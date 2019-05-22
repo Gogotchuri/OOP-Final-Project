@@ -8,9 +8,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 
-public class IndexController extends Controller {
-
-
+public class DealsController extends Controller {
     /**
      * Creates a controller, usually called from servlet, which is also
      * passed by parameter. servlet method passes taken request and response.
@@ -19,11 +17,16 @@ public class IndexController extends Controller {
      * @param res
      * @param servlet
      */
-    public IndexController(HttpServletRequest req, HttpServletResponse res, HttpServlet servlet) {
+    public DealsController(HttpServletRequest req, HttpServletResponse res, HttpServlet servlet) {
         super(req, res, servlet);
     }
 
-    public void index() throws IOException, ServletException {
-       dispatchTo("/pages/public/index.xhtml");
+    public void index() throws ServletException, IOException {
+        dispatchTo("/pages/public/deals.jsp");
+    }
+
+    public void show(int id) throws ServletException, IOException {
+        request.setAttribute("id", id);
+        dispatchTo("/pages/public/deal.jsp");
     }
 }
