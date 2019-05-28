@@ -11,6 +11,6 @@
     <title>Deal Page</title>
 </head>
 <body>
-    <h1>This is a deal page with id: <%=request.getAttribute("id")%> </h1>
+    <h1>This is a deal page with id: ${id} </h1>
 </body>
 </html>

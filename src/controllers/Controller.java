@@ -5,6 +5,7 @@ import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
 import java.io.IOException;
 
 /**
@@ -16,6 +17,7 @@ public abstract class Controller {
     protected HttpServletRequest request;
     protected HttpServlet servlet;
     protected ServletContext context;
+    protected HttpSession session;
 
     /**
      * Creates a controller, usually called from servlet, which is also
@@ -29,6 +31,7 @@ public abstract class Controller {
         this.request = req;
         this.servlet = servlet;
         this.context = servlet.getServletContext();
+        this.session = req.getSession();
     }
 
     /**
