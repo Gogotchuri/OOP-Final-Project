@@ -1,6 +1,5 @@
-package servlets.front;
 
-import controllers.front.DealsController;
+package servlets.front;
 
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
@@ -9,14 +8,21 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 
-@WebServlet(urlPatterns = {"/deals/show"})
+@WebServlet(urlPatterns = {"/deals/deal"})
 public class DealServlet extends HttpServlet {
 
-    @Override
-    protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-        String idParam = req.getParameter("id");
-        int id = (idParam != null && !idParam.isEmpty()) ? Integer.parseInt(idParam) : -1;
-        (new DealsController(req, resp, this)).show(id);
-    }
+    /**
+     returned html main components:
+     1) Information about some deal
 
+     If deal of this user member:
+     2) link to the member.DealConfigServlet (GET) (configuration form)
+     3) link to the member.DealConfigServlet (DELETE) (delete button)
+     */
+    @Override
+    protected void doGet(HttpServletRequest request, HttpServletResponse response)
+        throws ServletException, IOException {
+
+
+    }
 }
