@@ -8,16 +8,16 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 
-@WebServlet(urlPatterns = {"/deals/deal"})
+@WebServlet(urlPatterns = {"/deals/"})
 public class DealServlet extends HttpServlet {
 
     /**
      returned html main components:
      1) Information about some deal
 
-     If deal of this user member:
-     2) link to the member.DealConfigServlet (GET) (configuration form)
-     3) link to the member.DealConfigServlet (DELETE) (delete button)
+     If deal of this user:
+     2) link to the user.DealConfigServlet (GET) (deal configuration form)
+     3) link to the user.DealConfigServlet (DELETE) (deal delete button)
      */
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)

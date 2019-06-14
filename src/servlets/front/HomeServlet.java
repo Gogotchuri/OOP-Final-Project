@@ -2,7 +2,6 @@
 package servlets.front;
 
 import controllers.front.HomeController;
-
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
@@ -19,8 +18,8 @@ public class HomeServlet extends HttpServlet {
      2) link to the front.RegistrationServlet (GET) (registration form)
      3) link to the front.DealsServlet (GET) (all deals)
      4) In case of login:
-        link to the front.MemberServlet (GET) (user member profile)
-        link to the member.DealCreatorServlet (GET) (deal creator form)
+        link to the front.UserServlet (GET) (user profile)
+        link to the user.DealCreatorServlet (GET) (deal creator form)
      */
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)

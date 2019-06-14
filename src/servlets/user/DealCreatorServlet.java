@@ -1,5 +1,5 @@
 
-package servlets.member;
+package servlets.user;
 
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
@@ -8,13 +8,13 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 
-@WebServlet(urlPatterns = {"/user/deals/create"})
+@WebServlet(urlPatterns = {"/create-deal"})
 public class DealCreatorServlet extends HttpServlet {
 
 	/**
      returned html main components:
      1) fields for creating deal
-     2) link to the member.DealCreatorServlet (POST) (create new deal button)
+     2) link to the user.DealCreatorServlet (POST) (create new deal button)
 	 */
 	@Override
 	protected void doGet(HttpServletRequest request,
@@ -33,7 +33,7 @@ public class DealCreatorServlet extends HttpServlet {
      if satisfies:
 	    dispatch to front.Deal (GET) (deal view)
 	 else:
-	 	dispatch to member.DealCreatorServlet (GET) (deal creator form)
+	 	dispatch to user.DealCreatorServlet (GET) (deal creator form)
 	 */
 	@Override
 	protected void doPost(HttpServletRequest request,

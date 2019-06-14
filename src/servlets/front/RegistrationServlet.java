@@ -14,7 +14,7 @@ public class RegistrationServlet extends HttpServlet {
 	/**
      returned html main components:
      1) fields for registration
-     2) link to the front.LoginServlet (POST) (submit new member information)
+     2) link to the front.LoginServlet (POST) (submit new user information)
 	 */
 	@Override
 	protected void doGet(HttpServletRequest request,
@@ -27,7 +27,7 @@ public class RegistrationServlet extends HttpServlet {
 
 	/**
 	 Checks whenever entered data satisfies registration rules.
-	 If satisfies, registers user.
+	 If satisfies, registers guest.
 
      returned html:
      if satisfies:
