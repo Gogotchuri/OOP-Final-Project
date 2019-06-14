@@ -10,7 +10,7 @@ import java.io.IOException;
  */
 public interface ResourceController {
     /**
-     * Displays Collection view of the redource
+     * Displays Collection view of the resource
      * i.e. Deals page.
      * Should be called after request to resource base path
      * @throws IOException
@@ -27,12 +27,16 @@ public interface ResourceController {
     void show(int id) throws IOException, ServletException;
 
     /**
-     * Creates a deal from request parameters
+     * return Creation form page
      * @throws IOException
      * @throws ServletException
      */
     void create() throws IOException, ServletException;
 
+    /**
+     * Stores entry in database
+     * */
+    void store() throws IOException, ServletException;
     /**
      * Displays a form for changing resource with given id
      * @param id

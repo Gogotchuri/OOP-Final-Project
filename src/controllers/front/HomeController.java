@@ -22,6 +22,6 @@ public class HomeController extends Controller {
 
 
     public void index() throws IOException, ServletException {
-       dispatchTo("/pages/public/home.jsp");
+        outputToWriter("Hello from controller!");
     }
 }

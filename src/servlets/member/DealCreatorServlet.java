@@ -8,7 +8,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 
-@WebServlet(urlPatterns = {"/deal_creator"})
+@WebServlet(urlPatterns = {"/user/deals/create"})
 public class DealCreatorServlet extends HttpServlet {
 
 	/**
