@@ -7,7 +7,7 @@
 
 ## Technology
 - **Programming Language:** *JAVA*
-- **Web Technologies:** *Servlets* and *Tomcat*
+- **Web Technologies:** *Servlets*, *JSP* and *Tomcat*
 - **IDE:** *Intellij Idea*
 
 ## Team
