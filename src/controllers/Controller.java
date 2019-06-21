@@ -61,4 +61,9 @@ public abstract class Controller {
         response.getWriter().print(text);
     }
 
+    protected void sendError(int status_code, String message) throws IOException {
+        message = (message == null || message.isEmpty()) ? "Something Went wrong! Error message not formatted." : message;
+        response.sendError(status_code, message);
+    }
+
 }

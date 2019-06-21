@@ -37,16 +37,18 @@ public interface ResourceController {
      * Stores entry in database
      * */
     void store() throws IOException, ServletException;
+
     /**
-     * Displays a form for changing resource with given id
+     * Makes changes to the resource with given id
      * @param id
      * @throws IOException
      * @throws ServletException
      */
     void update(int id) throws IOException, ServletException;
 
+
     /**
-     * Makes changes to the resource with given id
+     * Displays a form for changing resource with given id
      * @param id
      * @throws IOException
      * @throws ServletException

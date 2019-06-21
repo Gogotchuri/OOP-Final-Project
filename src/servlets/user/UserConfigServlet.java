@@ -1,6 +1,9 @@
 
 package servlets.user;
 
+import controllers.user.UserController;
+import middlewares.AuthenticatedUser;
+
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
@@ -8,7 +11,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 
-@WebServlet(urlPatterns = {"/users/configuration"})
+@WebServlet(urlPatterns = {"/user/configuration"})
 public class UserConfigServlet extends HttpServlet {
 
 	/**
@@ -21,6 +24,10 @@ public class UserConfigServlet extends HttpServlet {
 						  HttpServletResponse response)
 		throws ServletException, IOException {
 
+		//Checking if user is authorized
+		if((new AuthenticatedUser(request, response)).unauthenticated()) return;
+
+		(new UserController(request, response, this)).editForm();
 
 	}
 
@@ -39,6 +46,11 @@ public class UserConfigServlet extends HttpServlet {
 	protected void doPut(HttpServletRequest request,
 						  HttpServletResponse response)
 		throws ServletException, IOException {
+
+		//Checking if user is authorized
+		if((new AuthenticatedUser(request, response)).unauthenticated()) return;
+
+		(new UserController(request, response, this)).update();
 
 
 	}

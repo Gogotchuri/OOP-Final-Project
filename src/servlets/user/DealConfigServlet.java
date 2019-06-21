@@ -1,6 +1,9 @@
 
 package servlets.user;
 
+import controllers.user.DealsController;
+import middlewares.AuthenticatedUser;
+
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
@@ -8,7 +11,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 
-@WebServlet(urlPatterns = {"/deals/configuration"})
+@WebServlet(urlPatterns = {"/user/deals/edit"})
 public class DealConfigServlet extends HttpServlet {
 
 	/**
@@ -20,7 +23,18 @@ public class DealConfigServlet extends HttpServlet {
 	protected void doGet(HttpServletRequest request,
 						  HttpServletResponse response)
 		throws ServletException, IOException {
+		//Checking if user is authorized
+		if((new AuthenticatedUser(request, response)).unauthenticated()) return;
 
+		int dealID;
+		try { dealID = Integer.parseInt(request.getParameter("id")); }
+		catch (NumberFormatException e) {
+			response.sendError(HttpServletResponse.SC_NOT_FOUND,
+					"This address should be called, with numeric parameter \"id\"!");
+			return;
+		}
+
+		(new DealsController(request, response, this)).edit(dealID);
 
 	}
 
@@ -39,8 +53,17 @@ public class DealConfigServlet extends HttpServlet {
 	protected void doPut(HttpServletRequest request,
 						  HttpServletResponse response)
 		throws ServletException, IOException {
+		//Checking if user is authorized
+		if((new AuthenticatedUser(request, response)).unauthenticated()) return;
 
-
+		int dealID;
+		try { dealID = Integer.parseInt(request.getParameter("id")); }
+		catch (NumberFormatException e) {
+			response.sendError(HttpServletResponse.SC_NOT_FOUND,
+					"This address should be called, with numeric parameter \"id\"!");
+			return;
+		}
+		(new DealsController(request, response, this)).update(dealID);
 	}
 
 
@@ -57,7 +80,16 @@ public class DealConfigServlet extends HttpServlet {
 	protected void doDelete(HttpServletRequest request,
 						  	 HttpServletResponse response)
 		throws ServletException, IOException {
+		//Checking if user is authorized
+		if((new AuthenticatedUser(request, response)).unauthenticated()) return;
 
-
+		int dealID;
+		try { dealID = Integer.parseInt(request.getParameter("id")); }
+		catch (NumberFormatException e) {
+			response.sendError(HttpServletResponse.SC_NOT_FOUND,
+					"This address should be called, with numeric parameter \"id\"!");
+			return;
+		}
+		(new DealsController(request, response, this)).destroy(dealID);
 	}
 }

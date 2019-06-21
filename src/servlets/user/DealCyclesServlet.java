@@ -1,6 +1,9 @@
 
 package servlets.user;
 
+import controllers.user.CyclesController;
+import middlewares.AuthenticatedUser;
+
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
@@ -8,7 +11,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 
-@WebServlet(urlPatterns = {"/deals/cycles"})
+@WebServlet(urlPatterns = {"/user/deals/cycles"})
 public class DealCyclesServlet extends HttpServlet {
 
 	/**
@@ -20,6 +23,18 @@ public class DealCyclesServlet extends HttpServlet {
 						  HttpServletResponse response)
 		throws ServletException, IOException {
 
+		//Checking if user is authorized
+		if((new AuthenticatedUser(request, response)).unauthenticated()) return;
+
+		int deal_id;
+		try { deal_id = Integer.parseInt(request.getParameter("deal_id")); }
+		catch (NumberFormatException e) {
+			response.sendError(HttpServletResponse.SC_NOT_FOUND,
+					"This address should be called, with numeric parameter \"deal_id\"!");
+			return;
+		}
+
+		(new CyclesController(request, response, this)).dealCycles(deal_id);
 
 	}
 }

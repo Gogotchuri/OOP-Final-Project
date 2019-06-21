@@ -1,6 +1,8 @@
 
 package servlets.front;
 
+import controllers.front.AuthController;
+
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
@@ -20,10 +22,8 @@ public class LoginServlet extends HttpServlet {
 	protected void doGet(HttpServletRequest request,
 						  HttpServletResponse response)
 		throws ServletException, IOException {
-
-
+		new AuthController(request, response, this).loginForm();
 	}
-
 
 	/**
 	 Checks whenever entered data matches with some registered account.
@@ -38,7 +38,8 @@ public class LoginServlet extends HttpServlet {
 	protected void doPost(HttpServletRequest request,
 						   HttpServletResponse response)
 		throws ServletException, IOException {
-
-
+		String username = request.getParameter("username"),
+				password = request.getParameter("password");
+		new AuthController(request, response, this).login(username, password);
 	}
 }

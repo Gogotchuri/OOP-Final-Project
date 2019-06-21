@@ -11,8 +11,8 @@ import java.io.IOException;
 public class HomeController extends Controller {
 
     /**
-     * Creates a controller, usually called from servlet, which is also
-     * passed by parameter. servlet method passes taken request and response.
+     Creates a controller, usually called from servlet, which is also
+     passed by parameter. Servlet method passes taken request and response.
      */
     public HomeController(HttpServletRequest request,
     					   HttpServletResponse response,
@@ -20,8 +20,11 @@ public class HomeController extends Controller {
         super(request, response, servlet);
     }
 
-
+	/**
+	 Dispatches to /pages/public/home.jsp
+	 which displays home page.
+	 */
     public void index() throws IOException, ServletException {
-        outputToWriter("Hello from controller!");
+        dispatchTo("/pages/public/home.jsp");
     }
 }

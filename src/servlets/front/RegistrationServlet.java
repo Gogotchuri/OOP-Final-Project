@@ -1,6 +1,8 @@
 
 package servlets.front;
 
+import controllers.front.AuthController;
+
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
@@ -8,7 +10,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 
-@WebServlet(urlPatterns = {"/registration"})
+@WebServlet(urlPatterns = {"/register"})
 public class RegistrationServlet extends HttpServlet {
 
 	/**
@@ -20,8 +22,7 @@ public class RegistrationServlet extends HttpServlet {
 	protected void doGet(HttpServletRequest request,
 						  HttpServletResponse response)
 		throws ServletException, IOException {
-
-
+		new AuthController(request, response, this).registerForm();
 	}
 
 
@@ -40,6 +41,16 @@ public class RegistrationServlet extends HttpServlet {
 						   HttpServletResponse response)
 		throws ServletException, IOException {
 
+		String
+			username = request.getParameter("username"),
+			password = request.getParameter("password"),
+			email = request.getParameter("email"),
+			firstName = request.getParameter("first-name"),
+			lastName = request.getParameter("last-name"),
+			phoneNumber = request.getParameter("phone-number");
 
+		new AuthController(request, response, this).register (
+			username, password, email, firstName, lastName, phoneNumber
+		);
 	}
 }

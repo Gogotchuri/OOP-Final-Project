@@ -1,6 +1,9 @@
 
 package servlets.user;
 
+import controllers.user.DealsController;
+import middlewares.AuthenticatedUser;
+
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
@@ -8,7 +11,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 
-@WebServlet(urlPatterns = {"/create-deal"})
+@WebServlet(urlPatterns = {"/user/deals/create"})
 public class DealCreatorServlet extends HttpServlet {
 
 	/**
@@ -20,7 +23,10 @@ public class DealCreatorServlet extends HttpServlet {
 	protected void doGet(HttpServletRequest request,
 						  HttpServletResponse response)
 		throws ServletException, IOException {
+		//Checking if user is authorized
+		if((new AuthenticatedUser(request, response)).unauthenticated()) return;
 
+		(new DealsController(request, response, this)).create();
 
 	}
 
@@ -39,7 +45,9 @@ public class DealCreatorServlet extends HttpServlet {
 	protected void doPost(HttpServletRequest request,
 						   HttpServletResponse response)
 		throws ServletException, IOException {
+		//Checking if user is authorized
+		if((new AuthenticatedUser(request, response)).unauthenticated()) return;
 
-
+		(new DealsController(request, response, this)).store();
 	}
 }

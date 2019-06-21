@@ -1,6 +1,7 @@
 
 package servlets.front;
 
+import controllers.front.DealsController;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
@@ -8,7 +9,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 
-@WebServlet(urlPatterns = {"/deals/"})
+@WebServlet(urlPatterns = {"/deals/show"})
 public class DealServlet extends HttpServlet {
 
     /**
@@ -23,6 +24,15 @@ public class DealServlet extends HttpServlet {
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
         throws ServletException, IOException {
 
+        int dealID;
+        try { dealID = Integer.parseInt(request.getParameter("id")); }
+        //უბრალოდ idც წყოფნის, იგულისხმება წინ რომ დიალისაა. რაც მოკლე მით უკეთესი და ლამაზი
+        catch (NumberFormatException e) {
+            response.sendError(HttpServletResponse.SC_NOT_FOUND,
+                    "This address should be called, with numeric parameter \"id\"!");
+            return;
+        }
 
+        new DealsController(request, response, this).show(dealID);
     }
 }
