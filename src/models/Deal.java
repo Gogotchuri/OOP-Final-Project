@@ -20,9 +20,9 @@ public class Deal {
         this.updated_at = updated_at;
     }
 
-    public List<Item> getOwnedItems(){return ItemManager.getOwnedItems(id);}
+    //public List<Item> getOwnedItems(){return ItemManager.getOwnedItems(id);}
 
-    public List<Integer> getWantedItemCategories(){return ItemManager.getWantedItemCategories(id);}
+    public List<Category> getWantedItemCategories(){return ItemManager.getWantedItemCategories(id);}
 
     public int getId(){return id;}
 

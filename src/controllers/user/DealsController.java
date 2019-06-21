@@ -38,7 +38,7 @@ public class DealsController extends Controller implements ResourceController {
      * @throws ServletException
      */
     public void index() throws IOException, ServletException {
-        List<Deal> deals = DealsManager.getUserDeals(user.getId());
+        List<Deal> deals = DealsManager.getUserDeals(user);
     }
 
     /**

@@ -10,6 +10,7 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
+import java.util.Enumeration;
 import java.util.Iterator;
 
 @WebServlet(urlPatterns = {"/deals"})
@@ -32,10 +33,10 @@ public class DealsServlet extends HttpServlet {
         SearchCriteria sc = new SearchCriteria();
 
 
-        Iterator<String> criteria = request.getParameterNames().asIterator();
+        Enumeration<String> criteria = request.getParameterNames();
 
-        while (criteria.hasNext()) {
-            String criteriaName = criteria.next();
+        while (criteria.hasMoreElements()) {
+            String criteriaName = criteria.nextElement();
             Criteria aCriteria = Criteria.getCriteria(criteriaName);
 
             if (aCriteria == null) {

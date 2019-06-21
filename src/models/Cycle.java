@@ -1,5 +1,7 @@
 package models;
 
+import java.sql.Timestamp;
+
 public class Cycle {
 
     private int id;
