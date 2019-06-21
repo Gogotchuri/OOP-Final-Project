@@ -20,8 +20,7 @@ public class ItemManager {
     private static final String SELECT_DEAL_OWNED_ITEMS = "SELECT item_id from owned_items where deal_id = ?";
     private static final String SELECT_DEAL_WANTED_ITEMS = "SELECT category_id from wanted_items where deal_id = ?";
 
-    private static final String SELECT_ITEMS_BY = "SELECT * FROM items WHERE ? = ? ;";
-    private static final String SELECT_ITEM_CATEGORIES = "SELECT * FROM item_categories WHERE ? = ? ;";
+    private static final String SELECT_BY = "SELECT * FROM ? WHERE ? = ? ;";
     private static DatabaseAccessObject DBO = DatabaseAccessObject.getInstance();
 
     /**
@@ -46,17 +45,19 @@ public class ItemManager {
 
     /**
      *
-     * @param column Name of the column in database
-     * @param value Value of given column
-     * @return List of items matching given criteria
+     * @param table Name of table
+     * @param column Name of column
+     * @param value Passed value
+     * @return All items from given table matching given criteria
      */
-    private static List<Item> getItemsByColumn(String column, String value) {
+    private static List<Item> getItemsByColumn(String table, String column, String value) {
         List<Item> list = new ArrayList<>();
         try {
-            PreparedStatement st = DBO.getPreparedStatement(SELECT_ITEMS_BY);
+            PreparedStatement st = DBO.getPreparedStatement(SELECT_BY);
 
-            st.setString(1,column);
-            st.setString(2,value);
+            st.setString(1,table);
+            st.setString(2,column);
+            st.setString(3,value);
 
             ResultSet rs = st.executeQuery();
             while(rs.next()) {
@@ -77,7 +78,7 @@ public class ItemManager {
      * @return List of the items of one user
      */
     public static List<Item> getUserItems(int userId) {
-        return getItemsByColumn("user_id", userId + "");
+        return getItemsByColumn("items","user_id", userId + "");
     }
 
     /**
@@ -85,8 +86,18 @@ public class ItemManager {
      * @return Item with that id, if doesn't exist, returns null
      */
     public static Item getItemById(int itemId){
-        List<Item> items = getItemsByColumn("id", itemId + "");
+        List<Item> items = getItemsByColumn("items","id", itemId + "");
         return (items.isEmpty()) ? null : items.get(0);
+    }
+
+    /**
+     *
+     * @param dealId Id of the deal
+     * @return List of items
+     */
+    public static List<Item> getOwnedItems(int dealId) {
+        String query = "SELECT * FROM ? JOIN owned_items on items.id = owned_items.item_id WHERE ? = ?;";
+        return getItemsByColumn("items", "owned_items.deal_id", dealId + "");
     }
 
     /**
@@ -113,9 +124,10 @@ public class ItemManager {
     private static Category parseCategory(ResultSet rs) throws SQLException {
         int categoryId = rs.getInt("item_category_id");
 
-        PreparedStatement st = DBO.getPreparedStatement(SELECT_ITEM_CATEGORIES);
-        st.setString(1,"id");
-        st.setInt(2, categoryId);
+        PreparedStatement st = DBO.getPreparedStatement(SELECT_BY);
+        st.setString(1,"item_categories");
+        st.setString(2,"id");
+        st.setInt(3, categoryId);
         ResultSet set = st.executeQuery();
 
         while(set.next()) {
@@ -173,27 +185,6 @@ public class ItemManager {
             return false;
         }
         return true;
-    }
-
-    /**
-     *
-     * @param deal_id Id of the deal
-     * @return List of items from one deal
-     */
-    public static List <Item> getItemsFromDeal(int deal_id){
-        List<Item> res = new ArrayList<>();
-        try {
-            PreparedStatement st = DBO.getPreparedStatement(SELECT_DEAL_OWNED_ITEMS);
-            st.setInt(1,deal_id);
-            ResultSet set = st.executeQuery();
-            while(set.next()){
-                res.add(getItemById(set.getInt("id")));
-            }
-        } catch (SQLException e) {
-            e.printStackTrace();
-            return null;
-        }
-        return res;
     }
 
     /**
