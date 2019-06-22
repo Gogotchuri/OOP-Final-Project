@@ -11,6 +11,7 @@ import java.util.Vector;
 public class Chat {
     private int chatID;
     private int cycleID;
+    private int messageAmount;
     private Timestamp lastUpdateDate; //Need timestamp for exact time
     private Vector<Message> messages; //Not sure needed
 
@@ -23,7 +24,8 @@ public class Chat {
         messages = new Vector<>(); //Should be fetched from db, not explicitly created
         this.chatID = chatID;
         this.cycleID = cycleID;
-        this.lastUpdateDate = (updateDate != null) ? new Timestamp(lastUpdateDate.getTime())
+        this.messageAmount = 0;
+        this.lastUpdateDate = (updateDate != null) ? new Timestamp(updateDate.getTime())
             : new Timestamp((new Date()).getTime());
     }
 
@@ -34,6 +36,7 @@ public class Chat {
      */
     public void addMessage(Message msg){
         messages.add(msg);
+        messageAmount++;
     }
 
     /**
@@ -91,5 +94,12 @@ public class Chat {
      */
     public int getCycleID() {
         return cycleID;
+    }
+
+    /**
+     * @return amount of messages in chat
+     */
+    public int getMessageAmount() {
+        return messageAmount;
     }
 }
