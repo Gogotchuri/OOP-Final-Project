@@ -30,6 +30,7 @@ public class User {
         this.updated_at = new Timestamp(System.currentTimeMillis());
     }
 
+
     public User(int id, String username, String password, String firstName, String lastName, String email,
                 String phone_number){
         this.id = id;
@@ -150,6 +151,16 @@ public class User {
     public static String encryptPassword(String password){
         //TODO encryption logic here
         return password;
+    }
+
+    public String toString() {
+        return id + " " + username + " " + password + " " + firstName + " " + lastName + " " + email;
+    }
+
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (!(o instanceof User)) return false;
+        return username.equals(((User) o).getUsername());
     }
 
 }
