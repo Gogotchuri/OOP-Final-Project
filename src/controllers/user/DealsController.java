@@ -2,6 +2,7 @@ package controllers.user;
 
 import controllers.Controller;
 import controllers.ResourceController;
+import events.DealCyclesFinder;
 import managers.DealsManager;
 import models.Deal;
 import models.User;
@@ -11,6 +12,7 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.List;
 
 public class DealsController extends Controller implements ResourceController {
@@ -69,18 +71,44 @@ public class DealsController extends Controller implements ResourceController {
     }
 
     /**
-     * Stores entry in database
+     Stores entry in database
      */
     public void store() throws IOException, ServletException {
-        //TODO validator! return if rule violation occurs
-        List<Integer> owned_ids = null; //TODO should be assigned after parsing request
-        List<Integer> wanted_ids = null; //TODO should be assigned after parsing request
-        Deal deal = new Deal(user.getId(), owned_ids, wanted_ids);
+
+        /*
+         TODO:
+         Call validator, which returns parameters passed in 'request'
+         or error if passed parameters are invalid.
+         */
+
+//      if (errorOccurredByValidator) {
+            List<String> errors = new ArrayList<>();
+            errors.add("Passed parameters are invalid!");
+            request.setAttribute("errors", errors);
+            create();
+//          return;
+//      }
+
+        // TODO: Should be assigned after parsing request by validator.
+        List<Integer> ownedIDs = null,
+                        wantedIDs = null;
+
+        Deal deal = new Deal(user.getId(), ownedIDs, wantedIDs);
+
         deal.setId(DealsManager.storeDeal(deal));
-        //Let him see deal after a successful creation!
-        if(deal.getId() != 0) show(deal.getId());
-        else sendError(500, "Internal server error! \n" +
-                "While Inserting new deal to database, 0 was returned as value of deal id (User.DealsController:83)");
+        int dealID = deal.getId();
+
+        if (dealID == 0) { // Deal did not insert into DB
+            sendError(500, "Internal server error! \n" +
+                "While Inserting new deal to database, 0 was returned as value of deal id" +
+                "(User.DealsController:97)");
+            return;
+        }
+
+        show(dealID);
+
+        // Starts new thread for finding cycles
+        new DealCyclesFinder(deal).start();
     }
 
 

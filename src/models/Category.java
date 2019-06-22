@@ -1,5 +1,7 @@
 package models;
 
+import java.util.List;
+
 /**
  * Class encapsulating a single category
  */
@@ -30,5 +32,15 @@ public class Category {
      */
     public String getName() {
         return name;
+    }
+
+    // TODO
+    @Override public boolean equals(Object other) {
+        return false;
+    }
+
+    // TODO
+    public static boolean listsEqualsIgnoreOrder(List<Category> l1, List<Category> l2) {
+        return false;
     }
 }

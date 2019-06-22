@@ -1,5 +1,6 @@
 package models;
 import java.sql.Timestamp;
+import java.util.List;
 
 public class Cycle {
 
@@ -18,6 +19,14 @@ public class Cycle {
         this.statusId = statusId;
         this.createdAt = createdAt;
         this.updatedAt = updatedAt;
+    }
+
+    /**
+     TODO
+     0->1 1->2 2->3 3->0
+     */
+    public Cycle(List<Deal> deals) {
+
     }
 
     /**

@@ -30,6 +30,11 @@ public class Deal {
         this.wanted_ids = wanted_item_ids;
     }
 
+    // TODO
+    public Deal(Deal toCopy) {
+
+    }
+
     public List<Item> getOwnedItems(){ return ItemManager.getOwnedItems(id); }
 
     public List<Category> getWantedItemCategories(){return ItemManager.getWantedItemCategories(id);}
@@ -56,5 +61,15 @@ public class Deal {
 
     public void setId(int id){
         this.id = id;
+    }
+
+    // TODO
+    @Override public boolean equals(Object other) {
+        return false;
+    }
+
+    // TODO
+    public List<Category> getOwnedItemCategories() {
+        return null;
     }
 }

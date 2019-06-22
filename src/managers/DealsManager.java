@@ -196,4 +196,16 @@ public class DealsManager {
                     ));
         }
     }
+
+    /**
+     TODO
+     Returns list of deals whose
+     Wanted item categories
+     are equal of
+     'deal's Owned item categories
+     Returns at least empty list
+     */
+    public static List<Deal> getClients(Deal deal) {
+        return new ArrayList<>();
+    }
 }
