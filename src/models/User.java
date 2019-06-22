@@ -131,6 +131,7 @@ public class User {
         this.updated_at = new Timestamp(System.currentTimeMillis());
     }
 
+
     public void setPhoneNumber(String phone_number) {
         this.phone_number = phone_number;
         this.updated_at = new Timestamp(System.currentTimeMillis());
@@ -153,10 +154,17 @@ public class User {
         return password;
     }
 
+    /**
+     * @return String representation of a user
+     */
     public String toString() {
         return id + " " + username + " " + password + " " + firstName + " " + lastName + " " + email;
     }
 
+    /**
+     * @param o Object, to compare this to
+     * @return Are those objects equal or not
+     */
     public boolean equals(Object o) {
         if (this == o) return true;
         if (!(o instanceof User)) return false;
