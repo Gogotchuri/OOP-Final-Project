@@ -13,7 +13,7 @@ public class UpdateManager {
      * Updates data in database
      * @param form Takes and updateForm, depending oh which, changes data
      */
-    public static void update(UpdateForm form) {
+    public static boolean update(UpdateForm form) {
         String query = "UPDATE " + form.getTableName() + " SET ";
         Iterator<UpdateForm.Pair> it = form.getUpdates();
 
@@ -33,6 +33,8 @@ public class UpdateManager {
             st.executeUpdate();
         } catch (SQLException e) {
             e.printStackTrace();
+            return false;
         }
+        return true;
     }
 }

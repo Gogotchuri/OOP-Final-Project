@@ -1,6 +1,7 @@
 package managers;
 
 import database.DatabaseAccessObject;
+import generalManagers.DeleteManager;
 import models.Chat;
 import models.Message;
 
@@ -34,6 +35,34 @@ public class ChatManager {
             return false;
         }
         return true;
+    }
+
+    /**
+     * Deletes message from database using its id
+     * @param messageID
+     * @return returns false if operation fails
+     */
+    public static boolean removeMessageFromDB(int messageID){
+        return DeleteManager.delete("messages", "id", messageID);
+    }
+
+    /**
+     * Deletes every message from database which has specified chat_id
+     * @param chatID
+     * @return returns false if operation fails
+     */
+    public static boolean removeMessagesByChatID(int chatID){
+        return DeleteManager.delete("messages", "chat_id", chatID);
+    }
+
+    /**
+     * Deletes chat from database using its id
+     * @param chatID
+     * @return returns false if operation fails
+     */
+    public static boolean removeChatFromDB(int chatID){
+        return removeMessagesByChatID(chatID) &&
+                DeleteManager.delete("chats", "id", chatID);
     }
 
 

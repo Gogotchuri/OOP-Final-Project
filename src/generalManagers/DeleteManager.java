@@ -13,7 +13,7 @@ public class DeleteManager {
      * @param columnName Name of a column
      * @param obj Object to compare to and then delete
      */
-    public static void delete(String table, String columnName, Object obj) {
+    public static boolean delete(String table, String columnName, Object obj) {
         String query = "DELETE FROM " + table + " WHERE " + columnName + " = ?;";
         try {
             PreparedStatement st = DAO.getPreparedStatement(query);
@@ -23,6 +23,8 @@ public class DeleteManager {
             st.executeUpdate();
         } catch (SQLException e) {
             e.printStackTrace();
+            return false;
         }
+        return true;
     }
 }
