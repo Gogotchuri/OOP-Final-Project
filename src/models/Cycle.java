@@ -1,30 +1,42 @@
 package models;
-
 import java.sql.Timestamp;
 
 public class Cycle {
 
-    private int id;
-    private int status_id;
-    private Timestamp created_at;
-    private Timestamp updated_at;
+    private int id, statusId;
+    private Timestamp createdAt, updatedAt;
 
-    public Cycle(int id, int status_id, Timestamp created_at, Timestamp updated_at){
+    /**
+     * Constructor of a cycle
+     * @param id Id of a cycle
+     * @param statusId Status of a cycle
+     * @param createdAt Time of creation
+     * @param updatedAt Time of update
+     */
+    public Cycle(int id, int statusId, Timestamp createdAt, Timestamp updatedAt){
         this.id = id;
-        this.status_id = status_id;
-        this.created_at = created_at;
-        this.updated_at = updated_at;
+        this.statusId = statusId;
+        this.createdAt = createdAt;
+        this.updatedAt = updatedAt;
     }
 
-    public int getId(){return id;}
+    /**
+     * @return Id of a cycle
+     */
+    public int getId() { return id; }
 
-    public int getStatus_id(){return status_id;}
+    /**
+     * @return StatusId of a cycle
+     */
+    public int getStatus_id() { return statusId; }
 
-    public Timestamp getUpdated_at() {
-        return updated_at;
-    }
+    /**
+     * @return Time of creation
+     */
+    public Timestamp getUpdated_at() { return updatedAt; }
 
-    public Timestamp getCreated_at() {
-        return created_at;
-    }
+    /**
+     * @return Time of update
+     */
+    public Timestamp getCreated_at() { return createdAt; }
 }
