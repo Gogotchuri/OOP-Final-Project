@@ -25,6 +25,7 @@ public class HomeController extends Controller {
 	 which displays home page.
 	 */
     public void index() throws IOException, ServletException {
+
         dispatchTo("/pages/public/home.jsp");
     }
 }

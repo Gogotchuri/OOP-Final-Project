@@ -32,7 +32,7 @@ public class CyclesController extends Controller {
         //TODO get cycle with id, if not found send error
         Cycle cycle = null;
         request.setAttribute("cycle", cycle);
-        dispatchTo("/pages/user/cycle.jsp");
+        dispatchTo("/pages/user/deals/cycle.jsp");
     }
     /**
      * Return suggested cycles for given deal
@@ -42,7 +42,7 @@ public class CyclesController extends Controller {
         //TODO get cycles for given deal id, if not found send error
         List<Cycle> cycles = null;
         request.setAttribute("cycles", cycles);
-        dispatchTo("/pages/user/deal-cycles.jsp");
+        dispatchTo("/pages/user/deals/deal-cycles.jsp");
     }
 
     public void acceptCycle(int cycle_id){

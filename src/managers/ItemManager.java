@@ -36,7 +36,6 @@ public class ItemManager {
             st.setString(5,item.getName());
             st.setTimestamp(6,item.getCreatedAt());
             st.setTimestamp(7,item.getUpdatedAt());
-
             st.executeUpdate();
         } catch (SQLException e) {
             e.printStackTrace();
@@ -130,7 +129,7 @@ public class ItemManager {
         st.setInt(3, categoryId);
         ResultSet set = st.executeQuery();
 
-        while(set.next()) {
+        if(set.next()) {
             return new Category(set.getInt("id"), set.getString("name"));
         }
 

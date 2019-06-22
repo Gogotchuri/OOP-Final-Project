@@ -45,11 +45,12 @@ public class DealsManager {
     }
 
     /**
-     * stores deal in the database
-     *
+     * stores deal in the database and returns id
+     * If something went wrong
      * @param deal
      */
     public static int storeDeal(Deal deal){
+        int id = 0;
         try {
             PreparedStatement st = DBAO.getPreparedStatement(STORE_DEAL_QUERY);
             st.setInt(1, deal.getUser_id());
@@ -58,19 +59,52 @@ public class DealsManager {
             st.setTimestamp(3, t);
             st.setTimestamp(4, t);
             st.setInt(5, deal.getStatus_id());
-
             st.executeUpdate();
-
             PreparedStatement statement = DBAO.getPreparedStatement(SELECT_ID);
             statement.setString(1, "deals");
             ResultSet set = statement.executeQuery();
-            return set.getInt("id");
+            id = set.getInt("id");
+            deal.setId(id);
+
+            //If deals already have wanted and owned item, insert those
+            List<Integer> wanted_item_ids = deal.getWanted_ids(),
+                    owned_item_ids = deal.getOwned_ids();
+            if(owned_item_ids != null) {
+                for (int i : owned_item_ids) {
+                    if(!ItemManager.insertOwnedItem(deal.getId(), i)) return 0;
+                }
+            }
+            if(wanted_item_ids != null) {
+                for (int i : wanted_item_ids)
+                    ItemManager.insertWantedItem(deal.getId(), i);
+            }
         } catch (SQLException e) {
             e.printStackTrace();
-            return 0;
         }
+        return id;
     }
 
+
+    /**
+     * Given a already existing deal in the database, updates entry
+     * @param deal
+     * @return true if update was a success
+     */
+    public static boolean updateDeal(Deal deal){
+        //TODO set deal fields in database!
+        return true;
+    }
+
+
+    /**
+     * Deletes deal with given id in database
+     * @param id Deal id
+     * @return true if deal deleted successfully
+     */
+    public static boolean deleteDeal(int id){
+        return true;
+        //TODO implement me
+    }
     /**
      * @param user User, deals of which the gather
      * @return List of deals by user
