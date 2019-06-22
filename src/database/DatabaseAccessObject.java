@@ -17,7 +17,7 @@ public class DatabaseAccessObject {
 
     public DatabaseAccessObject(){
         try {
-            Class.forName("com.mysql.cj.jdbc.Driver");
+            Class.forName("com.mysql.jdbc.Driver");
             con = DriverManager.getConnection( "jdbc:mysql://" + MYSQL_DATABASE_SERVER, MYSQL_USERNAME, MYSQL_PASSWORD);
             st = con.createStatement();
             st.executeQuery("USE " + MYSQL_DATABASE_NAME);

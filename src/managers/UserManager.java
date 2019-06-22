@@ -16,8 +16,8 @@ public class UserManager {
 
     private static DatabaseAccessObject DBAO = DatabaseAccessObject.getInstance();
 
-    private static final String SELECT_USER_QUERY = "SELECT * FROM users WHERE ? = ?;";
-    private static final String STORE_USER_QUERY = "INSERT INTO users VALUES(?, ?, ?, ?, ?, ?, ?, ?);";
+    private static final String STORE_USER_QUERY = "INSERT INTO users VALUES(?, ?, ?, ?, ?, ?, ?, ?, ?);";
+    private static final String GET_LAST_ID = "SELECT MAX(id) FROM users;";
 
     /**
      * get User object with its username
@@ -27,7 +27,7 @@ public class UserManager {
      */
 
     public static User getUserByUsername(String username){
-        ArrayList<User> users = getUsersByColumn("username", username);
+        ArrayList<User> users = getUsersByColumn("user_name", username, false);
         if(users.isEmpty()) return null;
         return users.get(0);
     }
@@ -39,12 +39,15 @@ public class UserManager {
      * @param value
      * @return
      */
-    public static ArrayList<User> getUsersByColumn(String column, String value){
+    public static ArrayList<User> getUsersByColumn(String column, String value, boolean isNumeric){
         ArrayList<User> users = new ArrayList<>();
         try {
-            PreparedStatement st = DBAO.getPreparedStatement(SELECT_USER_QUERY);
-            st.setString(1, column);
-            st.setString(2, value);
+            String query = "SELECT * FROM users WHERE " + column + " = ?;";
+            PreparedStatement st = DBAO.getPreparedStatement(query);
+
+            if(isNumeric) st.setInt(1, Integer.parseInt(value));
+            else st.setString(1, value);
+
             ResultSet set = st.executeQuery();
             while(set.next())
                 users.add(getUserFromResultSetRow(set));
@@ -61,8 +64,8 @@ public class UserManager {
      * @param id
      * @return User -null if user wasn't found
      */
-    public static User getUserById(int id){
-        ArrayList<User> users = getUsersByColumn("id", ""+id);
+    public static User getUserById(int id) {
+        ArrayList<User> users = getUsersByColumn("id", ""+id, true);
         if(users.isEmpty()) return null;
         return users.get(0);
     }
@@ -77,16 +80,21 @@ public class UserManager {
      */
     public static boolean storeUser(User user){
         try {
+            int generatedID = generateID();
             PreparedStatement st = DBAO.getPreparedStatement(STORE_USER_QUERY);
-            st.setString(1, user.getPassword());
+
+            st.setInt(1,generatedID);
             st.setString(2, user.getUsername());
-            st.setString(3, user.getFirstName());
-            st.setString(4, user.getLastName());
-            st.setString(5, user.getEmail());
-            st.setString(6, user.getPhoneNumber());
-            st.setTimestamp(7, user.getCreatedDate());
-            st.setTimestamp(8, user.getUpdatedDate());
+            st.setString(3, user.getPassword());
+            st.setString(4, user.getFirstName());
+            st.setString(5, user.getLastName());
+            st.setString(6, user.getEmail());
+            st.setString(7, user.getPhoneNumber());
+            st.setTimestamp(8, user.getCreatedDate());
+            st.setTimestamp(9, user.getUpdatedDate());
+
             st.executeUpdate();
+
         } catch (SQLException e) {
             e.printStackTrace();
             return false;
@@ -94,6 +102,21 @@ public class UserManager {
         return true;
     }
 
+    /**
+     * @return GeneratedID, taken from database
+     * @throws SQLException
+     */
+    private static int generateID() throws SQLException {
+        PreparedStatement st = DBAO.getPreparedStatement(GET_LAST_ID);
+        ResultSet set = st.executeQuery();
+        return (set.next()) ? 1 + set.getInt(1) : 1;
+    }
+
+    /**
+     * @param set ResultSett
+     * @return Parsed user, taken from resultSet
+     * @throws SQLException
+     */
     private static User getUserFromResultSetRow(ResultSet set) throws SQLException {
         User user = new User(
                 set.getInt("id"),
