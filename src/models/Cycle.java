@@ -1,11 +1,17 @@
 package models;
 import java.sql.Timestamp;
-import java.util.List;
+import java.util.*;
 
 public class Cycle {
 
     private int id, statusId;
     private Timestamp createdAt, updatedAt;
+    /**
+     * Map representing structure of a cycle
+     * Key is Id of a user
+     * Value is Deal, that user is interested in
+     */
+    private Map<Integer, Deal> map;
 
     /**
      * Constructor of a cycle
@@ -19,14 +25,33 @@ public class Cycle {
         this.statusId = statusId;
         this.createdAt = createdAt;
         this.updatedAt = updatedAt;
+        map = new LinkedHashMap<>();
     }
 
     /**
-     TODO
-     0->1 1->2 2->3 3->0
+     * Constructs a cycle object
+     * @param deals List of deals making up a cycle, already sorted
      */
     public Cycle(List<Deal> deals) {
+        for (int i=0; i<deals.size()-1; i++) {
+            map.put(deals.get(i).getId(), deals.get(i+1));
+        }
+        map.put(deals.get(deals.size()-1).getId(), deals.get(0));
+    }
 
+    /**
+     * @param userId Id of a user
+     * @return Deal that user is interested in
+     */
+    public Deal getWantedDealByUser(int userId) {
+        return (map.containsKey(userId)) ? map.get(userId) : null;
+    }
+
+    /**
+     * @return Iterator of ID's and deals
+     */
+    public Iterator<Map.Entry<Integer, Deal>> getCycleInfo() {
+        return map.entrySet().iterator();
     }
 
     /**

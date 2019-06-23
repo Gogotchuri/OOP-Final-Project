@@ -4,6 +4,9 @@ import controllers.front.DealsController;
 import controllers.front.DealsController.SearchCriteria;
 import controllers.front.DealsController.SearchCriteria.Criteria;
 import database.DatabaseAccessObject;
+import generalManagers.DeleteManager;
+import generalManagers.UpdateForm;
+import generalManagers.UpdateManager;
 import models.Deal;
 import models.User;
 
@@ -91,8 +94,12 @@ public class DealsManager {
      * @return true if update was a success
      */
     public static boolean updateDeal(Deal deal){
-        //TODO set deal fields in database!
-        return true;
+        UpdateForm uForm = new UpdateForm("deals", deal.getId());
+        uForm.addUpdate("user_id", deal.getUser_id());
+        uForm.addUpdate("status_id", deal.getStatus_id());
+        uForm.addUpdate("created_at", deal.getCreated_at());
+        uForm.addUpdate("updated_at", deal.getUpdated_at());
+        return UpdateManager.update(uForm);
     }
 
 
@@ -102,9 +109,9 @@ public class DealsManager {
      * @return true if deal deleted successfully
      */
     public static boolean deleteDeal(int id){
-        return true;
-        //TODO implement me
+        return DeleteManager.delete("deals", "id", id);
     }
+
     /**
      * @param user User, deals of which the gather
      * @return List of deals by user
@@ -206,6 +213,7 @@ public class DealsManager {
      Returns at least empty list
      */
     public static List<Deal> getClients(Deal deal) {
+
         return new ArrayList<>();
     }
 }

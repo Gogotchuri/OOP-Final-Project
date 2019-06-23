@@ -66,17 +66,19 @@ public class Deal {
     public int getStatus_id(){return status_id;}
 
     public List<Integer> getOwned_ids() {
-        return owned_ids;
+        return new ArrayList<>(owned_ids);
     }
 
     public List<Integer> getWanted_ids() {
-        return wanted_ids;
+        return new ArrayList<>(wanted_ids);
     }
 
-    public Timestamp getCreated_at(){return created_at;}
+    public Timestamp getCreated_at(){
+        return new Timestamp(created_at.getTime());
+    }
 
     public Timestamp getUpdated_at() {
-        return updated_at;
+        return new Timestamp(updated_at.getTime());
     }
 
     public void setId(int id){
