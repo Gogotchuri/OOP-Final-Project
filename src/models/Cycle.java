@@ -48,4 +48,14 @@ public class Cycle {
      * @return Time of update
      */
     public Timestamp getCreated_at() { return createdAt; }
+
+    /**
+     * @param o Passed cycle
+     * @return Whether two cycles are equal or not
+     */
+    public boolean equals(Object o) {
+        if(this == o) return true;
+        if(!(o instanceof Cycle)) return false;
+        return id == ((Cycle) o).getId();
+    }
 }

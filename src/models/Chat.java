@@ -102,4 +102,14 @@ public class Chat {
     public int getMessageAmount() {
         return messageAmount;
     }
+
+    /**
+     * @param o Passed object
+     * @return Whether two chats are equal or not
+     */
+    public boolean equals(Object o) {
+        if(this == o) return true;
+        if(!(o instanceof Chat)) return false;
+        return chatID == ((Chat) o).getChatID();
+    }
 }

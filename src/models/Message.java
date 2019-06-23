@@ -89,6 +89,16 @@ public class Message {
     public void setDate(Date date){
         this.date.setTime(date.getTime());
     }
+
+    /**
+     * @param o Passed message
+     * @return Whether two messages are equal or not
+     */
+    public boolean equals(Object o) {
+        if(this == o) return true;
+        if(!(o instanceof Message)) return false;
+        return messageID == ((Message) o).getMessageID();
+    }
 }
 
 
