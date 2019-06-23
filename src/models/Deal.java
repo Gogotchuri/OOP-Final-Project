@@ -3,7 +3,10 @@ package models;
 import managers.ItemManager;
 
 import java.sql.Timestamp;
+import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 public class Deal {
     private int id;
@@ -30,14 +33,31 @@ public class Deal {
         this.wanted_ids = wanted_item_ids;
     }
 
-    // TODO
+    /**
+     * Initialize Deal by copying another
+     * @param toCopy another object of the same type
+     */
     public Deal(Deal toCopy) {
-
+        this.id = toCopy.getId();
+        this.user_id = toCopy.getUser_id();
+        this.status_id = toCopy.getStatus_id();
+        this.created_at = new Timestamp(toCopy.getCreated_at().getTime());
+        this.updated_at = new Timestamp(toCopy.getUpdated_at().getTime());
+        this.owned_ids = new ArrayList<>(toCopy.getOwned_ids());
+        this.wanted_ids = new ArrayList<>(toCopy.getWanted_ids());
     }
 
     public List<Item> getOwnedItems(){ return ItemManager.getOwnedItems(id); }
 
+    /**
+     * @return List of every category of wanted items
+     */
     public List<Category> getWantedItemCategories(){return ItemManager.getWantedItemCategories(id);}
+
+    /**
+     * @return List of every category of owned items
+     */
+    public List<Category> getOwnedItemCategories(){return ItemManager.getOwnedItemCategories(id);}
 
     public int getId(){return id;}
 
@@ -63,13 +83,16 @@ public class Deal {
         this.id = id;
     }
 
-    // TODO
-    @Override public boolean equals(Object other) {
-        return false;
+    /**
+     * Checks if the passed object is the same as this
+     * @param other another object
+     * @return
+     */
+    @Override
+    public boolean equals(Object other) {
+        if(other == this) return true;
+        if(other == null || this.getClass() != other.getClass()) return false;
+        return this.id == ((Deal) other).getId();
     }
 
-    // TODO
-    public List<Category> getOwnedItemCategories() {
-        return null;
-    }
 }

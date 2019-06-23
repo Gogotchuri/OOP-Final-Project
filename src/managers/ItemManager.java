@@ -187,14 +187,14 @@ public class ItemManager {
     }
 
     /**
-     *
-     * @param dealID Id of the deal
-     * @return List of categories wanted in one deal
+     * @param dealID
+     * @param query
+     * @return Item categories
      */
-    public static List <Category> getWantedItemCategories(int dealID){
+    private static List <Category> getItemCategories(int dealID, String query){
         List<Category> list = new ArrayList<>();
         try {
-            PreparedStatement st = DBO.getPreparedStatement(SELECT_DEAL_WANTED_ITEMS);
+            PreparedStatement st = DBO.getPreparedStatement(query);
             st.setInt(1,dealID);
             ResultSet set = st.executeQuery();
 
@@ -207,5 +207,23 @@ public class ItemManager {
             return null;
         }
         return list;
+    }
+
+    /**
+     *
+     * @param dealID Id of the deal
+     * @return List of categories wanted in one deal
+     */
+    public static List <Category> getWantedItemCategories(int dealID){
+        return getItemCategories(dealID, SELECT_DEAL_WANTED_ITEMS);
+    }
+
+    /**
+     *
+     * @param dealID Id of the deal
+     * @return List of categories owned in one deal
+     */
+    public static List <Category> getOwnedItemCategories(int dealID){
+        return getItemCategories(dealID, SELECT_DEAL_OWNED_ITEMS);
     }
 }

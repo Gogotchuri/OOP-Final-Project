@@ -63,11 +63,8 @@ public class DealCyclesFinder extends Thread {
         Queue<LinkedDeal> currBreadth = new LinkedList<>(),
                            nextBreadth = new LinkedList<>();
 
-        Set<Deal> usedDeals = new HashSet<>();
-
         int currBreadthIndex = 0;
         currBreadth.add(new LinkedDeal(this.deal, null));
-        usedDeals.add(this.deal);
 
         while (currBreadthIndex++ < CYCLE_MAX_LENGTH &&
                 !currBreadth.isEmpty()) {
@@ -91,10 +88,8 @@ public class DealCyclesFinder extends Thread {
 
                 List<Deal> clients = DealsManager.getClients(new Deal(linkedDeal.deal));
 
-                for (Deal clientDeal : clients) // Returns at least empty list
-                    if (!usedDeals.contains(clientDeal)) {
-                        usedDeals.add(clientDeal);
-
+                for (Deal clientDeal : clients)
+                    if (!pathContainsDeal(linkedDeal, clientDeal)) {
                         LinkedDeal clientLinkedDeal = new LinkedDeal(clientDeal, linkedDeal);
                         nextBreadth.add(clientLinkedDeal);
                     }
@@ -138,5 +133,19 @@ public class DealCyclesFinder extends Thread {
         }
 
         return new Cycle(cycleDeals);
+    }
+
+    /**
+     Returns false iff:
+     Path from startLinkedDeal before null
+     does not contains equal Deal of passed 'dea;'
+     */
+    private boolean pathContainsDeal(LinkedDeal startLinkedDeal, Deal deal) {
+        while (startLinkedDeal != null) {
+            if (startLinkedDeal.deal.equals(deal))
+                return true;
+            startLinkedDeal = startLinkedDeal.linkedTo;
+        }
+        return false;
     }
 }

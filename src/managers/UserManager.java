@@ -1,6 +1,7 @@
 package managers;
 
 import database.DatabaseAccessObject;
+import generalManagers.DeleteManager;
 import models.Deal;
 import models.User;
 
@@ -100,6 +101,13 @@ public class UserManager {
             return false;
         }
         return true;
+    }
+
+    /**
+     * @param userName Name of user
+     */
+    public static void deleteUserByUsername(String userName) {
+        DeleteManager.delete("users","user_name", userName);
     }
 
     /**

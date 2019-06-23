@@ -97,4 +97,14 @@ public class Item {
      * @return Date, when item was updated
      */
     public Timestamp getUpdatedAt() { return updatedAt; }
+
+    /**
+     * @param o Passed item
+     * @return Whether two items are equal or not
+     */
+    public boolean equals(Object o) {
+        if(this == o) return true;
+        if(!(o instanceof Item)) return false;
+        return id == ((Item) o).getItemId();
+    }
 }
