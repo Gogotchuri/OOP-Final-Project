@@ -208,4 +208,27 @@ public class ItemManager {
         }
         return list;
     }
+
+    /**
+     *
+     * @param dealID Id of the deal
+     * @return List of categories owned in one deal
+     */
+    public static List <Category> getOwnedItemCategories(int dealID){
+        List<Category> list = new ArrayList<>();
+        try {
+            PreparedStatement st = DBO.getPreparedStatement(SELECT_DEAL_OWNED_ITEMS);
+            st.setInt(1,dealID);
+            ResultSet set = st.executeQuery();
+
+            while(set.next()) {
+                list.add(parseCategory(set));
+            }
+
+        } catch (SQLException e) {
+            e.printStackTrace();
+            return null;
+        }
+        return list;
+    }
 }
