@@ -65,7 +65,7 @@ public class AuthController extends Controller {
     }
 
     /**
-     If registration was a success passes home page to registered user,
+     If registration was a success passes login page to registered user,
      with success error message.
      Otherwise returns login page with errors.
      */
@@ -74,7 +74,6 @@ public class AuthController extends Controller {
         throws ServletException, IOException {
 
         ArrayList<String> errors = new ArrayList<>();
-        //TODO VALIDATION!
         String encryptedPassword = User.encryptPassword(password);
 
         User user = new User (
@@ -82,12 +81,17 @@ public class AuthController extends Controller {
              firstName, lastName, email, phoneNumber
         );
 
-        if (!UserManager.storeUser(user))
+        if (UserManager.getUserByUsername(username) != null)
             errors.add("Username isn't unique!");
+        else if(!UserManager.storeUser(user)){
+            sendError(500, "Something went wrong during storing the user in database. (AuthController:87)");
+            return;
+        }
+        //TODO add email uniqueness logic. Requires: getUserByEmail in UserManager
 
         if (errors.isEmpty()) {
             request.setAttribute("success", "You have registered successfully!");
-            redirectTo("/home");
+            redirectTo("/login");
             return;
         }
 

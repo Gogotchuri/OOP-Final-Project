@@ -7,5 +7,5 @@
 --%>
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <html>
-<nav class="mainNav">Help NAVBAR!</nav>
+<nav class="mainNav">MAIN NAVBAR!</nav>
 </html>
