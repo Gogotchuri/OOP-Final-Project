@@ -87,4 +87,14 @@ public class Image {
     public Timestamp getCreatedDate(){
         return created_at;
     }
+
+    /**
+     * @param o Passed image
+     * @return Checks whether two images are same or not
+     */
+    public boolean equals(Object o) {
+        if(this == o) return true;
+        if(!(o instanceof Image)) return false;
+        return url.equals(((Image) o).getUrl());
+    }
 }

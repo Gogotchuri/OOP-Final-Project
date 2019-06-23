@@ -40,12 +40,6 @@ public class UserTests {
     }
 
     @Test
-    public void deleteFromUsers() {
-        assertTrue(d.delete("users", "id", 35));
-        assertTrue(d.delete("users", "user_name", "LG"));
-    }
-
-    @Test
     public void updateUsers() {
         UpdateForm form = new UpdateForm("users",2);
         form.addUpdate("user_name","snakeee");
@@ -53,5 +47,11 @@ public class UserTests {
         form.addUpdate("last_name","Durant");
         form.addUpdate("id", 35);
         assertTrue(u.update(form));
+    }
+
+    @Test
+    public void deleteFromUsers() {
+        assertTrue(d.delete("users", "id", 35));
+        assertTrue(d.delete("users", "user_name", "LG"));
     }
 }
