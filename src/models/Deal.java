@@ -57,7 +57,7 @@ public class Deal {
     /**
      * @return List of every category of owned items
      */
-    public List<Category> getOwnedItemCategories(){return ItemManager.getWantedItemCategories(id);}
+    public List<Category> getOwnedItemCategories(){return ItemManager.getOwnedItemCategories(id);}
 
     public int getId(){return id;}
 
