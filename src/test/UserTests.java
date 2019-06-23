@@ -1,4 +1,5 @@
 package test;
+import database.DatabaseAccessObject;
 import generalManagers.DeleteManager;
 import generalManagers.UpdateForm;
 import generalManagers.UpdateManager;
@@ -6,6 +7,8 @@ import managers.UserManager;
 import models.User;
 import org.junit.jupiter.api.Test;
 
+import java.sql.PreparedStatement;
+import java.sql.SQLException;
 import java.util.ArrayList;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
@@ -20,6 +23,16 @@ public class UserTests {
     private static final UserManager m = new UserManager();
     private static final DeleteManager d = new DeleteManager();
     private static final UpdateManager u = new UpdateManager();
+
+    @Test
+    public void emptyBase() {
+        try {
+            PreparedStatement st = DatabaseAccessObject.getInstance().getPreparedStatement("delete from users;");
+            st.executeUpdate();
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+    }
 
     @Test
     public void addUsers() {
