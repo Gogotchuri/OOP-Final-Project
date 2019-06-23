@@ -19,6 +19,7 @@
     <jsp:include page="/pages/partials/navbar.jsp"/>
     <%--Page Content--%>
     <div>
+        <h2>Register</h2>
         <%if(errList != null){%>
             <div>
                 <%for(String err : errList){%>
