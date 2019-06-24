@@ -73,17 +73,6 @@ public class RegistrationServlet extends HttpServlet {
 			lastName = request.getParameter("last_name"),
 			phoneNumber = request.getParameter("phone_number");
 
-		//Before everything start
-//		PrintWriter writer = response.getWriter();
-//		writer.println(username);
-//		writer.println(password);
-//		writer.println(email);
-//		writer.println(firstName);
-//		writer.println(lastName);
-//		writer.println(phoneNumber);
-//		writer.flush();
-//		writer.close();
-
 		new AuthController(request, response, this).register (
 			username, password, email, firstName, lastName, phoneNumber
 		);

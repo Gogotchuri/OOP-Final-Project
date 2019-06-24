@@ -6,6 +6,10 @@
         <element id="directory" name="classes">
           <element id="module-output" name="OOP-Final-Project" />
         </element>
+        <element id="directory" name="lib">
+          <element id="library" level="module" name="JUnit4" module-name="OOP-Final-Project" />
+          <element id="library" level="module" name="JUnit5.3" module-name="OOP-Final-Project" />
+        </element>
       </element>
       <element id="javaee-facet-resources" facet="OOP-Final-Project/web/Web" />
     </root>

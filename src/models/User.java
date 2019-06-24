@@ -139,7 +139,7 @@ public class User {
 
     //Helpers
     public boolean checkPassword(String unprotected){
-        String encrypted = encryptPassword(unprotected); //TODO should encrypt here appropriately
+        String encrypted = encryptPassword(unprotected);
         //then check
         return encrypted.equals(getPassword());
     }

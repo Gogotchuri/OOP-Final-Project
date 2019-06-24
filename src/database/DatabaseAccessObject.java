@@ -1,13 +1,15 @@
 package database;
 
-import models.Image;
+
+import com.mysql.cj.jdbc.MysqlDataSource;
+
 import java.sql.*;
 
 public class DatabaseAccessObject {
-    public static final String MYSQL_USERNAME = "root";
-    public static final String MYSQL_PASSWORD = "bla";
-    public static final String MYSQL_DATABASE_SERVER = "127.0.0.1";
-    public static final String MYSQL_DATABASE_NAME = "bla";
+    private static final String MYSQL_USERNAME = "root";
+    private static final String MYSQL_PASSWORD = "";
+    private static final String MYSQL_DATABASE_SERVER = "127.0.0.1";
+    private static final String MYSQL_DATABASE_NAME = "oop";
 
     private static DatabaseAccessObject dao = null;
 
@@ -15,15 +17,19 @@ public class DatabaseAccessObject {
     private Statement st;
 
 
-    public DatabaseAccessObject(){
+    //Change to newer way of connecting to database
+    private DatabaseAccessObject(){
+        MysqlDataSource ds = new MysqlDataSource();
+        ds.setServerName(MYSQL_DATABASE_SERVER);
+        ds.setDatabaseName(MYSQL_DATABASE_NAME);
+        ds.setUser(MYSQL_USERNAME);
+        ds.setPassword(MYSQL_PASSWORD);
         try {
-            Class.forName("com.mysql.jdbc.Driver");
-            con = DriverManager.getConnection( "jdbc:mysql://" + MYSQL_DATABASE_SERVER, MYSQL_USERNAME, MYSQL_PASSWORD);
+            ds.setVerifyServerCertificate(false);
+            con = ds.getConnection();
             st = con.createStatement();
             st.executeQuery("USE " + MYSQL_DATABASE_NAME);
         } catch (SQLException e) {
-            e.printStackTrace();
-        } catch (ClassNotFoundException e) {
             e.printStackTrace();
         }
     }

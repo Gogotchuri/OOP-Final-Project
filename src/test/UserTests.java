@@ -11,8 +11,7 @@ import java.sql.PreparedStatement;
 import java.sql.SQLException;
 import java.util.ArrayList;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.junit.jupiter.api.Assertions.*;
 
 public class UserTests {
 
@@ -66,5 +65,14 @@ public class UserTests {
     public void deleteFromUsers() {
         assertTrue(d.delete("users", "id", 35));
         assertTrue(d.delete("users", "user_name", "LG"));
+    }
+
+
+    @Test
+    public void customTest(){
+
+        boolean levan = m.storeUser(u1);
+        assertTrue(levan);
+        assertNotNull(m.getUserByUsername(u1.getUsername()));
     }
 }
