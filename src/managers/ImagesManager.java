@@ -15,9 +15,10 @@ public class ImagesManager {
             " item_id, created_at FROM images WHERE id = ?;";
     private static final String GET_IMAGE_QUERY = "SELECT image_category_id, url, user_id," +
             " item_id, created_at FROM images WHERE id = ?;";
-    //aq image_category_is shesacvlelia!!!!!!!!!!
-    private static final String GET_USER_PROFILE_IMAGE = "SELECT * FROM images WHERE user_id = ? and image_category_id = 1";
-    private static final String INSERT_IMAGE_QUERY = "INSERT INTO images VALUES(?, ?, ?, ?, ?);";
+
+    private static final String GET_LAST_ID = "SELECT MAX(id) FROM images;";
+    private static final String GET_USER_PROFILE_IMAGE = "SELECT * FROM images WHERE user_id = ? and image_category_id = 1;";
+    private static final String INSERT_IMAGE_QUERY = "INSERT INTO images VALUES(?, ?, ?, ?, ?, ?);";
     private static final String INSERT_IMAGE_CATEGORY_QUERY = "INSERT INTO image_categories VALUES(?, ?);";
     private static DatabaseAccessObject DBO = DatabaseAccessObject.getInstance();
 
@@ -56,17 +57,31 @@ public class ImagesManager {
     public static boolean addImage(Image img){
         try {
             PreparedStatement st = DBO.getPreparedStatement(INSERT_IMAGE_QUERY);
-            st.setInt(1, img.getCategoryId());
-            st.setString(2, img.getUrl());
-            st.setInt(3, img.getUserId());
-            st.setInt(4, img.getItemId());
-            st.setTimestamp(5, img.getCreatedDate());
+
+            int generatedID = generateID();
+
+            st.setInt(1,generatedID);
+            st.setInt(2, img.getCategoryId());
+            st.setString(3, img.getUrl());
+            st.setInt(4, img.getUserId());
+            st.setInt(5, img.getItemId());
+            st.setTimestamp(6, img.getCreatedDate());
             st.executeUpdate();
         } catch (SQLException ex) {
             ex.printStackTrace();
             return false;
         }
         return true;
+    }
+
+    /**
+     * @return GeneratedID, taken from database
+     * @throws SQLException
+     */
+    private static int generateID() throws SQLException {
+        PreparedStatement st = DBO.getPreparedStatement(GET_LAST_ID);
+        ResultSet set = st.executeQuery();
+        return (set.next()) ? 1 + set.getInt(1) : 1;
     }
 
     /**
@@ -127,6 +142,7 @@ public class ImagesManager {
      * @param name
      * @return false if insertion fails
      */
+    //TODO : არ გვჭირდება, წინასწარ გვექნება განსზაღვრული როგორი ფოტოები გვინდა
     public static boolean addImageCategory(int categoryID, String name){
         try {
             PreparedStatement st = DBO.getPreparedStatement(INSERT_IMAGE_QUERY);
