@@ -19,8 +19,10 @@ public class ImagesManager {
 
     private static final String GET_USER_PROFILE_IMAGE = "SELECT * FROM profile_images WHERE user_id = ?";
 
-    private static final String INSERT_ITEM_IMAGE_QUERY = "INSERT INTO item_images VALUES(?, ?, ?, ?, ?, ?);";
-    private static final String INSERT_PROFILE_IMAGE_QUERY = "INSERT INTO profile_images VALUES(?, ?, ?, ?);";
+    private static final String INSERT_ITEM_IMAGE_QUERY = "INSERT INTO images (image_category_id, url, user_id, item_id," +
+            " created_at) VALUES(?, ?, ?, ?, ?);";
+    private static final String INSERT_PROFILE_IMAGE_QUERY = "INSERT INTO images (image_category_id, url, user_id, item_id," +
+            " created_at) VALUES(?, ?, ?, ?, ?);";
 
     private static final String INSERT_IMAGE_CATEGORY_QUERY = "INSERT INTO image_categories VALUES(?, ?);";
     private static DatabaseAccessObject DBO = DatabaseAccessObject.getInstance();
@@ -51,14 +53,11 @@ public class ImagesManager {
         try {
             PreparedStatement st = DBO.getPreparedStatement(INSERT_ITEM_IMAGE_QUERY);
 
-            int generatedID = generateID(GET_LAST_ID_ITEM);
-
-            st.setInt(1,generatedID);
-            st.setInt(2, img.getImageCategory());
-            st.setString(3, img.getUrl());
-            st.setInt(4, img.getUserId());
-            st.setInt(5, img.getItemId());
-            st.setTimestamp(6, img.getCreatedDate());
+            st.setInt(1, img.getImageCategory());
+            st.setString(2, img.getUrl());
+            st.setInt(3, img.getUserId());
+            st.setInt(4, img.getItemId());
+            st.setTimestamp(5, img.getCreatedDate());
             st.executeUpdate();
         } catch (SQLException ex) {
             ex.printStackTrace();
@@ -76,12 +75,9 @@ public class ImagesManager {
         try {
             PreparedStatement st = DBO.getPreparedStatement(INSERT_PROFILE_IMAGE_QUERY);
 
-            int generatedID = generateID(GET_LAST_ID_PROFILE);
-
-            st.setInt(1,generatedID);
             st.setString(2, img.getUrl());
             st.setInt(3, img.getUserId());
-            st.setTimestamp(4, img.getCreatedDate());
+            st.setTimestamp(5, img.getCreatedDate());
             st.executeUpdate();
         } catch (SQLException ex) {
             ex.printStackTrace();

@@ -24,7 +24,8 @@ public class DealsManager {
 
     private static final String SELECT_DEAL_BY_USER_QUERY = "SELECT * FROM deals WHERE user_id = ?;";
     private static final String SELECT_DEAL_QUERY = "SELECT * FROM deals WHERE id = ?;";
-    private static final String STORE_DEAL_QUERY = "INSERT INTO deals VALUES(?, ?, ?, ?);";
+    private static final String STORE_DEAL_QUERY = "INSERT INTO deals (user_id, status_id, created_at, updated_at) " +
+            "VALUES(?, ?, ?, ?);";
     private static final String SELECT_ID = "SELECT MAX(id) FROM ?";
 
     /**
@@ -61,7 +62,6 @@ public class DealsManager {
             Timestamp t = new Timestamp(System.currentTimeMillis());
             st.setTimestamp(3, t);
             st.setTimestamp(4, t);
-            st.setInt(5, deal.getStatus_id());
             st.executeUpdate();
             PreparedStatement statement = DBAO.getPreparedStatement(SELECT_ID);
             statement.setString(1, "deals");
