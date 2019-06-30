@@ -7,5 +7,9 @@
 --%>
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <html>
-<footer>Page footer</footer>
+    <footer class="footer">
+        <div class="main-footer">
+            <span>All Rights Reserved 2019 © Freeuni</span>
+        </div>
+    </footer>
 </html>
