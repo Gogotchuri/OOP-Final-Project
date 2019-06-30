@@ -19,10 +19,10 @@ public class ImagesManager {
 
     private static final String GET_USER_PROFILE_IMAGE = "SELECT * FROM profile_images WHERE user_id = ?";
 
-    private static final String INSERT_ITEM_IMAGE_QUERY = "INSERT INTO images (image_category_id, url, user_id, item_id," +
+    private static final String INSERT_ITEM_IMAGE_QUERY = "INSERT INTO item_images (image_category_id, url, user_id, item_id," +
             " created_at) VALUES(?, ?, ?, ?, ?);";
-    private static final String INSERT_PROFILE_IMAGE_QUERY = "INSERT INTO images (image_category_id, url, user_id, item_id," +
-            " created_at) VALUES(?, ?, ?, ?, ?);";
+    private static final String INSERT_PROFILE_IMAGE_QUERY = "INSERT INTO images (url, user_id," +
+            " created_at) VALUES(?, ?, ?);";
 
     private static final String INSERT_IMAGE_CATEGORY_QUERY = "INSERT INTO image_categories VALUES(?, ?);";
     private static DatabaseAccessObject DBO = DatabaseAccessObject.getInstance();
@@ -75,9 +75,9 @@ public class ImagesManager {
         try {
             PreparedStatement st = DBO.getPreparedStatement(INSERT_PROFILE_IMAGE_QUERY);
 
-            st.setString(2, img.getUrl());
-            st.setInt(3, img.getUserId());
-            st.setTimestamp(5, img.getCreatedDate());
+            st.setString(1, img.getUrl());
+            st.setInt(2, img.getUserId());
+            st.setTimestamp(3, img.getCreatedDate());
             st.executeUpdate();
         } catch (SQLException ex) {
             ex.printStackTrace();
