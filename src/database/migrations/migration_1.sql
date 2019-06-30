@@ -45,7 +45,7 @@ CREATE TABLE items
 (
   id INT(6) UNSIGNED AUTO_INCREMENT PRIMARY KEY,
   user_id INT(6) UNSIGNED NOT NULL,
-  FOREIGN KEY (user_id) REFERENCES users(id),
+  FOREIGN KEY (user_id) REFERENCES users(id) on delete cascade,
 
   item_category_id INT(6) UNSIGNED NOT NULL,
   FOREIGN KEY (item_category_id) REFERENCES item_categories(id),
@@ -61,9 +61,9 @@ CREATE TABLE owned_items
 (
   id INT(6) UNSIGNED AUTO_INCREMENT PRIMARY KEY,
   deal_id INT(6) UNSIGNED NOT NULL,
-  FOREIGN KEY (deal_id) REFERENCES deals(id),
+  FOREIGN KEY (deal_id) REFERENCES deals(id) on delete cascade,
   item_id INT(6) UNSIGNED NOT NULL,
-  FOREIGN KEY (item_id) REFERENCES items(id),
+  FOREIGN KEY (item_id) REFERENCES items(id) on delete cascade,
 
   created_at TIMESTAMP DEFAULT now(),
   updated_at TIMESTAMP DEFAULT now()
@@ -73,7 +73,7 @@ CREATE TABLE wanted_items
 (
   id INT(6) UNSIGNED AUTO_INCREMENT PRIMARY KEY,
   deal_id INT(6) UNSIGNED NOT NULL,
-  FOREIGN KEY (deal_id) REFERENCES deals(id),
+  FOREIGN KEY (deal_id) REFERENCES deals(id) on delete cascade,
   
   item_category_id INT(6) UNSIGNED NOT NULL,
   FOREIGN KEY (item_category_id) REFERENCES item_categories(id),
@@ -112,7 +112,7 @@ CREATE TABLE chats
   id INT(6) UNSIGNED AUTO_INCREMENT PRIMARY KEY,
   
   cycle_id INT(6) UNSIGNED NOT NULL,
-  FOREIGN KEY (cycle_id) REFERENCES cycles(id),
+  FOREIGN KEY (cycle_id) REFERENCES cycles(id) on delete cascade,
 
   updated_at TIMESTAMP DEFAULT now()
 );
@@ -122,7 +122,7 @@ CREATE TABLE messages
 (
   id INT(6) UNSIGNED AUTO_INCREMENT PRIMARY KEY,
   chat_id INT(6) UNSIGNED NOT NULL,
-  FOREIGN KEY(chat_id) REFERENCES chats(id),
+  FOREIGN KEY(chat_id) REFERENCES chats(id) on delete cascade,
 
   body VARCHAR(512) NOT NULL,
 
@@ -135,7 +135,7 @@ CREATE TABLE image_categories
   name VARCHAR(32) NOT NULL UNIQUE
 );
 
-CREATE TABLE images
+CREATE TABLE item_images
 (
   id INT(6) UNSIGNED AUTO_INCREMENT PRIMARY KEY,
 
@@ -144,10 +144,17 @@ CREATE TABLE images
 
   url VARCHAR(256) NOT NULL UNIQUE,
   user_id INT(6) UNSIGNED NOT NULL,
-  FOREIGN KEY (user_id) REFERENCES users(id),
-  item_id INT(6) UNSIGNED NOT NULL,
-  FOREIGN KEY (item_id) REFERENCES items(id),
-
-
+  FOREIGN KEY (user_id) REFERENCES users(id) on delete cascade,
+  item_id INT(6) UNSIGNED DEFAULT NULL,
+  FOREIGN KEY (item_id) REFERENCES items(id) on delete cascade,
   created_at TIMESTAMP DEFAULT now()
+);
+
+CREATE TABLE profile_images
+(
+    id INT(6) UNSIGNED AUTO_INCREMENT PRIMARY KEY,
+    url VARCHAR(256) NOT NULL UNIQUE,
+    user_id INT(6) UNSIGNED NOT NULL,
+    FOREIGN KEY (user_id) REFERENCES users(id) on delete cascade,
+    created_at TIMESTAMP DEFAULT now()
 );

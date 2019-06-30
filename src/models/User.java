@@ -61,7 +61,7 @@ public class User {
         return ImagesManager.getUserProfileImage(id);
     }
 
-    public List <Image> getImages(){return ImagesManager.getUserImages(id);};
+    public List <ItemImage> getImages() { return ImagesManager.getUserImages(id);};
 
     public List <Deal> getDeals(){ return DealsManager.getUserDeals(this);};
 

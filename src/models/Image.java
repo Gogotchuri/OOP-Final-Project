@@ -3,90 +3,44 @@ import managers.ImagesManager;
 
 import java.sql.Timestamp;
 
-public class Image {
-    private int id;
-    private int category_id;
+/**
+ * Class representing image
+ * This is a default class, used for saving user profile images
+ */
+public class Image implements Comparable <Image> {
+
+    private int id, userId;
     private String url;
-    private int user_id;
-    private int item_id;
-    private Timestamp created_at;
-    
-    /**
-     * create Image object according to its id
-     *
-     * @param id
-     */
+    private Timestamp createdAt;
 
-    public Image(int id) {
-        Image i = ImagesManager.getImage(id);
-        this.id = i.id;
-        this.category_id = i.category_id;
-        this.url = i.url;
-        this.user_id = i.user_id;
-        this.item_id = i.item_id;
-        this.created_at = i.created_at;
-    }
-
-    /**
-     *
-     * @param id ID of an image
-     * @param category_id id of image_category
-     * @param url url of an image
-     * @param user_id id of a user
-     * @param item_id id of an item
-     */
-    public Image(int id, int category_id, String url, int user_id, int item_id, Timestamp created_at) {
+    public Image(int id, int userId, String url, Timestamp createdAt) {
         this.id = id;
-        this.category_id = category_id;
+        this.userId = userId;
         this.url = url;
-        this.user_id = user_id;
-        this.item_id = item_id;
-        this.created_at = created_at;
+        this.createdAt = createdAt;
     }
 
     /**
-     * Alternate constructor, without id
-     * @param category_id id of image_category
-     * @param url url of an image
-     * @param user_id id of a user
-     * @param item_id id of an item
+     * @return ID of an image
      */
-    public Image(int category_id, String url, int user_id, int item_id, Timestamp created_at) {
-        this.category_id = category_id;
-        this.url = url;
-        this.user_id = user_id;
-        this.item_id = item_id;
-        this.created_at = created_at;
-    }
+    public int getId () { return id; }
 
-    public void setId(int id){
-        this.id = id;
-    }
+    /**
+     * @return user's ID
+     */
+    public int getUserId () { return userId; }
 
-    public int getId(){
-        return id;
-    }
+    /**
+     * @return url of an image
+     */
+    public String getUrl () { return url; }
 
-    public int getCategoryId(){
-        return category_id;
-    }
+    /**
+     * @return Date when created
+     */
+    public Timestamp getCreatedDate () { return createdAt; }
 
-    public String getUrl(){
-        return url;
-    }
-
-    public int getUserId(){
-        return user_id;
-    }
-
-    public int getItemId(){
-        return item_id;
-    }
-
-    public Timestamp getCreatedDate(){
-        return created_at;
-    }
-
+    @Override
     /**
      * @param o Passed image
      * @return Checks whether two images are same or not
@@ -95,5 +49,20 @@ public class Image {
         if(this == o) return true;
         if(!(o instanceof Image)) return false;
         return url.equals(((Image) o).getUrl());
+    }
+
+    @Override
+    /**
+     * @param other passed image
+     * @return compares two images
+     */
+    public int compareTo(Image other) { return Integer.compare(id, other.getId()); }
+
+    @Override
+    /**
+     * String representation of an image
+     */
+    public String toString() {
+        return id + " : " + url;
     }
 }
