@@ -15,16 +15,16 @@ import static org.junit.jupiter.api.Assertions.*;
 
 public class UserTests {
 
-    private static final User u1 = new User("LG","password","levan","gelashvili", "lgela17", "555");
-    private static final User u2 = new User("KING","heat","Lebron","James","ljame03","23");
-    private static final User u3 = new User("a","b","c","d","e","f");
+    private static final User u1 = new User(1,"LG","password","levan","gelashvili", "lgela17", "555");
+    private static final User u2 = new User(2,"KING","heat","Lebron","James","ljame03","23");
+    private static final User u3 = new User(3,"a","b","c","d","e","f");
 
     private static final UserManager m = new UserManager();
     private static final DeleteManager d = new DeleteManager();
     private static final UpdateManager u = new UpdateManager();
 
     @Test
-    public static void emptyBase() {
+    public void emptyBase() {
         try {
             PreparedStatement st = DatabaseAccessObject.getInstance().getPreparedStatement("delete from users;");
             st.executeUpdate();
@@ -35,9 +35,9 @@ public class UserTests {
 
     @Test
     public void addUsers() {
-        assertEquals(m.storeUser(u1),true);
-        assertEquals(m.storeUser(u2),true);
-        assertEquals(m.storeUser(u3),true);
+        assertTrue(UserManager.storeUser(u1));
+        assertTrue(m.storeUser(u2));
+        assertTrue(m.storeUser(u3));
     }
 
     @Test
@@ -70,6 +70,7 @@ public class UserTests {
 
     @Test
     public void customTest(){
+
         boolean levan = m.storeUser(u1);
         assertTrue(levan);
         assertNotNull(m.getUserByUsername(u1.getUsername()));
