@@ -14,32 +14,36 @@ import java.util.List;
 
 public class ItemManager {
 
-    private static final String INSERT_ITEM_QUERY = "INSERT INTO items VALUES(?, ?, ?, ?, ?, ?);";
-    private static final String INSERT_WANTED_ITEM_QUERY = "INSERT INTO wanted_items VALUES(?, ?, ?, ?);";
-    private static final String INSERT_OWNED_ITEM_QUERY = "INSERT INTO owned_items VALUES(?, ?, ?, ?);";
+    private static final String INSERT_ITEM_QUERY = "INSERT INTO items (user_id, item_category_id, description, " +
+            "created_at, updated_at) VALUES(?, ?, ?, ?, ?, ?);";
+    private static final String INSERT_WANTED_ITEM_QUERY = "INSERT INTO wanted_items (deal_id, item_category_id, " +
+            "created_at, updated_at) VALUES(?, ?, ?, ?);";
+    private static final String INSERT_OWNED_ITEM_QUERY = "INSERT INTO owned_items (deal_id, item_id, " +
+            "created_at, updated_at)  VALUES(?, ?, ?, ?);";
     private static final String SELECT_DEAL_OWNED_ITEMS = "SELECT item_id from owned_items where deal_id = ?";
-    private static final String SELECT_DEAL_WANTED_ITEMS = "SELECT category_id from wanted_items where deal_id = ?";
-
+    private static final String SELECT_DEAL_WANTED_ITEMS = "SELECT item_category_id from wanted_items where deal_id = ?";
     private static final String SELECT_BY = "SELECT * FROM ? WHERE ? = ? ;";
     private static DatabaseAccessObject DBO = DatabaseAccessObject.getInstance();
 
     /**
      * @param item Item, which needs to added to database
      */
-    public static void addItemToDB(Item item) {
+    public static boolean addItemToDB(Item item) {
         try {
             PreparedStatement st = DBO.getPreparedStatement(INSERT_ITEM_QUERY);
-            st.setInt(1,item.getItemId());
-            st.setInt(2,item.getUserId());
-            st.setInt(3,item.getCategory().getId());
-            st.setString(4,item.getDescription());
-            st.setString(5,item.getName());
-            st.setTimestamp(6,item.getCreatedAt());
-            st.setTimestamp(7,item.getUpdatedAt());
+            st.setInt(1,item.getUserId());
+            st.setInt(2,item.getCategory().getId());
+            st.setString(3,item.getDescription());
+            st.setString(4,item.getName());
+            Timestamp t = new Timestamp(System.currentTimeMillis());
+            st.setTimestamp(5, t);
+            st.setTimestamp(6, t);
             st.executeUpdate();
         } catch (SQLException e) {
             e.printStackTrace();
+            return false;
         }
+        return true;
     }
 
     /**
@@ -49,14 +53,12 @@ public class ItemManager {
      * @param value Passed value
      * @return All items from given table matching given criteria
      */
-    private static List<Item> getItemsByColumn(String table, String column, String value) {
+    public static List<Item> getItemsByColumn(String table, String column, String value) {
         List<Item> list = new ArrayList<>();
         try {
-            PreparedStatement st = DBO.getPreparedStatement(SELECT_BY);
+            String statement = "SELECT * FROM " + table + " WHERE " + column + " = " + value + ";";
 
-            st.setString(1,table);
-            st.setString(2,column);
-            st.setString(3,value);
+            PreparedStatement st = DBO.getPreparedStatement(statement);
 
             ResultSet rs = st.executeQuery();
             while(rs.next()) {
@@ -123,10 +125,8 @@ public class ItemManager {
     private static Category parseCategory(ResultSet rs) throws SQLException {
         int categoryId = rs.getInt("item_category_id");
 
-        PreparedStatement st = DBO.getPreparedStatement(SELECT_BY);
-        st.setString(1,"item_categories");
-        st.setString(2,"id");
-        st.setInt(3, categoryId);
+        String statement = "SELECT * FROM item_categories WHERE id = " + categoryId + ";";
+        PreparedStatement st = DBO.getPreparedStatement(statement);
         ResultSet set = st.executeQuery();
 
         if(set.next()) {
@@ -185,7 +185,6 @@ public class ItemManager {
         }
         return true;
     }
-
     /**
      * @param dealID
      * @param query
