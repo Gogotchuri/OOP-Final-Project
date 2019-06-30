@@ -17,9 +17,9 @@ public class UserManager {
 
     private static DatabaseAccessObject DBAO = DatabaseAccessObject.getInstance();
 
-    private static final String STORE_USER_QUERY = "INSERT INTO users VALUES(?, ?, ?, ?, ?, ?, ?, ?, ?);";
+    private static final String STORE_USER_QUERY = "INSERT INTO users (user_name , password , first_name, last_name, " +
+            "email, phone_number, created_at, updated_at) VALUES(?, ?, ?, ?, ?, ?, ?, ?);";
     private static final String GET_LAST_ID = "SELECT MAX(id) FROM users;";
-
     /**
      * get User object with its username
      *
@@ -81,18 +81,16 @@ public class UserManager {
      */
     public static boolean storeUser(User user){
         try {
-            int generatedID = generateID();
             PreparedStatement st = DBAO.getPreparedStatement(STORE_USER_QUERY);
 
-            st.setInt(1,generatedID);
-            st.setString(2, user.getUsername());
-            st.setString(3, user.getPassword());
-            st.setString(4, user.getFirstName());
-            st.setString(5, user.getLastName());
-            st.setString(6, user.getEmail());
-            st.setString(7, user.getPhoneNumber());
-            st.setTimestamp(8, user.getCreatedDate());
-            st.setTimestamp(9, user.getUpdatedDate());
+            st.setString(1, user.getUsername());
+            st.setString(2, user.getPassword());
+            st.setString(3, user.getFirstName());
+            st.setString(4, user.getLastName());
+            st.setString(5, user.getEmail());
+            st.setString(6, user.getPhoneNumber());
+            st.setTimestamp(7, user.getCreatedDate());
+            st.setTimestamp(8, user.getUpdatedDate());
 
             st.executeUpdate();
 
