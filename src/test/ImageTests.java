@@ -57,7 +57,7 @@ public class ImageTests {
 
     @Test
     public void prepareForForeignKeys() {
-        UserTests.emptyBase();
+        new UserTests().emptyBase();
         UserManager.storeUser(u1);
         UserManager.storeUser(u2);
         /*
