@@ -21,7 +21,7 @@ public class ImagesManager {
 
     private static final String INSERT_ITEM_IMAGE_QUERY = "INSERT INTO item_images (image_category_id, url, user_id, item_id," +
             " created_at) VALUES(?, ?, ?, ?, ?);";
-    private static final String INSERT_PROFILE_IMAGE_QUERY = "INSERT INTO images (url, user_id," +
+    private static final String INSERT_PROFILE_IMAGE_QUERY = "INSERT INTO profile_images (url, user_id," +
             " created_at) VALUES(?, ?, ?);";
 
     private static final String INSERT_IMAGE_CATEGORY_QUERY = "INSERT INTO image_categories VALUES(?, ?);";

@@ -101,9 +101,6 @@ CREATE TABLE offered_cycles
 
   cycle_id INT(6) UNSIGNED NOT NULL,
   FOREIGN KEY (cycle_id) REFERENCES cycles(id),
-
-  created_at TIMESTAMP DEFAULT now(),
-  updated_at TIMESTAMP DEFAULT now()
 );
 
 

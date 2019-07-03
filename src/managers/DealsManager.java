@@ -239,8 +239,13 @@ public class DealsManager {
             "    ) result \n" +
             ");";
 
-        // TODO
-
-        return new ArrayList<>();
+        List<Deal> deals = new ArrayList<>();
+        try {
+            PreparedStatement st = DBAO.getPreparedStatement(query);
+            queryDeals(deals,st);
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return deals;
     }
 }
