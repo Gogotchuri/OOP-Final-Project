@@ -33,10 +33,8 @@ public class Cycle {
      * @param deals List of deals making up a cycle, already sorted
      */
     public Cycle(List<Deal> deals) {
-        for (int i=0; i<deals.size()-1; i++) {
-            map.put(deals.get(i).getId(), deals.get(i+1));
-        }
-        map.put(deals.get(deals.size()-1).getId(), deals.get(0));
+        for (int i = 0; i < deals.size(); i++)
+            map.put(deals.get(i).getId(), deals.get((i + 1) % deals.size()));
     }
 
     /**
@@ -44,7 +42,7 @@ public class Cycle {
      * @return Deal that user is interested in
      */
     public Deal getWantedDealByUser(int userId) {
-        return (map.containsKey(userId)) ? map.get(userId) : null;
+        return map.getOrDefault(userId, null);
     }
 
     /**

@@ -205,7 +205,6 @@ public class DealsManager {
     }
 
     /**
-     TODO
      Returns list of deals whose
      Wanted item categories
      are equal of
@@ -213,6 +212,34 @@ public class DealsManager {
      Returns at least empty list
      */
     public static List<Deal> getClients(Deal deal) {
+
+        String query =
+            "SELECT * FROM deals \n" +
+            "WHERE id IN ( \n" +
+            "    SELECT result.deal_id FROM \n" +
+            "    (SELECT a.deal_id AS deal_id, \n" +
+            "            COUNT(*) AS row_num FROM \n" +
+            "        (SELECT deal_id, \n" +
+            "                item_category_id, \n" +
+            "                COUNT(*) AS freq_item_category \n" +
+            "           FROM wanted_items \n" +
+            "          GROUP BY deal_id, item_category_id) a \n" +
+            "        JOIN \n" +
+            "        (SELECT i.item_category_id AS item_category_id, \n" +
+            "                COUNT(*) AS freq_item_category \n" +
+            "           FROM owned_items oi JOIN items i ON (oi.item_id = i.id) \n" +
+            "          WHERE oi.deal_id = " + deal.getId() + "\n" +
+            "          GROUP BY i.item_category_id) b \n" +
+            "        ON a.item_category_id = b.item_category_id AND \n" +
+            "            a.freq_item_category = b.freq_item_category \n" +
+            "     GROUP BY deal_id \n" +
+            "     HAVING row_num = (SELECT COUNT(DISTINCT i.item_category_id) \n" +
+            "                         FROM owned_items oi JOIN items i ON (oi.item_id = i.id) \n" +
+            "                        WHERE oi.deal_id = " + deal.getId() + ") \n" +
+            "    ) result \n" +
+            ");";
+
+        // TODO
 
         return new ArrayList<>();
     }
