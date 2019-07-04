@@ -1,5 +1,7 @@
 package models;
 
+import java.security.MessageDigest;
+import java.security.NoSuchAlgorithmException;
 import java.sql.Timestamp;
 import java.util.List;
 
@@ -155,8 +157,25 @@ public class User {
      * @return
      */
     public static String encryptPassword(String password){
-        //TODO encryption logic here
-        return password;
+        String hashed = password;
+        try {
+            MessageDigest md = MessageDigest.getInstance("SHA-256");
+            hashed = hexToString(md.digest(password.getBytes()));
+        } catch (NoSuchAlgorithmException e) {
+            e.printStackTrace();
+        }
+        return hashed;
+    }
+
+    private static String hexToString(byte[] hex){
+        StringBuilder sb = new StringBuilder();
+        for (byte b : hex) {
+            int val = ((int)b) & 0xff;
+            if (val < 16) sb.append('0');
+            sb.append(Integer.toString(val, 16));
+        }
+
+        return sb.toString();
     }
 
     /**
