@@ -121,6 +121,11 @@ public class User {
         this.updated_at = new Timestamp(System.currentTimeMillis());
     }
 
+    public void setRawPassword(String password) {
+        this.password = encryptPassword(password);
+        this.updated_at = new Timestamp(System.currentTimeMillis());
+    }
+
     public void setEmail(String email) {
         this.email = email;
         this.updated_at = new Timestamp(System.currentTimeMillis());

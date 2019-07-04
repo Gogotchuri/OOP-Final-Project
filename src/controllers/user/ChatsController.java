@@ -31,8 +31,7 @@ public class ChatsController extends Controller {
     }
 
     public void index() throws IOException, ServletException {
-        //TODO implement method in manager to return all user chats!
-        List<Chat> chats = null;
+        List<Chat> chats = ChatManager.getUserChats(this.user.getId());
         request.setAttribute("chats", chats);
         dispatchTo("/pages/user/chats.jsp");
     }
@@ -71,7 +70,7 @@ public class ChatsController extends Controller {
         Chat chat = ChatManager.getChatByCycleID(cycle_id);
         if(chat == null){
             response.setStatus(404);
-            out.print("Unprocessable entity! Should contain a body field!");
+            out.print("No chat found with given cycle id!");
             out.flush();
             return;
         }

@@ -4,9 +4,13 @@ import database.DatabaseAccessObject;
 import generalManagers.DeleteManager;
 import models.Chat;
 import models.Message;
+import models.ProcessStatus;
 
 import java.sql.*;
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
+import java.util.Vector;
 
 public class ChatManager {
     private static final String GET_CHAT_BY_CYCLE_QUERY = "SELECT * FROM chats WHERE cycle_id = ?;";
@@ -97,7 +101,7 @@ public class ChatManager {
             ResultSet set = st.executeQuery();
             set.next();
             ch = new Chat(set.getBigDecimal("id").intValue(),
-                    cycleID, set.getTimestamp("updated_at"));
+                    cycleID, set.getTimestamp("updated_at"), new Vector<>());
 
             st = DBO.getPreparedStatement(GET_MESSAGES_QUERY);
             st.setInt(1, ch.getChatID());
@@ -113,6 +117,32 @@ public class ChatManager {
         return ch;
     }
 
+    //TODO WARNING! not tested yet, please test
+    public static List<Chat> getUserChats(int user_id){
+        List<Chat> chats = new ArrayList<>();
+        String query = "SELECT ch.id" +
+                "FROM chats ch" +
+                "JOIN cycles ON cycles.id = ch.cycle_id"+
+                "JOIN offered_cycles cyc ON cycles.id = cyc.cycle_id" +
+                "JOIN deals d on d.id = cyc.deal_id" +
+                "WHERE cycles.status id = " + ProcessStatus.Status.ONGOING.getId() +
+                "AND d.user_id = " + user_id +
+                "ORDER BY ch.updated_at";
+        //TODO is this right?? no idea
+
+        try {
+            PreparedStatement st = DBO.getPreparedStatement(query);
+            ResultSet rs = st.executeQuery();
+            while (rs.next()) {
+                Chat chat = getChatByID(rs.getInt("id"));
+                chats.add(chat);
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+
+        return chats;
+    }
     /**
      *
      * @param chatID id of the chat
@@ -126,7 +156,7 @@ public class ChatManager {
             ResultSet set = st.executeQuery();
             set.next();
             ch = new Chat(chatID, set.getBigDecimal("cycle_id").intValue(),
-                    set.getTimestamp("updated_at"));
+                    set.getTimestamp("updated_at"), new Vector<>());
 
             st = DBO.getPreparedStatement(GET_MESSAGES_QUERY);
             st.setInt(1, ch.getChatID());

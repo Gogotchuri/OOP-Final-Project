@@ -6,14 +6,14 @@ import events.DealCyclesFinder;
 import managers.DealsManager;
 import models.Deal;
 import models.User;
+import services.RequestValidator;
 
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.List;
+import java.util.*;
 
 public class DealsController extends Controller implements ResourceController {
     private User user;
@@ -75,19 +75,19 @@ public class DealsController extends Controller implements ResourceController {
      */
     public void store() throws IOException, ServletException {
 
-        /*
-         TODO:
-         Call validator, which returns parameters passed in 'request'
-         or error if passed parameters are invalid.
-         */
-
-//      if (errorOccurredByValidator) {
+        Map<String, List<String>> rules = new HashMap<>();
+        //Validation rules
+        rules.put("item_id", Arrays.asList("type:numeric", "min:1"));
+        //TODO need to think of ways to store deal from the frontend first
+        RequestValidator validator = new RequestValidator(request, rules);
+        if(validator.failed()){
+            request.setAttribute("errors", validator.getErrors());
             List<String> errors = new ArrayList<>();
             errors.add("Passed parameters are invalid!");
             request.setAttribute("errors", errors);
             create();
-//          return;
-//      }
+          return;
+      }
 
         // TODO: Should be assigned after parsing request by validator.
         List<Integer> ownedIDs = null,
@@ -122,7 +122,7 @@ public class DealsController extends Controller implements ResourceController {
     public void update(int id) throws IOException, ServletException {
         Deal deal = DealsManager.getDealById(id);
         if(!checkOwnership(deal)) return;
-        //TODO Parse, validate and set deal fields!
+        //TODO Parse, validate and set deal fields! same here, need to start from the front
         if(DealsManager.updateDeal(deal)) show(deal.getId());
         else sendError(500,
                 "Error occurred while updating a deal. DealsManager.updateDeal returned false! (user.DealsController:100)");

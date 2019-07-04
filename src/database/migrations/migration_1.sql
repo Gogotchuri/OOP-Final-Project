@@ -9,7 +9,7 @@ CREATE TABLE users
   last_name VARCHAR(64),
 
   email VARCHAR(128) UNIQUE,
-  phone_number VARCHAR(32) UNIQUE,
+  phone_number VARCHAR(32),
 
   created_at TIMESTAMP DEFAULT now(),
   updated_at TIMESTAMP DEFAULT now()
@@ -100,7 +100,7 @@ CREATE TABLE offered_cycles
   FOREIGN KEY (deal_id) REFERENCES deals(id),
 
   cycle_id INT(6) UNSIGNED NOT NULL,
-  FOREIGN KEY (cycle_id) REFERENCES cycles(id),
+  FOREIGN KEY (cycle_id) REFERENCES cycles(id)
 );
 
 

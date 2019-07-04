@@ -137,4 +137,14 @@ public class UserManager {
 
         return user;
     }
+
+    //TODO implement me
+    public static User getUserByEmail(String email) {
+        return null;
+    }
+
+    //TODO implement me
+    public static boolean updateExistingUser(User user) {
+        return false;
+    }
 }

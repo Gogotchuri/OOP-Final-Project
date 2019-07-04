@@ -11,7 +11,6 @@ import java.util.Vector;
 public class Chat {
     private int chatID;
     private int cycleID;
-    private int messageAmount;
     private Timestamp lastUpdateDate; //Need timestamp for exact time
     private Vector<Message> messages; //Not sure needed
 
@@ -20,14 +19,28 @@ public class Chat {
      * @param cycleID
      * @param updateDate
      */
-    public Chat(int chatID, int cycleID, Date updateDate){
-        messages = new Vector<>(); //Should be fetched from db, not explicitly created
+
+    /**
+     * Constructor for creating fresh object of chat
+     * */
+    public Chat(int chatID, int cycleID){
+        messages = new Vector<>();
         this.chatID = chatID;
         this.cycleID = cycleID;
-        this.messageAmount = 0;
-        this.lastUpdateDate = (updateDate != null) ? new Timestamp(updateDate.getTime())
-            : new Timestamp((new Date()).getTime());
+        this.lastUpdateDate = new Timestamp((new Date()).getTime());
     }
+
+    /**
+     * Constructor for creating object of chat with already existing messages in it
+     * */
+    public Chat(int chatID, int cycleID, Date updateDate, Vector<Message> messages){
+        this.messages = messages;
+        this.chatID = chatID;
+        this.cycleID = cycleID;
+        this.lastUpdateDate = (updateDate != null) ? new Timestamp(updateDate.getTime())
+                : new Timestamp((new Date()).getTime());
+    }
+
 
     /**
      * Add a new message in the sequence.
@@ -36,15 +49,13 @@ public class Chat {
      */
     public void addMessage(Message msg){
         messages.add(msg);
-        messageAmount++;
     }
 
     /**
      * @return  iterator containing every message in the chat
      */
     public Iterator getMessages(){
-        Iterator it = messages.iterator();
-        return it;
+        return messages.iterator();
     }
 
     /**
@@ -100,7 +111,7 @@ public class Chat {
      * @return amount of messages in chat
      */
     public int getMessageAmount() {
-        return messageAmount;
+        return messages.size();
     }
 
     /**
