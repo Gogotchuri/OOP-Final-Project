@@ -19,8 +19,8 @@ public class ChatAndCycleTests {
 
     @Test
     public void addChatTest(){
-        Chat ch1 = new Chat(1, 1, null);
-        Chat ch2 = new Chat(2, 2, null);
+        Chat ch1 = new Chat(1, 1);
+        Chat ch2 = new Chat(2, 2);
         assertEquals(ChatManager.addChatToDB(ch1), true);
         assertEquals(ChatManager.addChatToDB(ch2), true);
         assertEquals(ChatManager.getChatByCycleID(1).getChatID(), ch1.getChatID());

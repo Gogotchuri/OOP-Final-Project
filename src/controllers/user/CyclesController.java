@@ -1,6 +1,7 @@
 package controllers.user;
 
 import controllers.Controller;
+import managers.CycleManager;
 import models.Cycle;
 import models.User;
 
@@ -29,8 +30,8 @@ public class CyclesController extends Controller {
     }
 
     public void show(int cycle_id) throws ServletException, IOException {
-        //TODO get cycle with id, if not found send error
-        Cycle cycle = null;
+        //TODO if cycle not found send error
+        Cycle cycle = CycleManager.getCycleByID(cycle_id);
         request.setAttribute("cycle", cycle);
         dispatchTo("/pages/user/deals/cycle.jsp");
     }
@@ -39,8 +40,9 @@ public class CyclesController extends Controller {
      * @param deal_id
      */
     public void dealCycles(int deal_id) throws ServletException, IOException {
-        //TODO get cycles for given deal id, if not found send error
-        List<Cycle> cycles = null;
+        //TODO if cycle not found send error
+
+        List<Cycle> cycles = CycleManager.getCyclesByDealID(deal_id);
         request.setAttribute("cycles", cycles);
         dispatchTo("/pages/user/deals/deal-cycles.jsp");
     }
@@ -50,6 +52,6 @@ public class CyclesController extends Controller {
     }
 
     public void rejectCycle(int cycle_id){
-        //TODO implement rejecting logic (JUST DELETE!)
+        CycleManager.deleteCycle(cycle_id);
     }
 }
