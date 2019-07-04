@@ -2,6 +2,8 @@ package managers;
 
 import database.DatabaseAccessObject;
 import generalManagers.DeleteManager;
+import generalManagers.UpdateForm;
+import generalManagers.UpdateManager;
 import models.Deal;
 import models.User;
 
@@ -19,14 +21,13 @@ public class UserManager {
 
     private static final String STORE_USER_QUERY = "INSERT INTO users (user_name , password , first_name, last_name, " +
             "email, phone_number, created_at, updated_at) VALUES(?, ?, ?, ?, ?, ?, ?, ?);";
-    private static final String GET_LAST_ID = "SELECT MAX(id) FROM users;";
+
     /**
      * get User object with its username
      *
      * @param username
      * @return User -null if user wasn't found
      */
-
     public static User getUserByUsername(String username){
         ArrayList<User> users = getUsersByColumn("user_name", username, false);
         if(users.isEmpty()) return null;
@@ -109,16 +110,6 @@ public class UserManager {
     }
 
     /**
-     * @return GeneratedID, taken from database
-     * @throws SQLException
-     */
-    private static int generateID() throws SQLException {
-        PreparedStatement st = DBAO.getPreparedStatement(GET_LAST_ID);
-        ResultSet set = st.executeQuery();
-        return (set.next()) ? 1 + set.getInt(1) : 1;
-    }
-
-    /**
      * @param set ResultSett
      * @return Parsed user, taken from resultSet
      * @throws SQLException
@@ -138,13 +129,30 @@ public class UserManager {
         return user;
     }
 
-    //TODO implement me
+    /**
+     * @param email
+     * @return user with specified email
+     */
     public static User getUserByEmail(String email) {
-        return null;
+        return getUsersByColumn("email", email, false).get(0);
     }
 
-    //TODO implement me
+    /**
+     * Updates user information in database
+     * @param user
+     * @return true if update was successful
+     */
     public static boolean updateExistingUser(User user) {
-        return false;
+        UpdateForm uf = new UpdateForm("users", user.getId());
+        uf.addUpdate("user_name", user.getUsername());
+        uf.addUpdate("password", user.getPassword());
+        uf.addUpdate("first_name", user.getFirstName());
+        uf.addUpdate("last_name", user.getLastName());
+        uf.addUpdate("email", user.getEmail());
+        uf.addUpdate("phone_number", user.getPhoneNumber());
+        //Updating created_at isn't really necessary, but just in case
+        uf.addUpdate("created_at", user.getCreatedDate());
+        uf.addUpdate("updated_at", user.getUpdatedDate());
+        return UpdateManager.update(uf);
     }
 }

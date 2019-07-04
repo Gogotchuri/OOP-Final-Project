@@ -18,12 +18,10 @@ import java.util.Map;
 public class CycleManager {
 
     private static DatabaseAccessObject DAO = DatabaseAccessObject.getInstance();
-    private static final String GET_LAST_ID_CYCLE = "SELECT MAX(id) FROM cycles;";
-    private static final String GET_LAST_ID_OFFERED = "SELECT MAX(id) FROM offered_cycles;";
-    private static final String INSERT_CYCLE_QUERY = "INSERT INTO cycles (id, status_id, " +
-            "created_at, updated_at) VALUES (?, ?, ?, ?);";
-    private static final String INSERT_DEAL_TO_OFFERED = "INSERT INTO offered_cycles (id, deal_id, " +
-            "cycle_id) VALUES (?, ?, ?);";
+    private static final String INSERT_CYCLE_QUERY = "INSERT INTO cycles (status_id, " +
+            "created_at, updated_at) VALUES (?, ?, ?);";
+    private static final String INSERT_DEAL_TO_OFFERED = "INSERT INTO offered_cycles (deal_id, " +
+            "cycle_id) VALUES (?, ?);";
     private static final String GET_CYCLE_QUERY = "SELECT * FROM cycles WHERE cycle_id = ?;";
     private static final String GET_CYCLE_BY_DEAL_QUERY = "SELECT c.id, c.status_id, c.created_at, c.updated_at" +
             " FROM cycles c JOIN offered_cycles oc ON c.id = oc.cycle_id WHERE oc.deal_id = ?";
@@ -102,9 +100,8 @@ public class CycleManager {
         try {
             PreparedStatement st = DAO.getPreparedStatement(INSERT_DEAL_TO_OFFERED);
 
-            st.setInt(1, generateID(GET_LAST_ID_OFFERED));
-            st.setInt(2, cur.getId());
-            st.setInt(3, cycleID);
+            st.setInt(1, cur.getId());
+            st.setInt(2, cycleID);
 
             st.executeUpdate();
 
@@ -120,10 +117,9 @@ public class CycleManager {
         try {
             PreparedStatement st = DAO.getPreparedStatement(INSERT_CYCLE_QUERY);
 
-            st.setInt(1, generateID(GET_LAST_ID_CYCLE));
-            st.setInt(2, 1); //TODO : STATUS ID ARIS ES, ROMELIC DEFAULT 1ia mara gavitanot sadme
-            st.setTimestamp(3, cycle.getCreated_at());
-            st.setTimestamp(4,cycle.getUpdated_at());
+            st.setInt(1, 1); //TODO : STATUS ID ARIS ES, ROMELIC DEFAULT 1ia mara gavitanot sadme
+            st.setTimestamp(2, cycle.getCreated_at());
+            st.setTimestamp(3,cycle.getUpdated_at());
 
             st.executeUpdate();
 
@@ -148,15 +144,5 @@ public class CycleManager {
     public static void deleteCycle(int cycleID){
         deleteOfferedCycles(cycleID);
         DeleteManager.delete("cycles", "id", cycleID);
-    }
-
-    /**
-     * @return GeneratedID, taken from database
-     * @throws SQLException
-     */
-    private static int generateID(String query) throws SQLException {
-        PreparedStatement st = DAO.getPreparedStatement(query);
-        ResultSet set = st.executeQuery();
-        return (set.next()) ? 1 + set.getInt(1) : 1;
     }
 }

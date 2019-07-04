@@ -37,22 +37,13 @@ public class DealsController extends Controller {
 			page = Integer.parseInt(pageParam);
 			if(page <= 0) page = 1;
 		}
-//		List<Deal> deals = DealsManager.getDeals(sc);
-		//Dummy until data is Present TODO uncomment and change string to Deal model in list
-		List<String> deals = Arrays.asList(
-				"Deal 1", "Deal 2", "Deal 3",
-				"Deal 4", "Deal 5", "Deal 6",
-				"Deal 7", "Deal 8", "Deal 9",
-				"Deal 9", "Deal 10", "Deal 12",
-				"Deal 13", "Deal 14", "Deal 15"
-				);
+		List<Deal> deals = DealsManager.getDeals(sc);
 
 		if(deals.size() < (page-1)*PAGINATION){
 			sendError(404, "No deals on page "+page);
 			return;
 		}
-
-		List<String> paginatedDeals;
+		List<Deal> paginatedDeals;
 
 		if(deals.size() < page*PAGINATION)
 			paginatedDeals = deals.subList((page-1)*PAGINATION, deals.size());

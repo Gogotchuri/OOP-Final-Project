@@ -81,13 +81,12 @@ public class AuthController extends Controller {
              firstName, lastName, email, phoneNumber
         );
 
-        if (UserManager.getUserByUsername(username) != null)
+        if (UserManager.getUserByUsername(username) != null || UserManager.getUserByEmail(email) != null)
             errors.add("Username isn't unique!");
         else if(!UserManager.storeUser(user)){
             sendError(500, "Something went wrong during storing the user in database. (AuthController:87)");
             return;
         }
-        //TODO add email uniqueness logic. Requires: getUserByEmail in UserManager
 
         if (errors.isEmpty()) {
             request.setAttribute("success", "You have registered successfully!");
