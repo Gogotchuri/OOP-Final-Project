@@ -1,3 +1,4 @@
+
 package controllers.user;
 
 import controllers.Controller;
@@ -7,7 +8,6 @@ import managers.DealsManager;
 import models.Deal;
 import models.User;
 import services.RequestValidator;
-
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
@@ -16,19 +16,25 @@ import java.io.IOException;
 import java.util.*;
 
 public class DealsController extends Controller implements ResourceController {
+
     private User user;
+
     /**
      * Creates a controller, usually called from servlet, which is also
      * passed by parameter. servlet method passes taken request and response.
      *
-     * @param req request sent by user
-     * @param res servlet response
+     * @param request request sent by user
+     * @param response servlet response
      * @param servlet servlet calling this controller
      */
-    public DealsController(HttpServletRequest req, HttpServletResponse res, HttpServlet servlet) throws ServletException, IOException {
-        super(req, res, servlet);
+    public DealsController(HttpServletRequest request,
+                            HttpServletResponse response,
+                             HttpServlet servlet)
+        throws ServletException {
+        super(request, response, servlet);
         user = (User) session.getAttribute("user");
-        if(user == null) throw new ServletException("Unauthorized user!");
+        if (user == null)
+            throw new ServletException("Unauthorized user!");
     }
 
     /**
@@ -55,7 +61,7 @@ public class DealsController extends Controller implements ResourceController {
      */
     public void show(int id) throws IOException, ServletException {
         Deal deal = DealsManager.getDealById(id);
-        if(!checkOwnership(deal)) return;
+        if (!checkOwnership(deal)) return;
         request.setAttribute("deal", deal);
         dispatchTo("/pages/user/deals/deal.jsp");
     }
@@ -76,22 +82,21 @@ public class DealsController extends Controller implements ResourceController {
     public void store() throws IOException, ServletException {
 
         Map<String, List<String>> rules = new HashMap<>();
-        //Validation rules
         rules.put("item_id", Arrays.asList("type:numeric", "min:1"));
-        //TODO need to think of ways to store deal from the frontend first
+        rules.put("wanted_id", Arrays.asList("type:numeric", "min:1"));
         RequestValidator validator = new RequestValidator(request, rules);
-        if(validator.failed()){
+
+        if (validator.failed()) {
             request.setAttribute("errors", validator.getErrors());
             List<String> errors = new ArrayList<>();
             errors.add("Passed parameters are invalid!");
             request.setAttribute("errors", errors);
             create();
-          return;
-      }
+            return;
+        }
 
-        // TODO: Should be assigned after parsing request by validator.
-        List<Integer> ownedIDs = null,
-                        wantedIDs = null;
+        List<Integer> ownedIDs = getIntegerListOf("item_id"),
+                        wantedIDs = getIntegerListOf("wanted_id");
 
         Deal deal = new Deal(user.getId(), ownedIDs, wantedIDs);
 
@@ -101,7 +106,7 @@ public class DealsController extends Controller implements ResourceController {
         if (dealID == 0) { // Deal did not insert into DB
             sendError(500, "Internal server error! \n" +
                 "While Inserting new deal to database, 0 was returned as value of deal id" +
-                "(User.DealsController:97)");
+                "(User.DealsController:102)");
             return;
         }
 
@@ -111,8 +116,21 @@ public class DealsController extends Controller implements ResourceController {
         new DealCyclesFinder(deal).start();
     }
 
+    /**
+     Returns List of Integers
+     !!! (with assuming that parameters are numeric type) !!!
+     of passed parameter with key 'paramKey'
+     */
+    private List<Integer> getIntegerListOf(String paramKey) {
+        List<Integer> list = new ArrayList<>();
+        String[] values = request.getParameterValues(paramKey);
+        for (String value : values)
+            list.add(Integer.parseInt(value));
+        return list;
+    }
 
     /**
+     * !!! NOT IMPLEMENTED !!!
      * Makes changes to the resource with given id
      *
      * @param id
@@ -120,15 +138,17 @@ public class DealsController extends Controller implements ResourceController {
      * @throws ServletException
      */
     public void update(int id) throws IOException, ServletException {
+        /*
         Deal deal = DealsManager.getDealById(id);
         if(!checkOwnership(deal)) return;
-        //TODO Parse, validate and set deal fields! same here, need to start from the front
         if(DealsManager.updateDeal(deal)) show(deal.getId());
         else sendError(500,
                 "Error occurred while updating a deal. DealsManager.updateDeal returned false! (user.DealsController:100)");
+        */
     }
 
     /**
+     * !!! NOT IMPLEMENTED !!!
      * Displays a form for changing resource with given id
      *
      * @param id
@@ -136,10 +156,12 @@ public class DealsController extends Controller implements ResourceController {
      * @throws ServletException
      */
     public void edit(int id) throws IOException, ServletException {
+        /*
         Deal deal = DealsManager.getDealById(id);
         if(!checkOwnership(deal)) return;
         request.setAttribute("deal", deal);
         dispatchTo("/pages/user/deals/edit-deal.jsp");
+         */
     }
 
     /**

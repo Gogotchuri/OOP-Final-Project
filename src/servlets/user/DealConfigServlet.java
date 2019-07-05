@@ -11,7 +11,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 
-@WebServlet(urlPatterns = {"/user/deals/edit"})
+@WebServlet(urlPatterns = {"/user/deals/config"})
 public class DealConfigServlet extends HttpServlet {
 
 	/**
@@ -19,7 +19,7 @@ public class DealConfigServlet extends HttpServlet {
      1) filled fields with information of deal, for updating.
      2) link to the user.DealConfigServlet (PUT) (submit deal changes button)
 	 */
-	@Override
+/*	@Override
 	protected void doGet(HttpServletRequest request,
 						  HttpServletResponse response)
 		throws ServletException, IOException {
@@ -37,7 +37,7 @@ public class DealConfigServlet extends HttpServlet {
 		(new DealsController(request, response, this)).edit(dealID);
 
 	}
-
+*/
 
 	/**
 	 Checks whenever entered data satisfies deal editing rules.
@@ -49,7 +49,7 @@ public class DealConfigServlet extends HttpServlet {
 	 else:
 	    dispatch to user.DealConfigServlet (GET) (deal configuration form)
 	 */
-	@Override
+/*	@Override
 	protected void doPut(HttpServletRequest request,
 						  HttpServletResponse response)
 		throws ServletException, IOException {
@@ -65,7 +65,7 @@ public class DealConfigServlet extends HttpServlet {
 		}
 		(new DealsController(request, response, this)).update(dealID);
 	}
-
+*/
 
 	/**
 	 Deletes deal.
