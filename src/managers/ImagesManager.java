@@ -148,26 +148,4 @@ public class ImagesManager {
         }
         return images;
     }
-
-    /**
-     * Adds a type of image category in database
-     * @param categoryID
-     * @param name
-     * @return false if insertion fails
-     */
-    /*
-    //TODO : არ გვჭირდება, წინასწარ გვექნება განსზაღვრული როგორი ფოტოები გვინდა
-    public static boolean addImageCategory(int categoryID, String name){
-        try {
-            PreparedStatement st = DBO.getPreparedStatement(INSERT_IMAGE_QUERY);
-            st.setInt(1, categoryID);
-            st.setString(2, name);
-            st.executeUpdate();
-        } catch (SQLException ex) {
-            ex.printStackTrace();
-            return false;
-        }
-        return true;
-    }
-    */
 }
