@@ -37,4 +37,21 @@ public class UpdateManager {
         }
         return true;
     }
+
+    /**
+     * @param tableName Name of passed table
+     * @param seedValue Value of seed, int to reset id to
+     * @return Whether reseeding was successful
+     */
+    public static boolean reseedTable(String tableName, int seedValue) {
+        String query = "ALTER TABLE " + tableName + " AUTO_INCREMENT = " + seedValue + ";";
+        try {
+            PreparedStatement st = DAO.getPreparedStatement(query);
+            st.executeUpdate(query);
+            return true;
+        } catch (SQLException e) {
+            e.printStackTrace();
+            return false;
+        }
+    }
 }

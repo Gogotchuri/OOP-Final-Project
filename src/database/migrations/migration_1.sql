@@ -33,13 +33,27 @@ CREATE TABLE deals
   updated_at TIMESTAMP DEFAULT now()
 );
 
+CREATE TABLE item_types
+(
+    id INT(6) UNSIGNED AUTO_INCREMENT PRIMARY KEY,
+    name varchar(64) NOT NULL
+);
+
+CREATE TABLE item_brands
+(
+    id INT(6) UNSIGNED AUTO_INCREMENT PRIMARY KEY,
+    name varchar(64) NOT NULL
+);
 
 CREATE TABLE item_categories
 (
-  id INT(6) UNSIGNED AUTO_INCREMENT PRIMARY KEY,
-  name VARCHAR(64)NOT NULL UNIQUE
+    id INT(6) UNSIGNED AUTO_INCREMENT PRIMARY KEY,
+    name VARCHAR(64)NOT NULL UNIQUE,
+    type_id INT(6) UNSIGNED,
+    FOREIGN KEY (type_id) REFERENCES item_types(id),
+    brand_id INT(6) UNSIGNED,
+    FOREIGN KEY (brand_id) REFERENCES item_brands(id)
 );
-
 
 CREATE TABLE items
 (
