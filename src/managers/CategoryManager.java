@@ -1,11 +1,17 @@
 package managers;
 
 import database.DatabaseAccessObject;
-import models.Category;
+import models.categoryModels.ItemBrand;
 import models.categoryModels.ItemCategory;
+import models.categoryModels.ItemSerie;
+import models.categoryModels.ItemType;
+
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.sql.Statement;
+import java.util.ArrayList;
+import java.util.List;
 
 public class CategoryManager {
 
@@ -14,6 +20,40 @@ public class CategoryManager {
     private static final String SERIE_TABLE = "item_categories";
     private static final String TYPE_TABLE = "item_types";
     private static final String OTHER = "other";
+
+    /**
+     * @param cat Passed category
+     * @return Returns all categories from database matching given criteria
+     */
+    public static List<ItemCategory> getCategories(ItemCategory cat) {
+
+        List<ItemCategory> list = new ArrayList<>();
+        String serie = cat.getSerie().getName(), type = cat.getType().getName(), brand = cat.getBrand().getName();
+
+        String query = "SELECT * from item_categories s JOIN item_types t on s.type_id = t.id" +
+                " JOIN item_brands b on s.brand_id = b.id WHERE (s.name LIKE '%" + serie + "%' OR t.name LIKE'%" +
+                serie + "%' OR b.name LIKE '%" + serie + "%') ";
+        if(cat.getType().getName() != OTHER)
+            query += "AND t.name LIKE '%" + type + "%' ";
+        if(cat.getBrand().getName() != OTHER)
+            query += "AND b.name LIKE '%" + brand + "%'";
+        query += ';';
+
+        try {
+            PreparedStatement st = DAO.getPreparedStatement(query);
+            ResultSet set = st.executeQuery();
+
+            while(set.next()) {
+                list.add(parseCategory(set));
+            }
+
+        } catch (SQLException e) {
+            e.printStackTrace();
+            return null;
+        }
+
+        return list;
+    }
 
     /**
      * @param cat Insert passed category into database
@@ -109,12 +149,12 @@ public class CategoryManager {
         String query = "INSERT INTO " + tableName + " (name) VALUES (?);";
 
         try {
-            PreparedStatement st = DAO.getPreparedStatement(query);
+            PreparedStatement st = DAO.getPreparedStatement(query, Statement.RETURN_GENERATED_KEYS);
             st.setString(1, str);
             st.executeUpdate();
 
-            st = DAO.getPreparedStatement("SELECT MAX(id) FROM " + tableName + ";");
-            ResultSet set = st.executeQuery();
+            //Asks for id of an insertion and returns it if available
+            ResultSet set = st.getGeneratedKeys();
             return (set.next()) ? set.getInt(1) : -1;
 
         } catch (SQLException e) {
@@ -178,5 +218,18 @@ public class CategoryManager {
             e.printStackTrace();
         }
         return false;
+    }
+
+    /**
+     * @param set ResultSet taken from database
+     * @return New ItemCategory parsed from set
+     */
+    private static ItemCategory parseCategory(ResultSet set) throws SQLException {
+        return new ItemCategory(
+                set.getInt(1),
+                new ItemSerie(set.getInt(1), set.getString(2)),
+                new ItemType(set.getInt(3), set.getString(6)),
+                new ItemBrand(set.getInt(4), set.getString(8))
+        );
     }
 }
