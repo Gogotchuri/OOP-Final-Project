@@ -28,7 +28,7 @@ public class DealsManager {
     private static final String STORE_DEAL_QUERY = "INSERT INTO deals (user_id, status_id, created_at, updated_at) " +
             "VALUES(?, ?, ?, ?);";
     private static final String SELECT_ID = "SELECT MAX(id) FROM ?";
-    private static final String GET_USERID_BY_DEAL_QUERY = "SELECT user_id FROM deals WHERE user_id = ?;";
+    private static final String GET_USERID_BY_DEAL_QUERY = "SELECT user_id FROM deals WHERE deal_id = ?;";
     private static final String GET_OWNED_ITEMIDS_BY_DEAL_QUERY = "SELECT item_id FROM owned_items WHERE deal_id = ?;";
     private static final String GET_WANTED_CATEGORIES_BY_DEAL_QUERY = "SELECT i.item_category_id FROM items i " +
             "JOIN wanted_items wi ON i.id = wi.item_id " +
@@ -61,7 +61,7 @@ public class DealsManager {
      *         returns null
      */
     private static User getDealOwnerByDealID(int dealID) {
-        int userID = 0;
+        int userID = -1;
         try {
             PreparedStatement st = DAO.getPreparedStatement(GET_USERID_BY_DEAL_QUERY);
             st.setInt(1, dealID);
@@ -74,7 +74,7 @@ public class DealsManager {
             e.printStackTrace();
         }
 
-        return userID == 0 ? null : UserManager.getUserByID(userID);
+        return userID == -1 ? null : UserManager.getUserByID(userID);
     }
 
 
