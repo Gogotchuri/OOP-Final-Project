@@ -1,11 +1,14 @@
 
 package events;
 
+import managers.CategoryManager;
 import managers.CycleManager;
 import managers.DealsManager;
 import models.Category;
 import models.Cycle;
 import models.Deal;
+import models.categoryModels.ItemCategory;
+
 import java.sql.SQLException;
 import java.util.LinkedList;
 import java.util.List;
@@ -118,10 +121,10 @@ public class DealCyclesFinder extends Thread {
          l1 -> Parameter deal, wanted item categories.
          l2 -> this.deal, owned item categories.
          */
-        List<Category> l1 = deal.getWantedCategories(),
-                        l2 = this.deal.getOwnedItemCategories();
+        List<ItemCategory> l1 = deal.getWantedCategories(),
+                            l2 = this.deal.getOwnedItemCategories();
 
-        return Category.listsEqualsIgnoreOrder(l1, l2);
+        return CategoryManager.listsEqualsIgnoreOrder(l1, l2);
     }
 
     /**

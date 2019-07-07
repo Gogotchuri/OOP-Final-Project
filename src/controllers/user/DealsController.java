@@ -10,6 +10,7 @@ import models.Category;
 import models.Deal;
 import models.Item;
 import models.User;
+import models.categoryModels.ItemCategory;
 import services.RequestValidator;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
@@ -63,7 +64,7 @@ public class DealsController extends Controller implements ResourceController {
      * @throws ServletException
      */
     public void show(int id) throws IOException, ServletException {
-        Deal deal = DealsManager.getDealById(id);
+        Deal deal = DealsManager.getDealByID(id);
         if (!checkOwnership(deal)) return;
         request.setAttribute("deal", deal);
         dispatchTo("/pages/user/deals/deal.jsp");
@@ -104,7 +105,7 @@ public class DealsController extends Controller implements ResourceController {
 
 
         List<Item> ownedItems = null; // ItemManager.getItemsByIDs(ownedIDs);
-        List<Category> wantedCategories = null; // CategoryManager.getCategoriesByIDs(wantedIDs);
+        List<ItemCategory> wantedCategories = null; // CategoryManager.getCategoriesByIDs(wantedIDs);
 
 
         Deal deal = new Deal(ownedItems, wantedCategories);
@@ -181,7 +182,7 @@ public class DealsController extends Controller implements ResourceController {
      * @throws ServletException
      */
     public void destroy(int id) throws IOException, ServletException {
-        Deal deal = DealsManager.getDealById(id);
+        Deal deal = DealsManager.getDealByID(id);
         if(!checkOwnership(deal)) return;
         if(DealsManager.deleteDeal(id)) {
             index();

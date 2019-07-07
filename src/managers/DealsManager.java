@@ -11,6 +11,8 @@ import models.Category;
 import models.Deal;
 import models.Item;
 import models.User;
+import models.categoryModels.ItemCategory;
+
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -40,11 +42,11 @@ public class DealsManager {
      * @return Fully Filled Deal object
      *         Or null if Deal with such ID does not exists
      */
-    public static Deal getDealByDealID(int dealID) {
+    public static Deal getDealByID(int dealID) {
 
         User owner = getDealOwnerByDealID(dealID);
         List<Item> ownedItems = getDealOwnedItemsByDealID(dealID);
-        List<Category> wantedCategories = getDealWantedCategoriesByDealID(dealID);
+        List<ItemCategory> wantedCategories = getDealWantedCategoriesByDealID(dealID);
 
         return (owner == null ||
                  ownedItems == null ||
@@ -114,7 +116,7 @@ public class DealsManager {
      *         If such dealID does not exists in DB
      *         returns null
      */
-    private static List<Category> getDealWantedCategoriesByDealID(int dealID) {
+    private static List<ItemCategory> getDealWantedCategoriesByDealID(int dealID) {
         List<Integer> categoryIDs = new ArrayList<>();
         try {
             PreparedStatement st = DAO.getPreparedStatement(GET_WANTED_CATEGORIES_BY_DEAL_QUERY);
@@ -130,7 +132,7 @@ public class DealsManager {
             e.printStackTrace();
         }
 
-        List<Category> categories = new ArrayList<>();
+        List<ItemCategory> categories = new ArrayList<>();
         for (Integer categoryID : categoryIDs)
             categories.add(CategoryManager.getCategoryByID(categoryID));
 

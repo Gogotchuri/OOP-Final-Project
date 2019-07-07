@@ -1,6 +1,7 @@
 package managers;
 
 import database.DatabaseAccessObject;
+import models.Image;
 import models.categoryModels.ItemBrand;
 import models.categoryModels.ItemCategory;
 import models.categoryModels.ItemSerie;
@@ -45,6 +46,18 @@ public class CategoryManager {
             e.printStackTrace();
         }
         return null;
+    }
+
+
+    /**
+     * TODO: Levan
+     * Compares two lists of categories
+     * @param l1 - ItemCategory list 1
+     * @param l2 - ItemCategory list 2
+     * @return Whether they are equal or not
+     */
+    public static boolean listsEqualsIgnoreOrder(List<ItemCategory> l1, List<ItemCategory> l2) {
+        return false;
     }
 
 

@@ -1,6 +1,7 @@
 
 package models;
 
+import models.categoryModels.ItemCategory;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -13,7 +14,7 @@ public class Deal {
     private int dealID;                      // 0
     private User owner;                      // null
     private List<Item> ownedItems;           // null
-    private List<Category> wantedCategories; // null
+    private List<ItemCategory> wantedCategories; // null
 
 
     /**
@@ -26,7 +27,7 @@ public class Deal {
     public Deal(int dealID,
                  User owner,
                   List<Item> ownedItems,
-                   List<Category> wantedCategories)
+                   List<ItemCategory> wantedCategories)
     {
         this.dealID = dealID;
         this.owner = owner;
@@ -36,11 +37,12 @@ public class Deal {
 
 
     /**
-     * @param ownedItems
-     * @param wantedCategories
+     * Constructor.
+     * @param ownedItems - Owned Items of Deal
+     * @param wantedCategories - Wanted Categories of Deal
      */
     public Deal(List<Item> ownedItems,
-                 List<Category> wantedCategories) {
+                 List<ItemCategory> wantedCategories) {
         this(0, null, ownedItems, wantedCategories);
     }
 
@@ -74,16 +76,16 @@ public class Deal {
      *         If returned null that means that
      *         Deal's Owned Item List is not initialized yet.
      */
-    public List<Category> getWantedCategories() { return wantedCategories; }
+    public List<ItemCategory> getWantedCategories() { return wantedCategories; }
 
 
     /**
      * @return List of every category of owned items
      * @throws NullPointerException - If owned items is not initialized
      */
-    public List<Category> getOwnedItemCategories() {
+    public List<ItemCategory> getOwnedItemCategories() {
 
-        List<Category> ownedItemCategories = new ArrayList<>(ownedItems.size());
+        List<ItemCategory> ownedItemCategories = new ArrayList<>(ownedItems.size());
 
         for (Item item : ownedItems)
             ownedItemCategories.add(item.getCategory());
