@@ -179,7 +179,7 @@ public class ItemManager {
     public static boolean addItemToDB(Item item) {
         try {
             PreparedStatement st = DBO.getPreparedStatement(INSERT_ITEM_QUERY);
-            st.setInt(1,item.getOwner().getId());
+            st.setInt(1,item.getOwner().getUserID());
             st.setInt(2,item.getCategory().getId());
             st.setString(3,item.getDescription());
             st.setString(4,item.getName());

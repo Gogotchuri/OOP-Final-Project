@@ -203,7 +203,7 @@ public class DealsController extends Controller implements ResourceController {
             sendError(404, "Deal not found!");
             return false;
         }
-        if(deal.getOwner().getId() != this.user.getId()){
+        if(deal.getOwner().getUserID() != this.user.getUserID()){
             sendError(401, "Not authorized to edit this deal!");
             return false;
         }

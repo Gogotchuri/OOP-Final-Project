@@ -195,7 +195,7 @@ public class DealsManager {
 
         try {
             PreparedStatement st = DAO.getPreparedStatement(SELECT_DEAL_BY_USER_QUERY);
-            st.setInt(1, user.getId());
+            st.setInt(1, user.getUserID());
             queryDeals(list,st);
         } catch (SQLException e) {
             e.printStackTrace();
