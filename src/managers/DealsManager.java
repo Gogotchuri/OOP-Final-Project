@@ -28,6 +28,11 @@ public class DealsManager {
     private static final String STORE_DEAL_QUERY = "INSERT INTO deals (user_id, status_id, created_at, updated_at) " +
             "VALUES(?, ?, ?, ?);";
     private static final String SELECT_ID = "SELECT MAX(id) FROM ?";
+    private static final String GET_USERID_BY_DEAL_QUERY = "SELECT user_id FROM deals WHERE user_id = ?;";
+    private static final String GET_OWNED_ITEMIDS_BY_DEAL_QUERY = "SELECT item_id FROM owned_items WHERE deal_id = ?;";
+    private static final String GET_WANTED_CATEGORIES_BY_DEAL_QUERY = "SELECT i.item_category_id FROM items i " +
+            "JOIN wanted_items wi ON i.id = wi.item_id " +
+            "WHERE wi.deal_id = ?;";
 
 
     /**
@@ -50,49 +55,52 @@ public class DealsManager {
 
 
     /**
-     * TODO: Lasha
      * @param dealID - ID of Deal in DB
      * @return Owner (User) of Deal with ID = dealID
      *         If such dealID does not exists in DB
      *         returns null
      */
     private static User getDealOwnerByDealID(int dealID) {
-
-        /*
-         სელექთი, რომელიც აბრუნებს dealID-ს მქონე Deal-ის მფლობელს.
-         თუ მსგავსი dealID არ არსებობს (შესაბამისად არ არსებობს მფლობელიც)
-         აბრუნებს ცარიელ ცხრილს.
-         */
-        String query = "";
-
-        int userID = 0; // სელექთიდან ამოღებულ userID-ს მიანიჭებ ამას, თუ არადა დატოვებ 0-ს
+        int userID = 0;
+        try {
+            PreparedStatement st = DAO.getPreparedStatement(GET_USERID_BY_DEAL_QUERY);
+            st.setInt(1, dealID);
+            ResultSet set = st.executeQuery();
+            if(set.getFetchSize() != 0) {
+                set.next();
+                userID = set.getBigDecimal("user_id").intValue();
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
 
         return userID == 0 ? null : UserManager.getUserByID(userID);
     }
 
 
     /**
-     * TODO: Lasha
      * @param dealID - ID of Deal in DB
      * @return List of Items which Deal with dealID contains
      *         If such dealID does not exists in DB
      *         returns null
      */
     private static List<Item> getDealOwnedItemsByDealID(int dealID) {
+        List<Integer> itemIDs = new ArrayList<>();
+        try {
+            PreparedStatement st = DAO.getPreparedStatement(GET_OWNED_ITEMIDS_BY_DEAL_QUERY);
+            st.setInt(1, dealID);
+            ResultSet set = st.executeQuery();
+            if(set.getFetchSize() == 0) {
+                return null;
+            }
+            while (set.next()) {
+                itemIDs.add(set.getBigDecimal("item_id").intValue());
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
 
-        /*
-         სელექთი, რომელის აბრუნებს იმ itemID-ებს,
-         რომლების dealID-ს მქონდე Deal-ს ეკუთვნის.
-         თუ მსგავსი dealID არ არსებობს, შესაბამისად
-         არ არსებობს მისი itemID-ები უნდა დაბრუნდეს ცარიელი ცხრილი
-         */
-        String query = "";
-
-        // !!! თუ დაბრუნდა ცარიელი ცხრილი დააბრუნე null !!!
-
-        List<Integer> itemIDs = null; // გადაწერე ამოღებული მონაცემები აქ
-
-        List<Item> items = new ArrayList<>(itemIDs.size());
+        List<Item> items = new ArrayList<>();
         for (Integer itemID : itemIDs)
             items.add(ItemManager.getItemByID(itemID));
 
@@ -101,27 +109,28 @@ public class DealsManager {
 
 
     /**
-     * TODO: Lasha
      * @param dealID - ID of Deal in DB
      * @return List of Categories which Deal with dealID wants to get
      *         If such dealID does not exists in DB
      *         returns null
      */
     private static List<Category> getDealWantedCategoriesByDealID(int dealID) {
+        List<Integer> categoryIDs = new ArrayList<>();
+        try {
+            PreparedStatement st = DAO.getPreparedStatement(GET_WANTED_CATEGORIES_BY_DEAL_QUERY);
+            st.setInt(1, dealID);
+            ResultSet set = st.executeQuery();
+            if(set.getFetchSize() == 0) {
+                return null;
+            }
+            while (set.next()) {
+                categoryIDs.add(set.getBigDecimal("item_category_id").intValue());
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
 
-        /*
-         სელექთი, რომელიც აბრუნებს ნივთების იმ კატეგორიებს,
-         რომელიც dealID-ს მქონე მფლობელს უნდა.
-         თუ მსგავსი dealID არ არსებობს, შესაბამისად
-         არ არსებობს მისი itemID-ები უნდა დაბრუნდეს ცარიელი ცხრილი
-         */
-        String query = "";
-
-        // !!! თუ დაბრუნდა ცარიელი ცხრილი დააბრუნე null !!!
-
-        List<Integer> categoryIDs = null; // გადაწერე ამოღებული მონაცემები აქ
-
-        List<Category> categories = new ArrayList<>(categoryIDs.size());
+        List<Category> categories = new ArrayList<>();
         for (Integer categoryID : categoryIDs)
             categories.add(CategoryManager.getCategoryByID(categoryID));
 
