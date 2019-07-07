@@ -15,6 +15,7 @@ import java.util.List;
 public class CyclesController extends Controller {
 
     private User user;
+
     /**
      * Creates a controller, usually called from servlet, which is also
      * passed by parameter. servlet method passes taken request and response.
@@ -35,17 +36,18 @@ public class CyclesController extends Controller {
         request.setAttribute("cycle", cycle);
         dispatchTo("/pages/user/deals/cycle.jsp");
     }
-    /**
-     * Return suggested cycles for given deal
-     * @param deal_id
-     */
-    public void dealCycles(int deal_id) throws ServletException, IOException {
-        //TODO if cycle not found send error
 
-        List<Cycle> cycles = CycleManager.getCyclesByDealID(deal_id);
+
+    /**
+     * @param dealID - ID of Deal, which Cycles we want
+     * return - Suggested Cycles for given Deal
+     */
+    public void dealCycles(int dealID) throws ServletException, IOException {
+        List<Cycle> cycles = CycleManager.getCyclesOfDeal(dealID);
         request.setAttribute("cycles", cycles);
         dispatchTo("/pages/user/deals/deal-cycles.jsp");
     }
+
 
     public void acceptCycle(int cycle_id){
         //TODO implement accepting logic

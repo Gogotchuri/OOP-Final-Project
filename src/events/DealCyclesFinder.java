@@ -64,7 +64,7 @@ public class DealCyclesFinder extends Thread {
                            nextBreadth = new LinkedList<>();
 
         int currBreadthIndex = 0;
-        currBreadth.add(new LinkedDeal(this.deal, null));
+        currBreadth.add(new LinkedDeal(deal, null));
 
         while (currBreadthIndex++ < CYCLE_MAX_LENGTH &&
                 !currBreadth.isEmpty()) {
@@ -89,7 +89,7 @@ public class DealCyclesFinder extends Thread {
                 if (currBreadthIndex == CYCLE_MAX_LENGTH)
                     continue;
 
-                List<Deal> clients = DealsManager.getClients(new Deal(linkedDeal.deal));
+                List<Deal> clients = DealsManager.getClients(linkedDeal.deal);
 
                 for (Deal clientDeal : clients)
                     if (!pathContainsDeal(linkedDeal, clientDeal)) {
@@ -118,7 +118,7 @@ public class DealCyclesFinder extends Thread {
          l1 -> Parameter deal, wanted item categories.
          l2 -> this.deal, owned item categories.
          */
-        List<Category> l1 = deal.getWantedItemCategories(),
+        List<Category> l1 = deal.getWantedCategories(),
                         l2 = this.deal.getOwnedItemCategories();
 
         return Category.listsEqualsIgnoreOrder(l1, l2);
@@ -128,10 +128,10 @@ public class DealCyclesFinder extends Thread {
      Returns cycle made with this.deal
      */
     private Cycle getCycle(LinkedDeal linkedDeal) {
-        Set<Deal> cycleDeals = new HashSet<>(CYCLE_MAX_LENGTH);
+        Set<Deal> cycleDeals = new HashSet<>();
 
         while (linkedDeal != null) {
-            cycleDeals.add(new Deal(linkedDeal.deal));
+            cycleDeals.add(linkedDeal.deal);
             linkedDeal = linkedDeal.linkedTo;
         }
 

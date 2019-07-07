@@ -1,6 +1,6 @@
+
 package managers;
 
-import controllers.front.DealsController;
 import controllers.front.DealsController.SearchCriteria;
 import controllers.front.DealsController.SearchCriteria.Criteria;
 import database.DatabaseAccessObject;
@@ -9,7 +9,6 @@ import generalManagers.UpdateForm;
 import generalManagers.UpdateManager;
 import models.Deal;
 import models.User;
-
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -29,14 +28,13 @@ public class DealsManager {
     private static final String SELECT_ID = "SELECT MAX(id) FROM ?";
 
     /**
-     * get Deal with its id
-     *
-     * @param deal_id
-     * @return Deal
+     * @param dealID - ID of Deal in DB
+     * @return Filled Deal object
+     *         Or null if Deal with such ID does not exists
      */
-    public static Deal getDealById(int deal_id){
+    public static Deal getDealById(int dealID){
         Deal res = null;
-        try {
+        /*try {
             PreparedStatement st = DBAO.getPreparedStatement(SELECT_DEAL_QUERY);
             st.setInt(1, deal_id);
             ResultSet set = st.executeQuery();
@@ -44,7 +42,7 @@ public class DealsManager {
                     new Timestamp(set.getDate("created_at").getTime()), new Timestamp(set.getDate("updated_at").getTime()));
         } catch (SQLException e) {
             e.printStackTrace();
-        }
+        }*/
         return  res;
     }
 
@@ -55,7 +53,7 @@ public class DealsManager {
      */
     public static int storeDeal(Deal deal){
         int id = 0;
-        try {
+        /*try {
             PreparedStatement st = DBAO.getPreparedStatement(STORE_DEAL_QUERY);
             st.setInt(1, deal.getUser_id());
             st.setInt(2, deal.getStatus_id());
@@ -83,7 +81,7 @@ public class DealsManager {
             }
         } catch (SQLException e) {
             e.printStackTrace();
-        }
+        }*/
         return id;
     }
 
@@ -94,12 +92,13 @@ public class DealsManager {
      * @return true if update was a success
      */
     public static boolean updateDeal(Deal deal){
-        UpdateForm uForm = new UpdateForm("deals", deal.getId());
+        /*UpdateForm uForm = new UpdateForm("deals", deal.getId());
         uForm.addUpdate("user_id", deal.getUser_id());
         uForm.addUpdate("status_id", deal.getStatus_id());
         uForm.addUpdate("created_at", deal.getCreated_at());
         uForm.addUpdate("updated_at", deal.getUpdated_at());
-        return UpdateManager.update(uForm);
+        return UpdateManager.update(uForm);*/
+        return false;
     }
 
 
@@ -190,7 +189,7 @@ public class DealsManager {
      * @throws SQLException
      */
     private static void queryDeals(List<Deal> list, PreparedStatement st) throws SQLException {
-        ResultSet set = st.executeQuery();
+        /*ResultSet set = st.executeQuery();
 
         while(set.next()) {
             list.add(
@@ -201,7 +200,7 @@ public class DealsManager {
                             new Timestamp(set.getDate("created_at").getTime()),
                             new Timestamp(set.getDate("updated_at").getTime())
                     ));
-        }
+        }*/
     }
 
     /**
@@ -228,24 +227,25 @@ public class DealsManager {
             "        (SELECT i.item_category_id AS item_category_id, \n" +
             "                COUNT(*) AS freq_item_category \n" +
             "           FROM owned_items oi JOIN items i ON (oi.item_id = i.id) \n" +
-            "          WHERE oi.deal_id = " + deal.getId() + "\n" +
+            "          WHERE oi.deal_id = " + deal.getDealID() + "\n" +
             "          GROUP BY i.item_category_id) b \n" +
             "        ON a.item_category_id = b.item_category_id AND \n" +
             "            a.freq_item_category = b.freq_item_category \n" +
             "     GROUP BY deal_id \n" +
             "     HAVING row_num = (SELECT COUNT(DISTINCT i.item_category_id) \n" +
             "                         FROM owned_items oi JOIN items i ON (oi.item_id = i.id) \n" +
-            "                        WHERE oi.deal_id = " + deal.getId() + ") \n" +
+            "                        WHERE oi.deal_id = " + deal.getDealID() + ") \n" +
             "    ) result \n" +
             ");";
 
         List<Deal> deals = new ArrayList<>();
+
         try {
-            PreparedStatement st = DBAO.getPreparedStatement(query);
-            queryDeals(deals,st);
-        } catch (SQLException e) {
-            e.printStackTrace();
+            PreparedStatement statement = DBAO.getPreparedStatement(query);
+            queryDeals(deals, statement);
         }
+        catch (SQLException e) { e.printStackTrace(); }
+
         return deals;
     }
 }
