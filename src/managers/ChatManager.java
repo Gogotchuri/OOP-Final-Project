@@ -23,17 +23,24 @@ public class ChatManager {
 
 
     /**
-     * Adds a message to dataBase
+     * Adds a message to dataBase, updates ID in passed object
      * @param msg
      * @return false if insertion fails
      */
     public static boolean addMessageToDB(Message msg) {
         try {
-            PreparedStatement st = DBO.getPreparedStatement(INSERT_MESSAGE_QUERY);
+            PreparedStatement st = DBO.getPreparedStatement(INSERT_MESSAGE_QUERY, Statement.RETURN_GENERATED_KEYS);
             st.setInt(1, msg.getChatID());
             st.setString(2, msg.getBody());
             st.setTimestamp(3, msg.getDate());
-            st.executeUpdate();
+            if (st.executeUpdate() == 0)
+                throw new SQLException("Creating message failed, no rows affected.");
+            try (ResultSet generatedKeys = st.getGeneratedKeys()) {
+                if (generatedKeys.next())
+                    msg.setMessageID(generatedKeys.getInt(1));
+                else
+                    throw new SQLException("Creating message failed, no ID obtained.");
+            }
         } catch (SQLException ex) {
             ex.printStackTrace();
             return false;
@@ -71,16 +78,24 @@ public class ChatManager {
 
 
     /**
-     * Adds a chat to dataBase
+     * Adds a chat to dataBase, changes ID in passed chat
      * Returns false if it fails
      * @param chat
      */
     public static boolean addChatToDB(Chat chat){
         try {
-            PreparedStatement st = DBO.getPreparedStatement(INSERT_CHAT_QUERY);
+            PreparedStatement st = DBO.getPreparedStatement(INSERT_CHAT_QUERY, Statement.RETURN_GENERATED_KEYS);
             st.setInt(1, chat.getCycle().getCycleID());
             st.setTimestamp(2, chat.getLastUpdateDate());
-            st.executeUpdate();
+            if (st.executeUpdate() == 0)
+                throw new SQLException("Creating chat failed, no rows affected.");
+            try (ResultSet generatedKeys = st.getGeneratedKeys()) {
+                if (generatedKeys.next())
+                    chat.setChatID(generatedKeys.getInt(1));
+
+                else
+                    throw new SQLException("Creating chat failed, no ID obtained.");
+            }
         } catch (SQLException ex) {
             ex.printStackTrace();
             return false;

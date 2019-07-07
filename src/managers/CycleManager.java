@@ -9,6 +9,7 @@ import models.ProcessStatus;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.sql.Statement;
 import java.util.Iterator;
 import java.util.List;
 
@@ -85,7 +86,7 @@ public class CycleManager {
      */
     private static Cycle insertCycle(Cycle cycle) throws SQLException {
 
-        PreparedStatement statement = DAO.getPreparedStatement(INSERT_CYCLE_QUERY);
+        PreparedStatement statement = DAO.getPreparedStatement(INSERT_CYCLE_QUERY, Statement.RETURN_GENERATED_KEYS);
 
         statement.setInt(1, ProcessStatus.Status.ONGOING.getId());
 
@@ -100,6 +101,7 @@ public class CycleManager {
                      ProcessStatus.Status.ONGOING,
                       cycle.getDeals()
                 );
+
             else
                 throw new SQLException("Creating Cycle failed, no ID obtained.");
         }

@@ -57,6 +57,15 @@ public class Cycle {
 
 
     /**
+     * Updates cycle ID
+     * @param cycleID
+     */
+    public void setCycleID(int cycleID) {
+        this.cycleID = cycleID;
+    }
+
+
+    /**
      * @return Cycle's Process Status
      *         If returned null that means that
      *         Cycle's Status is not initialized yet.

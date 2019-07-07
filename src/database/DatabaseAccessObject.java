@@ -7,9 +7,9 @@ import java.sql.*;
 
 public class DatabaseAccessObject {
     private static final String MYSQL_USERNAME = "root";
-    private static final String MYSQL_PASSWORD = "";
+    private static final String MYSQL_PASSWORD = "zgarbi007";
     private static final String MYSQL_DATABASE_SERVER = "127.0.0.1";
-    private static final String MYSQL_DATABASE_NAME = "oop";
+    private static final String MYSQL_DATABASE_NAME = "ExchangeProject_schema";
 
     private static DatabaseAccessObject dao = null;
 
@@ -49,6 +49,10 @@ public class DatabaseAccessObject {
 
     public PreparedStatement getPreparedStatement(String pr_stmt) throws SQLException {
         return con.prepareStatement(pr_stmt);
+    }
+
+    public PreparedStatement getPreparedStatement(String pr_stmt, int option) throws SQLException {
+        return con.prepareStatement(pr_stmt, option);
     }
 
 }
