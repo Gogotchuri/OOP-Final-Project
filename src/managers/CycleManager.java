@@ -5,56 +5,131 @@ import database.DatabaseAccessObject;
 import generalManagers.DeleteManager;
 import models.Cycle;
 import models.Deal;
-
+import models.ProcessStatus;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.sql.Timestamp;
-import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
-import java.util.Map;
 
 public class CycleManager {
 
+
     private static DatabaseAccessObject DAO = DatabaseAccessObject.getInstance();
-    private static final String INSERT_CYCLE_QUERY = "INSERT INTO cycles (status_id, " +
-            "created_at, updated_at) VALUES (?, ?, ?);";
-    private static final String INSERT_DEAL_TO_OFFERED = "INSERT INTO offered_cycles (deal_id, " +
-            "cycle_id) VALUES (?, ?);";
-    private static final String GET_CYCLE_QUERY = "SELECT * FROM cycles WHERE cycle_id = ?;";
-    private static final String GET_CYCLE_BY_DEAL_QUERY = "SELECT c.id, c.status_id, c.created_at, c.updated_at" +
-            " FROM cycles c JOIN offered_cycles oc ON c.id = oc.cycle_id WHERE oc.deal_id = ?";
+
+    private static final String INSERT_CYCLE_QUERY =
+        "INSERT INTO cycles (status_id) VALUES (?);";
+
+    private static final String INSERT_CYCLE_TO_OFFERED_QUERY =
+        "INSERT INTO offered_cycles (deal_id, cycle_id) VALUES (?, ?);";
+
 
     /**
-     TODO: P.S. Should be as fast as possible
      Returns true iff:
      Data Base contains such cycle.
      */
-    public static boolean containsDB(Cycle cycle) {
-        return false;
+    public static boolean containsDB(Cycle cycle) throws SQLException {
+
+        StringBuilder queryBuilder = new StringBuilder (
+            "SELECT 1 \n" +
+            "  FROM ( \n" +
+            "      SELECT COUNT(oc.deal_id) AS all_deals_num, \n" +
+            "             cd.cycle_deals_num AS cycle_deals_num \n" +
+            "        FROM offered_cycles oc \n" +
+            "        JOIN (SELECT ioc.cycle_id AS cycle_id, \n" +
+            "                     COUNT(ioc.deal_id) AS cycle_deals_num \n" +
+            "                FROM offered_cycles ioc \n" +
+            "               WHERE "
+        );
+
+        Iterator<Deal> i = cycle.getDealsIterator();
+
+        /* As we know that, Cycle contains at least two Deal's */
+        queryBuilder.append("iod.deal_id = ").append(i.next().getId()).append(" ");
+        while (i.hasNext())
+            queryBuilder.append("OR iod.deal_id = ").append(i.next().getId()).append(" ");
+
+        queryBuilder.append('\n');
+
+        queryBuilder.append (
+            "               GROUP BY ioc.cycle_id) cd ON (oc.cycle_id = cd.cycle_id) \n" +
+            "       GROUP BY oc.cycle_id \n" +
+            ") result \n" +
+            "WHERE result.all_deals_num = result.cycle_deals_num;"
+        );
+
+
+        String query = queryBuilder.toString();
+
+        PreparedStatement statement = DAO.getPreparedStatement(query);
+        ResultSet resultSet = statement.executeQuery();
+
+        return resultSet.next();
     }
 
     /**
-     TODO: P.S. Should be as fast as possible
      Inserts new cycle into the Data Base.
      */
-    public static void addCycleToDB(Cycle cycle) {
-        insertCycle(cycle);
+    public static void addCycleToDB(Cycle cycle) throws SQLException {
 
-        Iterator<Map.Entry<Integer, Deal>> it = cycle.getCycleInfo();
-        while(it.hasNext()) {
-            Deal cur = it.next().getValue();
-            insertDealToOffered(cur, cycle.getId());
-        }
+        Cycle insertedCycle = insertCycle(cycle);
+
+        Iterator<Deal> i = cycle.getDealsIterator();
+        while (i.hasNext())
+            insertCycleToOffered(i.next().getId(), insertedCycle.getCycleID());
     }
 
+
     /**
-     * @param cycleID
-     * @return cycle with the passed id
+     * @param cycle - Passed Cycle, to be inserted in DB
      */
-    public static Cycle getCycleByID(int cycleID){
-        Cycle res = null;
+    private static Cycle insertCycle(Cycle cycle) throws SQLException {
+
+        PreparedStatement statement = DAO.getPreparedStatement(INSERT_CYCLE_QUERY);
+
+        statement.setInt(1, ProcessStatus.Status.ONGOING.getId());
+
+        if (statement.executeUpdate() == 0)
+            throw new SQLException("Creating Cycle failed, no rows affected.");
+
+        Cycle insertedCycle;
+        try (ResultSet generatedKeys = statement.getGeneratedKeys()) {
+            if (generatedKeys.next())
+                insertedCycle = new Cycle (
+                    generatedKeys.getInt(1),
+                     ProcessStatus.Status.ONGOING,
+                      cycle.getDeals()
+                );
+            else
+                throw new SQLException("Creating Cycle failed, no ID obtained.");
+        }
+
+        return insertedCycle;
+    }
+
+
+    /**
+     * @param cycleDealID ID of Deal to add in offered_cycles
+     * @param cycleID ID of a cycle, that deal belongs to
+     */
+    private static void insertCycleToOffered(int cycleDealID, int cycleID)
+        throws SQLException {
+
+        PreparedStatement statement = DAO.getPreparedStatement(INSERT_CYCLE_TO_OFFERED_QUERY);
+
+        statement.setInt(1, cycleDealID);
+        statement.setInt(2, cycleID);
+
+        if (statement.executeUpdate() == 0)
+            throw new SQLException("Creating Offered Cycle failed, no rows affected.");
+    }
+
+
+    /**
+     * TODO
+     */
+    public static Cycle getCycleByID(int cycleID) {
+        /*Cycle res = null;
         try {
             PreparedStatement st = DAO.getPreparedStatement(GET_CYCLE_QUERY);
             st.setInt(1, cycleID);
@@ -65,16 +140,16 @@ public class CycleManager {
         } catch (SQLException e) {
             e.printStackTrace();
         }
-        return  res;
+        return  res;*/
+        return null;
     }
 
+
     /**
-     *
-     * @param dealID
-     * @return
+     * TODO
      */
-    public static List<Cycle> getCyclesByDealID(int dealID){
-        List<Cycle> list = new ArrayList<>();
+    public static List<Cycle> getCyclesByDealID(int dealID) {
+        /*List<Cycle> list = new ArrayList<>();
         try {
             PreparedStatement st = DAO.getPreparedStatement(GET_CYCLE_BY_DEAL_QUERY);
             st.setInt(1, dealID);
@@ -89,48 +164,14 @@ public class CycleManager {
         } catch (SQLException e) {
             e.printStackTrace();
         }
-        return  list;
+        return  list;*/
+        return null;
     }
 
-    /**
-     * @param cur Deal to add in offered_cycles
-     * @param cycleID ID of a cycle, that deal belongs to
-     */
-    private static void insertDealToOffered(Deal cur, int cycleID) {
-        try {
-            PreparedStatement st = DAO.getPreparedStatement(INSERT_DEAL_TO_OFFERED);
-
-            st.setInt(1, cur.getId());
-            st.setInt(2, cycleID);
-
-            st.executeUpdate();
-
-        } catch (SQLException e) {
-            e.printStackTrace();
-        }
-    }
 
     /**
-     * @param cycle passed cycle, to be inserted in database
-     */
-    private static void insertCycle(Cycle cycle) {
-        try {
-            PreparedStatement st = DAO.getPreparedStatement(INSERT_CYCLE_QUERY);
-
-            st.setInt(1, 1); //TODO : STATUS ID ARIS ES, ROMELIC DEFAULT 1ia mara gavitanot sadme
-            st.setTimestamp(2, cycle.getCreated_at());
-            st.setTimestamp(3,cycle.getUpdated_at());
-
-            st.executeUpdate();
-
-        } catch (SQLException e) {
-            e.printStackTrace();
-        }
-    }
-
-    /**
-     * Deletes offered cycles associated with passed cycle id
-     * @param cycleID
+     * Deletes offered Cycles associated with passed Cycle id.
+     * @param cycleID - ID of Cycle in DB
      */
     private static void deleteOfferedCycles(int cycleID){
         DeleteManager.delete("offered_cycles", "cycle_id", cycleID);
@@ -138,11 +179,12 @@ public class CycleManager {
 
 
     /**
-     * Deletes a cycle from database
-     * @param cycleID id of the cycle to be deleted
+     * Deletes a Cycle from DB
+     * @param cycleID - ID of Cycle in DB
      */
     public static void deleteCycle(int cycleID){
         deleteOfferedCycles(cycleID);
         DeleteManager.delete("cycles", "id", cycleID);
     }
+
 }

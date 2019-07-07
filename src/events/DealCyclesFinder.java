@@ -6,12 +6,12 @@ import managers.DealsManager;
 import models.Category;
 import models.Cycle;
 import models.Deal;
-import java.util.Queue;
+import java.sql.SQLException;
 import java.util.LinkedList;
+import java.util.List;
+import java.util.Queue;
 import java.util.Set;
 import java.util.HashSet;
-import java.util.List;
-import java.util.ArrayList;
 import java.util.concurrent.locks.Lock;
 import java.util.concurrent.locks.ReentrantLock;
 
@@ -77,8 +77,11 @@ public class DealCyclesFinder extends Thread {
                     Cycle cycle = getCycle(linkedDeal);
 
                     lock.lock();
-                    if (!CycleManager.containsDB(cycle))
-                        CycleManager.addCycleToDB(cycle);
+                    try {
+                        if (!CycleManager.containsDB(cycle))
+                            CycleManager.addCycleToDB(cycle);
+                    }
+                    catch (SQLException e) { e.printStackTrace(); }
                     lock.unlock();
                 }
 
@@ -125,7 +128,7 @@ public class DealCyclesFinder extends Thread {
      Returns cycle made with this.deal
      */
     private Cycle getCycle(LinkedDeal linkedDeal) {
-        List<Deal> cycleDeals = new ArrayList<>(CYCLE_MAX_LENGTH);
+        Set<Deal> cycleDeals = new HashSet<>(CYCLE_MAX_LENGTH);
 
         while (linkedDeal != null) {
             cycleDeals.add(new Deal(linkedDeal.deal));

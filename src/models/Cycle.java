@@ -1,84 +1,82 @@
+
 package models;
-import java.sql.Timestamp;
-import java.util.*;
+
+import java.util.Iterator;
+import java.util.Set;
 
 public class Cycle {
 
-    private int id, statusId;
-    private Timestamp createdAt, updatedAt;
-    /**
-     * Map representing structure of a cycle
-     * Key is Id of a user
-     * Value is Deal, that user is interested in
-     */
-    private Map<Integer, Deal> map;
+
+    private int cycleID;
+    private ProcessStatus.Status cycleStatus;
+    private Set<Deal> deals;
+
 
     /**
-     * Constructor of a cycle
-     * @param id Id of a cycle
-     * @param statusId Status of a cycle
-     * @param createdAt Time of creation
-     * @param updatedAt Time of update
+     * Mains Constructor of a Cycle.
+     * @param cycleID - ID of a Cycle in DB
+     * @param cycleStatus - Process Status of a Cycle
+     * @param deals - Set of Deals which contains Cycle
      */
-    public Cycle(int id, int statusId, Timestamp createdAt, Timestamp updatedAt){
-        this.id = id;
-        this.statusId = statusId;
-        this.createdAt = createdAt;
-        this.updatedAt = updatedAt;
-        map = new LinkedHashMap<>();
+    public Cycle(int cycleID, ProcessStatus.Status cycleStatus, Set<Deal> deals) {
+        this.cycleID = cycleID;
+        this.cycleStatus = cycleStatus;
+        this.deals = deals;
     }
 
+
     /**
-     * Constructs a cycle object
-     * @param deals List of deals making up a cycle, already sorted
+     * Constructor.
+     * @param deals - Set of Deals which contains Cycle
      */
-    public Cycle(List<Deal> deals) {
-        for (int i = 0; i < deals.size(); i++)
-            map.put(deals.get(i).getId(), deals.get((i + 1) % deals.size()));
+    public Cycle(Set<Deal> deals) {
+        /* -1 means and null means that, cycleID and cycleStatus
+         * are not initialized yet. */
+        this(-1, null, deals);
     }
 
+
     /**
-     * @param userId Id of a user
-     * @return Deal that user is interested in
+     * @return ID of a Cycle
      */
-    public Deal getWantedDealByUser(int userId) {
-        return map.getOrDefault(userId, null);
+    public int getCycleID() { return cycleID; }
+
+
+    /**
+     * @return Cycle's Process Status
+     */
+    public ProcessStatus.Status getCycleStatus() { return cycleStatus; }
+
+
+    /**
+     * @return Set of Deals which contains Cycle
+     */
+    public Set<Deal> getDeals() { return deals; }
+
+
+    /**
+     * @return Iterator of 'deals'
+     */
+    public Iterator<Deal> getDealsIterator() {
+        return deals.iterator();
     }
 
+
     /**
-     * @return Iterator of ID's and deals
+     * @param other Passed Cycle
+     * @return Whether two Cycles are equal or not
      */
-    public Iterator<Map.Entry<Integer, Deal>> getCycleInfo() {
-        return map.entrySet().iterator();
+    @Override public boolean equals(Object other) {
+
+        if (this == other) return true;
+        if (!(other instanceof Cycle)) return false;
+
+        Cycle otherCycle = (Cycle) other;
+
+        if (cycleID != -1 && cycleID == otherCycle.cycleID)
+            return true;
+
+        return deals.equals(otherCycle.deals);
     }
 
-    /**
-     * @return Id of a cycle
-     */
-    public int getId() { return id; }
-
-    /**
-     * @return StatusId of a cycle
-     */
-    public int getStatus_id() { return statusId; }
-
-    /**
-     * @return Time of creation
-     */
-    public Timestamp getUpdated_at() { return updatedAt; }
-
-    /**
-     * @return Time of update
-     */
-    public Timestamp getCreated_at() { return createdAt; }
-
-    /**
-     * @param o Passed cycle
-     * @return Whether two cycles are equal or not
-     */
-    public boolean equals(Object o) {
-        if(this == o) return true;
-        if(!(o instanceof Cycle)) return false;
-        return id == ((Cycle) o).getId();
-    }
 }
