@@ -15,6 +15,18 @@ public class CategoryManager {
     private static final String TYPE_TABLE = "item_types";
     private static final String OTHER = "other";
 
+
+    /**
+     * TODO: Levan
+     * @param categoryID - ID of Deal in DB
+     * @return Fully Filled Category object
+     *         Or null if Category with such ID does not exists
+     */
+    public static Category getCategoryByID(int categoryID) {
+        return null;
+    }
+
+
     /**
      * @param cat Insert passed category into database
      * @return Success of insertion
@@ -179,4 +191,5 @@ public class CategoryManager {
         }
         return false;
     }
+
 }

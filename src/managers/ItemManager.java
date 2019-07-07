@@ -86,7 +86,7 @@ public class ItemManager {
      * @param itemId Id of an item
      * @return Item with that id, if doesn't exist, returns null
      */
-    public static Item getItemById(int itemId){
+    public static Item getItemByID(int itemId){
         List<Item> items = getItemsByColumn("items","id", itemId + "");
         return (items.isEmpty()) ? null : items.get(0);
     }
