@@ -41,13 +41,13 @@ public class ItemParameter{
     public boolean equals(Object other) {
         if(other == this) return true;
         if(!(other instanceof ItemParameter)) return false;
-        return id == ((ItemParameter) other).getId();
+        return name.equals(((ItemParameter) other).getName());
     }
 
     /**
      * @return String representation of an item parameter
      */
     public String toString() {
-        return id + " " + name;
+        return name;
     }
 }

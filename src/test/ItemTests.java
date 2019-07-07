@@ -29,9 +29,9 @@ public class ItemTests {
 
     @Test
     public void testGetItemById(){
-        assertEquals(ItemManager.getItemById(1),item1);
-        assertEquals(ItemManager.getItemById(2),item2);
-        assertEquals(ItemManager.getItemById(3),item3);
+        assertEquals(ItemManager.getItemByID(1),item1);
+        assertEquals(ItemManager.getItemByID(2),item2);
+        assertEquals(ItemManager.getItemByID(3),item3);
     }
 
     @Test

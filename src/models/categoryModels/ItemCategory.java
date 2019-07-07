@@ -1,7 +1,9 @@
 package models.categoryModels;
 
+import models.Item;
+
 //Class encapsulating a single category
-public class ItemCategory {
+public class ItemCategory implements Comparable<ItemCategory> {
 
     private int id;
     private ItemSerie serie;
@@ -16,8 +18,10 @@ public class ItemCategory {
      * @param brand Brand
      */
     public ItemCategory(int id, ItemSerie serie, ItemType type, ItemBrand brand) {
-        this(serie,type,brand);
         this.id = id;
+        this.serie = serie;
+        this.type = type;
+        this.brand = brand;
     }
 
     /**
@@ -27,10 +31,10 @@ public class ItemCategory {
      * @param brand Brand
      */
     public ItemCategory(ItemSerie serie, ItemType type, ItemBrand brand) {
-        this.serie = serie;
-        this.type = type;
-        this.brand = brand;
+        this(-1, serie, type, brand);
     }
+
+    public int getId() { return id; }
 
     /**
      * @return Serie of a category
@@ -51,5 +55,26 @@ public class ItemCategory {
      */
     public ItemBrand getBrand() {
         return brand;
+    }
+
+    @Override
+    public int compareTo(ItemCategory o) {
+        int cur = getSerie().getName().compareTo(o.getSerie().getName());
+        if(cur != 0) return cur;
+        cur = getType().getName().compareTo(o.getType().getName());
+        if(cur != 0) return cur;
+        return getBrand().getName().compareTo(o.getBrand().getName());
+    }
+
+    @Override
+    public String toString() {
+        return "Serie : " + serie.toString() + ", Type : " + type.toString() + ", Brand : " + brand.toString() + "\n";
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if(o == this) return true;
+        if(!(o instanceof ItemCategory)) return false;
+        return serie.equals(((ItemCategory) o).getSerie()) && brand.equals(((ItemCategory) o).getBrand()) && type.equals(((ItemCategory) o).getType());
     }
 }
