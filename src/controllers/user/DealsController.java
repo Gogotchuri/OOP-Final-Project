@@ -5,7 +5,10 @@ import controllers.Controller;
 import controllers.ResourceController;
 import events.DealCyclesFinder;
 import managers.DealsManager;
+import managers.ItemManager;
+import models.Category;
 import models.Deal;
+import models.Item;
 import models.User;
 import services.RequestValidator;
 import javax.servlet.ServletException;
@@ -95,15 +98,21 @@ public class DealsController extends Controller implements ResourceController {
             return;
         }
 
+
         List<Integer> ownedIDs = getIntegerListOf("item_id"),
                         wantedIDs = getIntegerListOf("wanted_id");
 
-        Deal deal = new Deal(user.getId(), ownedIDs, wantedIDs);
 
-        deal.setId(DealsManager.storeDeal(deal));
-        int dealID = deal.getId();
+        List<Item> ownedItems = null; // ItemManager.getItemsByIDs(ownedIDs);
+        List<Category> wantedCategories = null; // CategoryManager.getCategoriesByIDs(wantedIDs);
 
-        if (dealID == 0) { // Deal did not insert into DB
+
+        Deal deal = new Deal(ownedItems, wantedCategories);
+        deal.setDealID(DealsManager.storeDeal(deal));
+
+        int dealID = deal.getDealID();
+
+        if (dealID == -1) { // Deal did not insert into DB
             sendError(500, "Internal server error! \n" +
                 "While Inserting new deal to database, 0 was returned as value of deal id" +
                 "(User.DealsController:102)");
@@ -195,7 +204,7 @@ public class DealsController extends Controller implements ResourceController {
             sendError(404, "Deal not found!");
             return false;
         }
-        if(deal.getUser_id() != this.user.getId()){
+        if(deal.getOwner().getId() != this.user.getId()){
             sendError(401, "Not authorized to edit this deal!");
             return false;
         }

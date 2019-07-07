@@ -28,6 +28,7 @@ public class CycleManager {
     /**
      Returns true iff:
      Data Base contains such cycle.
+     @param cycle - Cycle (at least) initialized with only Set of Deals
      */
     public static boolean containsDB(Cycle cycle) throws SQLException {
 
@@ -46,9 +47,9 @@ public class CycleManager {
         Iterator<Deal> i = cycle.getDealsIterator();
 
         /* As we know that, Cycle contains at least two Deal's */
-        queryBuilder.append("iod.deal_id = ").append(i.next().getId()).append(" ");
+        queryBuilder.append("iod.deal_id = ").append(i.next().getDealID()).append(" ");
         while (i.hasNext())
-            queryBuilder.append("OR iod.deal_id = ").append(i.next().getId()).append(" ");
+            queryBuilder.append("OR iod.deal_id = ").append(i.next().getDealID()).append(" ");
 
         queryBuilder.append('\n');
 
@@ -69,9 +70,9 @@ public class CycleManager {
     }
 
     /**
-     * Inserts new cycle into the Data Base.
-     * Update passed cycle object's id
-     * @return true if successful
+     * Returns true iff:
+     * Data Base contains such cycle.
+     * @param cycle - Cycle (at least) initialized with only Set of Deals
      */
     public static boolean addCycleToDB(Cycle cycle) {
         try {
@@ -79,21 +80,24 @@ public class CycleManager {
 
             Iterator<Deal> i = cycle.getDealsIterator();
             while (i.hasNext())
-                insertCycleToOffered(i.next().getId(), insertedCycle.getCycleID());
+                insertCycleToOffered(i.next().getDealID(), insertedCycle.getCycleID());
         } catch (SQLException e){
             e.printStackTrace();
             return false;
         }
         return true;
+
     }
 
 
     /**
+     * Updates passed cycle object's ID
      * @param cycle - Passed Cycle, to be inserted in DB
      */
     private static Cycle insertCycle(Cycle cycle) throws SQLException {
 
-        PreparedStatement statement = DAO.getPreparedStatement(INSERT_CYCLE_QUERY, Statement.RETURN_GENERATED_KEYS);
+        PreparedStatement statement =
+            DAO.getPreparedStatement(INSERT_CYCLE_QUERY, Statement.RETURN_GENERATED_KEYS);
 
         statement.setInt(1, ProcessStatus.Status.ONGOING.getId());
 
