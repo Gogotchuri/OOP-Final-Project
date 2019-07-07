@@ -1,6 +1,9 @@
 package models.categoryModels;
-
-import models.Item;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.util.Collections;
+import java.util.List;
+import java.util.Locale;
 
 //Class encapsulating a single category
 public class ItemCategory implements Comparable<ItemCategory> {
@@ -76,5 +79,18 @@ public class ItemCategory implements Comparable<ItemCategory> {
         if(o == this) return true;
         if(!(o instanceof ItemCategory)) return false;
         return serie.equals(((ItemCategory) o).getSerie()) && brand.equals(((ItemCategory) o).getBrand()) && type.equals(((ItemCategory) o).getType());
+    }
+
+    /**
+     * @param set ResultSet taken from database
+     * @return New ItemCategory parsed from set
+     */
+    public static ItemCategory parseCategory(ResultSet set) throws SQLException {
+        return new ItemCategory(
+                set.getInt(1),
+                new ItemSerie(set.getInt(1), set.getString(2)),
+                new ItemType(set.getInt(3), set.getString(6)),
+                new ItemBrand(set.getInt(4), set.getString(8))
+        );
     }
 }

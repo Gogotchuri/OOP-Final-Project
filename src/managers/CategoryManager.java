@@ -12,6 +12,7 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 public class CategoryManager {
@@ -40,7 +41,7 @@ public class CategoryManager {
             PreparedStatement st = DAO.getPreparedStatement(query);
             ResultSet set = st.executeQuery();
 
-            if(set.next()) return parseCategory(set);
+            if(set.next()) return ItemCategory.parseCategory(set);
 
         } catch (SQLException e) {
             e.printStackTrace();
@@ -50,14 +51,19 @@ public class CategoryManager {
 
 
     /**
-     * TODO: Levan
      * Compares two lists of categories
      * @param l1 - ItemCategory list 1
      * @param l2 - ItemCategory list 2
      * @return Whether they are equal or not
      */
     public static boolean listsEqualsIgnoreOrder(List<ItemCategory> l1, List<ItemCategory> l2) {
-        return false;
+        if(l1 == null && l2 == null) return true;
+        if(l1 == null ^ l2 == null) return false;
+        if(l1.size() != l2.size()) return false;
+
+        Collections.sort(l1);
+        Collections.sort(l2);
+        return l1.equals(l2);
     }
 
 
@@ -84,7 +90,7 @@ public class CategoryManager {
             ResultSet set = st.executeQuery();
 
             while(set.next()) {
-                list.add(parseCategory(set));
+                list.add(ItemCategory.parseCategory(set));
             }
 
         } catch (SQLException e) {
@@ -257,18 +263,5 @@ public class CategoryManager {
             e.printStackTrace();
         }
         return false;
-    }
-
-    /**
-     * @param set ResultSet taken from database
-     * @return New ItemCategory parsed from set
-     */
-    private static ItemCategory parseCategory(ResultSet set) throws SQLException {
-        return new ItemCategory(
-                set.getInt(1),
-                new ItemSerie(set.getInt(1), set.getString(2)),
-                new ItemType(set.getInt(3), set.getString(6)),
-                new ItemBrand(set.getInt(4), set.getString(8))
-        );
     }
 }

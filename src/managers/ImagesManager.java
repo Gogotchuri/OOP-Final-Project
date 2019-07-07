@@ -9,15 +9,12 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class ImagesManager {
-    private static final String GET_USER_IMAGE_QUERY = "SELECT id, image_category_id, url," +
+    private static final String GET_USER_PROFILE_IMAGE = "SELECT id, image_category_id, url," +
             " item_id, created_at FROM item_images WHERE user_id = ?;";
-    private static final String GET_IMAGE_QUERY = "SELECT image_category_id, url, user_id," +
-            " item_id, created_at FROM item_images WHERE id = ?;";
-
-    private static final String GET_LAST_ID_ITEM = "SELECT MAX(id) FROM item_images;";
-    private static final String GET_LAST_ID_PROFILE = "SELECT MAX(id) FROM profile_images;";
-
-    private static final String GET_USER_PROFILE_IMAGE = "SELECT * FROM profile_images WHERE user_id = ?";
+    private static final String GET_ITEM_IMAGE_BY_ID = "SELECT image_category_id, url, user_id," +
+            " item_id, created_at FROM item_images WHERE user_id = ?;";
+    private static final String GET_ITEM_IMAGE_BY_ITEM_ID = "SELECT image_category_id, url, user_id," +
+            " item_id, created_at FROM item_images WHERE item_id = ?;";
 
     private static final String INSERT_ITEM_IMAGE_QUERY = "INSERT INTO item_images (image_category_id, url, user_id, item_id," +
             " created_at) VALUES(?, ?, ?, ?, ?);";
@@ -28,14 +25,27 @@ public class ImagesManager {
     private static DatabaseAccessObject DBO = DatabaseAccessObject.getInstance();
 
     /**
-     * TODO: Levan
      * @param imageID - ID of Image in DB
      * @return Fully Filled Image object.
      *         Or null if Image with such ID does not exists.
      */
-    public static Image getImageByID(int imageID) {
+    public static ItemImage getImageByID(int imageID) {
+        Image img = null;
+
+        try {
+            PreparedStatement st = DBO.getPreparedStatement(GET_ITEM_IMAGE_BY_ID);
+            st.setInt(1,imageID);
+            ResultSet set = st.executeQuery();
+
+            if(set.next())
+                return parseItemImage(set);
+
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
         return null;
     }
+
 
     /**
      * Adds image into database, based on whether it's a profile image or item image
@@ -104,10 +114,7 @@ public class ImagesManager {
             if(!set.next()){
                 return null;
             }
-            img = new Image(set.getBigDecimal("id").intValue(),
-                    set.getBigDecimal("user_id").intValue(),
-                    set.getString("url"),
-                    new Timestamp(set.getDate("created_at").getTime()));
+            img = parseProfileImage(set, user_id);
         } catch (SQLException e) {
             e.printStackTrace();
         }
@@ -115,30 +122,66 @@ public class ImagesManager {
     }
 
     /**
-     * get All item images of given user
-     *
-     * @param user_id
-     * @return list of all images
+     * @param userId Id of a user
+     * @return All images of items that passed user owns
      */
+    public static List<ItemImage> getItemImagesByUserID(int userId) {
+        return getItemImages(userId, GET_ITEM_IMAGE_BY_ID);
+    }
 
-    public static List<ItemImage> getUserImages(int user_id){
+    /**
+     * @param itemId ID of an item
+     * @return All images of a single item
+     */
+    public static List<ItemImage> getItemImagesByItemID(int itemId) {
+        return getItemImages(itemId, GET_ITEM_IMAGE_BY_ITEM_ID);
+    }
+
+    /**
+     * @param id Passed id, item or user id
+     * @param query String query
+     * @return Returns all images of a user or item
+     */
+    private static List<ItemImage> getItemImages(int id, String query){
         List<ItemImage> images = new ArrayList<>();
         try {
-            PreparedStatement st = DBO.getPreparedStatement(GET_USER_IMAGE_QUERY);
-            st.setInt(1, user_id);
+            PreparedStatement st = DBO.getPreparedStatement(query);
+            st.setInt(1, id);
             ResultSet set = st.executeQuery();
 
             while (set.next()) {
-                ItemImage img = new ItemImage(set.getBigDecimal("id").intValue(),
-                        set.getBigDecimal("image_category_id").intValue(),
-                        set.getString("url"), user_id,
-                        set.getBigDecimal("item_id").intValue(),
-                        new Timestamp(set.getDate("created_at").getTime()));
-                images.add(img);
+                images.add(parseItemImage(set));
             }
         } catch (SQLException e) {
             e.printStackTrace();
         }
         return images;
+    }
+
+    /**
+     * @param set Passed resultSet
+     * @param user_id Id of a user
+     * @return Parsed profile image
+     * @throws SQLException
+     */
+    private static Image parseProfileImage(ResultSet set, int user_id) throws SQLException {
+        return new Image(set.getBigDecimal("id").intValue(),
+                user_id,
+                set.getString("url"),
+                new Timestamp(set.getDate("created_at").getTime()));
+    }
+
+    /**
+     * @param set Passed resultSet
+     * @return Parsed image
+     * @throws SQLException
+     */
+    private static ItemImage parseItemImage(ResultSet set) throws SQLException {
+        return new ItemImage(set.getBigDecimal("id").intValue(),
+                set.getBigDecimal("image_category_id").intValue(),
+                set.getString("url"),
+                set.getBigDecimal("user_id").intValue(),
+                set.getBigDecimal("item_id").intValue(),
+                new Timestamp(set.getDate("created_at").getTime()));
     }
 }

@@ -4,6 +4,7 @@ package managers;
 import database.DatabaseAccessObject;
 import models.Image;
 import models.Item;
+import models.ItemImage;
 import models.User;
 import models.categoryModels.ItemCategory;
 
@@ -24,8 +25,10 @@ public class ItemManager {
     private static final String INSERT_OWNED_ITEM_QUERY = "INSERT INTO owned_items (deal_id, item_id, " +
             "created_at, updated_at)  VALUES(?, ?, ?, ?);";
     private static final String SELECT_DEAL_OWNED_ITEMS = "SELECT item_id from owned_items where deal_id = ?";
-    private static final String SELECT_DEAL_WANTED_ITEMS = "SELECT item_category_id from wanted_items where deal_id = ?";
-    private static final String SELECT_BY = "SELECT * FROM ? WHERE ? = ? ;";
+
+    private static final String JOIN_CATEGORIES = "SELECT * from item_categories s JOIN item_types t on s.type_id = t.id" +
+            " JOIN item_brands b on s.brand_id = b.id ";
+
     private static DatabaseAccessObject DBO = DatabaseAccessObject.getInstance();
 
 
@@ -38,7 +41,7 @@ public class ItemManager {
 
         User owner = getItemOwnerByDealID(itemID);
         ItemCategory category = getItemCategoryByItemID(itemID);
-        List<Image> images = getImagesByItemID(itemID);
+        List<ItemImage> images = getImagesByItemID(itemID);
         String name = getItemNameByItemID(itemID),
                 description = getItemDescriptionByItemID(itemID);
 
@@ -103,7 +106,7 @@ public class ItemManager {
      *         If such itemID does not exists in DB
      *         returns null.
      */
-    private static List<Image> getImagesByItemID(int itemID) {
+    private static List<ItemImage> getImagesByItemID(int itemID) {
 
         /*
          სელექთი, რომელიც დააბრუნებს
@@ -236,7 +239,6 @@ public class ItemManager {
      * @return List of items
      */
     public static List<Item> getOwnedItems(int dealId) {
-        String query = "SELECT * FROM ? JOIN owned_items on items.id = owned_items.item_id WHERE ? = ?;";
         return getItemsByColumn("items", "owned_items.deal_id", dealId + "");
     }
 
@@ -246,35 +248,13 @@ public class ItemManager {
      * @throws SQLException
      */
     private static Item parseItem(ResultSet rs) throws SQLException {
-        /*return new Item(rs.getBigDecimal("id").intValue(),
-                        rs.getBigDecimal("user_id").intValue(),
+        return new Item(rs.getBigDecimal("id").intValue(),
+                        UserManager.getUserByID(rs.getInt("user_id")),
+                        CategoryManager.getCategoryByID(rs.getInt("item_category_id")),
+                        ImagesManager.getItemImagesByItemID(rs.getInt("id")),
                         rs.getString("name"),
-                        rs.getString("description"),
-                        parseCategory(rs),
-                        rs.getDate("created_at")
-        );*/
-        return null;
+                        rs.getString("description"));
     }
-
-    /**
-     *
-     * @param rs ResultSet
-     * @return Category of an item, created from ResultSet, if doesn't exist, returns null
-     */
-    private static ItemCategory parseCategory(ResultSet rs) throws SQLException {
-        int categoryId = rs.getInt("item_category_id");
-
-        String statement = "SELECT * FROM item_categories WHERE id = " + categoryId + ";";
-        PreparedStatement st = DBO.getPreparedStatement(statement);
-        ResultSet set = st.executeQuery();
-
-        if(set.next()) {
-            // return new ItemCategory(set.getInt("id"), set.getString("name"));
-        }
-
-        return null;
-    }
-
 
     /**
      *adds wanted item in the database
@@ -337,7 +317,7 @@ public class ItemManager {
             ResultSet set = st.executeQuery();
 
             while(set.next()) {
-                list.add(parseCategory(set));
+                list.add(ItemCategory.parseCategory(set));
             }
 
         } catch (SQLException e) {
@@ -352,8 +332,10 @@ public class ItemManager {
      * @param dealID Id of the deal
      * @return List of categories wanted in one deal
      */
-    public static List <ItemCategory> getWantedItemCategories(int dealID){
-        return getItemCategories(dealID, SELECT_DEAL_WANTED_ITEMS);
+    public static List <ItemCategory> getWantedItemCategories(int dealID) {
+        String query = JOIN_CATEGORIES + " JOIN wanted_items s.id = on wanted_items.deal_id" +
+                " WHERE wanted_items.deal_id = ?;";
+        return getItemCategories(dealID, query);
     }
 
     /**
@@ -361,7 +343,7 @@ public class ItemManager {
      * @param dealID Id of the deal
      * @return List of categories owned in one deal
      */
-    public static List <ItemCategory> getOwnedItemCategories(int dealID){
-        return getItemCategories(dealID, SELECT_DEAL_OWNED_ITEMS);
+    public static List <ItemCategory> getOwnedItemCategories(int dealID) {
+        return getItemCategories(dealID, query);
     }
 }

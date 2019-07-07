@@ -6,6 +6,10 @@ import managers.ImagesManager;
 import managers.ItemManager;
 import managers.UserManager;
 import models.*;
+import models.categoryModels.ItemBrand;
+import models.categoryModels.ItemCategory;
+import models.categoryModels.ItemSerie;
+import models.categoryModels.ItemType;
 import org.junit.jupiter.api.Test;
 import static org.junit.jupiter.api.Assertions.*;
 import java.sql.PreparedStatement;
@@ -30,10 +34,10 @@ public class ImageTests {
 
     private static final User u1 = new User(1,"LG","password","levan","gelashvili", "lgela17", "555");
     private static final User u2 = new User("KING","heat","Lebron","James","ljame03","23");
-    private static final Category cat = new Category(1,"category");
+    private static final ItemCategory cat = new ItemCategory(1, new ItemSerie("a"), new ItemType("b"), new ItemBrand("c"));
 
-    private static final Item it1 = new Item(1,1,"nivti","magaria", cat, time);
-    private static final Item it2 = new Item(2,2,"nivti2","magaria2", cat, time);
+    private static final Item it1 = new Item(1,1,cat,null time);
+    private static final Item it2 = new Item(2,2,cat,null, time);
 
     private static final Image im1 = new ItemImage(1,1,"chemi_cover",1,3, time);
     private static final Image im2 = new ItemImage(2,1,"chemi_featured",1,2, time);
