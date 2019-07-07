@@ -43,7 +43,7 @@ public class CyclesController extends Controller {
      * return - Suggested Cycles for given Deal
      */
     public void dealCycles(int dealID) throws ServletException, IOException {
-        List<Cycle> cycles = CycleManager.getCyclesOfDeal(dealID);
+        List<Cycle> cycles = CycleManager.getCyclesByDealID(dealID);
         request.setAttribute("cycles", cycles);
         dispatchTo("/pages/user/deals/deal-cycles.jsp");
     }

@@ -26,6 +26,50 @@ public class CycleManager {
 
 
     /**
+     * TODO: Krawa
+     */
+    public static Cycle getCycleByID(int cycleID) {
+        /*Cycle res = null;
+        try {
+            PreparedStatement st = DAO.getPreparedStatement(GET_CYCLE_QUERY);
+            st.setInt(1, cycleID);
+            ResultSet set = st.executeQuery();
+            res = new Cycle(cycleID, set.getBigDecimal("status_id").intValue(),
+                    new Timestamp(set.getDate("created_at").getTime()),
+                    new Timestamp(set.getDate("updated_at").getTime()));
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return  res;*/
+        return null;
+    }
+
+
+    /**
+     * TODO: Krawa
+     */
+    public static List<Cycle> getCyclesByDealID(int dealID) {
+        /*List<Cycle> list = new ArrayList<>();
+        try {
+            PreparedStatement st = DAO.getPreparedStatement(GET_CYCLE_BY_DEAL_QUERY);
+            st.setInt(1, dealID);
+            ResultSet set = st.executeQuery();
+            while(set.next()) {
+                list.add(
+                        new Cycle(set.getBigDecimal("status_id").intValue(),
+                                set.getBigDecimal("status_id").intValue(),
+                                new Timestamp(set.getDate("created_at").getTime()),
+                                new Timestamp(set.getDate("updated_at").getTime())));
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return  list;*/
+        return null;
+    }
+
+
+    /**
      Returns true iff:
      Data Base contains such cycle.
      @param cycle - Cycle (at least) initialized with only Set of Deals
@@ -81,12 +125,12 @@ public class CycleManager {
             Iterator<Deal> i = cycle.getDealsIterator();
             while (i.hasNext())
                 insertCycleToOffered(i.next().getDealID(), insertedCycle.getCycleID());
-        } catch (SQLException e){
+
+        } catch (SQLException e) {
             e.printStackTrace();
             return false;
         }
         return true;
-
     }
 
 
@@ -135,50 +179,6 @@ public class CycleManager {
 
         if (statement.executeUpdate() == 0)
             throw new SQLException("Creating Offered Cycle failed, no rows affected.");
-    }
-
-
-    /**
-     * TODO
-     */
-    public static Cycle getCycleByID(int cycleID) {
-        /*Cycle res = null;
-        try {
-            PreparedStatement st = DAO.getPreparedStatement(GET_CYCLE_QUERY);
-            st.setInt(1, cycleID);
-            ResultSet set = st.executeQuery();
-            res = new Cycle(cycleID, set.getBigDecimal("status_id").intValue(),
-                    new Timestamp(set.getDate("created_at").getTime()),
-                    new Timestamp(set.getDate("updated_at").getTime()));
-        } catch (SQLException e) {
-            e.printStackTrace();
-        }
-        return  res;*/
-        return null;
-    }
-
-
-    /**
-     * TODO
-     */
-    public static List<Cycle> getCyclesByDealID(int dealID) {
-        /*List<Cycle> list = new ArrayList<>();
-        try {
-            PreparedStatement st = DAO.getPreparedStatement(GET_CYCLE_BY_DEAL_QUERY);
-            st.setInt(1, dealID);
-            ResultSet set = st.executeQuery();
-            while(set.next()) {
-                list.add(
-                        new Cycle(set.getBigDecimal("status_id").intValue(),
-                                set.getBigDecimal("status_id").intValue(),
-                                new Timestamp(set.getDate("created_at").getTime()),
-                                new Timestamp(set.getDate("updated_at").getTime())));
-            }
-        } catch (SQLException e) {
-            e.printStackTrace();
-        }
-        return  list;*/
-        return null;
     }
 
 
