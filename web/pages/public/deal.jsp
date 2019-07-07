@@ -51,20 +51,15 @@
     <%--Page Content--%>
     <div class="wrapper">
 
-        <% HttpSession session = request.getSession();%>
+        <%--<% HttpSession session = request.getSession();%>--%>
         <% User thisUser = (User)session.getAttribute("user");%>
         <% int thisId = thisUser.getId();%>
 
-        <% if(deal.getUser_id() == thisId){ %>
         <div>
-            <ul>
-                <li><input type="button" onclick="user.dealConfigServlet.doGet()" value="Edit"></li>
-                <li><input type="button" onclick="user.DealConfigServlet.doDelete()" value="Delete"></li>
-            </ul>
-        </div>
-        <%}%>
-
-        <div><h3>Information</h3>
+            <% if(deal.getUser_id() == thisId){ %>
+                <input type="button" onclick="user.DealConfigServlet.doDelete()" value="Delete Deal">
+            <%}%>
+            <h3>Information</h3>
             <ul>
                 <li><%=deal.getId()%></li>
                 <li><%=deal.getCreated_at()%></li>
