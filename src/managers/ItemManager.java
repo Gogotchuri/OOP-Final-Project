@@ -26,6 +26,8 @@ public class ItemManager {
     private static final String SELECT_DEAL_OWNED_ITEMS = "SELECT item_id from owned_items where deal_id = ?";
     private static final String SELECT_DEAL_WANTED_ITEMS = "SELECT item_category_id from wanted_items where deal_id = ?";
     private static final String SELECT_BY = "SELECT * FROM ? WHERE ? = ? ;";
+    private static final String GET_ITEM_INFO_BY_ITEM_ID = "SELECT * FROM items WHERE id = ?;";
+    private static final String GET_IMAGE_IDS_BY_ITEM_ID = "SELECT id FROM item_images WHERE item_id = ?;";
     private static DatabaseAccessObject DBO = DatabaseAccessObject.getInstance();
 
 
@@ -36,7 +38,7 @@ public class ItemManager {
      */
     public static Item getItemByID(int itemID){
 
-        User owner = getItemOwnerByDealID(itemID);
+        User owner = getOwnerByItemID(itemID);
         ItemCategory category = getItemCategoryByItemID(itemID);
         List<Image> images = getImagesByItemID(itemID);
         String name = getItemNameByItemID(itemID),
@@ -53,68 +55,73 @@ public class ItemManager {
 
 
     /**
-     * TODO: Lasha
      * @param itemID - ID of Deal in DB
      * @return Owner (User) of Item with ID = itemID.
      *         If such itemID does not exists in DB
      *         returns null.
      */
-    private static User getItemOwnerByDealID(int itemID) {
-
-        /*
-         სელექთი, რომელიც დააბრუნებს
-         itemID-ს მქონე Item-ის მფლობელის ID-ს.
-         თუ itemID არ არსებობს ბაზაში, დააბრუნებს ცარიელ ცხრილს.
-         */
-        String query = "";
-
-        int ownerID = 0; // აქ ჩაწერე შედეგი, თუ არაცარიელი ცხრილი დაბრუნდა
-
-        return ownerID == 0 ? null : UserManager.getUserByID(ownerID);
+    private static User getOwnerByItemID(int itemID) {
+        int ownerID = -1;
+        try {
+            PreparedStatement st = DBO.getPreparedStatement(GET_ITEM_INFO_BY_ITEM_ID);
+            st.setInt(1, itemID);
+            ResultSet set = st.executeQuery();
+            if(set.getFetchSize() != 0) {
+                set.next();
+                ownerID = set.getBigDecimal("user_id").intValue();
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return ownerID == -1 ? null : UserManager.getUserByID(ownerID);
     }
 
 
     /**
-     * TODO: Lasha
      * @param itemID - ID of Deal in DB
      * @return Category of Item with ID = itemID.
      *         If such itemID does not exists in DB
      *         returns null.
      */
     private static ItemCategory getItemCategoryByItemID(int itemID) {
-
-        /*
-         სელექთი, რომელიც დააბრუნებს
-         itemID-ს მქონე Item-ის კატეგორიის ID-ს.
-         თუ itemID არ არსებობს ბაზაში, დააბრუნებს ცარიელ ცხრილს.
-         */
-        String query = "";
-
-        int categoryID = 0; // აქ ჩაწერე შედეგი, თუ არაცარიელი ცხრილი დაბრუნდა
-
-        return categoryID == 0 ? null : CategoryManager.getCategoryByID(categoryID);
+        int categoryID = -1;
+        try {
+            PreparedStatement st = DBO.getPreparedStatement(GET_ITEM_INFO_BY_ITEM_ID);
+            st.setInt(1, itemID);
+            ResultSet set = st.executeQuery();
+            if(set.getFetchSize() != 0) {
+                set.next();
+                categoryID = set.getBigDecimal("item_category_id").intValue();
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return categoryID == -1 ? null : CategoryManager.getCategoryByID(categoryID);
     }
 
 
     /**
-     * TODO: Lasha
      * @param itemID - ID of Deal in DB
      * @return List of Images which Item with itemID have.
      *         If such itemID does not exists in DB
      *         returns null.
      */
     private static List<Image> getImagesByItemID(int itemID) {
-
-        /*
-         სელექთი, რომელიც დააბრუნებს
-         itemID-ის Item-ის შესაბამის Image-ების ID-ებს.
-         თუ itemID არ არსებობს ბაზაში, დააბრუნებს ცარიელ ცხრილს.
-         */
-        String query = "";
-
-        List<Integer> imageIDs = null; // აქ გადაწერე შედეგად მიღებული ცხრილი მონაცემები
-
-        List<Image> images = new ArrayList<>(imageIDs.size());
+        List<Integer> imageIDs = new ArrayList<>();
+        try {
+            PreparedStatement st = DBO.getPreparedStatement(GET_IMAGE_IDS_BY_ITEM_ID);
+            st.setInt(1, itemID);
+            ResultSet set = st.executeQuery();
+            if(set.getFetchSize() == 0) {
+                return null;
+            }
+            while (set.next()) {
+                imageIDs.add(set.getBigDecimal("id").intValue());
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        List<Image> images = new ArrayList<>();
         for (Integer imageID : imageIDs)
             images.add(ImagesManager.getImageByID(imageID));
 
@@ -123,51 +130,45 @@ public class ItemManager {
 
 
     /**
-     * TODO: Lasha
      * @param itemID - ID of Deal in DB
      * @return Name of Item with ID = itemID.
      *         If such itemID does not exists in DB
      *         returns null.
      */
     private static String getItemNameByItemID(int itemID) {
-
-        /*
-         სელექთი, რომელიც დააბრუნებს
-         itemID-ს მქონე Item-ის სახელს.
-         თუ itemID არ არსებობს ბაზაში, დააბრუნებს ცარიელ ცხრილს.
-         */
-        String query = "";
-
-        /*
-         თუ ცარიელი ცხრილი დაბრუნდა
-            return null
-         თუ არადა Item-ის სახელი
-         */
+        try {
+            PreparedStatement st = DBO.getPreparedStatement(GET_ITEM_INFO_BY_ITEM_ID);
+            st.setInt(1, itemID);
+            ResultSet set = st.executeQuery();
+            if(set.getFetchSize() != 0) {
+                set.next();
+                return set.getString("name");
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
         return null;
     }
 
 
     /**
-     * TODO: Lasha
      * @param itemID - ID of Deal in DB
      * @return Description of Item with ID = itemID.
      *         If such itemID does not exists in DB
      *         returns null.
      */
     private static String getItemDescriptionByItemID(int itemID) {
-
-        /*
-         სელექთი, რომელიც დააბრუნებს
-         itemID-ს მქონე Item-ის აღწერას.
-         თუ itemID არ არსებობს ბაზაში, დააბრუნებს ცარიელ ცხრილს.
-         */
-        String query = "";
-
-        /*
-         თუ ცარიელი ცხრილი დაბრუნდა
-            return null
-         თუ არადა Item-ის სახელი
-         */
+        try {
+            PreparedStatement st = DBO.getPreparedStatement(GET_ITEM_INFO_BY_ITEM_ID);
+            st.setInt(1, itemID);
+            ResultSet set = st.executeQuery();
+            if(set.getFetchSize() != 0) {
+                set.next();
+                return set.getString("description");
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
         return null;
     }
 
