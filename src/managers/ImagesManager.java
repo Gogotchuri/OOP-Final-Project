@@ -28,11 +28,14 @@ public class ImagesManager {
     private static DatabaseAccessObject DBO = DatabaseAccessObject.getInstance();
 
     /**
-     * get Image object according to its id
-     *
-     * @param image_id
-     * @return image from the database with given id
+     * TODO: Levan
+     * @param imageID - ID of Image in DB
+     * @return Fully Filled Image object.
+     *         Or null if Image with such ID does not exists.
      */
+    public static Image getImageByID(int imageID) {
+        return null;
+    }
 
     /**
      * Adds image into database, based on whether it's a profile image or item image

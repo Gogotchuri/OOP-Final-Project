@@ -1,10 +1,11 @@
+
 package managers;
 
 import database.DatabaseAccessObject;
 import models.Category;
+import models.Image;
 import models.Item;
-
-import java.math.BigDecimal;
+import models.User;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -13,6 +14,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class ItemManager {
+
 
     private static final String INSERT_ITEM_QUERY = "INSERT INTO items (user_id, item_category_id, description, " +
             "created_at, updated_at) VALUES(?, ?, ?, ?, ?, ?);";
@@ -25,13 +27,157 @@ public class ItemManager {
     private static final String SELECT_BY = "SELECT * FROM ? WHERE ? = ? ;";
     private static DatabaseAccessObject DBO = DatabaseAccessObject.getInstance();
 
+
+    /**
+     * @param itemID - ID of Deal in DB
+     * @return Fully Filled Item object
+     *         Or null if Item with such ID does not exists
+     */
+    public static Item getItemByID(int itemID){
+
+        User owner = getItemOwnerByDealID(itemID);
+        Category category = getItemCategoryByItemID(itemID);
+        List<Image> images = getImagesByItemID(itemID);
+        String name = getItemNameByItemID(itemID),
+                description = getItemDescriptionByItemID(itemID);
+
+        return (owner == null ||
+                 category == null ||
+                  images == null ||
+                   name == null ||
+                    description == null)
+                ?
+                null : new Item(itemID, owner, category, images, name, description);
+    }
+
+
+    /**
+     * TODO: Lasha
+     * @param itemID - ID of Deal in DB
+     * @return Owner (User) of Item with ID = itemID.
+     *         If such itemID does not exists in DB
+     *         returns null.
+     */
+    private static User getItemOwnerByDealID(int itemID) {
+
+        /*
+         სელექთი, რომელიც დააბრუნებს
+         itemID-ს მქონე Item-ის მფლობელის ID-ს.
+         თუ itemID არ არსებობს ბაზაში, დააბრუნებს ცარიელ ცხრილს.
+         */
+        String query = "";
+
+        int ownerID = 0; // აქ ჩაწერე შედეგი, თუ არაცარიელი ცხრილი დაბრუნდა
+
+        return ownerID == 0 ? null : UserManager.getUserByID(ownerID);
+    }
+
+
+    /**
+     * TODO: Lasha
+     * @param itemID - ID of Deal in DB
+     * @return Category of Item with ID = itemID.
+     *         If such itemID does not exists in DB
+     *         returns null.
+     */
+    private static Category getItemCategoryByItemID(int itemID) {
+
+        /*
+         სელექთი, რომელიც დააბრუნებს
+         itemID-ს მქონე Item-ის კატეგორიის ID-ს.
+         თუ itemID არ არსებობს ბაზაში, დააბრუნებს ცარიელ ცხრილს.
+         */
+        String query = "";
+
+        int categoryID = 0; // აქ ჩაწერე შედეგი, თუ არაცარიელი ცხრილი დაბრუნდა
+
+        return categoryID == 0 ? null : CategoryManager.getCategoryByID(categoryID);
+    }
+
+
+    /**
+     * TODO: Lasha
+     * @param itemID - ID of Deal in DB
+     * @return List of Images which Item with itemID have.
+     *         If such itemID does not exists in DB
+     *         returns null.
+     */
+    private static List<Image> getImagesByItemID(int itemID) {
+
+        /*
+         სელექთი, რომელიც დააბრუნებს
+         itemID-ის Item-ის შესაბამის Image-ების ID-ებს.
+         თუ itemID არ არსებობს ბაზაში, დააბრუნებს ცარიელ ცხრილს.
+         */
+        String query = "";
+
+        List<Integer> imageIDs = null; // აქ გადაწერე შედეგად მიღებული ცხრილი მონაცემები
+
+        List<Image> images = new ArrayList<>(imageIDs.size());
+        for (Integer imageID : imageIDs)
+            images.add(ImagesManager.getImageByID(imageID));
+
+        return images;
+    }
+
+
+    /**
+     * TODO: Lasha
+     * @param itemID - ID of Deal in DB
+     * @return Name of Item with ID = itemID.
+     *         If such itemID does not exists in DB
+     *         returns null.
+     */
+    private static String getItemNameByItemID(int itemID) {
+
+        /*
+         სელექთი, რომელიც დააბრუნებს
+         itemID-ს მქონე Item-ის სახელს.
+         თუ itemID არ არსებობს ბაზაში, დააბრუნებს ცარიელ ცხრილს.
+         */
+        String query = "";
+
+        /*
+         თუ ცარიელი ცხრილი დაბრუნდა
+            return null
+         თუ არადა Item-ის სახელი
+         */
+        return null;
+    }
+
+
+    /**
+     * TODO: Lasha
+     * @param itemID - ID of Deal in DB
+     * @return Description of Item with ID = itemID.
+     *         If such itemID does not exists in DB
+     *         returns null.
+     */
+    private static String getItemDescriptionByItemID(int itemID) {
+
+        /*
+         სელექთი, რომელიც დააბრუნებს
+         itemID-ს მქონე Item-ის აღწერას.
+         თუ itemID არ არსებობს ბაზაში, დააბრუნებს ცარიელ ცხრილს.
+         */
+        String query = "";
+
+        /*
+         თუ ცარიელი ცხრილი დაბრუნდა
+            return null
+         თუ არადა Item-ის სახელი
+         */
+        return null;
+    }
+
+
     /**
      * @param item Item, which needs to added to database
      */
     public static boolean addItemToDB(Item item) {
         try {
             PreparedStatement st = DBO.getPreparedStatement(INSERT_ITEM_QUERY);
-            st.setInt(1,item.getUserId());
+            st.setInt(1,item.getOwner().getId());
             st.setInt(2,item.getCategory().getId());
             st.setString(3,item.getDescription());
             st.setString(4,item.getName());
@@ -82,14 +228,6 @@ public class ItemManager {
         return getItemsByColumn("items","user_id", userId + "");
     }
 
-    /**
-     * @param itemId Id of an item
-     * @return Item with that id, if doesn't exist, returns null
-     */
-    public static Item getItemByID(int itemId){
-        List<Item> items = getItemsByColumn("items","id", itemId + "");
-        return (items.isEmpty()) ? null : items.get(0);
-    }
 
     /**
      *
@@ -102,19 +240,19 @@ public class ItemManager {
     }
 
     /**
-     *
      * @param rs ResultSet
      * @return Item, parsed from ResultSet
      * @throws SQLException
      */
     private static Item parseItem(ResultSet rs) throws SQLException {
-        return new Item(rs.getBigDecimal("id").intValue(),
+        /*return new Item(rs.getBigDecimal("id").intValue(),
                         rs.getBigDecimal("user_id").intValue(),
                         rs.getString("name"),
                         rs.getString("description"),
                         parseCategory(rs),
                         rs.getDate("created_at")
-        );
+        );*/
+        return null;
     }
 
     /**
