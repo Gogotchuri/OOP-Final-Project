@@ -14,7 +14,7 @@ public class Item {
     private int itemID;               // 0
     private User owner;               // null
     private ItemCategory category;    // null
-    private List<Image> images;       // null
+    private List<ItemImage> images;       // null
     private String name, description; // null
 
 
@@ -30,7 +30,7 @@ public class Item {
     public Item (int itemID,
                   User owner,
                    ItemCategory category,
-                    List<Image> images,
+                    List<ItemImage> images,
                      String name,
                       String description)
     {
@@ -64,13 +64,13 @@ public class Item {
     /**
      * @return List of Images of the Item
      */
-    public List<Image> getImages() { return images; }
+    public List<ItemImage> getImages() { return images; }
 
 
     /**
      * @return Iterator of the images
      */
-    public Iterator<Image> getImagesIterator() {
+    public Iterator<ItemImage> getImagesIterator() {
         return images.iterator();
     }
 

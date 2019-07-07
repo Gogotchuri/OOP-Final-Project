@@ -44,7 +44,7 @@ public class UserTests {
     public void getUsersByColumn() {
         assertEquals(m.getUserByUsername("KING"),u2);
         assertEquals(m.getUserByUsername("dummy"),null);
-        assertEquals(m.getUserById(55555), null);
+        assertEquals(m.getUserByID(55555), null);
         assertEquals(m.getUsersByColumn("first_name", "levan",false).get(0), u1);
         assertEquals(m.getUsersByColumn("last_name", "James", false).get(0), u2);
         assertEquals(m.getUsersByColumn("phone_number","doesnt exist",false), new ArrayList<>());
