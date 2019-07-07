@@ -1,6 +1,7 @@
 
 package models;
 
+import java.util.HashSet;
 import java.util.Iterator;
 import java.util.Set;
 
@@ -32,7 +33,7 @@ public class Cycle {
      * @param cycleID - ID of a Cycle in DB
      */
     public Cycle(int cycleID) {
-        this(cycleID, null, null);
+        this(cycleID, null, new HashSet<>());
     }
 
     /**

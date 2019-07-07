@@ -69,15 +69,22 @@ public class CycleManager {
     }
 
     /**
-     Inserts new cycle into the Data Base.
+     * Inserts new cycle into the Data Base.
+     * Update passed cycle object's id
+     * @return true if successful
      */
-    public static void addCycleToDB(Cycle cycle) throws SQLException {
+    public static boolean addCycleToDB(Cycle cycle) {
+        try {
+            Cycle insertedCycle = insertCycle(cycle);
 
-        Cycle insertedCycle = insertCycle(cycle);
-
-        Iterator<Deal> i = cycle.getDealsIterator();
-        while (i.hasNext())
-            insertCycleToOffered(i.next().getId(), insertedCycle.getCycleID());
+            Iterator<Deal> i = cycle.getDealsIterator();
+            while (i.hasNext())
+                insertCycleToOffered(i.next().getId(), insertedCycle.getCycleID());
+        } catch (SQLException e){
+            e.printStackTrace();
+            return false;
+        }
+        return true;
     }
 
 
@@ -95,14 +102,14 @@ public class CycleManager {
 
         Cycle insertedCycle;
         try (ResultSet generatedKeys = statement.getGeneratedKeys()) {
-            if (generatedKeys.next())
-                insertedCycle = new Cycle (
-                    generatedKeys.getInt(1),
-                     ProcessStatus.Status.ONGOING,
-                      cycle.getDeals()
+            if (generatedKeys.next()) {
+                insertedCycle = new Cycle(
+                        generatedKeys.getInt(1),
+                        ProcessStatus.Status.ONGOING,
+                        cycle.getDeals()
                 );
-
-            else
+                cycle.setCycleID(insertedCycle.getCycleID());
+            } else
                 throw new SQLException("Creating Cycle failed, no ID obtained.");
         }
 

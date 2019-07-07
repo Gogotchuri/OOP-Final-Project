@@ -1,6 +1,7 @@
 package test;
 
 import database.DatabaseAccessObject;
+import generalManagers.DeleteManager;
 import managers.ImagesManager;
 import managers.ItemManager;
 import managers.UserManager;
@@ -44,16 +45,6 @@ public class ImageTests {
     private static final Image im7 = new Image(7,1,"avatar1",time);
     private static final Image im8 = new Image(8,2,"avatar2",time);
 
-    @Test
-    public void emptyBase(String query) {
-        try {
-            PreparedStatement st = DatabaseAccessObject.getInstance().getPreparedStatement(query);
-            st.executeUpdate();
-        } catch (SQLException e) {
-            e.printStackTrace();
-        }
-    }
-
 
     @Test
     public void prepareForForeignKeys() {
@@ -73,8 +64,8 @@ public class ImageTests {
 
     @Test
     public void addImages() {
-        emptyBase("delete from item_images;");
-        emptyBase("delete from profile_images;");
+        DeleteManager.emptyBase("item_images");
+        DeleteManager.emptyBase("profile_images");
         assertTrue(ImagesManager.addImage(im1));
         assertTrue(ImagesManager.addImage(im2));
         assertTrue(ImagesManager.addImage(im3));
