@@ -66,7 +66,7 @@ public class UserManager {
      * @param id
      * @return User -null if user wasn't found
      */
-    public static User getUserById(int id) {
+    public static User getUserByID(int id) {
         ArrayList<User> users = getUsersByColumn("id", ""+id, true);
         if(users.isEmpty()) return null;
         return users.get(0);

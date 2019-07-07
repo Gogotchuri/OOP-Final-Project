@@ -7,9 +7,9 @@ import java.sql.*;
 
 public class DatabaseAccessObject {
     private static final String MYSQL_USERNAME = "root";
-    private static final String MYSQL_PASSWORD = "zgarbi007";
-    private static final String MYSQL_DATABASE_SERVER = "127.0.0.1";
-    private static final String MYSQL_DATABASE_NAME = "ExchangeProject_schema";
+    private static final String MYSQL_PASSWORD = "password";
+    private static final String MYSQL_DATABASE_SERVER = "localhost";
+    private static final String MYSQL_DATABASE_NAME = "oop";
 
     private static DatabaseAccessObject dao = null;
 

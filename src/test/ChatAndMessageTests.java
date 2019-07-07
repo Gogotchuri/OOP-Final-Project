@@ -1,6 +1,8 @@
 package test;
 
+import generalManagers.DeleteManager;
 import managers.ChatManager;
+import managers.CycleManager;
 import models.Chat;
 import models.Cycle;
 import models.Message;
@@ -10,20 +12,17 @@ import static org.junit.jupiter.api.Assertions.*;
 import java.sql.Timestamp;
 import java.util.Date;
 
-public class ChatAndCycleTests {
-    private Chat ch1, ch2;
+public class ChatAndMessageTests {
 
-    @Test
-    public void addCycleTest(){
-
-    }
-
-
-    //Needed to run them together, because the ID-s are not the same every time
+    //Needed to run them together, because the ID-s are automatically generated
     @Test
     public void chatAndMessageTest(){
-        ch1 = new Chat(1, new Cycle(1));
-        ch2 = new Chat(2, new Cycle(2));
+        DeleteManager.emptyBase("messages");
+        DeleteManager.emptyBase("chats");
+        CycleManager.addCycleToDB(new Cycle(1));
+        CycleManager.addCycleToDB(new Cycle(2));
+        Chat ch1 = new Chat(1, new Cycle(1));
+        Chat ch2 = new Chat(2, new Cycle(2));
         assertEquals(ChatManager.addChatToDB(ch1), true);
         assertEquals(ChatManager.addChatToDB(ch2), true);
         assertEquals(ChatManager.getChatByCycleID(1).getChatID(), ch1.getChatID());

@@ -73,7 +73,6 @@ public class CategoryTests {
         equalLists(CategoryManager.getCategories(cat3), Arrays.asList(cat3));
         equalLists(CategoryManager.getCategories(cat5), Arrays.asList(cat5));
 
-
         //Edge, with other inputs
         equalLists(CategoryManager.getCategories(oCat1), Arrays.asList(cat1,cat2));
         equalLists(CategoryManager.getCategories(oCat2), Arrays.asList(cat1,cat2,cat5,oCat1,oCat2,oCat4));

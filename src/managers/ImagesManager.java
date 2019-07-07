@@ -87,16 +87,6 @@ public class ImagesManager {
     }
 
     /**
-     * @return GeneratedID, taken from database
-     * @throws SQLException
-     */
-    private static int generateID(String query) throws SQLException {
-        PreparedStatement st = DBO.getPreparedStatement(query);
-        ResultSet set = st.executeQuery();
-        return (set.next()) ? 1 + set.getInt(1) : 1;
-    }
-
-    /**
      * get profile image of given user
      *
      * @param user_id

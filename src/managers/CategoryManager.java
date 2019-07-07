@@ -20,6 +20,33 @@ public class CategoryManager {
     private static final String SERIE_TABLE = "item_categories";
     private static final String TYPE_TABLE = "item_types";
     private static final String OTHER = "other";
+    private static final String JOIN_QUERY = "SELECT * from item_categories s JOIN item_types t on s.type_id = t.id" +
+            " JOIN item_brands b on s.brand_id = b.id ";
+
+
+    /**
+     * @param categoryID - ID of Deal in DB
+     * @return Fully Filled Category object
+     *         Or null if Category with such ID does not exists
+     */
+    //TODO : NOT TESTED YET
+    public static ItemCategory getCategoryByID(int categoryID) {
+        ItemCategory category = null;
+
+        String query = JOIN_QUERY + " WHERE s.id = " + categoryID + ";";
+
+        try {
+            PreparedStatement st = DAO.getPreparedStatement(query);
+            ResultSet set = st.executeQuery();
+
+            if(set.next()) return parseCategory(set);
+
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return null;
+    }
+
 
     /**
      * @param cat Passed category
@@ -30,9 +57,9 @@ public class CategoryManager {
         List<ItemCategory> list = new ArrayList<>();
         String serie = cat.getSerie().getName(), type = cat.getType().getName(), brand = cat.getBrand().getName();
 
-        String query = "SELECT * from item_categories s JOIN item_types t on s.type_id = t.id" +
-                " JOIN item_brands b on s.brand_id = b.id WHERE (s.name LIKE '%" + serie + "%' OR t.name LIKE'%" +
-                serie + "%' OR b.name LIKE '%" + serie + "%') ";
+        String query = JOIN_QUERY + " WHERE (s.name LIKE '%" + serie + "%' OR t.name LIKE'%" +
+                                      serie + "%' OR b.name LIKE '%" + serie + "%') ";
+
         if(cat.getType().getName() != OTHER)
             query += "AND t.name LIKE '%" + type + "%' ";
         if(cat.getBrand().getName() != OTHER)
@@ -85,9 +112,9 @@ public class CategoryManager {
     private static boolean addEverything(ItemCategory cat) {
         return insertIntoParentTable
                 (SERIE_TABLE,
-                cat.getSerie().getName(),
-                insertIntoAndReturnID(TYPE_TABLE, cat.getType().getName()),
-                insertIntoAndReturnID(BRAND_TABLE, cat.getBrand().getName()));
+                        cat.getSerie().getName(),
+                        insertIntoAndReturnID(TYPE_TABLE, cat.getType().getName()),
+                        insertIntoAndReturnID(BRAND_TABLE, cat.getBrand().getName()));
     }
 
     /**
@@ -207,8 +234,7 @@ public class CategoryManager {
 
     private static boolean baseContainsRow(String serie, String type, String brand) {
 
-        String query = "SELECT s.id from item_categories s JOIN item_types t on s.type_id = t.id" +
-                " JOIN item_brands b on s.brand_id = b.id WHERE s.name LIKE '%" + serie +
+        String query = JOIN_QUERY + " WHERE s.name LIKE '%" + serie +
                 "%' AND t.name LIKE '%" + type + "%' AND b.name LIKE '%" + brand + "%';";
 
         try {

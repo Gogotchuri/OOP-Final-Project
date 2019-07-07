@@ -1,6 +1,7 @@
 
 package models;
 
+import java.util.HashSet;
 import java.util.Iterator;
 import java.util.Set;
 
@@ -10,7 +11,7 @@ public class Cycle {
     /* Comments means default values
      * if user does not initializes it. */
 
-    private int cycleID;                      // -1
+    private int cycleID;                      // 0
     private ProcessStatus.Status cycleStatus; // null
     private Set<Deal> deals;                  // null
 
@@ -32,7 +33,7 @@ public class Cycle {
      * @param cycleID - ID of a Cycle in DB
      */
     public Cycle(int cycleID) {
-        this(cycleID, null, null);
+        this(cycleID, null, new HashSet<>());
     }
 
     /**
@@ -44,12 +45,12 @@ public class Cycle {
      * @param deals - Set of Deals which contains Cycle
      */
     public Cycle(Set<Deal> deals) {
-        this(-1, null, deals);
+        this(0, null, deals);
     }
 
 
     /**
-     * @return ID of a Cycle
+     * @return ID of a Cycle.
      *         If returned -1 that means that
      *         Cycle's ID is not initialized yet.
      */
@@ -101,6 +102,7 @@ public class Cycle {
 
 
     /**
+     * !!! Cycle ID must be Initialized for correct comparing !!!
      * @param other - Passed Cycle
      * @return Whether two Cycles are equal or not
      */
@@ -111,10 +113,7 @@ public class Cycle {
 
         Cycle otherCycle = (Cycle) other;
 
-        if (cycleID != -1 && cycleID == otherCycle.cycleID)
-            return true;
-
-        return deals.equals(otherCycle.deals);
+        return cycleID == otherCycle.cycleID;
     }
 
 }
