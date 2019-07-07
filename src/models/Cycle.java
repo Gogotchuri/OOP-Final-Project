@@ -16,7 +16,7 @@ public class Cycle {
 
 
     /**
-     * Mains Constructor of a Cycle.
+     * Main Constructor of a Cycle.
      * @param cycleID - ID of a Cycle in DB
      * @param cycleStatus - Process Status of a Cycle
      * @param deals - Set of Deals which contains Cycle
@@ -27,6 +27,13 @@ public class Cycle {
         this.deals = deals;
     }
 
+    /**
+     * Constructor with only ID
+     * @param cycleID - ID of a Cycle in DB
+     */
+    public Cycle(int cycleID) {
+        this(cycleID, null, null);
+    }
 
     /**
      * Constructor of a Cycle.
