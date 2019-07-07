@@ -4,11 +4,9 @@ package events;
 import managers.CategoryManager;
 import managers.CycleManager;
 import managers.DealsManager;
-import models.Category;
 import models.Cycle;
 import models.Deal;
 import models.categoryModels.ItemCategory;
-
 import java.sql.SQLException;
 import java.util.LinkedList;
 import java.util.List;
