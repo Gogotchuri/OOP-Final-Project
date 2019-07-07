@@ -5,18 +5,13 @@ import controllers.front.DealsController.SearchCriteria;
 import controllers.front.DealsController.SearchCriteria.Criteria;
 import database.DatabaseAccessObject;
 import generalManagers.DeleteManager;
-import generalManagers.UpdateForm;
-import generalManagers.UpdateManager;
-import models.Category;
 import models.Deal;
 import models.Item;
 import models.User;
 import models.categoryModels.ItemCategory;
-
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.sql.Timestamp;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;

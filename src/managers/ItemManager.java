@@ -2,7 +2,6 @@
 package managers;
 
 import database.DatabaseAccessObject;
-import models.Category;
 import models.Image;
 import models.Item;
 import models.User;
@@ -262,7 +261,7 @@ public class ItemManager {
      * @param rs ResultSet
      * @return Category of an item, created from ResultSet, if doesn't exist, returns null
      */
-    private static Category parseCategory(ResultSet rs) throws SQLException {
+    private static ItemCategory parseCategory(ResultSet rs) throws SQLException {
         int categoryId = rs.getInt("item_category_id");
 
         String statement = "SELECT * FROM item_categories WHERE id = " + categoryId + ";";
@@ -270,7 +269,7 @@ public class ItemManager {
         ResultSet set = st.executeQuery();
 
         if(set.next()) {
-            return new Category(set.getInt("id"), set.getString("name"));
+            // return new ItemCategory(set.getInt("id"), set.getString("name"));
         }
 
         return null;
@@ -330,8 +329,8 @@ public class ItemManager {
      * @param query
      * @return Item categories
      */
-    private static List <Category> getItemCategories(int dealID, String query){
-        List<Category> list = new ArrayList<>();
+    private static List <ItemCategory> getItemCategories(int dealID, String query){
+        List<ItemCategory> list = new ArrayList<>();
         try {
             PreparedStatement st = DBO.getPreparedStatement(query);
             st.setInt(1,dealID);
@@ -353,7 +352,7 @@ public class ItemManager {
      * @param dealID Id of the deal
      * @return List of categories wanted in one deal
      */
-    public static List <Category> getWantedItemCategories(int dealID){
+    public static List <ItemCategory> getWantedItemCategories(int dealID){
         return getItemCategories(dealID, SELECT_DEAL_WANTED_ITEMS);
     }
 
@@ -362,7 +361,7 @@ public class ItemManager {
      * @param dealID Id of the deal
      * @return List of categories owned in one deal
      */
-    public static List <Category> getOwnedItemCategories(int dealID){
+    public static List <ItemCategory> getOwnedItemCategories(int dealID){
         return getItemCategories(dealID, SELECT_DEAL_OWNED_ITEMS);
     }
 }

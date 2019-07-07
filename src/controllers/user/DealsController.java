@@ -5,8 +5,6 @@ import controllers.Controller;
 import controllers.ResourceController;
 import events.DealCyclesFinder;
 import managers.DealsManager;
-import managers.ItemManager;
-import models.Category;
 import models.Deal;
 import models.Item;
 import models.User;
