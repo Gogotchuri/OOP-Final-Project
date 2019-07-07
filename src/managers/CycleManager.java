@@ -28,6 +28,7 @@ public class CycleManager {
     /**
      Returns true iff:
      Data Base contains such cycle.
+     @param cycle - Cycle (at least) initialized with only Set of Deals
      */
     public static boolean containsDB(Cycle cycle) throws SQLException {
 
@@ -70,6 +71,7 @@ public class CycleManager {
 
     /**
      Inserts new cycle into the Data Base.
+     @param cycle - Cycle (at least) initialized with only Set of Deals
      */
     public static void addCycleToDB(Cycle cycle) throws SQLException {
 
@@ -86,7 +88,8 @@ public class CycleManager {
      */
     private static Cycle insertCycle(Cycle cycle) throws SQLException {
 
-        PreparedStatement statement = DAO.getPreparedStatement(INSERT_CYCLE_QUERY, Statement.RETURN_GENERATED_KEYS);
+        PreparedStatement statement =
+            DAO.getPreparedStatement(INSERT_CYCLE_QUERY, Statement.RETURN_GENERATED_KEYS);
 
         statement.setInt(1, ProcessStatus.Status.ONGOING.getId());
 
