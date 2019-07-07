@@ -46,14 +46,14 @@ CREATE TABLE item_brands
 );
 
 CREATE TABLE item_categories
-(
-    id INT(6) UNSIGNED AUTO_INCREMENT PRIMARY KEY,
-    name VARCHAR(64)NOT NULL UNIQUE,
-    type_id INT(6) UNSIGNED,
-    FOREIGN KEY (type_id) REFERENCES item_types(id),
-    brand_id INT(6) UNSIGNED,
-    FOREIGN KEY (brand_id) REFERENCES item_brands(id)
-);
+  (
+      id INT(6) UNSIGNED AUTO_INCREMENT PRIMARY KEY,
+      name VARCHAR(64)NOT NULL,
+      type_id INT(6) UNSIGNED,
+      FOREIGN KEY (type_id) REFERENCES item_types(id),
+      brand_id INT(6) UNSIGNED,
+      FOREIGN KEY (brand_id) REFERENCES item_brands(id)
+  );
 
 CREATE TABLE items
 (
