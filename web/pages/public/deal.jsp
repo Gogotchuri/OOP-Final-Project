@@ -7,9 +7,12 @@
 --%>
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <%@ page import="models.Deal" %>
+<%@ page import="models.User" %>
+<%@ page import="models.Item" %>
+<%@ page import="java.lang.Integer" %>
 <%@ page import="models.Category" %>
 <%@ page import="java.util.List" %>
-<% Deal d= (Deal)request.getAttribute("deal");%>
+<% Deal deal= (Deal)request.getAttribute("deal");%>
 <html>
     <%--HEAD--%>
     <jsp:include page="/pages/partials/head.jsp">
@@ -48,16 +51,23 @@
     <%--Page Content--%>
     <div class="wrapper">
 
-        <div><h3>Edit</h3>
+        <% HttpSession session = request.getSession();%>
+        <% User thisUser = (User)session.getAttribute("user");%>
+        <% int thisId = thisUser.getId();%>
+
+        <% if(deal.getUser_id() == thisId){ %>
+        <div>
             <ul>
-                <li><input type="button" onclick="alert('Hello World!')" value="Click Me!"></li>
+                <li><input type="button" onclick="user.dealConfigServlet.doGet()" value="Edit"></li>
+                <li><input type="button" onclick="user.DealConfigServlet.doDelete()" value="Delete"></li>
             </ul>
         </div>
+        <%}%>
 
         <div><h3>Information</h3>
             <ul>
-                <li><%=d.getId()%></li>
-                <li><%=d.getCreated_at()%></li>
+                <li><%=deal.getId()%></li>
+                <li><%=deal.getCreated_at()%></li>
                 <li>status</li>
                 <li>Cycles
                     <ul>
@@ -68,16 +78,22 @@
         </div>
 
         <div class = "box1">
+            <% List<Item> OwnedItems = deal.getOwnedItems()%>
             <h3>What i give</h3>
             <ul>
-                <li>Item1</li>
+                <% for(Item i : OwnedItems){ %>
+                <li><%= i.getName()%></li>
+                <% } %>
             </ul>
         </div>
 
         <div class="box2">
             <h3>What i get</h3>
+            <% List<Category> WantedItemCategories = deal.getWantedItemCategories(); %>
             <ul>
-                <li>Item1</li>
+                <% for(Category c : WantedItemCategories){ %>
+                <li><%= c.getName()%></li>
+                <% } %>
             </ul>
         </div>
     </div>
