@@ -2,6 +2,7 @@ package test;
 
 import managers.ChatManager;
 import models.Chat;
+import models.Cycle;
 import models.Message;
 import org.junit.jupiter.api.Test;
 import static org.junit.jupiter.api.Assertions.*;
@@ -19,8 +20,8 @@ public class ChatAndCycleTests {
 
     @Test
     public void addChatTest(){
-        Chat ch1 = new Chat(1, 1);
-        Chat ch2 = new Chat(2, 2);
+        Chat ch1 = new Chat(1, new Cycle(1));
+        Chat ch2 = new Chat(2, new Cycle(2));
         assertEquals(ChatManager.addChatToDB(ch1), true);
         assertEquals(ChatManager.addChatToDB(ch2), true);
         assertEquals(ChatManager.getChatByCycleID(1).getChatID(), ch1.getChatID());
