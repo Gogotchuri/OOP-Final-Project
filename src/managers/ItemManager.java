@@ -24,7 +24,8 @@ public class ItemManager {
             "created_at, updated_at) VALUES(?, ?, ?, ?);";
     private static final String INSERT_OWNED_ITEM_QUERY = "INSERT INTO owned_items (deal_id, item_id, " +
             "created_at, updated_at)  VALUES(?, ?, ?, ?);";
-    private static final String SELECT_DEAL_OWNED_ITEMS = "SELECT item_id from owned_items where deal_id = ?";
+
+    //private static final String SELECT_DEAL_OWNED_ITEMS = "SELECT item_id from owned_items where deal_id = ?";
 
     private static final String JOIN_CATEGORIES = "SELECT * from item_categories s JOIN item_types t on s.type_id = t.id" +
             " JOIN item_brands b on s.brand_id = b.id ";
@@ -92,6 +93,7 @@ public class ItemManager {
             st.setInt(1, itemID);
             ResultSet set = st.executeQuery();
             if (set.getFetchSize() != 0) {
+
                 set.next();
                 categoryID = set.getBigDecimal("item_category_id").intValue();
             }
