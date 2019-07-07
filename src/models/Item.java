@@ -1,6 +1,7 @@
 
 package models;
 
+import models.categoryModels.ItemCategory;
 import java.util.Iterator;
 import java.util.List;
 
@@ -12,7 +13,7 @@ public class Item {
 
     private int itemID;               // 0
     private User owner;               // null
-    private Category category;        // null
+    private ItemCategory category;    // null
     private List<Image> images;       // null
     private String name, description; // null
 
@@ -28,7 +29,7 @@ public class Item {
      */
     public Item (int itemID,
                   User owner,
-                   Category category,
+                   ItemCategory category,
                     List<Image> images,
                      String name,
                       String description)
@@ -57,7 +58,7 @@ public class Item {
     /**
      * @return Category of the Item
      */
-    public Category getCategory() { return category; }
+    public ItemCategory getCategory() { return category; }
 
 
     /**

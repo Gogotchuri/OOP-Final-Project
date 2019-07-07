@@ -6,6 +6,8 @@ import models.Category;
 import models.Image;
 import models.Item;
 import models.User;
+import models.categoryModels.ItemCategory;
+
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -36,7 +38,7 @@ public class ItemManager {
     public static Item getItemByID(int itemID){
 
         User owner = getItemOwnerByDealID(itemID);
-        Category category = getItemCategoryByItemID(itemID);
+        ItemCategory category = getItemCategoryByItemID(itemID);
         List<Image> images = getImagesByItemID(itemID);
         String name = getItemNameByItemID(itemID),
                 description = getItemDescriptionByItemID(itemID);
@@ -80,7 +82,7 @@ public class ItemManager {
      *         If such itemID does not exists in DB
      *         returns null.
      */
-    private static Category getItemCategoryByItemID(int itemID) {
+    private static ItemCategory getItemCategoryByItemID(int itemID) {
 
         /*
          სელექთი, რომელიც დააბრუნებს
