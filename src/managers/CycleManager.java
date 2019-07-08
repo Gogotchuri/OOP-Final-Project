@@ -18,31 +18,31 @@ public class CycleManager {
 
     private static DatabaseAccessObject DAO = DatabaseAccessObject.getInstance();
 
-    private static final String INSERT_CYCLE_QUERY =
-        "INSERT INTO cycles (status_id) VALUES (?);";
-
-    private static final String INSERT_CYCLE_TO_OFFERED_QUERY =
-        "INSERT INTO offered_cycles (deal_id, cycle_id) VALUES (?, ?);";
-
 
     /**
      * @param cycleID - ID of Cycle in DB
-     * @return Fully Filled Cycle object which's ID = dealID
+     * @return Fully Filled Cycle object which's ID = cycleID
      *         Or null if Cycle with such ID does not exists
      */
     public static Cycle getCycleByCycleID(int cycleID) {
 
-        Cycle cycle = null;
-
         ProcessStatus.Status cycleStatus =
             StatusManager.getStatusIDByID("cycles", cycleID);
 
-        return cycle;
+        List<Deal> cycleDeals =
+            DealsManager.getDealsByCycleID(cycleID);
+
+        return (cycleStatus == null || cycleDeals == null)
+                ?
+                null : new Cycle(cycleID, cycleStatus, cycleDeals);
     }
 
 
     /**
-     * TODO: Krawa
+     * @param dealID - ID of Cycle in DB
+     * @return Fully Filled List of Cycle objects of Deal
+     *         Which Site has offered to User
+     *         Or null if Deal with such ID does not exists
      */
     public static List<Cycle> getCyclesByDealID(int dealID) {
         /*List<Cycle> list = new ArrayList<>();
@@ -138,7 +138,10 @@ public class CycleManager {
     private static Cycle insertCycle(Cycle cycle) throws SQLException {
 
         PreparedStatement statement =
-            DAO.getPreparedStatement(INSERT_CYCLE_QUERY, Statement.RETURN_GENERATED_KEYS);
+            DAO.getPreparedStatement (
+                "INSERT INTO cycles (status_id) VALUES (?);",
+                Statement.RETURN_GENERATED_KEYS
+            );
 
         statement.setInt(1, ProcessStatus.Status.ONGOING.getId());
 
@@ -148,7 +151,7 @@ public class CycleManager {
         Cycle insertedCycle;
         try (ResultSet generatedKeys = statement.getGeneratedKeys()) {
             if (generatedKeys.next()) {
-                insertedCycle = new Cycle(
+                insertedCycle = new Cycle (
                         generatedKeys.getInt(1),
                         ProcessStatus.Status.ONGOING,
                         cycle.getDeals()
@@ -169,7 +172,10 @@ public class CycleManager {
     private static void insertCycleToOffered(int cycleDealID, int cycleID)
         throws SQLException {
 
-        PreparedStatement statement = DAO.getPreparedStatement(INSERT_CYCLE_TO_OFFERED_QUERY);
+        PreparedStatement statement =
+            DAO.getPreparedStatement (
+                "INSERT INTO offered_cycles (deal_id, cycle_id) VALUES (?, ?);"
+            );
 
         statement.setInt(1, cycleDealID);
         statement.setInt(2, cycleID);

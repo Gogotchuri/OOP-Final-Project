@@ -50,21 +50,37 @@ public class DealsManager {
      * @return List of fully filled deals of User with ID = userID
      */
     public static List<Deal> getDealsByUserID(int userID) {
-
         List<Deal> deals = new ArrayList<>();
-
         try {
-
             PreparedStatement statement =
                 DAO.getPreparedStatement (
-                    "SELECT id AS id_of_deal FROM deals WHERE user_id = " + userID + ";"
+                    "SELECT id AS id_of_deal" +
+                           "  FROM deals" +
+                           " WHERE user_id = " + userID + ";"
                 );
-
             queryDeals(deals, statement);
-
         }
         catch (SQLException e) { e.printStackTrace(); }
+        return deals;
+    }
 
+
+    /**
+     * @param cycleID - ID of Cycle in DB
+     * @return List of fully filled deals of Cycle with ID = cycleID
+     */
+    public static List<Deal> getDealsByCycleID(int cycleID) {
+        List<Deal> deals = new ArrayList<>();
+        try {
+            PreparedStatement statement =
+                    DAO.getPreparedStatement (
+                    "SELECT deal_id AS id_of_deal" +
+                           "  FROM offered_cycles" +
+                           " WHERE cycle_id = " + cycleID + ";"
+                    );
+            queryDeals(deals, statement);
+        }
+        catch (SQLException e) { e.printStackTrace(); }
         return deals;
     }
 
