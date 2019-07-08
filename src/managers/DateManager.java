@@ -1,7 +1,6 @@
 
 package managers;
 
-import com.mysql.cj.xdevapi.SqlResultImpl;
 import database.DatabaseAccessObject;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;

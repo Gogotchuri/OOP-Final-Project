@@ -8,11 +8,7 @@ import models.Cycle;
 import models.Deal;
 import models.categoryModels.ItemCategory;
 import java.sql.SQLException;
-import java.util.LinkedList;
-import java.util.List;
-import java.util.Queue;
-import java.util.Set;
-import java.util.HashSet;
+import java.util.*;
 import java.util.concurrent.locks.Lock;
 import java.util.concurrent.locks.ReentrantLock;
 
@@ -129,7 +125,7 @@ public class DealCyclesFinder extends Thread {
      Returns cycle made with this.deal
      */
     private Cycle getCycle(LinkedDeal linkedDeal) {
-        Set<Deal> cycleDeals = new HashSet<>();
+        List<Deal> cycleDeals = new ArrayList<>(CYCLE_MAX_LENGTH);
 
         while (linkedDeal != null) {
             cycleDeals.add(linkedDeal.deal);
