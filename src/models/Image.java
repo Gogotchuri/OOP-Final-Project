@@ -9,15 +9,20 @@ import java.sql.Timestamp;
  */
 public class Image implements Comparable <Image> {
 
-    private int id, userId;
+    private int id;
+    private User user;
     private String url;
     private Timestamp createdAt;
 
-    public Image(int id, int userId, String url, Timestamp createdAt) {
+    public Image(int id, User user, String url, Timestamp createdAt) {
         this.id = id;
-        this.userId = userId;
+        this.user = user;
         this.url = url;
         this.createdAt = createdAt;
+    }
+
+    public Image(User user, String url) {
+        this(0,user,url,new Timestamp(System.currentTimeMillis()));
     }
 
     /**
@@ -28,7 +33,7 @@ public class Image implements Comparable <Image> {
     /**
      * @return user's ID
      */
-    public int getUserId () { return userId; }
+    public User getUser () { return user; }
 
     /**
      * @return url of an image
@@ -56,7 +61,7 @@ public class Image implements Comparable <Image> {
      * @param other passed image
      * @return compares two images
      */
-    public int compareTo(Image other) { return Integer.compare(id, other.getId()); }
+    public int compareTo(Image other) { return url.compareTo(other.getUrl()); }
 
     @Override
     /**
