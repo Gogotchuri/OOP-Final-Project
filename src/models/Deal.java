@@ -2,6 +2,8 @@
 package models;
 
 import models.categoryModels.ItemCategory;
+
+import java.sql.Timestamp;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -16,6 +18,7 @@ public class Deal {
     private List<Item> ownedItems;               // null
     private List<ItemCategory> wantedCategories; // null
     private ProcessStatus.Status status;         // null
+    private Timestamp createDate;                // null
 
 
     /**
@@ -24,18 +27,22 @@ public class Deal {
      * @param owner - Owner of Deal
      * @param ownedItems - Owned Items of Deal
      * @param wantedCategories - Wanted Categories of Deal
+     * @param status - Deal Status
+     * @param createDate - Deal's Create Date
      */
     public Deal(int dealID,
-                 User owner,
-                  List<Item> ownedItems,
-                   List<ItemCategory> wantedCategories,
-                    ProcessStatus.Status status)
+                User owner,
+                List<Item> ownedItems,
+                List<ItemCategory> wantedCategories,
+                ProcessStatus.Status status,
+                Timestamp createDate)
     {
         this.dealID = dealID;
         this.owner = owner;
         this.ownedItems = ownedItems;
         this.wantedCategories = wantedCategories;
         this.status = status;
+        this.createDate = createDate;
     }
 
 
@@ -46,9 +53,9 @@ public class Deal {
      * @param wantedCategories - Wanted Categories of Deal
      */
     public Deal(User owner,
-                 List<Item> ownedItems,
-                  List<ItemCategory> wantedCategories) {
-        this(0, owner, ownedItems, wantedCategories, null);
+                List<Item> ownedItems,
+                List<ItemCategory> wantedCategories) {
+        this(0, owner, ownedItems, wantedCategories, null, null);
     }
 
 
@@ -82,6 +89,18 @@ public class Deal {
      *         Deal's Owned Item List is not initialized yet.
      */
     public List<ItemCategory> getWantedCategories() { return wantedCategories; }
+
+
+    /**
+     * @return Deal Status
+     */
+    public ProcessStatus.Status getStatus() { return status; }
+
+
+    /**
+     * @return Deal's Create Date
+     */
+    public Timestamp getCreateDate() { return createDate; }
 
 
     /**

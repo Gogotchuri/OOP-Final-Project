@@ -10,10 +10,8 @@ import models.Item;
 import models.ProcessStatus;
 import models.User;
 import models.categoryModels.ItemCategory;
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
-import java.sql.SQLException;
-import java.sql.Statement;
+
+import java.sql.*;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
@@ -35,13 +33,14 @@ public class DealsManager {
         List<Item> ownedItems = ItemManager.getItemsByDealID(dealID);
         List<ItemCategory> wantedCategories = CategoryManager.getWantedCategoriesByDealID(dealID);
         ProcessStatus.Status dealStatus = getDealStatusByDealID(dealID);
+        Timestamp dealCreateDate = null; // TODO
 
         return (owner == null ||
                  ownedItems == null ||
                   wantedCategories == null ||
                    dealStatus == null)
                 ?
-                null : new Deal(dealID, owner, ownedItems, wantedCategories, dealStatus);
+                null : new Deal(dealID, owner, ownedItems, wantedCategories, dealStatus, dealCreateDate);
     }
 
 
