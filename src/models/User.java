@@ -3,10 +3,7 @@ package models;
 
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
-import java.sql.Timestamp;
 import java.util.List;
-import managers.DealsManager;
-import managers.ImagesManager;
 
 public class User {
 

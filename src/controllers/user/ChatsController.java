@@ -75,7 +75,7 @@ public class ChatsController extends Controller {
             return;
         }
 
-        Message msg = new Message(chat.getChatID(), user.getId(), body);
+        Message msg = new Message(chat.getChatID(), user.getUserID(), body);
 
         if(!ChatManager.addMessageToDB(msg)) {
             response.setStatus(500);
