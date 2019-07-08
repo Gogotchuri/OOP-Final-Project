@@ -7,11 +7,9 @@
 --%>
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <%@ page import="java.util.List" %>
-<%@ page import="managers.UserManager" %>
 <%@ page import="models.*" %>
 <%@ page import="managers.CycleManager" %>
 <%@ page import="java.text.SimpleDateFormat" %>
-<%@ page import="com.mysql.cj.x.protobuf.MysqlxDatatypes" %>
 <%@ page import="models.categoryModels.ItemCategory" %>
 <%@ page import="models.categoryModels.ItemType" %>
 <%@ page import="models.categoryModels.ItemBrand" %>
@@ -62,23 +60,23 @@ s
 
         <%--<% HttpSession session = request.getSession();%>--%>
         <% User thisUser = (User)session.getAttribute("user");%>
-        <% int thisId = thisUser.getUserID()%>
+        <% int thisId = thisUser.getUserID();%>
 
         <div>
             <% User user = deal.getOwner();%>
+            <% String deleteMethod = "user.DealConfigServlet.doDelete()";%>
             <% if(user.getUserID() == thisId){ %>
-                <input type="button" onclick="user.DealConfigServlet.doDelete()" value="Delete Deal">
+                <input type="button" onclick= "<%= deleteMethod%>" value="Delete Deal">
             <%}%>
 
             <% String userFullName = " (" + user.getFirstName() + " " + user.getLastName() + ")";%>
             <% String dateCreated = new SimpleDateFormat("yyyy.MM.dd.HH.mm.ss").format(deal.getCreateDate());%>
             <% List<Cycle> cycles = CycleManager.getCyclesByDealID(deal.getDealID());%>
             <h3>Information</h3>
-            <ul>
-                <li><%= user.getUsername()%> <br> <%= userFullName %></li>
-                <li><%= dateCreated%></li>
-                <li><%= deal.getStatus().getName() %></li>
-                <li>Cycles
+                User: <%= user.getUsername()%> <br> <p class="italic"><%= userFullName %></p>
+                Deal Created: <%= dateCreated%>
+                Deal Status: <%= deal.getStatus().getName() %>
+                Cycles:
                     <ul>
                         <% for (int i=0; i<cycles.size(); i++){%>
                         <% Cycle c = cycles.get(i);%>
@@ -88,8 +86,6 @@ s
                         <li><%= cycleInfo%> <br> <p class="italic"><%= statusName %></>p></li>
                         <%}%>
                     </ul>
-                </li>
-            </ul>
         </div>
 
         <div class = "box1">
