@@ -4,7 +4,6 @@ import database.DatabaseAccessObject;
 import generalManagers.DeleteManager;
 import generalManagers.UpdateForm;
 import generalManagers.UpdateManager;
-import models.Deal;
 import models.User;
 
 import java.sql.PreparedStatement;
@@ -13,7 +12,6 @@ import java.sql.SQLException;
 import java.sql.Timestamp;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Vector;
 
 public class UserManager {
 
@@ -134,7 +132,9 @@ public class UserManager {
      * @return user with specified email
      */
     public static User getUserByEmail(String email) {
-        return getUsersByColumn("email", email, false).get(0);
+        List<User> users = getUsersByColumn("email", email, false);
+        if(users.isEmpty()) return null;
+        return users.get(0);
     }
 
     /**

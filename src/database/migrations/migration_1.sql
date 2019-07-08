@@ -134,7 +134,8 @@ CREATE TABLE messages
   id INT(6) UNSIGNED AUTO_INCREMENT PRIMARY KEY,
   chat_id INT(6) UNSIGNED NOT NULL,
   FOREIGN KEY(chat_id) REFERENCES chats(id) on delete cascade,
-
+  author_id INT(6) UNSIGNED NOT NULL,
+  FOREIGN KEY(author_id) REFERENCES users(id) on delete cascade,
   body VARCHAR(512) NOT NULL,
 
   created_at TIMESTAMP DEFAULT now()

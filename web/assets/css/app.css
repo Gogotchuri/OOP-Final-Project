@@ -148,8 +148,7 @@
     grid-template-columns: 1fr 3fr;
     grid-gap: 5px;
     height: 5em;
-    border: solid;
-    border-width: 1px;
+    border: 1px solid;
     margin-left: 3px;
     cursor: pointer;
     background-color: #eee;
@@ -231,7 +230,7 @@ div.messages div.own-message > div.message-bubble:after {
     border-left-color: bisque;
     border-right: 0;
     border-bottom: 0;
-    margin-top: 0px;
+    margin-top: 0;
     margin-right: -12px;
 }
 
@@ -244,6 +243,7 @@ div.messages div.message > div.message-bubble{
     background: aquamarine;
     border-radius: .4em;
 }
+
 
 div.messages div.message > div.message-bubble:after {
     content: '';
@@ -258,6 +258,45 @@ div.messages div.message > div.message-bubble:after {
     margin-left: -12px;
 }
 
+
+div.messages div.message-bubble{
+    display: grid;
+    grid-template-rows: 1fr 6fr 1fr;
+}
+
+div.messages .message-author{
+    margin-right: 5px;
+    font-style: italic;
+    font-size: calc(0.4em + 0.5vw);
+    font-weight: bold;
+}
+
+div.messages .message-date{
+    margin-right: 5px;
+    font-style: italic;
+    font-size: calc(0.35em + 0.5vw);
+    font-weight: lighter;
+}
+
+div.messages .message-text{
+    font-size: calc(0.5em + 0.5vw);
+    font-weight: normal;
+}
+div.messages div.message .message-author{
+    text-align: left;
+}
+
+div.messages div.own-message .message-author{
+    text-align: right;
+}
+
+div.messages div.message .message-date{
+    text-align: right;
+}
+
+div.messages div.own-message .message-date{
+    text-align: left;
+}
 /*input field*/
 .chats-container > div.conversation > div.message-send{
     border-top: solid;
