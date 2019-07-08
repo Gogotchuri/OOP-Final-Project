@@ -111,6 +111,8 @@ CREATE TABLE offered_cycles
 (
     id INT(6) UNSIGNED AUTO_INCREMENT PRIMARY KEY,
     status_id INT(6) UNSIGNED NOT NULL,
+    FOREIGN KEY (status_id) REFERENCES process_statuses(id),
+    
     deal_id INT(6) UNSIGNED NOT NULL,
     FOREIGN KEY (deal_id) REFERENCES deals(id),
 
