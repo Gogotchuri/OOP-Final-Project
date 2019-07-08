@@ -126,8 +126,8 @@ public class UserManager {
             ImagesManager.getUserProfileImage(userID),
             DealsManager.getDealsByUserID(userID),
             ChatManager.getUserChats(userID),
-            null, // TODO
-            null  // TODO
+            resultSet.getTimestamp("created_at"),
+            resultSet.getTimestamp("updated_at")
         );
     }
 
