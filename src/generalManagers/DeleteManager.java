@@ -27,4 +27,21 @@ public class DeleteManager {
         }
         return true;
     }
+
+    /**
+     * Used to delete every entry from table
+     * @param table name of table which needs to be emptied
+     * @return true if operation successful
+     */
+    public static boolean emptyBase(String table) {
+        try {
+            PreparedStatement st = DatabaseAccessObject.getInstance()
+                    .getPreparedStatement("delete from " + table + ";");
+            st.executeUpdate();
+        } catch (SQLException e) {
+            e.printStackTrace();
+            return false;
+        }
+        return true;
+    }
 }

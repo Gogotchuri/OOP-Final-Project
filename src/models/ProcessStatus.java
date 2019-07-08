@@ -21,5 +21,16 @@ public class ProcessStatus {
             return name;
         }
     }
+
+    public static Status getStatusByID(int statusID) {
+
+        Status[] statuses = Status.values();
+
+        for (Status status : statuses)
+            if (status.getId() == statusID)
+                return status;
+
+        return null;
+    }
 }
 

@@ -6,7 +6,10 @@ import controllers.ResourceController;
 import events.DealCyclesFinder;
 import managers.DealsManager;
 import models.Deal;
+import models.Item;
+import models.ProcessStatus;
 import models.User;
+import models.categoryModels.ItemCategory;
 import services.RequestValidator;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
@@ -46,7 +49,7 @@ public class DealsController extends Controller implements ResourceController {
      * @throws ServletException caused by dispatching
      */
     public void index() throws IOException, ServletException {
-        List<Deal> deals = DealsManager.getUserDeals(user);
+        List<Deal> deals = DealsManager.getDealsByUserID(user.getUserID());
         request.setAttribute("deals", deals);
         dispatchTo("/pages/user/deals/deals.jsp");
     }
@@ -60,7 +63,7 @@ public class DealsController extends Controller implements ResourceController {
      * @throws ServletException
      */
     public void show(int id) throws IOException, ServletException {
-        Deal deal = DealsManager.getDealById(id);
+        Deal deal = DealsManager.getDealByDealID(id);
         if (!checkOwnership(deal)) return;
         request.setAttribute("deal", deal);
         dispatchTo("/pages/user/deals/deal.jsp");
@@ -95,15 +98,21 @@ public class DealsController extends Controller implements ResourceController {
             return;
         }
 
+
         List<Integer> ownedIDs = getIntegerListOf("item_id"),
                         wantedIDs = getIntegerListOf("wanted_id");
 
-        Deal deal = new Deal(user.getId(), ownedIDs, wantedIDs);
 
-        deal.setId(DealsManager.storeDeal(deal));
-        int dealID = deal.getId();
+        List<Item> ownedItems = null; // ItemManager.getItemsByIDs(ownedIDs);
+        List<ItemCategory> wantedCategories = null; // CategoryManager.getCategoriesByIDs(wantedIDs);
 
-        if (dealID == 0) { // Deal did not insert into DB
+
+        Deal deal = new Deal(user, ownedItems, wantedCategories);
+        deal.setDealID(DealsManager.storeDeal(deal));
+
+        int dealID = deal.getDealID();
+
+        if (dealID == -1) { // Deal did not insert into DB
             sendError(500, "Internal server error! \n" +
                 "While Inserting new deal to database, 0 was returned as value of deal id" +
                 "(User.DealsController:102)");
@@ -172,7 +181,7 @@ public class DealsController extends Controller implements ResourceController {
      * @throws ServletException
      */
     public void destroy(int id) throws IOException, ServletException {
-        Deal deal = DealsManager.getDealById(id);
+        Deal deal = DealsManager.getDealByDealID(id);
         if(!checkOwnership(deal)) return;
         if(DealsManager.deleteDeal(id)) {
             index();
@@ -195,7 +204,7 @@ public class DealsController extends Controller implements ResourceController {
             sendError(404, "Deal not found!");
             return false;
         }
-        if(deal.getUser_id() != this.user.getId()){
+        if(deal.getOwner().getUserID() != this.user.getUserID()){
             sendError(401, "Not authorized to edit this deal!");
             return false;
         }

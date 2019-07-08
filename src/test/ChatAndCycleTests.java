@@ -2,12 +2,15 @@ package test;
 
 import managers.ChatManager;
 import models.Chat;
+import models.Cycle;
 import models.Message;
 import org.junit.jupiter.api.Test;
-import static org.junit.jupiter.api.Assertions.*;
 
 import java.sql.Timestamp;
 import java.util.Date;
+
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 public class ChatAndCycleTests {
 
@@ -19,8 +22,10 @@ public class ChatAndCycleTests {
 
     @Test
     public void addChatTest(){
-        Chat ch1 = new Chat(1, 1);
-        Chat ch2 = new Chat(2, 2);
+        Cycle cyc1 = new Cycle(1);
+        Cycle cyc2 = new Cycle(2);
+        Chat ch1 = new Chat(1, cyc1);
+        Chat ch2 = new Chat(2, cyc2);
         assertEquals(ChatManager.addChatToDB(ch1), true);
         assertEquals(ChatManager.addChatToDB(ch2), true);
         assertEquals(ChatManager.getChatByCycleID(1).getChatID(), ch1.getChatID());
@@ -29,9 +34,9 @@ public class ChatAndCycleTests {
 
     @Test
     public void addMessageTest(){
-        Message msg1 = new Message(1, 1, "first message", new Timestamp(new Date().getTime()));
-        Message msg2 = new Message(2, 1, "second message", new Timestamp(new Date().getTime()));
-        Message msg3 = new Message(3, 2, "third message", new Timestamp(new Date().getTime()));
+        Message msg1 = new Message(1, 1, 1, "first message", new Timestamp(new Date().getTime()));
+        Message msg2 = new Message(2, 1, 1, "second message", new Timestamp(new Date().getTime()));
+        Message msg3 = new Message(3, 2, 1,"third message", new Timestamp(new Date().getTime()));
         assertEquals(ChatManager.addMessageToDB(msg1), true);
         assertEquals(ChatManager.addMessageToDB(msg2), true);
         assertEquals(ChatManager.addMessageToDB(msg3), true);

@@ -15,9 +15,9 @@ import static org.junit.jupiter.api.Assertions.*;
 
 public class UserTests {
 
-    private static final User u1 = new User(1,"LG","password","levan","gelashvili", "lgela17", "555");
-    private static final User u2 = new User(2,"KING","heat","Lebron","James","ljame03","23");
-    private static final User u3 = new User(3,"a","b","c","d","e","f");
+    private static final User u1 = new User("LG","password","levan","gelashvili", "lgela17", "555");
+    private static final User u2 = new User("KING","heat","Lebron","James","ljame03","23");
+    private static final User u3 = new User("a","b","c","d","e","f");
 
     private static final UserManager m = new UserManager();
     private static final DeleteManager d = new DeleteManager();
@@ -44,8 +44,7 @@ public class UserTests {
     public void getUsersByColumn() {
         assertEquals(m.getUserByUsername("KING"),u2);
         assertEquals(m.getUserByUsername("dummy"),null);
-        assertEquals(m.getUserById(55), null);
-        assertEquals(m.getUserById(2),u2);
+        assertEquals(m.getUserByID(55555), null);
         assertEquals(m.getUsersByColumn("first_name", "levan",false).get(0), u1);
         assertEquals(m.getUsersByColumn("last_name", "James", false).get(0), u2);
         assertEquals(m.getUsersByColumn("phone_number","doesnt exist",false), new ArrayList<>());
@@ -53,7 +52,7 @@ public class UserTests {
 
     @Test
     public void updateUsers() {
-        UpdateForm form = new UpdateForm("users",2);
+        UpdateForm form = new UpdateForm("users", m.getUserByUsername("KING").getUserID());
         form.addUpdate("user_name","snakeee");
         form.addUpdate("first_name","Kevin");
         form.addUpdate("last_name","Durant");
@@ -70,7 +69,6 @@ public class UserTests {
 
     @Test
     public void customTest(){
-
         boolean levan = m.storeUser(u1);
         assertTrue(levan);
         assertNotNull(m.getUserByUsername(u1.getUsername()));

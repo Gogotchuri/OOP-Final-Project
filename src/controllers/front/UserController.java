@@ -28,7 +28,7 @@ public class UserController extends Controller {
      */
     public void show(int userID) throws ServletException, IOException {
 
-    	User user = UserManager.getUserById(userID);
+    	User user = UserManager.getUserByID(userID);
 
     	if (user == null) {
 			/*

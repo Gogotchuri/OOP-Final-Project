@@ -1,10 +1,13 @@
+
 package managers;
 
 import database.DatabaseAccessObject;
-import models.Category;
+import models.Image;
 import models.Item;
+import models.ItemImage;
+import models.User;
+import models.categoryModels.ItemCategory;
 
-import java.math.BigDecimal;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -14,16 +17,168 @@ import java.util.List;
 
 public class ItemManager {
 
+
     private static final String INSERT_ITEM_QUERY = "INSERT INTO items (user_id, item_category_id, description, " +
             "created_at, updated_at) VALUES(?, ?, ?, ?, ?, ?);";
     private static final String INSERT_WANTED_ITEM_QUERY = "INSERT INTO wanted_items (deal_id, item_category_id, " +
             "created_at, updated_at) VALUES(?, ?, ?, ?);";
     private static final String INSERT_OWNED_ITEM_QUERY = "INSERT INTO owned_items (deal_id, item_id, " +
             "created_at, updated_at)  VALUES(?, ?, ?, ?);";
-    private static final String SELECT_DEAL_OWNED_ITEMS = "SELECT item_id from owned_items where deal_id = ?";
-    private static final String SELECT_DEAL_WANTED_ITEMS = "SELECT item_category_id from wanted_items where deal_id = ?";
-    private static final String SELECT_BY = "SELECT * FROM ? WHERE ? = ? ;";
+    private static final String GET_OWNED_ITEMIDS_BY_DEAL_QUERY = "SELECT item_id FROM owned_items WHERE deal_id = ?;";
+
+    //private static final String SELECT_DEAL_OWNED_ITEMS = "SELECT item_id from owned_items where deal_id = ?";
+
+    private static final String JOIN_CATEGORIES = "SELECT * from item_categories s JOIN item_types t on s.type_id = t.id" +
+            " JOIN item_brands b on s.brand_id = b.id ";
+    private static final String GET_ITEM_INFO_BY_ITEM_ID = "SELECT * FROM items WHERE id = ?;";
+    private static final String GET_IMAGE_IDS_BY_ITEM_ID = "SELECT id FROM item_images WHERE item_id = ?;";
     private static DatabaseAccessObject DBO = DatabaseAccessObject.getInstance();
+
+
+    /**
+     * @param itemID - ID of Deal in DB
+     * @return Fully Filled Item object
+     *         Or null if Item with such ID does not exists
+     */
+    public static Item getItemByID(int itemID){
+
+        User owner = getOwnerByItemID(itemID);
+        ItemCategory category = getItemCategoryByItemID(itemID);
+        List<ItemImage> images = ImagesManager.getItemImagesByItemID(itemID);
+        String name = getItemNameByItemID(itemID),
+                description = getItemDescriptionByItemID(itemID);
+
+        return (owner == null ||
+                 category == null ||
+                  images == null ||
+                   name == null ||
+                    description == null)
+                ?
+                null : new Item(itemID, owner, category, images, name, description);
+    }
+
+
+
+    /**
+     * @param dealID - ID of Deal in DB
+     * @return List of Items which Deal with dealID contains
+     *         If such dealID does not exists in DB
+     *         returns null
+     */
+    public static List<Item> getItemsByDealID(int dealID) {
+        List<Integer> itemIDs = new ArrayList<>();
+        try {
+            PreparedStatement st = DBO.getPreparedStatement(GET_OWNED_ITEMIDS_BY_DEAL_QUERY);
+            st.setInt(1, dealID);
+            ResultSet set = st.executeQuery();
+            if(set.getFetchSize() == 0) {
+                return null;
+            }
+            while (set.next()) {
+                itemIDs.add(set.getBigDecimal("item_id").intValue());
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+
+        List<Item> items = new ArrayList<>();
+        for (Integer itemID : itemIDs)
+            items.add(ItemManager.getItemByID(itemID));
+
+        return items;
+    }
+
+
+    /**
+     * @param itemID - ID of Deal in DB
+     * @return Owner (User) of Item with ID = itemID.
+     *         If such itemID does not exists in DB
+     *         returns null.
+     */
+    private static User getOwnerByItemID(int itemID) {
+        int ownerID = -1;
+        try {
+            PreparedStatement st = DBO.getPreparedStatement(GET_ITEM_INFO_BY_ITEM_ID);
+            st.setInt(1, itemID);
+            ResultSet set = st.executeQuery();
+            if(set.getFetchSize() != 0) {
+                set.next();
+                ownerID = set.getBigDecimal("user_id").intValue();
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return ownerID == -1 ? null : UserManager.getUserByID(ownerID);
+    }
+
+
+    /**
+     * @param itemID - ID of Deal in DB
+     * @return Category of Item with ID = itemID.
+     *         If such itemID does not exists in DB
+     *         returns null.
+     */
+    private static ItemCategory getItemCategoryByItemID(int itemID) {
+        int categoryID = -1;
+        try {
+            PreparedStatement st = DBO.getPreparedStatement(GET_ITEM_INFO_BY_ITEM_ID);
+            st.setInt(1, itemID);
+            ResultSet set = st.executeQuery();
+            if (set.getFetchSize() != 0) {
+
+                set.next();
+                categoryID = set.getBigDecimal("item_category_id").intValue();
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return categoryID == -1 ? null : CategoryManager.getCategoryByID(categoryID);
+    }
+
+
+    /**
+     * @param itemID - ID of Deal in DB
+     * @return Name of Item with ID = itemID.
+     *         If such itemID does not exists in DB
+     *         returns null.
+     */
+    private static String getItemNameByItemID(int itemID) {
+        try {
+            PreparedStatement st = DBO.getPreparedStatement(GET_ITEM_INFO_BY_ITEM_ID);
+            st.setInt(1, itemID);
+            ResultSet set = st.executeQuery();
+            if(set.getFetchSize() != 0) {
+                set.next();
+                return set.getString("name");
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return null;
+    }
+
+
+    /**
+     * @param itemID - ID of Deal in DB
+     * @return Description of Item with ID = itemID.
+     *         If such itemID does not exists in DB
+     *         returns null.
+     */
+    private static String getItemDescriptionByItemID(int itemID) {
+        try {
+            PreparedStatement st = DBO.getPreparedStatement(GET_ITEM_INFO_BY_ITEM_ID);
+            st.setInt(1, itemID);
+            ResultSet set = st.executeQuery();
+            if(set.getFetchSize() != 0) {
+                set.next();
+                return set.getString("description");
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return null;
+    }
+
 
     /**
      * @param item Item, which needs to added to database
@@ -31,7 +186,7 @@ public class ItemManager {
     public static boolean addItemToDB(Item item) {
         try {
             PreparedStatement st = DBO.getPreparedStatement(INSERT_ITEM_QUERY);
-            st.setInt(1,item.getUserId());
+            st.setInt(1,item.getOwner().getUserID());
             st.setInt(2,item.getCategory().getId());
             st.setString(3,item.getDescription());
             st.setString(4,item.getName());
@@ -82,14 +237,6 @@ public class ItemManager {
         return getItemsByColumn("items","user_id", userId + "");
     }
 
-    /**
-     * @param itemId Id of an item
-     * @return Item with that id, if doesn't exist, returns null
-     */
-    public static Item getItemById(int itemId){
-        List<Item> items = getItemsByColumn("items","id", itemId + "");
-        return (items.isEmpty()) ? null : items.get(0);
-    }
 
     /**
      *
@@ -97,45 +244,22 @@ public class ItemManager {
      * @return List of items
      */
     public static List<Item> getOwnedItems(int dealId) {
-        String query = "SELECT * FROM ? JOIN owned_items on items.id = owned_items.item_id WHERE ? = ?;";
         return getItemsByColumn("items", "owned_items.deal_id", dealId + "");
     }
 
     /**
-     *
      * @param rs ResultSet
      * @return Item, parsed from ResultSet
      * @throws SQLException
      */
     private static Item parseItem(ResultSet rs) throws SQLException {
         return new Item(rs.getBigDecimal("id").intValue(),
-                        rs.getBigDecimal("user_id").intValue(),
+                        UserManager.getUserByID(rs.getInt("user_id")),
+                        CategoryManager.getCategoryByID(rs.getInt("item_category_id")),
+                        ImagesManager.getItemImagesByItemID(rs.getInt("id")),
                         rs.getString("name"),
-                        rs.getString("description"),
-                        parseCategory(rs),
-                        rs.getDate("created_at")
-        );
+                        rs.getString("description"));
     }
-
-    /**
-     *
-     * @param rs ResultSet
-     * @return Category of an item, created from ResultSet, if doesn't exist, returns null
-     */
-    private static Category parseCategory(ResultSet rs) throws SQLException {
-        int categoryId = rs.getInt("item_category_id");
-
-        String statement = "SELECT * FROM item_categories WHERE id = " + categoryId + ";";
-        PreparedStatement st = DBO.getPreparedStatement(statement);
-        ResultSet set = st.executeQuery();
-
-        if(set.next()) {
-            return new Category(set.getInt("id"), set.getString("name"));
-        }
-
-        return null;
-    }
-
 
     /**
      *adds wanted item in the database
@@ -145,7 +269,7 @@ public class ItemManager {
      * @return boolean
      * @throws SQLException
      */
-    public static boolean insertWantedItem(int deal_id, int item_category_id){
+    public static boolean insertWantedItemCategory(int deal_id, int item_category_id){
         return insert(deal_id, item_category_id, INSERT_WANTED_ITEM_QUERY);
     }
 
@@ -190,15 +314,15 @@ public class ItemManager {
      * @param query
      * @return Item categories
      */
-    private static List <Category> getItemCategories(int dealID, String query){
-        List<Category> list = new ArrayList<>();
+    private static List <ItemCategory> getItemCategories(int dealID, String query){
+        List<ItemCategory> list = new ArrayList<>();
         try {
             PreparedStatement st = DBO.getPreparedStatement(query);
             st.setInt(1,dealID);
             ResultSet set = st.executeQuery();
 
             while(set.next()) {
-                list.add(parseCategory(set));
+                list.add(ItemCategory.parseCategory(set));
             }
 
         } catch (SQLException e) {
@@ -213,8 +337,10 @@ public class ItemManager {
      * @param dealID Id of the deal
      * @return List of categories wanted in one deal
      */
-    public static List <Category> getWantedItemCategories(int dealID){
-        return getItemCategories(dealID, SELECT_DEAL_WANTED_ITEMS);
+    public static List <ItemCategory> getWantedItemCategories(int dealID) {
+        String query = JOIN_CATEGORIES + " JOIN wanted_items s.id = on wanted_items.deal_id" +
+                " WHERE wanted_items.deal_id = ?;";
+        return getItemCategories(dealID, query);
     }
 
     /**
@@ -222,7 +348,8 @@ public class ItemManager {
      * @param dealID Id of the deal
      * @return List of categories owned in one deal
      */
-    public static List <Category> getOwnedItemCategories(int dealID){
-        return getItemCategories(dealID, SELECT_DEAL_OWNED_ITEMS);
+    //TODO : გვჭირდება ეს საერთოდ?
+    public static List <ItemCategory> getOwnedItemCategories(int dealID) {
+        return null;
     }
 }
