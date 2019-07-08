@@ -43,7 +43,10 @@ public class DealCycleServlet extends HttpServlet{
 
 
 	/**
-	 Accepts offered cycle, takes cycle_id as request parameter
+	 TODO: Ilia, authenticated ki sheidzleba iyos mara xo sheidzleba
+	       hacker iyos da sxvisi cycle_id da deal_id gamogzavnos ???
+
+	 Accepts offered cycle, takes cycle_id and deal_id as request parameter
 
 	 returned html:
 	 dispatch to user.DealCycleServlet (GET) (cycle where action performed)
@@ -55,15 +58,17 @@ public class DealCycleServlet extends HttpServlet{
 		//Checking if user is authorized
 		if((new AuthenticatedUser(request, response)).unauthenticated()) return;
 
-		int cycle_id;
-		try { cycle_id = Integer.parseInt(request.getParameter("cycle_id")); }
-		catch (NumberFormatException e) {
+		int cycle_id, deal_id;
+		try {
+			cycle_id = Integer.parseInt(request.getParameter("cycle_id"));
+			deal_id = Integer.parseInt(request.getParameter("cycle_id"));
+		} catch (NumberFormatException e) {
 			response.sendError(HttpServletResponse.SC_NOT_FOUND,
 					"This address should be called, with numeric parameter \"cycle_id\"!");
 			return;
 		}
 
-		(new CyclesController(request, response, this)).acceptCycle(cycle_id);
+		(new CyclesController(request, response, this)).acceptCycle(cycle_id, deal_id);
 
 	}
 

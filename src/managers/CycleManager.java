@@ -10,14 +10,13 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
+import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 
 public class CycleManager {
 
-
     private static DatabaseAccessObject DAO = DatabaseAccessObject.getInstance();
-
 
     /**
      * @param cycleID - ID of Cycle in DB
@@ -41,27 +40,29 @@ public class CycleManager {
     /**
      * @param dealID - ID of Cycle in DB
      * @return Fully Filled List of Cycle objects of Deal
-     *         Which Site has offered to User
-     *         Or null if Deal with such ID does not exists
+     *         Which out site has offered to User
+     *         Or null if some error happens
      */
     public static List<Cycle> getCyclesByDealID(int dealID) {
-        /*List<Cycle> list = new ArrayList<>();
+        List<Cycle> cycles = new ArrayList<>();
         try {
-            PreparedStatement st = DAO.getPreparedStatement(GET_CYCLE_BY_DEAL_QUERY);
-            st.setInt(1, dealID);
-            ResultSet set = st.executeQuery();
-            while(set.next()) {
-                list.add(
-                        new Cycle(set.getBigDecimal("status_id").intValue(),
-                                set.getBigDecimal("status_id").intValue(),
-                                new Timestamp(set.getDate("created_at").getTime()),
-                                new Timestamp(set.getDate("updated_at").getTime())));
-            }
-        } catch (SQLException e) {
-            e.printStackTrace();
+            PreparedStatement statement =
+                DAO.getPreparedStatement (
+                    "SELECT cycle_id \n" +
+                           "  FROM offered_cycles \n" +
+                           " WHERE deal_id = " + dealID + ";"
+                );
+            ResultSet resultSet = statement.executeQuery();
+            while (resultSet.next())
+                cycles.add (
+                    getCycleByCycleID(resultSet.getBigDecimal("cycle_id").intValue())
+                );
         }
-        return  list;*/
-        return null;
+        catch (SQLException e) {
+            e.printStackTrace();
+            return null;
+        }
+        return cycles;
     }
 
 
@@ -195,12 +196,34 @@ public class CycleManager {
 
 
     /**
+     * @param dealID - ID of Deal in DB
+     * @return Whether Cycles accepted or not
+     */
+    public static boolean acceptCycle(int cycleID, int dealID) {
+        try {
+            PreparedStatement statement =
+                DAO.getPreparedStatement (
+                    "UPDATE offered_cycles \n" +
+                           "   SET status_id = " + ProcessStatus.Status.COMPLETED + " \n" +
+                           " WHERE cycle_id = " + cycleID + " \n" +
+                           "   AND deal_id = " + dealID + ";"
+            );
+            return statement.executeUpdate() != 0;
+        }
+        catch (SQLException e) {
+            e.printStackTrace();
+            return false;
+        }
+    }
+
+
+    /**
      * Deletes a Cycle from DB
      * @param cycleID - ID of Cycle in DB
      */
-    public static void deleteCycle(int cycleID){
+    public static boolean deleteCycle(int cycleID){
         deleteOfferedCycles(cycleID);
-        DeleteManager.delete("cycles", "id", cycleID);
+        return DeleteManager.delete("cycles", "id", cycleID);
     }
 
 }

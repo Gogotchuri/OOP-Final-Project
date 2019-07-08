@@ -25,7 +25,7 @@ public class DealsManager {
     /**
      * @param dealID - ID of Deal in DB
      * @return Fully Filled Deal object which's ID = dealID
-     *         Or null if Deal with such ID does not exists
+     *         Or null if some error happens
      */
     public static Deal getDealByDealID(int dealID) {
 
@@ -48,6 +48,7 @@ public class DealsManager {
     /**
      * @param userID - ID of User in DB
      * @return List of fully filled deals of User with ID = userID
+     *         Or null if some error happens
      */
     public static List<Deal> getDealsByUserID(int userID) {
         List<Deal> deals = new ArrayList<>();
@@ -59,8 +60,10 @@ public class DealsManager {
                            " WHERE user_id = " + userID + ";"
                 );
             queryDeals(deals, statement);
+        } catch (SQLException e) {
+            e.printStackTrace();
+            return null;
         }
-        catch (SQLException e) { e.printStackTrace(); }
         return deals;
     }
 
@@ -68,6 +71,7 @@ public class DealsManager {
     /**
      * @param cycleID - ID of Cycle in DB
      * @return List of fully filled deals of Cycle with ID = cycleID
+     *         Or null if some error happens
      */
     public static List<Deal> getDealsByCycleID(int cycleID) {
         List<Deal> deals = new ArrayList<>();
@@ -80,7 +84,10 @@ public class DealsManager {
                     );
             queryDeals(deals, statement);
         }
-        catch (SQLException e) { e.printStackTrace(); }
+        catch (SQLException e) {
+            e.printStackTrace();
+            return null;
+        }
         return deals;
     }
 
@@ -110,6 +117,7 @@ public class DealsManager {
     /**
      * @param sc - SearchCriteria, based on which we query deals
      * @return List of deals based on given criteria
+     *         Or null if some error happens
      */
     public static List<Deal> getDealsBySearchCriteria(SearchCriteria sc) {
 
@@ -152,15 +160,7 @@ public class DealsManager {
 
         queryBuilder.append(';');
 
-        List<Deal> list = new ArrayList<>();
-
-        try {
-            PreparedStatement statement = DAO.getPreparedStatement(queryBuilder.toString());
-            queryDeals(list, statement);
-        }
-        catch (SQLException e) { e.printStackTrace(); }
-
-        return list;
+        return getDealList(queryBuilder.toString());
     }
 
 
@@ -170,12 +170,13 @@ public class DealsManager {
      are equal of
      'deal's Owned item categories
      Returns at least empty list
+     Or null if some error happens
      */
     public static List<Deal> getClients(int dealID) {
 
         String query =
             "SELECT d.id AS id_of_deal FROM deals d \n" +
-            "WHERE d.id IN ( \n" +
+            " WHERE d.id IN ( \n" +
             "    SELECT result.deal_id FROM \n" +
             "    (SELECT a.deal_id AS deal_id, \n" +
             "            COUNT(*) AS row_num FROM \n" +
@@ -199,14 +200,24 @@ public class DealsManager {
             "    ) result \n" +
             ");";
 
-        List<Deal> deals = new ArrayList<>();
+        return getDealList(query);
+    }
 
+
+    /**
+     * @param query - query to execute
+     * @return List of Deals got by query
+     *         Or null if some error happens
+     */
+    private static List<Deal> getDealList(String query) {
+        List<Deal> deals = new ArrayList<>();
         try {
             PreparedStatement statement = DAO.getPreparedStatement(query);
             queryDeals(deals, statement);
+        } catch (SQLException e) {
+            e.printStackTrace();
+            return null;
         }
-        catch (SQLException e) { e.printStackTrace(); }
-
         return deals;
     }
 

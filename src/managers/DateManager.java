@@ -9,9 +9,7 @@ import java.sql.Timestamp;
 
 public class DateManager {
 
-
     private static DatabaseAccessObject DAO = DatabaseAccessObject.getInstance();
-
 
     /**
      * @param tableName - Name Of table
@@ -48,16 +46,13 @@ public class DateManager {
         try {
             PreparedStatement statement =
                     DAO.getPreparedStatement (
-                            "SELECT " + dateName +
-                                    " FROM " + tableName +
-                                    " WHERE id = " + ID + ";"
+                            "SELECT " + dateName + '\n' +
+                                   "  FROM " + tableName + '\n' +
+                                   "  WHERE id = " + ID + ";"
                     );
-
             ResultSet resultSet = statement.executeQuery();
-
             if (resultSet.next())
                 date = resultSet.getTimestamp(dateName);
-
         } catch (SQLException e) { e.printStackTrace(); }
         return date;
     }

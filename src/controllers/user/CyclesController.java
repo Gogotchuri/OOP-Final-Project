@@ -1,10 +1,10 @@
+
 package controllers.user;
 
 import controllers.Controller;
 import managers.CycleManager;
 import models.Cycle;
 import models.User;
-
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
@@ -20,19 +20,31 @@ public class CyclesController extends Controller {
      * Creates a controller, usually called from servlet, which is also
      * passed by parameter. servlet method passes taken request and response.
      *
-     * @param req
-     * @param res
-     * @param servlet
+     * @param request request sent by user
+     * @param response servlet response
+     * @param servlet servlet calling this controller
      */
-    public CyclesController(HttpServletRequest req, HttpServletResponse res, HttpServlet servlet) throws ServletException {
-        super(req, res, servlet);
+    public CyclesController(HttpServletRequest request,
+                             HttpServletResponse response,
+                              HttpServlet servlet)
+        throws ServletException {
+        super(request, response, servlet);
         user = (User) session.getAttribute("user");
-        if(user == null) throw new ServletException("Unauthorized user!");
+        if (user == null)
+            throw new ServletException("Unauthorized user!");
     }
 
-    public void show(int cycle_id) throws ServletException, IOException {
-        //TODO if cycle not found send error
-        Cycle cycle = CycleManager.getCycleByCycleID(cycle_id);
+
+    /**
+     * @param cycleID - ID of Cycle in DB
+     * Sets Cycle object for cycle.jsp
+     */
+    public void show(int cycleID) throws ServletException, IOException {
+        Cycle cycle = CycleManager.getCycleByCycleID(cycleID);
+        if (cycle == null) {
+            // TODO: Send Error
+            return;
+        }
         request.setAttribute("cycle", cycle);
         dispatchTo("/pages/user/deals/cycle.jsp");
     }
@@ -44,16 +56,30 @@ public class CyclesController extends Controller {
      */
     public void dealCycles(int dealID) throws ServletException, IOException {
         List<Cycle> cycles = CycleManager.getCyclesByDealID(dealID);
+        if (cycles == null) {
+            // TODO: Send Error
+            return;
+        }
         request.setAttribute("cycles", cycles);
         dispatchTo("/pages/user/deals/deal-cycles.jsp");
     }
 
 
-    public void acceptCycle(int cycle_id){
-        //TODO implement accepting logic
+    /**
+     * @param cycleID - ID of Cycle in DB
+     * Accepts cycle by user
+     */
+    public boolean acceptCycle(int cycleID, int dealID) {
+        return CycleManager.acceptCycle(cycleID, dealID);
     }
 
-    public void rejectCycle(int cycle_id){
-        CycleManager.deleteCycle(cycle_id);
+
+    /**
+     * @param cycleID - ID of Cycle in DB
+     * Deletes Cycle
+     */
+    public boolean rejectCycle(int cycleID){
+        return CycleManager.deleteCycle(cycleID);
     }
+
 }
