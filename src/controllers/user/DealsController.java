@@ -62,7 +62,7 @@ public class DealsController extends Controller implements ResourceController {
      * @throws ServletException
      */
     public void show(int id) throws IOException, ServletException {
-        Deal deal = DealsManager.getDealByID(id);
+        Deal deal = DealsManager.getDealByDealID(id);
         if (!checkOwnership(deal)) return;
         request.setAttribute("deal", deal);
         dispatchTo("/pages/user/deals/deal.jsp");
@@ -180,7 +180,7 @@ public class DealsController extends Controller implements ResourceController {
      * @throws ServletException
      */
     public void destroy(int id) throws IOException, ServletException {
-        Deal deal = DealsManager.getDealByID(id);
+        Deal deal = DealsManager.getDealByDealID(id);
         if(!checkOwnership(deal)) return;
         if(DealsManager.deleteDeal(id)) {
             index();

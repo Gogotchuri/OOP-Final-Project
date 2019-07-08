@@ -32,7 +32,7 @@ public class DealsManager {
      * @return Fully Filled Deal object
      *         Or null if Deal with such ID does not exists
      */
-    public static Deal getDealByID(int dealID) {
+    public static Deal getDealByDealID(int dealID) {
 
         User owner = UserManager.getUserByDealID(dealID);
         List<Item> ownedItems = ItemManager.getItemsByDealID(dealID);
@@ -44,12 +44,6 @@ public class DealsManager {
                 ?
                 null : new Deal(dealID, owner, ownedItems, wantedCategories);
     }
-
-
-
-
-
-
 
 
     /**
