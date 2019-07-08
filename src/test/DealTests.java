@@ -1,9 +1,12 @@
 package test;
 
+import controllers.front.DealsController;
 import generalManagers.DeleteManager;
+import managers.CycleManager;
 import managers.DealsManager;
 import managers.ItemManager;
 import managers.UserManager;
+import models.Cycle;
 import models.Deal;
 import models.Item;
 import models.User;
@@ -39,10 +42,11 @@ public class DealTests {
     private Deal deal1, deal2;
 
     @BeforeClass
-    public void setup(){
+    public static void setup(){
         DeleteManager.emptyBase("deals");
         DeleteManager.emptyBase("users");
         DeleteManager.emptyBase("items");
+        DeleteManager.emptyBase("cycles");
         ItemManager.addItemToDB(item1);
         ItemManager.addItemToDB(item2);
         ItemManager.addItemToDB(item3);
@@ -72,6 +76,34 @@ public class DealTests {
         assertEquals(DealsManager.getDealsByUserID(user2.getUserID()).get(0).getDealID(), deal2.getDealID());
     }
 
+    @Test
+    public void getDealsByCycleIDTest(){
+        Cycle cycle = new Cycle(new ArrayList<>(Arrays.asList(deal1, deal2)));
+        CycleManager.addCycleToDB(cycle);
+        assertEquals(DealsManager.getDealsByCycleID(cycle.getCycleID()).size(), 2);
+    }
+
+    @Test
+    public void getDealsBySearchCriteriaTest(){
+        DealsController.SearchCriteria sc1 = new DealsController.SearchCriteria();
+        sc1.addCriteria(DealsController.SearchCriteria.Criteria.USER_NAME, "one");
+        DealsController.SearchCriteria sc2 = new DealsController.SearchCriteria();
+        sc2.addCriteria(DealsController.SearchCriteria.Criteria.CATEGORY_NAME, "S2");
+        assertEquals(DealsManager.getDealsBySearchCriteria(sc1).size(), 1);
+        assertEquals(DealsManager.getDealsBySearchCriteria(sc2).size(), 1);
+    }
+
+    @Test
+    public void getClientsTest(){
+        assertEquals(DealsManager.getClients(deal1.getDealID()).size(), 1);
+        assertEquals(DealsManager.getClients(deal2.getDealID()).size(), 1);
+    }
+
+    @Test
+    public void deleteDealTest(){
+        assertTrue(DealsManager.deleteDeal(deal1.getDealID()));
+        assertTrue(DealsManager.deleteDeal(deal2.getDealID()));
+    }
 
 
     private static ItemCategory makeCategory(String serie, String type, String brand) {
