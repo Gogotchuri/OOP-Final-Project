@@ -18,9 +18,7 @@ import java.util.List;
 
 public class DealsManager {
 
-
     private static DatabaseAccessObject DAO = DatabaseAccessObject.getInstance();
-
 
     /**
      * @param dealID - ID of Deal in DB

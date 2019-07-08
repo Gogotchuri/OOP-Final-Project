@@ -7,7 +7,6 @@ import java.util.List;
 
 public class Cycle {
 
-
     /* Comments means default values
      * if user does not initializes it. */
 

@@ -68,7 +68,7 @@ public class CycleManager {
 
     /**
      Returns true iff:
-     Data Base contains such cycle.
+     Data Base contains such cycle
      @param cycle - Cycle (at least) initialized with only Set of Deals
      */
     public static boolean containsDB(Cycle cycle) throws SQLException {

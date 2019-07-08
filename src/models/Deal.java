@@ -9,7 +9,6 @@ import java.util.List;
 
 public class Deal {
 
-
     /* Comments means default values
      * if user does not initializes it. */
 
