@@ -61,10 +61,10 @@ public class DealCycleServlet extends HttpServlet{
 		int cycle_id, deal_id;
 		try {
 			cycle_id = Integer.parseInt(request.getParameter("cycle_id"));
-			deal_id = Integer.parseInt(request.getParameter("cycle_id"));
+			deal_id = Integer.parseInt(request.getParameter("deal_id"));
 		} catch (NumberFormatException e) {
 			response.sendError(HttpServletResponse.SC_NOT_FOUND,
-					"This address should be called, with numeric parameter \"cycle_id\"!");
+					"This address should be called, with numeric parameter \"cycle_id\" and \"deal_id\"!");
 			return;
 		}
 

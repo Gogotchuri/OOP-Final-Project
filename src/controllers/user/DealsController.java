@@ -103,8 +103,8 @@ public class DealsController extends Controller implements ResourceController {
                         wantedIDs = getIntegerListOf("wanted_id");
 
 
-        List<Item> ownedItems = null; // ItemManager.getItemsByIDs(ownedIDs);
-        List<ItemCategory> wantedCategories = null; // CategoryManager.getCategoriesByIDs(wantedIDs);
+        List<Item> ownedItems = null; // TODO ItemManager.getItemsByIDs(ownedIDs);
+        List<ItemCategory> wantedCategories = null; // TODO CategoryManager.getCategoriesByIDs(wantedIDs);
 
 
         Deal deal = new Deal(user, ownedItems, wantedCategories);
