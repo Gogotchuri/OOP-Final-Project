@@ -1,6 +1,4 @@
 package models;
-import models.categoryModels.ItemCategory;
-
 import java.sql.Timestamp;
 
 /**
@@ -10,26 +8,30 @@ import java.sql.Timestamp;
  */
 public class ItemImage extends Image {
 
-    private Item item;
+    private int itemId;
     private ImageCategories.ImageCategory category;
 
-    public ItemImage(int id, String url, Item item, ImageCategories.ImageCategory category, Timestamp createdAt) {
-        super(id, item.getOwner(), url, createdAt);
-        this.item = item;
+    public ItemImage(int id, String url, int userID, int itemId, ImageCategories.ImageCategory category, Timestamp createdAt) {
+        super(id, userID, url, createdAt);
+        this.itemId = itemId;
         this.category = category;
     }
 
-    public ItemImage(String url, Item item, ImageCategories.ImageCategory category) {
-        this(0,url,item,category, new Timestamp(System.currentTimeMillis()));
+    public ItemImage(String url, int userID, int itemID, ImageCategories.ImageCategory category) {
+        this(0, url, userID, itemID, category, new Timestamp(System.currentTimeMillis()));
     }
 
     /**
      * @return ID of an item
      */
-    public Item getItem() { return item; }
+    public int getItemId() {
+        return itemId;
+    }
 
     /**
      * @return Category of an image
      */
-    public ImageCategories.ImageCategory getImageCategory() { return category; }
+    public ImageCategories.ImageCategory getImageCategory() {
+        return category;
+    }
 }

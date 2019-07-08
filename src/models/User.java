@@ -167,13 +167,13 @@ public class User {
 
 
     /**
-     * @return Deal's Create Date
+     * @return User's Create Date
      */
     public Timestamp getCreateDate() { return createDate; }
 
 
     /**
-     * @return Deal's Update Date
+     * @return User's Update Date
      */
     public Timestamp getUpdateDate() { return updateDate; }
 
