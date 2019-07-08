@@ -27,7 +27,7 @@ public final class ChatEndpoint {
         else session.getUserProperties().put(USER_KEY, user);
 
         ChatSessionController csc = ChatSessionController.getInstanceForChat(chat_id, session);
-        if(!csc.getChat().isParticipant(user.getId())) throw new AuthenticationException("User isn't allowed to participate!");
+        if(!csc.getChat().isParticipant(user.getUserID())) throw new AuthenticationException("User isn't allowed to participate!");
 
         try {
             session.getUserProperties().put(SESSION_CONTROLLER_KEY, csc);
@@ -48,7 +48,7 @@ public final class ChatEndpoint {
         System.out.println("Message received: "+ message +"; From: " + user.getUsername());
         ChatSessionController csc = (ChatSessionController)session.getUserProperties().get(SESSION_CONTROLLER_KEY);
         try {
-            csc.sendMessage(new Message(csc.getChat().getChatID(), user.getId(), message), session);
+            csc.sendMessage(new Message(csc.getChat().getChatID(), user.getUserID(), message), session);
         } catch (ServerException e) {
             e.printStackTrace();
         }

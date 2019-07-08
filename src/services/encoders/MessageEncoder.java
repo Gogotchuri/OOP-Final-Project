@@ -20,7 +20,7 @@ public class MessageEncoder implements Encoder.Text<Message>{
     @Override
     public String encode(Message message) throws EncodeException {
         JsonObject jo = message.toJsonObject();
-        User user = UserManager.getUserById(message.getUserId());
+        User user = UserManager.getUserByID(message.getUserId());
         if(user == null) throw new EncodeException(message, "Username couldn't be determined!");
         jo.addProperty("username", user.getUsername());
         Gson gson = new Gson();

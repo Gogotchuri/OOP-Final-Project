@@ -48,7 +48,7 @@ public class DealsController extends Controller implements ResourceController {
      * @throws ServletException caused by dispatching
      */
     public void index() throws IOException, ServletException {
-        List<Deal> deals = DealsManager.getUserDeals(user);
+        List<Deal> deals = DealsManager.getDealsByUserID(user.getUserID());
         request.setAttribute("deals", deals);
         dispatchTo("/pages/user/deals/deals.jsp");
     }
