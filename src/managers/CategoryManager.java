@@ -24,6 +24,9 @@ public class CategoryManager {
     private static final String OTHER = "other";
     private static final String JOIN_QUERY = "SELECT * from item_categories s JOIN item_types t on s.type_id = t.id" +
             " JOIN item_brands b on s.brand_id = b.id ";
+    private static final String GET_WANTED_CATEGORIES_BY_DEAL_QUERY = "SELECT i.item_category_id FROM items i " +
+            "JOIN wanted_items wi ON i.id = wi.item_id " +
+            "WHERE wi.deal_id = ?;";
 
 
     /**
@@ -47,6 +50,35 @@ public class CategoryManager {
             e.printStackTrace();
         }
         return null;
+    }
+
+    /**
+     * @param dealID - ID of Deal in DB
+     * @return List of Categories which Deal with dealID wants to get
+     *         If such dealID does not exists in DB
+     *         returns null
+     */
+    public static List<ItemCategory> getWantedCategoriesByDealID(int dealID) {
+        List<Integer> categoryIDs = new ArrayList<>();
+        try {
+            PreparedStatement st = DAO.getPreparedStatement(GET_WANTED_CATEGORIES_BY_DEAL_QUERY);
+            st.setInt(1, dealID);
+            ResultSet set = st.executeQuery();
+            if(set.getFetchSize() == 0) {
+                return null;
+            }
+            while (set.next()) {
+                categoryIDs.add(set.getBigDecimal("item_category_id").intValue());
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+
+        List<ItemCategory> categories = new ArrayList<>();
+        for (Integer categoryID : categoryIDs)
+            categories.add(CategoryManager.getCategoryByID(categoryID));
+
+        return categories;
     }
 
 
