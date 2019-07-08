@@ -3,7 +3,7 @@ package models;
 
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
-import java.security.Timestamp;
+import java.sql.Timestamp;
 import java.util.List;
 
 public class User {
@@ -28,7 +28,7 @@ public class User {
 
     private List<Chat> chats;     // null
 
-    private Timestamp createdAt, updatedAt; // null
+    private Timestamp createDate, updateDate; // null
 
 
     /**
@@ -53,7 +53,9 @@ public class User {
                  String phoneNumber,
                  Image profilePicture,
                  List<Deal> deals,
-                 List<Chat> chats
+                 List<Chat> chats,
+                 Timestamp createDate,
+                 Timestamp updateDate
                  )
     {
         this.userID = userID;
@@ -66,6 +68,8 @@ public class User {
         this.profilePicture = profilePicture;
         this.deals = deals;
         this.chats = chats;
+        this.createDate = createDate;
+        this.updateDate = updateDate;
     }
 
 
@@ -93,6 +97,8 @@ public class User {
             lastName,
             email,
             phoneNumber,
+            null,
+            null,
             null,
             null,
             null
@@ -158,6 +164,19 @@ public class User {
      * @return Chats of User
      */
     public List<Chat> getChats() { return chats; }
+
+
+    /**
+     * @return Deal's Create Date
+     */
+    public Timestamp getCreateDate() { return createDate; }
+
+
+    /**
+     * @return Deal's Update Date
+     */
+    public Timestamp getUpdateDate() { return updateDate; }
+
 
     /**
      * Sets set encrypted Password.

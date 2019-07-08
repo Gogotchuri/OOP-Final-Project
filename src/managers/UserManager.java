@@ -125,7 +125,9 @@ public class UserManager {
             resultSet.getString("phone_number"),
             ImagesManager.getUserProfileImage(userID),
             DealsManager.getDealsByUserID(userID),
-            ChatManager.getUserChats(userID)
+            ChatManager.getUserChats(userID),
+            null, // TODO
+            null  // TODO
         );
     }
 
@@ -147,8 +149,8 @@ public class UserManager {
             st.setString(4, user.getLastName());
             st.setString(5, user.getEmail());
             st.setString(6, user.getPhoneNumber());
-            st.setTimestamp(7, user.getCreatedAt());
-            st.setTimestamp(8, user.getUpdatedAt());
+            st.setTimestamp(7, user.getCreateDate());
+            st.setTimestamp(8, user.getUpdateDate());
 
             st.executeUpdate();
 
@@ -188,8 +190,8 @@ public class UserManager {
         uf.addUpdate("email", user.getEmail());
         uf.addUpdate("phone_number", user.getPhoneNumber());
         //Updating created_at isn't really necessary, but just in case
-        uf.addUpdate("created_at", user.getCreatedAt());
-        uf.addUpdate("updated_at", user.getUpdatedAt());
+        uf.addUpdate("created_at", user.getCreateDate());
+        uf.addUpdate("updated_at", user.getUpdateDate());
         return UpdateManager.update(uf);
     }
 }
