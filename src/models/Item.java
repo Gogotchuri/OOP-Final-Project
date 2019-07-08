@@ -2,6 +2,8 @@
 package models;
 
 import models.categoryModels.ItemCategory;
+
+import java.sql.Timestamp;
 import java.util.Iterator;
 import java.util.List;
 
@@ -14,8 +16,10 @@ public class Item {
     private int itemID;               // 0
     private User owner;               // null
     private ItemCategory category;    // null
-    private List<ItemImage> images;       // null
+    private List<ItemImage> images;   // null
     private String name, description; // null
+    private Timestamp createDate;     // null
+    private Timestamp updateDate;     // null
 
 
     /**
@@ -32,7 +36,9 @@ public class Item {
                    ItemCategory category,
                     List<ItemImage> images,
                      String name,
-                      String description)
+                      String description,
+                       Timestamp createDate,
+                        Timestamp updateDate)
     {
         this.itemID = itemID;
         this.owner = owner;
@@ -40,6 +46,8 @@ public class Item {
         this.images = images;
         this.name = name;
         this.description = description;
+        this.createDate = createDate;
+        this.updateDate = updateDate;
     }
 
 
@@ -85,6 +93,18 @@ public class Item {
      * @return Description of the Item
      */
     public String getDescription() { return description; }
+
+
+    /**
+     * @return Deal's Create Date
+     */
+    public Timestamp getCreateDate() { return createDate; }
+
+
+    /**
+     * @return Deal's Update Date
+     */
+    public Timestamp getUpdateDate() { return updateDate; }
 
 
     /**

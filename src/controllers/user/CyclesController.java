@@ -32,7 +32,7 @@ public class CyclesController extends Controller {
 
     public void show(int cycle_id) throws ServletException, IOException {
         //TODO if cycle not found send error
-        Cycle cycle = CycleManager.getCycleByID(cycle_id);
+        Cycle cycle = CycleManager.getCycleByCycleID(cycle_id);
         request.setAttribute("cycle", cycle);
         dispatchTo("/pages/user/deals/cycle.jsp");
     }

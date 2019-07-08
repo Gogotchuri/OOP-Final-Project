@@ -26,22 +26,18 @@ public class CycleManager {
 
 
     /**
-     * TODO: Krawa
+     * @param cycleID - ID of Cycle in DB
+     * @return Fully Filled Cycle object which's ID = dealID
+     *         Or null if Cycle with such ID does not exists
      */
-    public static Cycle getCycleByID(int cycleID) {
-        /*Cycle res = null;
-        try {
-            PreparedStatement st = DAO.getPreparedStatement(GET_CYCLE_QUERY);
-            st.setInt(1, cycleID);
-            ResultSet set = st.executeQuery();
-            res = new Cycle(cycleID, set.getBigDecimal("status_id").intValue(),
-                    new Timestamp(set.getDate("created_at").getTime()),
-                    new Timestamp(set.getDate("updated_at").getTime()));
-        } catch (SQLException e) {
-            e.printStackTrace();
-        }
-        return  res;*/
-        return null;
+    public static Cycle getCycleByCycleID(int cycleID) {
+
+        Cycle cycle = null;
+
+        ProcessStatus.Status cycleStatus =
+            getCycleStatusByCycleID(cycleID);
+
+        return cycle;
     }
 
 
@@ -65,6 +61,15 @@ public class CycleManager {
             e.printStackTrace();
         }
         return  list;*/
+        return null;
+    }
+
+
+    /**
+     * @param cycleID
+     * @return
+     */
+    private static ProcessStatus.Status getCycleStatusByCycleID(int cycleID) {
         return null;
     }
 
@@ -112,6 +117,7 @@ public class CycleManager {
 
         return resultSet.next();
     }
+
 
     /**
      * Returns true iff:

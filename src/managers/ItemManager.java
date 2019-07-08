@@ -45,16 +45,22 @@ public class ItemManager {
         User owner = getOwnerByItemID(itemID);
         ItemCategory category = getItemCategoryByItemID(itemID);
         List<ItemImage> images = ImagesManager.getItemImagesByItemID(itemID);
+
         String name = getItemNameByItemID(itemID),
                 description = getItemDescriptionByItemID(itemID);
+
+        Timestamp createDate = null, // TODO
+                   updateDate = null; // TODO
 
         return (owner == null ||
                  category == null ||
                   images == null ||
                    name == null ||
-                    description == null)
+                    description == null ||
+                     createDate == null ||
+                      updateDate == null)
                 ?
-                null : new Item(itemID, owner, category, images, name, description);
+                null : new Item(itemID, owner, category, images, name, description, createDate, updateDate);
     }
 
 
@@ -253,12 +259,13 @@ public class ItemManager {
      * @throws SQLException
      */
     private static Item parseItem(ResultSet rs) throws SQLException {
-        return new Item(rs.getBigDecimal("id").intValue(),
+        /*return new Item(rs.getBigDecimal("id").intValue(),
                         UserManager.getUserByID(rs.getInt("user_id")),
                         CategoryManager.getCategoryByID(rs.getInt("item_category_id")),
                         ImagesManager.getItemImagesByItemID(rs.getInt("id")),
                         rs.getString("name"),
-                        rs.getString("description"));
+                        rs.getString("description"));*/
+        return null;
     }
 
     /**

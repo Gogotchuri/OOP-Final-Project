@@ -59,7 +59,7 @@ public class Cycle {
 
     /**
      * Updates cycle ID
-     * @param cycleID
+     * @param cycleID - ID of a Cycle in DB
      */
     public void setCycleID(int cycleID) {
         this.cycleID = cycleID;
