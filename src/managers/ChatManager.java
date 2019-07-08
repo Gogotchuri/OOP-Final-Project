@@ -7,9 +7,11 @@ import models.Cycle;
 import models.Message;
 import models.ProcessStatus;
 
-import java.sql.*;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.sql.Statement;
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
 import java.util.Vector;
 
@@ -114,7 +116,7 @@ public class ChatManager {
             ResultSet set = st.executeQuery();
 
             while (set.next()) {
-                ch.addMessage(new Message(set.getInt("id"), ch.getChatID(),
+                ch.addMessage(new Message(set.getInt("id"), ch.getChatID(),set.getInt("author_id"),
                         set.getString("body"), set.getTimestamp("created_at")));
             }
         } catch (SQLException e) {
@@ -138,7 +140,6 @@ public class ChatManager {
             set.next();
             ch = new Chat(set.getBigDecimal("id").intValue(),
                     new Cycle(cycleID), set.getTimestamp("updated_at"), new Vector<>());
-
             getMessagesForChat(ch);
         } catch (SQLException e) {
             e.printStackTrace();
@@ -149,14 +150,14 @@ public class ChatManager {
     //TODO WARNING! not tested yet, please test
     public static List<Chat> getUserChats(int user_id){
         List<Chat> chats = new ArrayList<>();
-        String query = "SELECT ch.id" +
-                "FROM chats ch" +
-                "JOIN cycles ON cycles.id = ch.cycle_id"+
-                "JOIN offered_cycles cyc ON cycles.id = cyc.cycle_id" +
-                "JOIN deals d on d.id = cyc.deal_id" +
-                "WHERE cycles.status id = " + ProcessStatus.Status.ONGOING.getId() +
-                "AND d.user_id = " + user_id +
-                "ORDER BY ch.updated_at";
+        String query = "SELECT ch.id " +
+                "FROM chats ch " +
+                "JOIN cycles ON cycles.id = ch.cycle_id "+
+                "JOIN offered_cycles cyc ON cycles.id = cyc.cycle_id " +
+                "JOIN deals d on d.id = cyc.deal_id " +
+                "WHERE cycles.status_id = " + ProcessStatus.Status.ONGOING.getId() +
+                " AND d.user_id = " + user_id +
+                " ORDER BY ch.updated_at";
         //TODO is this right?? no idea
 
         try {
@@ -186,7 +187,6 @@ public class ChatManager {
             set.next();
             ch = new Chat(chatID, new Cycle(set.getBigDecimal("cycle_id").intValue()),
                     set.getTimestamp("updated_at"), new Vector<>());
-
             getMessagesForChat(ch);
         } catch (SQLException e) {
             e.printStackTrace();

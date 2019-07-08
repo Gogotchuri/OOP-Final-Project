@@ -2,7 +2,6 @@
 package servlets.front;
 
 import controllers.front.HomeController;
-import models.User;
 
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;

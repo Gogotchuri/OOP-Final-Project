@@ -122,4 +122,14 @@ public class Chat {
         if(!(o instanceof Chat)) return false;
         return chatID == ((Chat) o).getChatID();
     }
+
+    /**
+     * Given a user id, returns true if user can participate in the chat
+     * @param user_id user to check
+     * @return true if user can participate in chat
+     */
+    public boolean isParticipant(int user_id){
+       return true;
+       //TODO implement me
+    }
 }

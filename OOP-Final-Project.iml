@@ -43,5 +43,8 @@
       </library>
     </orderEntry>
     <orderEntry type="library" name="mysql-connector-java-8.0.11" level="project" />
+    <orderEntry type="library" name="javax.websocket-api-1.1" level="project" />
+    <orderEntry type="library" name="javax.json-api-1.1.4" level="project" />
+    <orderEntry type="library" name="gson-2.8.5" level="project" />
   </component>
 </module>
