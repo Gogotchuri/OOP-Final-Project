@@ -31,8 +31,8 @@ public class ImageTests {
 
     private static final Timestamp time = new Timestamp(System.currentTimeMillis());
 
-    private static User u1 = new User(1,"mudamtqveny", "password", "levan", "gelashvili", "lgela17", "123", null, null, null);
-    private static User u2 = new User(2,"king", "heat","lebron","james","ljame03", "6", null, null, null);
+    private static User u1 = new User(1,"mudamtqveny", "password", "levan", "gelashvili", "lgela17", "123", null, null, null, time, time);
+    private static User u2 = new User(2,"king", "heat","lebron","james","ljame03", "6", null, null, null, time, time);
     private static final ItemCategory dummy = new ItemCategory(1, new ItemSerie("a"), new ItemType("b"), new ItemBrand("c"));
 
     private static Item it1 = new Item(1, u1, dummy, null, "Samsung A20", "");
@@ -71,8 +71,8 @@ public class ImageTests {
     public void insertIntoBase() {
         emptyBase();
         assertTrue(CategoryManager.insertCategory(dummy));
-        /*assertTrue(UserManager.storeUser(u1));
-        assertTrue(UserManager.storeUser(u2));
+        assertTrue(UserManager.storeUser(u1));
+        /*assertTrue(UserManager.storeUser(u2));
         assertTrue(ItemManager.addItemToDB(it1));
         assertTrue(ItemManager.addItemToDB(it2));
         assertTrue(ItemManager.addItemToDB(it3));*/
