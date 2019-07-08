@@ -113,6 +113,12 @@ public class User {
 
 
     /**
+     * Updates user's id
+     */
+    public void setUserID(int userID) { this.userID = userID; }
+
+
+    /**
      * @return User Name of User
      */
     public String getUsername() { return username; }

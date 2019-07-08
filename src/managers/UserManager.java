@@ -9,6 +9,7 @@ import models.User;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -20,7 +21,7 @@ public class UserManager {
     private static final String STORE_USER_QUERY = "INSERT INTO users (user_name , password , first_name, last_name, " +
             "email, phone_number, created_at, updated_at) VALUES(?, ?, ?, ?, ?, ?, ?, ?);";
 
-    private static final String GET_USER_ID_BY_DEAL_QUERY = "SELECT user_id FROM deals WHERE deal_id = ?;";
+    private static final String GET_USER_ID_BY_DEAL_QUERY = "SELECT user_id FROM deals WHERE id = ?;";
 
 
     /**
@@ -141,7 +142,7 @@ public class UserManager {
      */
     public static boolean storeUser(User user){
         try {
-            PreparedStatement st = DAO.getPreparedStatement(STORE_USER_QUERY);
+            PreparedStatement st = DAO.getPreparedStatement(STORE_USER_QUERY, Statement.RETURN_GENERATED_KEYS);
 
             st.setString(1, user.getUsername());
             st.setString(2, user.getPassword());
@@ -153,6 +154,12 @@ public class UserManager {
             st.setTimestamp(8, user.getUpdateDate());
 
             st.executeUpdate();
+            try (ResultSet generatedKeys = st.getGeneratedKeys()) {
+                if (generatedKeys.next()) {
+                    user.setUserID(generatedKeys.getInt(1));
+                } else
+                    throw new SQLException("Storing user failed, no ID obtained.");
+            }
 
         } catch (SQLException e) {
             e.printStackTrace();
