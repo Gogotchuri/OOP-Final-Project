@@ -1,110 +1,105 @@
+
 package models;
 
-import java.sql.Timestamp;
-import java.util.ArrayList;
-import java.util.Date;
+import models.categoryModels.ItemCategory;
 import java.util.Iterator;
 import java.util.List;
 
-/**
- * Class representing a single item
- */
 public class Item {
 
-    private int userId, id;
-    private Category category;
-    private List<Image> images;
-    private String name, description;
-    private Timestamp createdAt, updatedAt;
+
+    /* Comments means default values
+     * if user does not initializes it. */
+
+    private int itemID;               // 0
+    private User owner;               // null
+    private ItemCategory category;    // null
+    private List<ItemImage> images;       // null
+    private String name, description; // null
 
 
     /**
-     * Constructor of an item
-     * @param createdAt Date, when item was created
-     * @param name Name of the item
-     * @param description Description of the item
+     * Main Constructor
+     * @param itemID - ID of Item in DB
+     * @param owner - Owner of the Item
+     * @param category - Category of the Item
+     * @param images - List of Images of the Item
+     * @param name - Name of the Item
+     * @param description - Description of the Item
      */
-    public Item(int id, int userId, String name, String description, Category category, Date createdAt) {
-        this.userId = userId;
-        this.id = id;
+    public Item (int itemID,
+                  User owner,
+                   ItemCategory category,
+                    List<ItemImage> images,
+                     String name,
+                      String description)
+    {
+        this.itemID = itemID;
+        this.owner = owner;
+        this.category = category;
+        this.images = images;
         this.name = name;
         this.description = description;
-        this.createdAt = new Timestamp(createdAt.getTime());
-        this.category = category;
-        images = new ArrayList<Image>();
     }
 
-    /**
-     * @return Name of the item
-     */
-    public String getName() {
-        return name;
-    }
 
     /**
-     * @return Description of the item
+     * @return ID of Item in DB
      */
-    public String getDescription() {
-        return description;
-    }
+    public int getItemID() { return itemID; }
+
 
     /**
-     * @return Category of the item
+     * @return Owner of the Item
      */
-    public Category getCategory() { return category; }
+    public User getOwner() { return owner; }
+
 
     /**
-     * @return Images of the item
+     * @return Category of the Item
      */
-    public Iterator<Image> getImages() {
+    public ItemCategory getCategory() { return category; }
+
+
+    /**
+     * @return List of Images of the Item
+     */
+    public List<ItemImage> getImages() { return images; }
+
+
+    /**
+     * @return Iterator of the images
+     */
+    public Iterator<ItemImage> getImagesIterator() {
         return images.iterator();
     }
 
-    /**
-     * @return Id of the user
-     */
-    public int getUserId() {
-        return userId;
-    }
 
     /**
-     * @return Id of the item
+     * @return Name of the Item
      */
-    public int getItemId() { return id; }
+    public String getName() { return name; }
+
 
     /**
-     * Adds an item to the list of items
-     * @param image Image of an item
+     * @return Description of the Item
      */
-    public void addImage(Image image) {
-        images.add(image);
-    }
+    public String getDescription() { return description; }
+
 
     /**
-     * Updates date of an item
-     * @param updatedAt Date, when item was updated
-     */
-    public void updateDate(Date updatedAt) {
-        this.updatedAt.setTime(updatedAt.getTime());
-    }
-
-    /**
-     * @return Date, when item was created
-     */
-    public Timestamp getCreatedAt() { return createdAt; }
-
-    /**
-     * @return Date, when item was updated
-     */
-    public Timestamp getUpdatedAt() { return updatedAt; }
-
-    /**
-     * @param o Passed item
+     * !!! Item ID must be Initialized for correct comparing !!!
+     * @param other Passed item
      * @return Whether two items are equal or not
      */
-    public boolean equals(Object o) {
-        if(this == o) return true;
-        if(!(o instanceof Item)) return false;
-        return id == ((Item) o).getItemId();
+    public boolean equals(Object other) {
+
+        if (this == other) return true;
+        if (!(other instanceof Item)) return false;
+
+        Item otherItem = (Item) other;
+
+        return itemID == otherItem.itemID;
     }
+
 }

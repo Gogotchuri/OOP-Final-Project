@@ -1,24 +1,24 @@
 
 CREATE TABLE users
 (
-  id INT(6) UNSIGNED AUTO_INCREMENT PRIMARY KEY,
-  user_name VARCHAR(64) NOT NULL UNIQUE,
-  password VARCHAR(64) NOT NULL,
+    id INT(6) UNSIGNED AUTO_INCREMENT PRIMARY KEY,
+    user_name VARCHAR(64) NOT NULL UNIQUE,
+    password VARCHAR(64) NOT NULL,
 
-  first_name VARCHAR(64),
-  last_name VARCHAR(64),
+    first_name VARCHAR(64),
+    last_name VARCHAR(64),
 
-  email VARCHAR(128) UNIQUE,
-  phone_number VARCHAR(32),
+    email VARCHAR(128) UNIQUE,
+    phone_number VARCHAR(32),
 
-  created_at TIMESTAMP DEFAULT now(),
-  updated_at TIMESTAMP DEFAULT now()
+    created_at TIMESTAMP DEFAULT now(),
+    updated_at TIMESTAMP DEFAULT now()
 );
 
 CREATE TABLE process_statuses
 (
-  id INT(6) UNSIGNED AUTO_INCREMENT PRIMARY KEY,
-  status VARCHAR(16) NOT NULL UNIQUE
+    id INT(6) UNSIGNED AUTO_INCREMENT PRIMARY KEY,
+    status VARCHAR(16) NOT NULL UNIQUE
 );
 
 CREATE TABLE deals
@@ -48,7 +48,7 @@ CREATE TABLE item_brands
 CREATE TABLE item_categories
 (
     id INT(6) UNSIGNED AUTO_INCREMENT PRIMARY KEY,
-    name VARCHAR(64)NOT NULL UNIQUE,
+    name VARCHAR(64)NOT NULL,
     type_id INT(6) UNSIGNED,
     FOREIGN KEY (type_id) REFERENCES item_types(id),
     brand_id INT(6) UNSIGNED,
@@ -57,64 +57,64 @@ CREATE TABLE item_categories
 
 CREATE TABLE items
 (
-  id INT(6) UNSIGNED AUTO_INCREMENT PRIMARY KEY,
-  user_id INT(6) UNSIGNED NOT NULL,
-  FOREIGN KEY (user_id) REFERENCES users(id) on delete cascade,
+    id INT(6) UNSIGNED AUTO_INCREMENT PRIMARY KEY,
+    user_id INT(6) UNSIGNED NOT NULL,
+    FOREIGN KEY (user_id) REFERENCES users(id) on delete cascade,
 
-  item_category_id INT(6) UNSIGNED NOT NULL,
-  FOREIGN KEY (item_category_id) REFERENCES item_categories(id),
-  
-  description VARCHAR(512),
-  name VARCHAR(32) NOT NULL,
+    item_category_id INT(6) UNSIGNED NOT NULL,
+    FOREIGN KEY (item_category_id) REFERENCES item_categories(id),
 
-  created_at TIMESTAMP DEFAULT now(),
-  updated_at TIMESTAMP DEFAULT now()
+    description VARCHAR(512),
+    name VARCHAR(32) NOT NULL,
+
+    created_at TIMESTAMP DEFAULT now(),
+    updated_at TIMESTAMP DEFAULT now()
 );
 
 CREATE TABLE owned_items
 (
-  id INT(6) UNSIGNED AUTO_INCREMENT PRIMARY KEY,
-  deal_id INT(6) UNSIGNED NOT NULL,
-  FOREIGN KEY (deal_id) REFERENCES deals(id) on delete cascade,
-  item_id INT(6) UNSIGNED NOT NULL,
-  FOREIGN KEY (item_id) REFERENCES items(id) on delete cascade,
+    id INT(6) UNSIGNED AUTO_INCREMENT PRIMARY KEY,
+    deal_id INT(6) UNSIGNED NOT NULL,
+    FOREIGN KEY (deal_id) REFERENCES deals(id) on delete cascade,
+    item_id INT(6) UNSIGNED NOT NULL,
+    FOREIGN KEY (item_id) REFERENCES items(id) on delete cascade,
 
-  created_at TIMESTAMP DEFAULT now(),
-  updated_at TIMESTAMP DEFAULT now()
+    created_at TIMESTAMP DEFAULT now(),
+    updated_at TIMESTAMP DEFAULT now()
 );
 
 CREATE TABLE wanted_items
 (
-  id INT(6) UNSIGNED AUTO_INCREMENT PRIMARY KEY,
-  deal_id INT(6) UNSIGNED NOT NULL,
-  FOREIGN KEY (deal_id) REFERENCES deals(id) on delete cascade,
-  
-  item_category_id INT(6) UNSIGNED NOT NULL,
-  FOREIGN KEY (item_category_id) REFERENCES item_categories(id),
+    id INT(6) UNSIGNED AUTO_INCREMENT PRIMARY KEY,
+    deal_id INT(6) UNSIGNED NOT NULL,
+    FOREIGN KEY (deal_id) REFERENCES deals(id) on delete cascade,
 
-  created_at TIMESTAMP DEFAULT now(),
-  updated_at TIMESTAMP DEFAULT now()
+    item_category_id INT(6) UNSIGNED NOT NULL,
+    FOREIGN KEY (item_category_id) REFERENCES item_categories(id),
+
+    created_at TIMESTAMP DEFAULT now(),
+    updated_at TIMESTAMP DEFAULT now()
 );
 
 
 CREATE TABLE cycles
 (
-  id INT(6) UNSIGNED AUTO_INCREMENT PRIMARY KEY,
-  status_id INT(6) UNSIGNED NOT NULL,
-  FOREIGN KEY (status_id) REFERENCES process_statuses(id),
+    id INT(6) UNSIGNED AUTO_INCREMENT PRIMARY KEY,
+    status_id INT(6) UNSIGNED NOT NULL,
+    FOREIGN KEY (status_id) REFERENCES process_statuses(id),
 
-  created_at TIMESTAMP DEFAULT now(),
-  updated_at TIMESTAMP DEFAULT now()
+    created_at TIMESTAMP DEFAULT now(),
+    updated_at TIMESTAMP DEFAULT now()
 );
 
 CREATE TABLE offered_cycles
 (
-  id INT(6) UNSIGNED AUTO_INCREMENT PRIMARY KEY,
-  deal_id INT(6) UNSIGNED NOT NULL,
-  FOREIGN KEY (deal_id) REFERENCES deals(id),
+    id INT(6) UNSIGNED AUTO_INCREMENT PRIMARY KEY,
+    deal_id INT(6) UNSIGNED NOT NULL,
+    FOREIGN KEY (deal_id) REFERENCES deals(id),
 
-  cycle_id INT(6) UNSIGNED NOT NULL,
-  FOREIGN KEY (cycle_id) REFERENCES cycles(id)
+    cycle_id INT(6) UNSIGNED NOT NULL,
+    FOREIGN KEY (cycle_id) REFERENCES cycles(id)
 );
 
 

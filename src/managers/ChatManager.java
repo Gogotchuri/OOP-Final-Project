@@ -3,12 +3,14 @@ package managers;
 import database.DatabaseAccessObject;
 import generalManagers.DeleteManager;
 import models.Chat;
+import models.Cycle;
 import models.Message;
 import models.ProcessStatus;
 
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Vector;
@@ -23,17 +25,24 @@ public class ChatManager {
 
 
     /**
-     * Adds a message to dataBase
+     * Adds a message to dataBase, updates ID in passed object
      * @param msg
      * @return false if insertion fails
      */
     public static boolean addMessageToDB(Message msg) {
         try {
-            PreparedStatement st = DBO.getPreparedStatement(INSERT_MESSAGE_QUERY);
+            PreparedStatement st = DBO.getPreparedStatement(INSERT_MESSAGE_QUERY, Statement.RETURN_GENERATED_KEYS);
             st.setInt(1, msg.getChatID());
             st.setString(2, msg.getBody());
             st.setTimestamp(3, msg.getDate());
-            st.executeUpdate();
+            if (st.executeUpdate() == 0)
+                throw new SQLException("Creating message failed, no rows affected.");
+            try (ResultSet generatedKeys = st.getGeneratedKeys()) {
+                if (generatedKeys.next())
+                    msg.setMessageID(generatedKeys.getInt(1));
+                else
+                    throw new SQLException("Creating message failed, no ID obtained.");
+            }
         } catch (SQLException ex) {
             ex.printStackTrace();
             return false;
@@ -71,21 +80,49 @@ public class ChatManager {
 
 
     /**
-     * Adds a chat to dataBase
+     * Adds a chat to dataBase, changes ID in passed chat
      * Returns false if it fails
      * @param chat
      */
     public static boolean addChatToDB(Chat chat){
         try {
-            PreparedStatement st = DBO.getPreparedStatement(INSERT_CHAT_QUERY);
-            st.setInt(1, chat.getCycleID());
+            PreparedStatement st = DBO.getPreparedStatement(INSERT_CHAT_QUERY, Statement.RETURN_GENERATED_KEYS);
+            st.setInt(1, chat.getCycle().getCycleID());
             st.setTimestamp(2, chat.getLastUpdateDate());
-            st.executeUpdate();
+            if (st.executeUpdate() == 0)
+                throw new SQLException("Creating chat failed, no rows affected.");
+            try (ResultSet generatedKeys = st.getGeneratedKeys()) {
+                if (generatedKeys.next())
+                    chat.setChatID(generatedKeys.getInt(1));
+
+                else
+                    throw new SQLException("Creating chat failed, no ID obtained.");
+            }
         } catch (SQLException ex) {
             ex.printStackTrace();
             return false;
         }
         return true;
+    }
+
+    /**
+     * Fills chat with messages
+     * @param ch
+     */
+    private static void getMessagesForChat(Chat ch){
+        try {
+            PreparedStatement st = DBO.getPreparedStatement(GET_MESSAGES_QUERY);
+            st.setInt(1, ch.getChatID());
+            ResultSet set = st.executeQuery();
+
+            while (set.next()) {
+                ch.addMessage(new Message(set.getInt("id"), ch.getChatID(),set.getInt("author_id"),
+                        set.getString("body"), set.getTimestamp("created_at")));
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+
     }
 
 
@@ -102,16 +139,8 @@ public class ChatManager {
             ResultSet set = st.executeQuery();
             set.next();
             ch = new Chat(set.getBigDecimal("id").intValue(),
-                    cycleID, set.getTimestamp("updated_at"), new Vector<>());
-
-            st = DBO.getPreparedStatement(GET_MESSAGES_QUERY);
-            st.setInt(1, ch.getChatID());
-            set = st.executeQuery();
-
-            while (set.next()) {
-                ch.addMessage(new Message(set.getInt("id"), ch.getChatID(), set.getInt("author_id"),
-                        set.getString("body"), set.getTimestamp("created_at")));
-            }
+                    new Cycle(cycleID), set.getTimestamp("updated_at"), new Vector<>());
+            getMessagesForChat(ch);
         } catch (SQLException e) {
             e.printStackTrace();
         }
@@ -156,17 +185,9 @@ public class ChatManager {
             st.setInt(1, chatID);
             ResultSet set = st.executeQuery();
             set.next();
-            ch = new Chat(chatID, set.getBigDecimal("cycle_id").intValue(),
+            ch = new Chat(chatID, new Cycle(set.getBigDecimal("cycle_id").intValue()),
                     set.getTimestamp("updated_at"), new Vector<>());
-
-            st = DBO.getPreparedStatement(GET_MESSAGES_QUERY);
-            st.setInt(1, ch.getChatID());
-            set = st.executeQuery();
-
-            while (set.next()) {
-                ch.addMessage(new Message(set.getInt("id"), ch.getChatID(), set.getInt("author_id"),
-                        set.getString("body"), set.getTimestamp("created_at")));
-            }
+            getMessagesForChat(ch);
         } catch (SQLException e) {
             e.printStackTrace();
         }

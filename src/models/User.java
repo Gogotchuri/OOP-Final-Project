@@ -1,162 +1,197 @@
+
 package models;
 
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 import java.sql.Timestamp;
 import java.util.List;
-
 import managers.DealsManager;
 import managers.ImagesManager;
 
 public class User {
-    private int id;
-    private String username;
-    private String password; //Encrypted password
-    private String firstName;
-    private String lastName;
-    private String email;
-    private String phone_number;
-    private Timestamp created_at;
-    private Timestamp updated_at;
 
 
-    public User(String username, String password, String firstName, String lastName, String email,
-                String phone_number){
-        this.password = password;
+    /* Comments means default values
+     * if user does not initializes it. */
+
+    private int userID;           // 0
+
+    private String
+        username,                 // null
+        password,                 // null
+        firstName,                // null
+        lastName,                 // null
+        email,                    // null
+        phoneNumber;              // null
+
+    private Image profilePicture; // null
+
+    private List<Deal> deals;     // null
+
+    private List<Chat> chats;     // null
+
+
+    /**
+     * Main Constructor
+     * @param userID - ID of User in DB
+     * @param username - User Name of User
+     * @param password - Encrypted Password of User
+     * @param firstName - First Name of User
+     * @param lastName - Last Name of User
+     * @param email - E-mail of User
+     * @param phoneNumber - Phone Number of User
+     * @param profilePicture - Profile Picture of User
+     * @param deals - List of Deals of User
+     * @param chats - Chats of User
+     */
+    public User (int userID,
+                 String username,
+                 String password,
+                 String firstName,
+                 String lastName,
+                 String email,
+                 String phoneNumber,
+                 Image profilePicture,
+                 List<Deal> deals,
+                 List<Chat> chats)
+    {
+        this.userID = userID;
         this.username = username;
+        this.password = password;
         this.firstName = firstName;
         this.lastName = lastName;
         this.email = email;
-        this.phone_number = phone_number;
-        this.created_at =  new Timestamp(System.currentTimeMillis());
-        this.updated_at = new Timestamp(System.currentTimeMillis());
+        this.phoneNumber = phoneNumber;
+        this.profilePicture = profilePicture;
+        this.deals = deals;
+        this.chats = chats;
     }
 
 
-    public User(int id, String username, String password, String firstName, String lastName, String email,
-                String phone_number){
-        this.id = id;
-        this.password = password;
-        this.username = username;
-        this.firstName = firstName;
-        this.lastName = lastName;
-        this.email = email;
-        this.phone_number = phone_number;
-        this.created_at =  new Timestamp(System.currentTimeMillis());
-        this.updated_at = new Timestamp(System.currentTimeMillis());
+    /**
+     * Constructor.
+     * @param username - User Name of User
+     * @param password - Encrypted Password of User
+     * @param firstName - First Name of User
+     * @param lastName - Last Name of User
+     * @param email - E-mail of User
+     * @param phoneNumber - Phone Number of User
+     */
+    public User (String username,
+                 String password,
+                 String firstName,
+                 String lastName,
+                 String email,
+                 String phoneNumber)
+    {
+        this (
+            0,
+            username,
+            password,
+            firstName,
+            lastName,
+            email,
+            phoneNumber,
+            null,
+            null,
+            null
+        );
     }
 
-    public User(int id, String username, String password, String firstName, String lastName, String email,
-                String phone_number, Timestamp updated_at, Timestamp created_at){
-        this.id = id;
-        this.password = password;
-        this.username = username;
-        this.firstName = firstName;
-        this.lastName = lastName;
-        this.email = email;
-        this.phone_number = phone_number;
-        this.created_at =  created_at;
-        this.updated_at = updated_at;
-    }
 
-    public Image getProfilePicture(){
-        return ImagesManager.getUserProfileImage(id);
-    }
+    /**
+     * @return ID of User in DB
+     */
+    public int getUserID() { return userID; }
 
-    public List <ItemImage> getImages() { return ImagesManager.getUserImages(id);};
 
-    public List <Deal> getDeals(){ return DealsManager.getUserDeals(this);};
+    /**
+     * @return User Name of User
+     */
+    public String getUsername() { return username; }
 
-    public int getId() {
-        return id;
-    }
 
-    public String getUsername() {
-        return username;
-    }
+    /**
+     * @return Encrypted Password of User
+     */
+    public String getPassword() { return password; }
 
-    public String getPassword() {
-        return password;
-    }
 
-    public String getFirstName() {
-        return firstName;
-    }
+    /**
+     * @return First Name of User
+     */
+    public String getFirstName() { return firstName; }
 
-    public String getEmail() {
-        return email;
-    }
 
-    public String getLastName() {
-        return lastName;
-    }
+    /**
+     * @return Last Name of User
+     */
+    public String getLastName() { return lastName; }
 
-    public String getPhoneNumber() {
-        return phone_number;
-    }
 
-    public Timestamp getCreatedDate(){
-        return created_at;
-    }
+    /**
+     * @return E-mail of User
+     */
+    public String getEmail() { return email; }
 
-    public Timestamp getUpdatedDate() {
-        return updated_at;
-    }
 
-    public void setFirstName(String firstName) {
-        this.firstName = firstName;
-        this.updated_at = new Timestamp(System.currentTimeMillis());
-    }
+    /**
+     * @return Phone Number of User
+     */
+    public String getPhoneNumber() { return phoneNumber; }
 
-    public void setId(int id) {
-        this.id = id;
-        this.updated_at = new Timestamp(System.currentTimeMillis());
-    }
 
-    public void setUsername(String username) {
-        this.username = username;
-        this.updated_at = new Timestamp(System.currentTimeMillis());
-    }
+    /**
+     * @return Profile Picture of User
+     */
+    public Image getProfilePicture() { return profilePicture; }
 
-    public void setPassword(String password) {
-        this.password = password;
-        this.updated_at = new Timestamp(System.currentTimeMillis());
-    }
 
+    /**
+     * @return List of Deals of User
+     */
+    public List<Deal> getDeals() { return deals; }
+
+
+    /**
+     * @return Chats of User
+     */
+    public List<Chat> getChats() { return chats; }
+
+
+    /**
+     * Sets set encrypted Password.
+     * @param password - Raw password
+     */
     public void setRawPassword(String password) {
         this.password = encryptPassword(password);
-        this.updated_at = new Timestamp(System.currentTimeMillis());
     }
 
+
+    /**
+     * Sets new E-mail for User.
+     * @param email - New E-mail of User
+     */
     public void setEmail(String email) {
         this.email = email;
-        this.updated_at = new Timestamp(System.currentTimeMillis());
-    }
-
-    public void setLastName(String lastName) {
-        this.lastName = lastName;
-        this.updated_at = new Timestamp(System.currentTimeMillis());
     }
 
 
-    public void setPhoneNumber(String phone_number) {
-        this.phone_number = phone_number;
-        this.updated_at = new Timestamp(System.currentTimeMillis());
+    /**
+     * @param unprotected - Unprotected Password
+     * @return Whether passed password equals of User's password
+     */
+    public boolean checkPassword(String unprotected) {
+        return encryptPassword(unprotected).equals(password);
     }
 
-    //Helpers
-    public boolean checkPassword(String unprotected){
-        String encrypted = encryptPassword(unprotected);
-        //then check
-        return encrypted.equals(getPassword());
-    }
 
     /**
      * Given a string password returns encrypted version
-     * @param password
-     * @return
+     * @param password - Unprotected password
+     * @return Encrypted password
      */
-    public static String encryptPassword(String password){
+    public static String encryptPassword(String password) {
         String hashed = password;
         try {
             MessageDigest md = MessageDigest.getInstance("SHA-256");
@@ -167,32 +202,29 @@ public class User {
         return hashed;
     }
 
-    private static String hexToString(byte[] hex){
+    private static String hexToString(byte[] hex) {
         StringBuilder sb = new StringBuilder();
         for (byte b : hex) {
             int val = ((int)b) & 0xff;
             if (val < 16) sb.append('0');
             sb.append(Integer.toString(val, 16));
         }
-
         return sb.toString();
     }
 
-    /**
-     * @return String representation of a user
-     */
-    public String toString() {
-        return id + " " + username + " " + password + " " + firstName + " " + lastName + " " + email;
-    }
 
     /**
-     * @param o Object, to compare this to
-     * @return Are those objects equal or not
+     * @param other - other User
+     * @return Whether two Users are equal or not
      */
-    public boolean equals(Object o) {
-        if (this == o) return true;
-        if (!(o instanceof User)) return false;
-        return username.equals(((User) o).getUsername());
+    @Override public boolean equals(Object other) {
+
+        if (this == other) return true;
+        if (!(other instanceof User)) return false;
+
+        User otherUser = (User) other;
+
+        return userID == otherUser.userID;
     }
 
 }

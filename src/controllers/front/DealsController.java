@@ -152,7 +152,7 @@ public class DealsController extends Controller {
      */
     public void show(int dealID) throws ServletException, IOException {
 
-    	Deal deal = DealsManager.getDealById(dealID);
+    	Deal deal = DealsManager.getDealByID(dealID);
 
     	if (deal == null) {
 			response.sendError(HttpServletResponse.SC_NOT_FOUND, "Deal with given id wasn't found!");

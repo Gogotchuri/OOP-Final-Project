@@ -1,17 +1,18 @@
 
 package events;
 
+import managers.CategoryManager;
 import managers.CycleManager;
 import managers.DealsManager;
-import models.Category;
 import models.Cycle;
 import models.Deal;
-import java.util.Queue;
+import models.categoryModels.ItemCategory;
+import java.sql.SQLException;
 import java.util.LinkedList;
+import java.util.List;
+import java.util.Queue;
 import java.util.Set;
 import java.util.HashSet;
-import java.util.List;
-import java.util.ArrayList;
 import java.util.concurrent.locks.Lock;
 import java.util.concurrent.locks.ReentrantLock;
 
@@ -64,7 +65,7 @@ public class DealCyclesFinder extends Thread {
                            nextBreadth = new LinkedList<>();
 
         int currBreadthIndex = 0;
-        currBreadth.add(new LinkedDeal(this.deal, null));
+        currBreadth.add(new LinkedDeal(deal, null));
 
         while (currBreadthIndex++ < CYCLE_MAX_LENGTH &&
                 !currBreadth.isEmpty()) {
@@ -77,8 +78,11 @@ public class DealCyclesFinder extends Thread {
                     Cycle cycle = getCycle(linkedDeal);
 
                     lock.lock();
-                    if (!CycleManager.containsDB(cycle))
-                        CycleManager.addCycleToDB(cycle);
+                    try {
+                        if (!CycleManager.containsDB(cycle))
+                            CycleManager.addCycleToDB(cycle);
+                    }
+                    catch (SQLException e) { e.printStackTrace(); }
                     lock.unlock();
                 }
 
@@ -86,7 +90,7 @@ public class DealCyclesFinder extends Thread {
                 if (currBreadthIndex == CYCLE_MAX_LENGTH)
                     continue;
 
-                List<Deal> clients = DealsManager.getClients(new Deal(linkedDeal.deal));
+                List<Deal> clients = DealsManager.getClients(linkedDeal.deal);
 
                 for (Deal clientDeal : clients)
                     if (!pathContainsDeal(linkedDeal, clientDeal)) {
@@ -115,20 +119,20 @@ public class DealCyclesFinder extends Thread {
          l1 -> Parameter deal, wanted item categories.
          l2 -> this.deal, owned item categories.
          */
-        List<Category> l1 = deal.getWantedItemCategories(),
-                        l2 = this.deal.getOwnedItemCategories();
+        List<ItemCategory> l1 = deal.getWantedCategories(),
+                            l2 = this.deal.getOwnedItemCategories();
 
-        return Category.listsEqualsIgnoreOrder(l1, l2);
+        return CategoryManager.listsEqualsIgnoreOrder(l1, l2);
     }
 
     /**
      Returns cycle made with this.deal
      */
     private Cycle getCycle(LinkedDeal linkedDeal) {
-        List<Deal> cycleDeals = new ArrayList<>(CYCLE_MAX_LENGTH);
+        Set<Deal> cycleDeals = new HashSet<>();
 
         while (linkedDeal != null) {
-            cycleDeals.add(new Deal(linkedDeal.deal));
+            cycleDeals.add(linkedDeal.deal);
             linkedDeal = linkedDeal.linkedTo;
         }
 

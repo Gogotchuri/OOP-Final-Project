@@ -31,7 +31,7 @@ public class ChatsController extends Controller {
     }
 
     public void index() throws IOException, ServletException {
-        List<Chat> chats = ChatManager.getUserChats(this.user.getId());
+        List<Chat> chats = ChatManager.getUserChats(this.user.getUserID());
         request.setAttribute("chats", chats);
         dispatchTo("/pages/user/chats.jsp");
     }

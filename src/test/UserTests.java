@@ -44,7 +44,7 @@ public class UserTests {
     public void getUsersByColumn() {
         assertEquals(m.getUserByUsername("KING"),u2);
         assertEquals(m.getUserByUsername("dummy"),null);
-        assertEquals(m.getUserById(55555), null);
+        assertEquals(m.getUserByID(55555), null);
         assertEquals(m.getUsersByColumn("first_name", "levan",false).get(0), u1);
         assertEquals(m.getUsersByColumn("last_name", "James", false).get(0), u2);
         assertEquals(m.getUsersByColumn("phone_number","doesnt exist",false), new ArrayList<>());
@@ -52,7 +52,7 @@ public class UserTests {
 
     @Test
     public void updateUsers() {
-        UpdateForm form = new UpdateForm("users", m.getUserByUsername("KING").getId());
+        UpdateForm form = new UpdateForm("users", m.getUserByUsername("KING").getUserID());
         form.addUpdate("user_name","snakeee");
         form.addUpdate("first_name","Kevin");
         form.addUpdate("last_name","Durant");

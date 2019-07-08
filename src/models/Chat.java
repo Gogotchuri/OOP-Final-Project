@@ -9,34 +9,33 @@ import java.util.Vector;
  * Class containing sequence of messages
  */
 public class Chat {
-    private int chatID;
-    private int cycleID;
+    private int chatID; //-1
+    private Cycle cycle; //null
     private Timestamp lastUpdateDate; //Need timestamp for exact time
-    private Vector<Message> messages; //Not sure needed
+    private Vector<Message> messages; //default: empty vector
+
 
     /**
-     * @param chatID
-     * @param cycleID
-     * @param updateDate
+     * Constructor with only chat id and cycle
+     * @param chatID the id of the chat in DB
+     * @param cycle cycle which the chat is for
      */
-
-    /**
-     * Constructor for creating fresh object of chat
-     * */
-    public Chat(int chatID, int cycleID){
-        messages = new Vector<>();
-        this.chatID = chatID;
-        this.cycleID = cycleID;
-        this.lastUpdateDate = new Timestamp((new Date()).getTime());
+    public Chat(int chatID, Cycle cycle){
+        this(chatID, cycle, null, null);
     }
+
 
     /**
      * Constructor for creating object of chat with already existing messages in it
-     * */
-    public Chat(int chatID, int cycleID, Date updateDate, Vector<Message> messages){
+     * @param chatID the id of the chat in DB
+     * @param cycle cycle which the chat is for
+     * @param updateDate time of last update
+     * @param messages collection of messages
+     */
+    public Chat(int chatID, Cycle cycle, Date updateDate, Vector<Message> messages){
         this.messages = messages;
         this.chatID = chatID;
-        this.cycleID = cycleID;
+        this.cycle = cycle;
         this.lastUpdateDate = (updateDate != null) ? new Timestamp(updateDate.getTime())
                 : new Timestamp((new Date()).getTime());
     }
@@ -94,17 +93,17 @@ public class Chat {
     }
 
     /**
-     * @param id
+     * @param cycle
      */
-    public void setCycleID(int id){
-        cycleID = id;
+    public void setCycle(Cycle cycle){
+        this.cycle = cycle;
     }
 
     /**
-     * @return ID of cycle which this chat is associated with
+     * @return cycle which this chat is associated with
      */
-    public int getCycleID() {
-        return cycleID;
+    public Cycle getCycle() {
+        return cycle;
     }
 
     /**

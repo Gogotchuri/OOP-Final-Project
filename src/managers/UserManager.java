@@ -64,7 +64,7 @@ public class UserManager {
      * @param id
      * @return User -null if user wasn't found
      */
-    public static User getUserById(int id) {
+    public static User getUserByID(int id) {
         ArrayList<User> users = getUsersByColumn("id", ""+id, true);
         if(users.isEmpty()) return null;
         return users.get(0);
@@ -72,6 +72,7 @@ public class UserManager {
 
 
     /**
+     * TODO: Krawa
      * Should Store given user to database.
      * return true is user has been store successfully,
      * otherwise (if query violated any constraint returns false)
@@ -79,7 +80,7 @@ public class UserManager {
      * @return
      */
     public static boolean storeUser(User user){
-        try {
+        /*try {
             PreparedStatement st = DBAO.getPreparedStatement(STORE_USER_QUERY);
 
             st.setString(1, user.getUsername());
@@ -96,7 +97,7 @@ public class UserManager {
         } catch (SQLException e) {
             e.printStackTrace();
             return false;
-        }
+        }*/
         return true;
     }
 
@@ -108,12 +109,13 @@ public class UserManager {
     }
 
     /**
+     * TODO: Krawa
      * @param set ResultSett
      * @return Parsed user, taken from resultSet
      * @throws SQLException
      */
     private static User getUserFromResultSetRow(ResultSet set) throws SQLException {
-        User user = new User(
+        /*User user = new User(
                 set.getInt("id"),
                 set.getString("user_name"),
                 set.getString("password"),
@@ -124,7 +126,8 @@ public class UserManager {
                 new Timestamp(set.getTimestamp("updated_at").getTime()),
                 new Timestamp(set.getTimestamp("created_at").getTime()));
 
-        return user;
+        return user;*/
+        return null;
     }
 
     /**
@@ -143,7 +146,7 @@ public class UserManager {
      * @return true if update was successful
      */
     public static boolean updateExistingUser(User user) {
-        UpdateForm uf = new UpdateForm("users", user.getId());
+        /*UpdateForm uf = new UpdateForm("users", user.getUserID());
         uf.addUpdate("user_name", user.getUsername());
         uf.addUpdate("password", user.getPassword());
         uf.addUpdate("first_name", user.getFirstName());
@@ -153,6 +156,7 @@ public class UserManager {
         //Updating created_at isn't really necessary, but just in case
         uf.addUpdate("created_at", user.getCreatedDate());
         uf.addUpdate("updated_at", user.getUpdatedDate());
-        return UpdateManager.update(uf);
+        return UpdateManager.update(uf);*/
+        return false;
     }
 }
