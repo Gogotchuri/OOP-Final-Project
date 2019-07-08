@@ -1,5 +1,6 @@
 package models;
 
+import java.sql.Time;
 import java.util.Date;
 import java.sql.Timestamp;
 import java.util.Iterator;
@@ -32,7 +33,7 @@ public class Chat {
      * @param updateDate time of last update
      * @param messages collection of messages
      */
-    public Chat(int chatID, Cycle cycle, Date updateDate, Vector<Message> messages){
+    public Chat(int chatID, Cycle cycle, Timestamp updateDate, Vector<Message> messages){
         this.messages = messages;
         this.chatID = chatID;
         this.cycle = cycle;
