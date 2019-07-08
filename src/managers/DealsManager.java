@@ -32,13 +32,15 @@ public class DealsManager {
         User owner = UserManager.getUserByDealID(dealID);
         List<Item> ownedItems = ItemManager.getItemsByDealID(dealID);
         List<ItemCategory> wantedCategories = CategoryManager.getWantedCategoriesByDealID(dealID);
+
         ProcessStatus.Status dealStatus = getDealStatusByDealID(dealID);
-        Timestamp dealCreateDate = null; // TODO
+        Timestamp dealCreateDate = getDealCreateDateByDealID(dealID);
 
         return (owner == null ||
                  ownedItems == null ||
                   wantedCategories == null ||
-                   dealStatus == null)
+                   dealStatus == null ||
+                    dealCreateDate == null)
                 ?
                 null : new Deal(dealID, owner, ownedItems, wantedCategories, dealStatus, dealCreateDate);
     }
@@ -114,6 +116,33 @@ public class DealsManager {
         } catch (SQLException e) { e.printStackTrace(); }
 
         return statusID == 0 ? null : ProcessStatus.getStatusByID(statusID);
+    }
+
+
+    /**
+     * @param dealID - ID of Deal in DB
+     * @return Returns Creating Date of Deal with ID = dealID.
+     *         If such Deal does not exists returns null.
+     */
+    private static Timestamp getDealCreateDateByDealID(int dealID) {
+
+        Timestamp createDate = null;
+
+        try {
+
+            PreparedStatement statement =
+                    DAO.getPreparedStatement (
+                            "SELECT created_at FROM deals WHERE id = " + dealID + ";"
+                    );
+
+            ResultSet resultSet = statement.executeQuery();
+
+            if (resultSet.next())
+                createDate = resultSet.getTimestamp("created_at");
+
+        } catch (SQLException e) { e.printStackTrace(); }
+
+        return createDate;
     }
 
 
