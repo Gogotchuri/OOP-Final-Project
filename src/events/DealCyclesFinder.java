@@ -90,7 +90,7 @@ public class DealCyclesFinder extends Thread {
                 if (currBreadthIndex == CYCLE_MAX_LENGTH)
                     continue;
 
-                List<Deal> clients = DealsManager.getClients(linkedDeal.deal);
+                List<Deal> clients = DealsManager.getClients(linkedDeal.deal.getDealID());
 
                 for (Deal clientDeal : clients)
                     if (!pathContainsDeal(linkedDeal, clientDeal)) {

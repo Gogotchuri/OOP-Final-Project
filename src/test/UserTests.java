@@ -52,7 +52,7 @@ public class UserTests {
 
     @Test
     public void updateUsers() {
-        UpdateForm form = new UpdateForm("users", m.getUserByUsername("KING").getId());
+        UpdateForm form = new UpdateForm("users", m.getUserByUsername("KING").getUserID());
         form.addUpdate("user_name","snakeee");
         form.addUpdate("first_name","Kevin");
         form.addUpdate("last_name","Durant");

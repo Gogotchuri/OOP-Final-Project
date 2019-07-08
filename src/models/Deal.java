@@ -11,10 +11,11 @@ public class Deal {
     /* Comments means default values
      * if user does not initializes it. */
 
-    private int dealID;                      // 0
-    private User owner;                      // null
-    private List<Item> ownedItems;           // null
+    private int dealID;                          // 0
+    private User owner;                          // null
+    private List<Item> ownedItems;               // null
     private List<ItemCategory> wantedCategories; // null
+    private ProcessStatus.Status status;         // null
 
 
     /**
@@ -27,23 +28,27 @@ public class Deal {
     public Deal(int dealID,
                  User owner,
                   List<Item> ownedItems,
-                   List<ItemCategory> wantedCategories)
+                   List<ItemCategory> wantedCategories,
+                    ProcessStatus.Status status)
     {
         this.dealID = dealID;
         this.owner = owner;
         this.ownedItems = ownedItems;
         this.wantedCategories = wantedCategories;
+        this.status = status;
     }
 
 
     /**
      * Constructor.
+     * @param owner - User which has this Deal
      * @param ownedItems - Owned Items of Deal
      * @param wantedCategories - Wanted Categories of Deal
      */
-    public Deal(List<Item> ownedItems,
-                 List<ItemCategory> wantedCategories) {
-        this(0, null, ownedItems, wantedCategories);
+    public Deal(User owner,
+                 List<Item> ownedItems,
+                  List<ItemCategory> wantedCategories) {
+        this(0, owner, ownedItems, wantedCategories, null);
     }
 
 

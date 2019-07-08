@@ -37,7 +37,7 @@ public class DealsController extends Controller {
 			page = Integer.parseInt(pageParam);
 			if(page <= 0) page = 1;
 		}
-		List<Deal> deals = DealsManager.getDeals(sc);
+		List<Deal> deals = DealsManager.getDealsBySearchCriteria(sc);
 
 		if(deals.size() < (page-1)*PAGINATION){
 			sendError(404, "No deals on page "+page);
@@ -152,7 +152,7 @@ public class DealsController extends Controller {
      */
     public void show(int dealID) throws ServletException, IOException {
 
-    	Deal deal = DealsManager.getDealByID(dealID);
+    	Deal deal = DealsManager.getDealByDealID(dealID);
 
     	if (deal == null) {
 			response.sendError(HttpServletResponse.SC_NOT_FOUND, "Deal with given id wasn't found!");

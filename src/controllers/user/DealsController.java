@@ -7,6 +7,7 @@ import events.DealCyclesFinder;
 import managers.DealsManager;
 import models.Deal;
 import models.Item;
+import models.ProcessStatus;
 import models.User;
 import models.categoryModels.ItemCategory;
 import services.RequestValidator;
@@ -48,7 +49,7 @@ public class DealsController extends Controller implements ResourceController {
      * @throws ServletException caused by dispatching
      */
     public void index() throws IOException, ServletException {
-        List<Deal> deals = DealsManager.getUserDeals(user);
+        List<Deal> deals = DealsManager.getDealsByUserID(user.getUserID());
         request.setAttribute("deals", deals);
         dispatchTo("/pages/user/deals/deals.jsp");
     }
@@ -62,7 +63,7 @@ public class DealsController extends Controller implements ResourceController {
      * @throws ServletException
      */
     public void show(int id) throws IOException, ServletException {
-        Deal deal = DealsManager.getDealByID(id);
+        Deal deal = DealsManager.getDealByDealID(id);
         if (!checkOwnership(deal)) return;
         request.setAttribute("deal", deal);
         dispatchTo("/pages/user/deals/deal.jsp");
@@ -106,7 +107,7 @@ public class DealsController extends Controller implements ResourceController {
         List<ItemCategory> wantedCategories = null; // CategoryManager.getCategoriesByIDs(wantedIDs);
 
 
-        Deal deal = new Deal(ownedItems, wantedCategories);
+        Deal deal = new Deal(user, ownedItems, wantedCategories);
         deal.setDealID(DealsManager.storeDeal(deal));
 
         int dealID = deal.getDealID();
@@ -180,7 +181,7 @@ public class DealsController extends Controller implements ResourceController {
      * @throws ServletException
      */
     public void destroy(int id) throws IOException, ServletException {
-        Deal deal = DealsManager.getDealByID(id);
+        Deal deal = DealsManager.getDealByDealID(id);
         if(!checkOwnership(deal)) return;
         if(DealsManager.deleteDeal(id)) {
             index();
@@ -203,7 +204,7 @@ public class DealsController extends Controller implements ResourceController {
             sendError(404, "Deal not found!");
             return false;
         }
-        if(deal.getOwner().getId() != this.user.getId()){
+        if(deal.getOwner().getUserID() != this.user.getUserID()){
             sendError(401, "Not authorized to edit this deal!");
             return false;
         }

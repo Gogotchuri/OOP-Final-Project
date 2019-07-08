@@ -24,6 +24,7 @@ public class ItemManager {
             "created_at, updated_at) VALUES(?, ?, ?, ?);";
     private static final String INSERT_OWNED_ITEM_QUERY = "INSERT INTO owned_items (deal_id, item_id, " +
             "created_at, updated_at)  VALUES(?, ?, ?, ?);";
+    private static final String GET_OWNED_ITEMIDS_BY_DEAL_QUERY = "SELECT item_id FROM owned_items WHERE deal_id = ?;";
 
     //private static final String SELECT_DEAL_OWNED_ITEMS = "SELECT item_id from owned_items where deal_id = ?";
 
@@ -54,6 +55,37 @@ public class ItemManager {
                     description == null)
                 ?
                 null : new Item(itemID, owner, category, images, name, description);
+    }
+
+
+
+    /**
+     * @param dealID - ID of Deal in DB
+     * @return List of Items which Deal with dealID contains
+     *         If such dealID does not exists in DB
+     *         returns null
+     */
+    public static List<Item> getItemsByDealID(int dealID) {
+        List<Integer> itemIDs = new ArrayList<>();
+        try {
+            PreparedStatement st = DBO.getPreparedStatement(GET_OWNED_ITEMIDS_BY_DEAL_QUERY);
+            st.setInt(1, dealID);
+            ResultSet set = st.executeQuery();
+            if(set.getFetchSize() == 0) {
+                return null;
+            }
+            while (set.next()) {
+                itemIDs.add(set.getBigDecimal("item_id").intValue());
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+
+        List<Item> items = new ArrayList<>();
+        for (Integer itemID : itemIDs)
+            items.add(ItemManager.getItemByID(itemID));
+
+        return items;
     }
 
 
@@ -154,7 +186,7 @@ public class ItemManager {
     public static boolean addItemToDB(Item item) {
         try {
             PreparedStatement st = DBO.getPreparedStatement(INSERT_ITEM_QUERY);
-            st.setInt(1,item.getOwner().getId());
+            st.setInt(1,item.getOwner().getUserID());
             st.setInt(2,item.getCategory().getId());
             st.setString(3,item.getDescription());
             st.setString(4,item.getName());
@@ -237,7 +269,7 @@ public class ItemManager {
      * @return boolean
      * @throws SQLException
      */
-    public static boolean insertWantedItem(int deal_id, int item_category_id){
+    public static boolean insertWantedItemCategory(int deal_id, int item_category_id){
         return insert(deal_id, item_category_id, INSERT_WANTED_ITEM_QUERY);
     }
 
