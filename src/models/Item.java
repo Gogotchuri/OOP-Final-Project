@@ -7,7 +7,7 @@ import java.sql.Timestamp;
 import java.util.Iterator;
 import java.util.List;
 
-public class Item {
+public class Item implements Comparable<Item> {
 
 
     /* Comments means default values
@@ -122,4 +122,13 @@ public class Item {
         return itemID == otherItem.itemID;
     }
 
+    @Override
+    public int compareTo(Item o) {
+        return name.compareTo(o.getName());
+    }
+
+    @Override
+    public String toString() {
+        return name;
+    }
 }

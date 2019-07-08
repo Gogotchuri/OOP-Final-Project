@@ -51,8 +51,7 @@ public class UserManager {
             PreparedStatement statement = DAO.getPreparedStatement(GET_USER_ID_BY_DEAL_QUERY);
             statement.setInt(1, dealID);
             ResultSet resultSet = statement.executeQuery();
-            if (resultSet.getFetchSize() != 0) {
-                resultSet.next();
+            if (resultSet.next()) {
                 userID = resultSet.getBigDecimal("user_id").intValue();
             }
         }

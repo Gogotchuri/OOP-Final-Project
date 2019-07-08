@@ -31,7 +31,6 @@ public class ItemManager {
     private static final String JOIN_CATEGORIES = "SELECT * from item_categories s JOIN item_types t on s.type_id = t.id" +
             " JOIN item_brands b on s.brand_id = b.id ";
     private static final String GET_ITEM_INFO_BY_ITEM_ID = "SELECT * FROM items WHERE id = ?;";
-    private static final String GET_IMAGE_IDS_BY_ITEM_ID = "SELECT id FROM item_images WHERE item_id = ?;";
     private static DatabaseAccessObject DBO = DatabaseAccessObject.getInstance();
 
 
@@ -49,9 +48,9 @@ public class ItemManager {
         String name = getItemNameByItemID(itemID),
                 description = getItemDescriptionByItemID(itemID);
 
-        Timestamp createDate = null, // TODO
-                   updateDate = null; // TODO
-
+        Timestamp createDate = DateManager.getCreateDateByID("items", itemID);
+        Timestamp updateDate = DateManager.getUpdateDateByID("items", itemID);
+        //System.out.println(owner + " " + category + " " + images + " " + name + " " + description + " " + createDate + " " + updateDate);
         return (owner == null ||
                  category == null ||
                   images == null ||
@@ -64,7 +63,6 @@ public class ItemManager {
     }
 
 
-
     /**
      * @param dealID - ID of Deal in DB
      * @return List of Items which Deal with dealID contains
@@ -73,19 +71,21 @@ public class ItemManager {
      */
     public static List<Item> getItemsByDealID(int dealID) {
         List<Integer> itemIDs = new ArrayList<>();
+        boolean flag = false;
+
         try {
             PreparedStatement st = DBO.getPreparedStatement(GET_OWNED_ITEMIDS_BY_DEAL_QUERY);
             st.setInt(1, dealID);
             ResultSet set = st.executeQuery();
-            if(set.getFetchSize() == 0) {
-                return null;
-            }
             while (set.next()) {
+                flag = true;
                 itemIDs.add(set.getBigDecimal("item_id").intValue());
             }
         } catch (SQLException e) {
             e.printStackTrace();
         }
+
+        if(!flag) return null;
 
         List<Item> items = new ArrayList<>();
         for (Integer itemID : itemIDs)
@@ -107,10 +107,9 @@ public class ItemManager {
             PreparedStatement st = DBO.getPreparedStatement(GET_ITEM_INFO_BY_ITEM_ID);
             st.setInt(1, itemID);
             ResultSet set = st.executeQuery();
-            if(set.getFetchSize() != 0) {
-                set.next();
-                ownerID = set.getBigDecimal("user_id").intValue();
-            }
+
+            if(set.next()) ownerID = set.getInt("user_id");
+
         } catch (SQLException e) {
             e.printStackTrace();
         }
@@ -130,11 +129,9 @@ public class ItemManager {
             PreparedStatement st = DBO.getPreparedStatement(GET_ITEM_INFO_BY_ITEM_ID);
             st.setInt(1, itemID);
             ResultSet set = st.executeQuery();
-            if (set.getFetchSize() != 0) {
 
-                set.next();
-                categoryID = set.getBigDecimal("item_category_id").intValue();
-            }
+            if (set.next())categoryID = set.getBigDecimal("item_category_id").intValue();
+
         } catch (SQLException e) {
             e.printStackTrace();
         }
@@ -153,10 +150,8 @@ public class ItemManager {
             PreparedStatement st = DBO.getPreparedStatement(GET_ITEM_INFO_BY_ITEM_ID);
             st.setInt(1, itemID);
             ResultSet set = st.executeQuery();
-            if(set.getFetchSize() != 0) {
-                set.next();
-                return set.getString("name");
-            }
+
+           if(set.next()) return set.getString("name");
         } catch (SQLException e) {
             e.printStackTrace();
         }
@@ -175,10 +170,8 @@ public class ItemManager {
             PreparedStatement st = DBO.getPreparedStatement(GET_ITEM_INFO_BY_ITEM_ID);
             st.setInt(1, itemID);
             ResultSet set = st.executeQuery();
-            if(set.getFetchSize() != 0) {
-                set.next();
-                return set.getString("description");
-            }
+
+            if(set.next()) return set.getString("description");
         } catch (SQLException e) {
             e.printStackTrace();
         }
@@ -259,13 +252,14 @@ public class ItemManager {
      * @throws SQLException
      */
     private static Item parseItem(ResultSet rs) throws SQLException {
-        /*return new Item(rs.getBigDecimal("id").intValue(),
+        return new Item(rs.getBigDecimal("id").intValue(),
                         UserManager.getUserByID(rs.getInt("user_id")),
                         CategoryManager.getCategoryByID(rs.getInt("item_category_id")),
                         ImagesManager.getItemImagesByItemID(rs.getInt("id")),
                         rs.getString("name"),
-                        rs.getString("description"));*/
-        return null;
+                        rs.getString("description"),
+                        rs.getTimestamp("created_at"),
+                        rs.getTimestamp("updated_at"));
     }
 
     /**
