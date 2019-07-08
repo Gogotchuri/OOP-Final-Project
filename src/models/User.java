@@ -3,6 +3,7 @@ package models;
 
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
+import java.security.Timestamp;
 import java.util.List;
 
 public class User {
@@ -27,6 +28,8 @@ public class User {
 
     private List<Chat> chats;     // null
 
+    private Timestamp createdAt, updatedAt; // null
+
 
     /**
      * Main Constructor
@@ -50,7 +53,8 @@ public class User {
                  String phoneNumber,
                  Image profilePicture,
                  List<Deal> deals,
-                 List<Chat> chats)
+                 List<Chat> chats
+                 )
     {
         this.userID = userID;
         this.username = username;
@@ -154,7 +158,6 @@ public class User {
      * @return Chats of User
      */
     public List<Chat> getChats() { return chats; }
-
 
     /**
      * Sets set encrypted Password.

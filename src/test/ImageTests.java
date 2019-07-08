@@ -1,7 +1,9 @@
 package test;
 
 import generalManagers.DeleteManager;
-import managers.ImagesManager;
+import generalManagers.UpdateManager;
+import managers.CategoryManager;
+import managers.ItemManager;
 import managers.UserManager;
 import models.*;
 import models.categoryModels.ItemBrand;
@@ -9,11 +11,11 @@ import models.categoryModels.ItemCategory;
 import models.categoryModels.ItemSerie;
 import models.categoryModels.ItemType;
 import org.junit.jupiter.api.Test;
-import static org.junit.jupiter.api.Assertions.*;
+
 import java.sql.Timestamp;
-import java.util.Arrays;
-import java.util.Collections;
-import java.util.List;
+
+import static org.junit.jupiter.api.Assertions.assertTrue;
+
 
 public class ImageTests {
     /**
@@ -22,79 +24,57 @@ public class ImageTests {
      * For testing purposes : id ----> image_category :
      * 1 ----> profile
      * 2 ----> featured
-     * 3 ----> cover
      *
      * !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
      */
 
-    //TODO : NEEDS TO BE TESTED OVER BECAUSE OF MASSIVE CHANGES
 
-    /*
     private static final Timestamp time = new Timestamp(System.currentTimeMillis());
 
-    private static final User u1 = new User(1,"LG","password","levan","gelashvili", "lgela17", "555");
-    private static final User u2 = new User("KING","heat","Lebron","James","ljame03","23");
-    private static final ItemCategory cat = new ItemCategory(1, new ItemSerie("a"), new ItemType("b"), new ItemBrand("c"));
+    private static User u1 = new User(1,"mudamtqveny", "password", "levan", "gelashvili", "lgela17", "123", null, null, null, time, time);
+    private static User u2 = new User(2,"king", "heat","lebron","james","ljame03", "6", null, null, null, time, time);
+    private static final ItemCategory dummy = new ItemCategory(1, new ItemSerie("a"), new ItemType("b"), new ItemBrand("c"));
 
-    private static final Item it1 = new Item(1,1,cat,null time);
-    private static final Item it2 = new Item(2,2,cat,null, time);
+    private static Item it1 = new Item(1, u1, dummy, null, "Samsung A20", "");
+    private static Item it2 = new Item(2, u1, dummy, null, "Hp laptop", "");
+    private static Item it3 = new Item(3, u2, dummy, null, "2016 finals trophy", "");
 
-    private static final Image im1 = new ItemImage(1,1,"chemi_cover",1,3, time);
-    private static final Image im2 = new ItemImage(2,1,"chemi_featured",1,2, time);
-    private static final Image im3 = new ItemImage(3,1,"chemi_meore_featured",1,2, time);
-    private static final Image im4 = new ItemImage(4,1,"chemi_nivtis_profili",1,1,time);
-    private static final Image im5 = new ItemImage(5,2,"meore_profili",2,1,time);
-    private static final Image im6 = new ItemImage(6,2,"meore_featured",2,2,time);
+    private static final Image prof1 = new Image(u1,"levanisProfili");
+    private static final Image prof2 = new Image(u2, "lebronisProfili");
 
-    private static final Image im7 = new Image(7,1,"avatar1",time);
-    private static final Image im8 = new Image(8,2,"avatar2",time);
+    private static final Image itemProf1 = new ItemImage("samsungProfile", it1, ImageCategories.ImageCategory.PROFILE);
+    private static final Image itemProf2 = new ItemImage("trophyProfile", it3, ImageCategories.ImageCategory.PROFILE);
 
+    private static final Image itemImg1 = new ItemImage("samsungFeatured1", it1, ImageCategories.ImageCategory.FEATURED);
+    private static final Image itemImg2 = new ItemImage("samsungFeatured2", it1, ImageCategories.ImageCategory.FEATURED);
+    private static final Image itemImg3 = new ItemImage("hpFeatured", it2, ImageCategories.ImageCategory.FEATURED);
 
-    @Test
-    public void prepareForForeignKeys() {
-        new UserTests().emptyBase();
-        UserManager.storeUser(u1);
-        UserManager.storeUser(u2);
+    private void emptyBase() {
+        DeleteManager.delete("item_categories", "1", 1);
+        DeleteManager.delete("item_brands", "1", 1);
+        DeleteManager.delete("item_types", "1", 1);
+        DeleteManager.delete("profile_images", "1", 1);
+        DeleteManager.delete("item_images", "1", 1);
+        DeleteManager.delete("items", "1", 1);
+        DeleteManager.delete("users", "1", 1);
 
-
-//            ეს ჩავამატე ჩემ ბაზაში, რადგან itemManager მზად არ იყო
-//
-//            insert into items(id,user_id,item_category_id,description,name)
-//            values
-//            (1,1,1,'magaria','nivti'),
-//            (2,2,1,'magaria2','nivti2');
+        UpdateManager.reseedTable("item_brands", 1);
+        UpdateManager.reseedTable("item_types", 1);
+        UpdateManager.reseedTable("item_categories", 1);
+        UpdateManager.reseedTable("users", 1);
+        UpdateManager.reseedTable("items", 1);
+        UpdateManager.reseedTable("profile_images", 1);
+        UpdateManager.reseedTable("item_images", 1);
     }
 
     @Test
-    public void addImages() {
-        DeleteManager.emptyBase("item_images");
-        DeleteManager.emptyBase("profile_images");
-        assertTrue(ImagesManager.addImage(im1));
-        assertTrue(ImagesManager.addImage(im2));
-        assertTrue(ImagesManager.addImage(im3));
-        assertTrue(ImagesManager.addImage(im4));
-        assertTrue(ImagesManager.addImage(im5));
-        assertTrue(ImagesManager.addImage(im6));
-        assertTrue(ImagesManager.addImage(im7));
-        assertTrue(ImagesManager.addImage(im8));
+    public void insertIntoBase() {
+        emptyBase();
+        assertTrue(CategoryManager.insertCategory(dummy));
+        assertTrue(UserManager.storeUser(u1));
+        /*assertTrue(UserManager.storeUser(u2));
+        assertTrue(ItemManager.addItemToDB(it1));
+        assertTrue(ItemManager.addItemToDB(it2));
+        assertTrue(ItemManager.addItemToDB(it3));*/
     }
-
-    @Test
-    public void testGetUserImages() {
-        List<ItemImage> list1 = ImagesManager.getUserImages(1);
-        List<ItemImage> list2 = ImagesManager.getUserImages(2);
-        Collections.sort(list1);
-        Collections.sort(list2);
-        assertEquals(list1, Arrays.asList(im1,im2,im3,im4));
-        assertEquals(list2, Arrays.asList(im5,im6));
-    }
-
-    @Test
-    public void testGetProfileImages() {
-        assertEquals(ImagesManager.getUserProfileImage(1),im7);
-        assertEquals(ImagesManager.getUserProfileImage(2),im8);
-        assertEquals(ImagesManager.getUserProfileImage(3),null);
-    }
-
-     */
 }

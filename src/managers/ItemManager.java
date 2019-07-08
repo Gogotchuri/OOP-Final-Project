@@ -19,7 +19,7 @@ public class ItemManager {
 
 
     private static final String INSERT_ITEM_QUERY = "INSERT INTO items (user_id, item_category_id, description, " +
-            "created_at, updated_at) VALUES(?, ?, ?, ?, ?, ?);";
+            "name, created_at, updated_at) VALUES(?, ?, ?, ?, ?, ?);";
     private static final String INSERT_WANTED_ITEM_QUERY = "INSERT INTO wanted_items (deal_id, item_category_id, " +
             "created_at, updated_at) VALUES(?, ?, ?, ?);";
     private static final String INSERT_OWNED_ITEM_QUERY = "INSERT INTO owned_items (deal_id, item_id, " +
@@ -214,7 +214,7 @@ public class ItemManager {
      * @param value Passed value
      * @return All items from given table matching given criteria
      */
-    public static List<Item> getItemsByColumn(String table, String column, String value) {
+    private static List<Item> getItemsByColumn(String table, String column, String value) {
         List<Item> list = new ArrayList<>();
         try {
             String statement = "SELECT * FROM " + table + " WHERE " + column + " = " + value + ";";

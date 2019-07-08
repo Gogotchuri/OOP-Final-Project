@@ -2,6 +2,7 @@ package managers;
 
 import database.DatabaseAccessObject;
 import models.Image;
+import models.ImageCategories;
 import models.ItemImage;
 
 import java.sql.*;
@@ -29,7 +30,7 @@ public class ImagesManager {
      * @return Fully Filled Image object.
      *         Or null if Image with such ID does not exists.
      */
-    public static ItemImage getImageByID(int imageID) {
+    public static ItemImage getItemImageByID(int imageID) {
         Image img = null;
 
         try {
@@ -66,10 +67,10 @@ public class ImagesManager {
         try {
             PreparedStatement st = DBO.getPreparedStatement(INSERT_ITEM_IMAGE_QUERY);
 
-            st.setInt(1, img.getImageCategory());
+            st.setInt(1, img.getImageCategory().getId());
             st.setString(2, img.getUrl());
-            st.setInt(3, img.getUserId());
-            st.setInt(4, img.getItemId());
+            st.setInt(3, img.getUser().getUserID());
+            st.setInt(4, img.getItem().getItemID());
             st.setTimestamp(5, img.getCreatedDate());
             st.executeUpdate();
         } catch (SQLException ex) {
@@ -89,7 +90,7 @@ public class ImagesManager {
             PreparedStatement st = DBO.getPreparedStatement(INSERT_PROFILE_IMAGE_QUERY);
 
             st.setString(1, img.getUrl());
-            st.setInt(2, img.getUserId());
+            st.setInt(2, img.getUser().getUserID());
             st.setTimestamp(3, img.getCreatedDate());
             st.executeUpdate();
         } catch (SQLException ex) {
@@ -166,7 +167,7 @@ public class ImagesManager {
      */
     private static Image parseProfileImage(ResultSet set, int user_id) throws SQLException {
         return new Image(set.getBigDecimal("id").intValue(),
-                user_id,
+                UserManager.getUserByID(user_id),
                 set.getString("url"),
                 new Timestamp(set.getDate("created_at").getTime()));
     }
@@ -178,10 +179,9 @@ public class ImagesManager {
      */
     private static ItemImage parseItemImage(ResultSet set) throws SQLException {
         return new ItemImage(set.getBigDecimal("id").intValue(),
-                set.getBigDecimal("image_category_id").intValue(),
                 set.getString("url"),
-                set.getBigDecimal("user_id").intValue(),
-                set.getBigDecimal("item_id").intValue(),
+                ItemManager.getItemByID(set.getInt("item_id")),
+                ImageCategories.getCategoryByID(set.getInt("image_category_id")),
                 new Timestamp(set.getDate("created_at").getTime()));
     }
 }
