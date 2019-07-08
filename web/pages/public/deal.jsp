@@ -6,12 +6,12 @@
   To change this template use File | Settings | File Templates.
 --%>
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
-<%@ page import="models.Deal" %>
-<%@ page import="models.User" %>
-<%@ page import="models.Item" %>
 <%@ page import="java.lang.Integer" %>
-<%@ page import="models.Category" %>
 <%@ page import="java.util.List" %>
+<%@ page import="managers.UserManager" %>
+<%@ page import="models.*" %>
+<%@ page import="managers.CycleManager" %>
+<%@ page import="java.text.SimpleDateFormat" %>
 <% Deal deal= (Deal)request.getAttribute("deal");%>
 <html>
     <%--HEAD--%>
@@ -41,6 +41,11 @@
             grid-row: 1/3;
         }
 
+        p.italic {
+            font-style: italic;
+            font-size: 14px;
+        }
+
 
     </style>
 
@@ -59,25 +64,38 @@
             <% if(deal.getUser_id() == thisId){ %>
                 <input type="button" onclick="user.DealConfigServlet.doDelete()" value="Delete Deal">
             <%}%>
+            <% int userId = deal.getUser_id();%>
+            <% User user = UserManager.getUserById(userId);%>
+            <% String userFullName = " (" + user.getFirstName() + " " + user.getLastName() + ")";%>
+            <% String dateCreated = new SimpleDateFormat("yyyy.MM.dd.HH.mm.ss").format(deal.getCreated_at());%>
+            <% List<Cycle> cycles = CycleManager.getCyclesByDealID(deal.getId());%>
             <h3>Information</h3>
             <ul>
-                <li><%=deal.getId()%></li>
-                <li><%=deal.getCreated_at()%></li>
-                <li>status</li>
+                <li><%= user.getUsername()%> <br> <%= userFullName %></li>
+                <li><%= dateCreated%></li>
+                <li><%= deal.getStatus_id() %></li>
                 <li>Cycles
                     <ul>
-                        <li>1<li>
-                        <li>2<li> </ul>
+                        <% for (int i=0; i<cycles.size(); i++){%>
+                        <% Cycle c = cycles.get(i);%>
+                        <% String date = new SimpleDateFormat("yyyy.MM.dd.HH.mm.ss").format(c.getCreated_at());%>
+                        <% String cycleInfo = "Cycle" + i;%>
+                        <li><%= cycleInfo%> <br> <p class="italic"><%= date %></>p></li>
+                        <%}%>
+                    </ul>
                 </li>
             </ul>
         </div>
 
         <div class = "box1">
-            <% List<Item> OwnedItems = deal.getOwnedItems()%>
+            <% List<Item> OwnedItems = deal.getOwnedItems();%>
             <h3>What i give</h3>
             <ul>
-                <% for(Item i : OwnedItems){ %>
-                <li><%= i.getName()%></li>
+                <% for(Item i : OwnedItems){%>
+                <% String catInfo = " (" + i.getCategory().getName() +")";%>
+                <% String date = new SimpleDateFormat("yyyy.MM.dd.HH.mm.ss").format(i.getCreatedAt());%>
+
+                <li><%= i.getName() %> <br> <%= catInfo%> <br> <p class="italic"><%= date%></p>></li>
                 <% } %>
             </ul>
         </div>
