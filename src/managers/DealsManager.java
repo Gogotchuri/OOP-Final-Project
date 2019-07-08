@@ -244,9 +244,11 @@ public class DealsManager {
 
 
             try (ResultSet generatedKeys = statement.getGeneratedKeys()) {
-                if (generatedKeys.next())
-                    dealID =generatedKeys.getInt(1);
-                else
+                if (generatedKeys.next()) {
+                    dealID = generatedKeys.getInt(1);
+                    deal.setDealID(dealID);
+
+                } else
                     throw new SQLException("Storing Deal failed, no ID obtained.");
             }
 
