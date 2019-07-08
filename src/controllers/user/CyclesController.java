@@ -67,7 +67,7 @@ public class CyclesController extends Controller {
 
     /**
      * @param cycleID - ID of Cycle in DB
-     * Accepts cycle by user
+     * Accepts cycle
      */
     public boolean acceptCycle(int cycleID, int dealID) {
         return CycleManager.acceptCycle(cycleID, dealID);
