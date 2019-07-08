@@ -19,58 +19,51 @@ public class UserTests {
     private static final User u2 = new User("KING","heat","Lebron","James","ljame03","23");
     private static final User u3 = new User("a","b","c","d","e","f");
 
-    private static final UserManager m = new UserManager();
-    private static final DeleteManager d = new DeleteManager();
-    private static final UpdateManager u = new UpdateManager();
 
-    @Test
     public void emptyBase() {
-        try {
-            PreparedStatement st = DatabaseAccessObject.getInstance().getPreparedStatement("delete from users;");
-            st.executeUpdate();
-        } catch (SQLException e) {
-            e.printStackTrace();
-        }
+        DeleteManager.delete("users", "1",1);
+        UpdateManager.reseedTable("users",1);
     }
 
     @Test
     public void addUsers() {
+        emptyBase();
         assertTrue(UserManager.storeUser(u1));
-        assertTrue(m.storeUser(u2));
-        assertTrue(m.storeUser(u3));
+        assertTrue(UserManager.storeUser(u2));
+        assertTrue(UserManager.storeUser(u3));
     }
 
     @Test
     public void getUsersByColumn() {
-        assertEquals(m.getUserByUsername("KING"),u2);
-        assertEquals(m.getUserByUsername("dummy"),null);
-        assertEquals(m.getUserByID(55555), null);
-        assertEquals(m.getUsersByColumn("first_name", "levan",false).get(0), u1);
-        assertEquals(m.getUsersByColumn("last_name", "James", false).get(0), u2);
-        assertEquals(m.getUsersByColumn("phone_number","doesnt exist",false), new ArrayList<>());
+        assertEquals(UserManager.getUserByUsername("KING").getUsername(),u2.getUsername());
+        assertEquals(UserManager.getUserByUsername("dummy"),null);
+        assertEquals(UserManager.getUserByID(55555), null);
+        assertEquals(UserManager.getUsersByColumn("first_name", "levan",false).get(0).getUsername(), u1.getUsername());
+        assertEquals(UserManager.getUsersByColumn("last_name", "James", false).get(0).getUsername(), u2.getUsername());
+        assertEquals(UserManager.getUsersByColumn("phone_number","doesnt exist",false), new ArrayList<>());
     }
 
     @Test
     public void updateUsers() {
-        UpdateForm form = new UpdateForm("users", m.getUserByUsername("KING").getUserID());
+        UpdateForm form = new UpdateForm("users", UserManager.getUserByUsername("KING").getUserID());
         form.addUpdate("user_name","snakeee");
         form.addUpdate("first_name","Kevin");
         form.addUpdate("last_name","Durant");
         form.addUpdate("id", 35);
-        assertTrue(u.update(form));
+        assertTrue(UpdateManager.update(form));
     }
 
     @Test
     public void deleteFromUsers() {
-        assertTrue(d.delete("users", "id", 35));
-        assertTrue(d.delete("users", "user_name", "LG"));
+        assertTrue(DeleteManager.delete("users", "id", 35));
+        assertTrue(DeleteManager.delete("users", "user_name", "LG"));
     }
 
 
     @Test
     public void customTest(){
-        boolean levan = m.storeUser(u1);
+        boolean levan = UserManager.storeUser(u1);
         assertTrue(levan);
-        assertNotNull(m.getUserByUsername(u1.getUsername()));
+        assertNotNull(UserManager.getUserByUsername(u1.getUsername()));
     }
 }
