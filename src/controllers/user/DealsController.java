@@ -7,6 +7,7 @@ import events.DealCyclesFinder;
 import managers.DealsManager;
 import models.Deal;
 import models.Item;
+import models.ProcessStatus;
 import models.User;
 import models.categoryModels.ItemCategory;
 import services.RequestValidator;
@@ -106,7 +107,7 @@ public class DealsController extends Controller implements ResourceController {
         List<ItemCategory> wantedCategories = null; // CategoryManager.getCategoriesByIDs(wantedIDs);
 
 
-        Deal deal = new Deal(ownedItems, wantedCategories);
+        Deal deal = new Deal(user, ownedItems, wantedCategories);
         deal.setDealID(DealsManager.storeDeal(deal));
 
         int dealID = deal.getDealID();

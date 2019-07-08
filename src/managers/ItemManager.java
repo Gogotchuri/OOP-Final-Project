@@ -269,7 +269,7 @@ public class ItemManager {
      * @return boolean
      * @throws SQLException
      */
-    public static boolean insertWantedItem(int deal_id, int item_category_id){
+    public static boolean insertWantedItemCategory(int deal_id, int item_category_id){
         return insert(deal_id, item_category_id, INSERT_WANTED_ITEM_QUERY);
     }
 

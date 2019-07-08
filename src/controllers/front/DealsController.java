@@ -37,7 +37,7 @@ public class DealsController extends Controller {
 			page = Integer.parseInt(pageParam);
 			if(page <= 0) page = 1;
 		}
-		List<Deal> deals = DealsManager.getDeals(sc);
+		List<Deal> deals = DealsManager.getDealsBySearchCriteria(sc);
 
 		if(deals.size() < (page-1)*PAGINATION){
 			sendError(404, "No deals on page "+page);
