@@ -35,7 +35,7 @@ public class CycleManager {
         Cycle cycle = null;
 
         ProcessStatus.Status cycleStatus =
-            getCycleStatusByCycleID(cycleID);
+            StatusManager.getStatusIDByID("cycles", cycleID);
 
         return cycle;
     }
@@ -61,15 +61,6 @@ public class CycleManager {
             e.printStackTrace();
         }
         return  list;*/
-        return null;
-    }
-
-
-    /**
-     * @param cycleID
-     * @return
-     */
-    private static ProcessStatus.Status getCycleStatusByCycleID(int cycleID) {
         return null;
     }
 
