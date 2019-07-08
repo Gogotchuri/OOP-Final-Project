@@ -34,11 +34,12 @@ public class DealsManager {
         User owner = UserManager.getUserByDealID(dealID);
         List<Item> ownedItems = ItemManager.getItemsByDealID(dealID);
         List<ItemCategory> wantedCategories = CategoryManager.getWantedCategoriesByDealID(dealID);
-        ProcessStatus.Status dealStatus = null; // TODO
+        ProcessStatus.Status dealStatus = getDealStatusByDealID(dealID);
 
         return (owner == null ||
                  ownedItems == null ||
-                  wantedCategories == null)
+                  wantedCategories == null ||
+                   dealStatus == null)
                 ?
                 null : new Deal(dealID, owner, ownedItems, wantedCategories, dealStatus);
     }
@@ -56,7 +57,7 @@ public class DealsManager {
 
             PreparedStatement statement =
                 DAO.getPreparedStatement (
-                    "SELECT id FROM deals WHERE user_id = " + userID + ";"
+                    "SELECT id AS id_of_deal FROM deals WHERE user_id = " + userID + ";"
                 );
 
             queryDeals(deals, statement);
@@ -70,7 +71,7 @@ public class DealsManager {
 
     /**
      * Helper method, queries
-     * SELECT deal_id !!! AS id !!! FROM deals ...
+     * SELECT deal_id !!! AS id_of_deal !!! FROM deals ...
      * Adds fully filled deals to the list
      * @param list - List, which we update with queried deals
      * @param statement - Passed preparedStatement
@@ -82,11 +83,38 @@ public class DealsManager {
         ResultSet resultSet = statement.executeQuery();
 
         while (resultSet.next()) {
-            int dealID = resultSet.getBigDecimal("id").intValue();
+            int dealID = resultSet.getBigDecimal("id_of_deal").intValue();
             list.add (
                 getDealByDealID(dealID)
             );
         }
+    }
+
+
+    /**
+     * @param dealID - ID of Deal in DB
+     * @return ProcessStatus of Deal with given dealID.
+     *         If such deal does not exists returns null.
+     */
+    private static ProcessStatus.Status getDealStatusByDealID(int dealID) {
+
+        int statusID = 0;
+
+        try {
+
+            PreparedStatement statement =
+                DAO.getPreparedStatement (
+                        "SELECT status_id FROM deals WHERE id = " + dealID + ";"
+                );
+
+            ResultSet resultSet = statement.executeQuery();
+
+            if (resultSet.next())
+                statusID = resultSet.getBigDecimal("status_id").intValue();
+
+        } catch (SQLException e) { e.printStackTrace(); }
+
+        return statusID == 0 ? null : ProcessStatus.getStatusByID(statusID);
     }
 
 
@@ -97,7 +125,7 @@ public class DealsManager {
     public static List<Deal> getDealsBySearchCriteria(SearchCriteria sc) {
 
         StringBuilder queryBuilder = new StringBuilder (
-            "SELECT * \n" +
+            "SELECT d.id AS id_of_deal \n" +
             "  FROM deals d \n" +
             "  JOIN users u ON (d.user_id = u.id) \n" +
             "  JOIN wanted_items wi ON (d.id = wi.deal_id) \n" +
@@ -157,8 +185,8 @@ public class DealsManager {
     public static List<Deal> getClients(int dealID) {
 
         String query =
-            "SELECT * FROM deals \n" +
-            "WHERE id IN ( \n" +
+            "SELECT d.id AS id_of_deal FROM deals d \n" +
+            "WHERE d.id IN ( \n" +
             "    SELECT result.deal_id FROM \n" +
             "    (SELECT a.deal_id AS deal_id, \n" +
             "            COUNT(*) AS row_num FROM \n" +
@@ -234,14 +262,11 @@ public class DealsManager {
             }
 
 
-            List<Item> ownedItems = deal.getOwnedItems();
-            List<ItemCategory> wantedCategories = deal.getWantedCategories();
-
-            for (Item item : ownedItems)
+            for (Item item : deal.getOwnedItems())
                 if (!ItemManager.insertOwnedItem(deal.getDealID(), item.getItemID()))
                     return 0;
 
-            for (ItemCategory itemCategory : wantedCategories)
+            for (ItemCategory itemCategory : deal.getWantedCategories())
                 if (!ItemManager.insertWantedItemCategory(deal.getDealID(), itemCategory.getId()))
                     return 0;
 
