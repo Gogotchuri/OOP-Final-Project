@@ -43,7 +43,7 @@ public class UserManager {
      *         If such dealID does not exists in DB
      *         returns null
      */
-    public static User getUserByDealID(int dealID) {
+    public static int getUserIDByDealID(int dealID) {
 
         int userID = 0;
 
@@ -57,7 +57,7 @@ public class UserManager {
         }
         catch (SQLException e) { e.printStackTrace(); }
 
-        return userID == 0 ? null : UserManager.getUserByID(userID);
+        return userID;
     }
 
 

@@ -30,10 +30,10 @@ public class ItemTests {
     private static final ItemCategory cat2 = new ItemCategory(2, new ItemSerie("E40"), new ItemType("Fridge"), new ItemBrand("Samsung"));
     private static final ItemCategory cat3 = new ItemCategory(3, new ItemSerie("FinalsTrophy"), new ItemType("Trophy"), new ItemBrand("NBA"));
 
-    private static final Item it1 = new Item(1, u1, cat1, null, "Samsung Galaxy s3", "Karg mdgomareobashi", time, time);
-    private static final Item it2 = new Item(2, u1, cat2, null, "Macivari", "aciebs", time, time);
-    private static final Item it3 = new Item(3, u2, cat3, null, "2016shi mogebuli finali", "kai iyo", time, time);
-    private static final Item it4 = new Item(4, u1, cat1, null, "Meore teleponic mqonia", "esec karg", time, time);
+    private static final Item it1 = new Item(1, u1.getUserID(), cat1, null, "Samsung Galaxy s3", "Karg mdgomareobashi", time, time);
+    private static final Item it2 = new Item(2, u1.getUserID(), cat2, null, "Macivari", "aciebs", time, time);
+    private static final Item it3 = new Item(3, u2.getUserID(), cat3, null, "2016shi mogebuli finali", "kai iyo", time, time);
+    private static final Item it4 = new Item(4, u1.getUserID(), cat1, null, "Meore teleponic mqonia", "esec karg", time, time);
 
     private void emptyBase() {
         DeleteManager.delete("items", "1", 1);

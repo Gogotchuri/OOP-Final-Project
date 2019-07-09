@@ -38,7 +38,7 @@ public class ItemManager {
      */
     public static Item getItemByID(int itemID){
 
-        User owner = getOwnerByItemID(itemID);
+        int ownerID = getOwnerIDByItemID(itemID);
         ItemCategory category = getItemCategoryByItemID(itemID);
         List<ItemImage> images = ImagesManager.getItemImagesByItemID(itemID);
 
@@ -48,7 +48,7 @@ public class ItemManager {
         Timestamp createDate = DateManager.getCreateDateByID("items", itemID);
         Timestamp updateDate = DateManager.getUpdateDateByID("items", itemID);
         //System.out.println(owner + " " + category + " " + images + " " + name + " " + description + " " + createDate + " " + updateDate);
-        return (owner == null ||
+        return (ownerID == 0 ||
                  category == null ||
                   images == null ||
                    name == null ||
@@ -56,7 +56,7 @@ public class ItemManager {
                      createDate == null ||
                       updateDate == null)
                 ?
-                null : new Item(itemID, owner, category, images, name, description, createDate, updateDate);
+                null : new Item(itemID, ownerID, category, images, name, description, createDate, updateDate);
     }
 
 
@@ -115,8 +115,8 @@ public class ItemManager {
      *         If such itemID does not exists in DB
      *         returns null.
      */
-    private static User getOwnerByItemID(int itemID) {
-        int ownerID = -1;
+    private static int getOwnerIDByItemID(int itemID) {
+        int ownerID = 0;
         try {
             PreparedStatement st = DBO.getPreparedStatement(GET_ITEM_INFO_BY_ITEM_ID);
             st.setInt(1, itemID);
@@ -127,7 +127,7 @@ public class ItemManager {
         } catch (SQLException e) {
             e.printStackTrace();
         }
-        return ownerID == -1 ? null : UserManager.getUserByID(ownerID);
+        return ownerID;
     }
 
 
@@ -199,7 +199,7 @@ public class ItemManager {
     public static boolean addItemToDB(Item item) {
         try {
             PreparedStatement st = DBO.getPreparedStatement(INSERT_ITEM_QUERY, Statement.RETURN_GENERATED_KEYS);
-            st.setInt(1,item.getOwner().getUserID());
+            st.setInt(1,item.getOwnerID());
             st.setInt(2,item.getCategory().getId());
             st.setString(3,item.getDescription());
             st.setString(4,item.getName());
@@ -274,7 +274,7 @@ public class ItemManager {
      */
     private static Item parseItem(ResultSet rs) throws SQLException {
         return new Item(rs.getBigDecimal("id").intValue(),
-                        UserManager.getUserByID(rs.getInt("user_id")),
+                        rs.getBigDecimal("user_id").intValue(),
                         CategoryManager.getCategoryByID(rs.getInt("item_category_id")),
                         ImagesManager.getItemImagesByItemID(rs.getInt("id")),
                         rs.getString("name"),

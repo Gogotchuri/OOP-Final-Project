@@ -27,19 +27,19 @@ public class DealsManager {
      */
     public static Deal getDealByDealID(int dealID) {
 
-        User owner = UserManager.getUserByDealID(dealID);
+        int ownerID = UserManager.getUserIDByDealID(dealID);
         List<Item> ownedItems = ItemManager.getItemsByDealID(dealID);
         List<ItemCategory> wantedCategories = CategoryManager.getWantedCategoriesByDealID(dealID);
         ProcessStatus.Status dealStatus = StatusManager.getStatusIDByID("deals", dealID);
         Timestamp dealCreateDate = DateManager.getCreateDateByID("deals", dealID);
 
-        return (owner == null ||
+        return (ownerID == 0 ||
                  ownedItems == null ||
                   wantedCategories == null ||
                    dealStatus == null ||
                     dealCreateDate == null)
                 ?
-                null : new Deal(dealID, owner.getUserID(), ownedItems, wantedCategories, dealStatus, dealCreateDate);
+                null : new Deal(dealID, ownerID, ownedItems, wantedCategories, dealStatus, dealCreateDate);
     }
 
 

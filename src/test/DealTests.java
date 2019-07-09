@@ -36,11 +36,11 @@ public class DealTests {
                 "ne", "onemail", "111");
         User user2 = new User("two", "2", "t",
                 "wo", "twomail", "222");
-        Item item1 = new Item(1, user1, cat1, null, "sams s3",
+        Item item1 = new Item(1, user1.getUserID(), cat1, null, "sams s3",
                 "qaia", null, null);
-        Item item2 = new Item(2, user2, cat2, null, "sams s2",
+        Item item2 = new Item(2, user2.getUserID(), cat2, null, "sams s2",
                 "qaia", null, null);
-        Item item3 = new Item(3, user1, cat3, null, "macomputer",
+        Item item3 = new Item(3, user1.getUserID(), cat3, null, "macomputer",
                 "qaia", null, null);
 
         DeleteManager.emptyBase("deals");

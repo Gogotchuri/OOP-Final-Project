@@ -39,19 +39,19 @@ public class ImageTests {
     private static User u2 = new User(2,"king", "heat","lebron","james","ljame03", "6", null, null, null, time, time);
     private static final ItemCategory dummy = new ItemCategory(1, new ItemSerie("a"), new ItemType("b"), new ItemBrand("c"));
 
-    private static Item it1 = new Item(1, u1, dummy, null, "Samsung A20", "", time, time);
-    private static Item it2 = new Item(2, u1, dummy, null, "Hp laptop", "",time, time);
-    private static Item it3 = new Item(3, u2, dummy, null, "2016 finals trophy", "", time, time);
+    private static Item it1 = new Item(1, u1.getUserID(), dummy, null, "Samsung A20", "", time, time);
+    private static Item it2 = new Item(2, u1.getUserID(), dummy, null, "Hp laptop", "",time, time);
+    private static Item it3 = new Item(3, u2.getUserID(), dummy, null, "2016 finals trophy", "", time, time);
 
     private static final Image prof1 = new Image(u1.getUserID(),"levanisProfili");
     private static final Image prof2 = new Image(u2.getUserID(),"lebronisProfili");
 
-    private static final Image itemProf1 = new ItemImage("samsungProfile", it1.getOwner().getUserID(), it1.getItemID(), ImageCategories.ImageCategory.PROFILE);
-    private static final Image itemProf2 = new ItemImage("trophyProfile", it3.getOwner().getUserID(), it3.getItemID(), ImageCategories.ImageCategory.PROFILE);
+    private static final Image itemProf1 = new ItemImage("samsungProfile", it1.getOwnerID(), it1.getItemID(), ImageCategories.ImageCategory.PROFILE);
+    private static final Image itemProf2 = new ItemImage("trophyProfile", it3.getOwnerID(), it3.getItemID(), ImageCategories.ImageCategory.PROFILE);
 
-    private static final Image itemImg1 = new ItemImage("samsungFeatured1", it1.getOwner().getUserID(), it1.getItemID(), ImageCategories.ImageCategory.FEATURED);
-    private static final Image itemImg2 = new ItemImage("samsungFeatured2", it1.getOwner().getUserID(), it1.getItemID(), ImageCategories.ImageCategory.FEATURED);
-    private static final Image itemImg3 = new ItemImage("hpFeatured", it2.getOwner().getUserID(), it2.getItemID(), ImageCategories.ImageCategory.FEATURED);
+    private static final Image itemImg1 = new ItemImage("samsungFeatured1", it1.getOwnerID(), it1.getItemID(), ImageCategories.ImageCategory.FEATURED);
+    private static final Image itemImg2 = new ItemImage("samsungFeatured2", it1.getOwnerID(), it1.getItemID(), ImageCategories.ImageCategory.FEATURED);
+    private static final Image itemImg3 = new ItemImage("hpFeatured", it2.getOwnerID(), it2.getItemID(), ImageCategories.ImageCategory.FEATURED);
 
     private void emptyBase() {
         DeleteManager.delete("profile_images", "1", 1);
