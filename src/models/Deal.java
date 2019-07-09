@@ -13,7 +13,7 @@ public class Deal {
      * if user does not initializes it. */
 
     private int dealID;                          // 0
-    private User owner;                          // null
+    private int ownerID;                         // 0
     private List<Item> ownedItems;               // null
     private List<ItemCategory> wantedCategories; // null
     private ProcessStatus.Status status;         // null
@@ -23,21 +23,21 @@ public class Deal {
     /**
      * Main Constructor Of Deal
      * @param dealID - ID of Deal
-     * @param owner - Owner of Deal
+     * @param ownerID - Owner ID of Deal
      * @param ownedItems - Owned Items of Deal
      * @param wantedCategories - Wanted Categories of Deal
      * @param status - Deal Status
      * @param createDate - Deal's Create Date
      */
     public Deal(int dealID,
-                User owner,
+                int ownerID,
                 List<Item> ownedItems,
                 List<ItemCategory> wantedCategories,
                 ProcessStatus.Status status,
                 Timestamp createDate)
     {
         this.dealID = dealID;
-        this.owner = owner;
+        this.ownerID = ownerID;
         this.ownedItems = ownedItems;
         this.wantedCategories = wantedCategories;
         this.status = status;
@@ -47,14 +47,14 @@ public class Deal {
 
     /**
      * Constructor.
-     * @param owner - User which has this Deal
+     * @param ownerID - User which has this Deal
      * @param ownedItems - Owned Items of Deal
      * @param wantedCategories - Wanted Categories of Deal
      */
-    public Deal(User owner,
-                List<Item> ownedItems,
-                List<ItemCategory> wantedCategories) {
-        this(0, owner, ownedItems, wantedCategories, null, null);
+    public Deal(int ownerID,
+                 List<Item> ownedItems,
+                  List<ItemCategory> wantedCategories) {
+        this(0, ownerID, ownedItems, wantedCategories, null, null);
     }
 
 
@@ -67,11 +67,11 @@ public class Deal {
 
 
     /**
-     * @return Owner of the Deal.
-     *         If returned null that means that
+     * @return Owner's ID of the Deal.
+     *         If returned 0 that means that
      *         Deal's Owner is not initialized yet.
      */
-    public User getOwner() { return owner; }
+    public int getOwnerID() { return ownerID; }
 
 
     /**

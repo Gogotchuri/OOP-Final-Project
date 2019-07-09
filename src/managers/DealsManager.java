@@ -39,7 +39,7 @@ public class DealsManager {
                    dealStatus == null ||
                     dealCreateDate == null)
                 ?
-                null : new Deal(dealID, owner, ownedItems, wantedCategories, dealStatus, dealCreateDate);
+                null : new Deal(dealID, owner.getUserID(), ownedItems, wantedCategories, dealStatus, dealCreateDate);
     }
 
 
@@ -244,7 +244,7 @@ public class DealsManager {
                     Statement.RETURN_GENERATED_KEYS
                 );
 
-            statement.setInt(1, deal.getOwner().getUserID());
+            statement.setInt(1, deal.getOwnerID());
             statement.setInt(2, ProcessStatus.Status.ONGOING.getId());
 
 

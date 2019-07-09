@@ -116,7 +116,7 @@ public class DealsController extends Controller implements ResourceController {
             return;
         }
 
-        Deal deal = new Deal(user, ownedItems, wantedCategories);
+        Deal deal = new Deal(user.getUserID(), ownedItems, wantedCategories);
         deal.setDealID(DealsManager.storeDeal(deal));
 
         int dealID = deal.getDealID();
@@ -213,7 +213,7 @@ public class DealsController extends Controller implements ResourceController {
             sendError(404, "Deal not found!");
             return false;
         }
-        if(deal.getOwner().getUserID() != this.user.getUserID()){
+        if(deal.getOwnerID() != this.user.getUserID()){
             sendError(401, "Not authorized to edit this deal!");
             return false;
         }
