@@ -117,7 +117,7 @@ CREATE TABLE offered_cycles
     FOREIGN KEY (deal_id) REFERENCES deals(id) on delete cascade,
 
     cycle_id INT(6) UNSIGNED NOT NULL,
-    FOREIGN KEY (cycle_id) REFERENCES cycles(id)
+    FOREIGN KEY (cycle_id) REFERENCES cycles(id) on delete cascade
 );
 
 
