@@ -5,10 +5,7 @@ import controllers.front.DealsController.SearchCriteria;
 import controllers.front.DealsController.SearchCriteria.Criteria;
 import database.DatabaseAccessObject;
 import generalManagers.DeleteManager;
-import models.Deal;
-import models.Item;
-import models.ProcessStatus;
-import models.User;
+import models.*;
 import models.categoryModels.ItemCategory;
 
 import java.sql.*;
@@ -283,6 +280,9 @@ public class DealsManager {
      * @return true if Deal deleted successfully
      */
     public static boolean deleteDeal(int dealID) {
+        List<Cycle> ls = CycleManager.getCyclesByDealID(dealID);
+        for(Cycle c : ls)
+            CycleManager.deleteCycle(c.getCycleID());
         return DeleteManager.delete("deals", "id", dealID);
     }
 

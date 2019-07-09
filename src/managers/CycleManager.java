@@ -242,7 +242,6 @@ public class CycleManager {
      * @param cycleID - ID of Cycle in DB
      */
     public static boolean deleteCycle(int cycleID){
-        deleteOfferedCycles(cycleID);
         return DeleteManager.delete("cycles", "id", cycleID);
     }
 
