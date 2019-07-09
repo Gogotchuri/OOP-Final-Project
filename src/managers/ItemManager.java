@@ -8,10 +8,7 @@ import models.ItemImage;
 import models.User;
 import models.categoryModels.ItemCategory;
 
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
-import java.sql.SQLException;
-import java.sql.Timestamp;
+import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -201,7 +198,7 @@ public class ItemManager {
      */
     public static boolean addItemToDB(Item item) {
         try {
-            PreparedStatement st = DBO.getPreparedStatement(INSERT_ITEM_QUERY);
+            PreparedStatement st = DBO.getPreparedStatement(INSERT_ITEM_QUERY, Statement.RETURN_GENERATED_KEYS);
             st.setInt(1,item.getOwner().getUserID());
             st.setInt(2,item.getCategory().getId());
             st.setString(3,item.getDescription());
@@ -210,6 +207,13 @@ public class ItemManager {
             st.setTimestamp(5, t);
             st.setTimestamp(6, t);
             st.executeUpdate();
+
+            try (ResultSet generatedKeys = st.getGeneratedKeys()) {
+                if (generatedKeys.next()) {
+                    item.setItemID(generatedKeys.getInt(1));
+                } else
+                    throw new SQLException("Creating item failed, no ID obtained.");
+            }
         } catch (SQLException e) {
             e.printStackTrace();
             return false;

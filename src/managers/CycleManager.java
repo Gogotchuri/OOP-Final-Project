@@ -122,6 +122,7 @@ public class CycleManager {
             Cycle insertedCycle = insertCycle(cycle);
 
             Iterator<Deal> i = cycle.getDealsIterator();
+            if(i != null)
             while (i.hasNext())
                 insertCycleToOffered(i.next().getDealID(), insertedCycle.getCycleID());
 

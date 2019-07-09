@@ -56,6 +56,11 @@ public class Item implements Comparable<Item> {
      */
     public int getItemID() { return itemID; }
 
+    /**
+     * Updates item's id
+     */
+    public void setItemID(int id) { this.itemID = id; }
+
 
     /**
      * @return Owner of the Item
