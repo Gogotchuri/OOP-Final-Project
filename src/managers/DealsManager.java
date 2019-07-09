@@ -137,12 +137,12 @@ public class DealsManager {
             if (criteria == Criteria.USER_NAME) {
 
                 String userName = sc.getCriteriaValue(Criteria.USER_NAME);
-                queryBuilder.append(" AND u.user_name = ").append(userName).append(" \n");
+                queryBuilder.append(" AND u.user_name = \'").append(userName).append("\' \n");
 
             } else if (criteria == Criteria.CATEGORY_NAME) {
 
                 String category = sc.getCriteriaValue(Criteria.CATEGORY_NAME);
-                queryBuilder.append(" AND ic.name = ").append(category).append(" \n");
+                queryBuilder.append(" AND ic.name = \'").append(category).append("\' \n");
 
             } else if (criteria == Criteria.DEAL_CREATE_DATE) {
 
