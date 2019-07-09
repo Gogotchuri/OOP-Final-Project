@@ -177,11 +177,12 @@ public class CycleManager {
 
         PreparedStatement statement =
             DAO.getPreparedStatement (
-                "INSERT INTO offered_cycles (deal_id, cycle_id) VALUES (?, ?);"
+                "INSERT INTO offered_cycles (status_id, deal_id, cycle_id) VALUES (?, ?, ?);"
             );
 
-        statement.setInt(1, cycleDealID);
-        statement.setInt(2, cycleID);
+        statement.setInt(1, ProcessStatus.Status.ONGOING.getId());
+        statement.setInt(2, cycleDealID);
+        statement.setInt(3, cycleID);
 
         if (statement.executeUpdate() == 0)
             throw new SQLException("Creating Offered Cycle failed, no rows affected.");
