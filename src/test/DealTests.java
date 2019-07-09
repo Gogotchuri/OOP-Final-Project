@@ -29,6 +29,12 @@ public class DealTests {
     @Test
     public void setup(){
 
+        DeleteManager.emptyBase("offered_cycles");
+        DeleteManager.emptyBase("cycles");
+        DeleteManager.emptyBase("deals");
+        DeleteManager.emptyBase("users");
+        DeleteManager.emptyBase("items");
+
         ItemCategory cat1 = new ItemCategory(1, new ItemSerie("item1"), new ItemType("car"), new ItemBrand("toyota"));
         ItemCategory cat2 = new ItemCategory(1, new ItemSerie("item2"), new ItemType("fridge"), new ItemBrand("samsung"));
         ItemCategory cat3 = new ItemCategory(1, new ItemSerie("item3"), new ItemType("lolipop"), new ItemBrand("chupa-chups"));
@@ -36,19 +42,14 @@ public class DealTests {
                 "ne", "onemail", "111");
         User user2 = new User("two", "2", "t",
                 "wo", "twomail", "222");
+        UserManager.storeUser(user1);
+        UserManager.storeUser(user2);
         Item item1 = new Item(1, user1.getUserID(), cat1, null, "sams s3",
                 "qaia", null, null);
         Item item2 = new Item(2, user2.getUserID(), cat2, null, "sams s2",
                 "qaia", null, null);
         Item item3 = new Item(3, user1.getUserID(), cat3, null, "macomputer",
                 "qaia", null, null);
-
-        DeleteManager.emptyBase("deals");
-        DeleteManager.emptyBase("users");
-        DeleteManager.emptyBase("items");
-        DeleteManager.emptyBase("cycles");
-        UserManager.storeUser(user1);
-        UserManager.storeUser(user2);
 
         ItemManager.addItemToDB(item1);
         ItemManager.addItemToDB(item2);
@@ -60,7 +61,7 @@ public class DealTests {
         assertNotEquals(DealsManager.storeDeal(deal1), 0);
         assertNotEquals(DealsManager.storeDeal(deal2), 0);
 
-        assertNotEquals(DealsManager.getDealByDealID(deal1.getDealID()), null);/*
+        assertNotEquals(DealsManager.getDealByDealID(deal1.getDealID()), null);
         assertNotEquals(DealsManager.getDealByDealID(deal2.getDealID()), null);
 
         assertEquals(DealsManager.getDealsByUserID(user1.getUserID()).get(0).getDealID(), deal1.getDealID());
@@ -73,15 +74,16 @@ public class DealTests {
         DealsController.SearchCriteria sc1 = new DealsController.SearchCriteria();
         sc1.addCriteria(DealsController.SearchCriteria.Criteria.USER_NAME, "one");
         DealsController.SearchCriteria sc2 = new DealsController.SearchCriteria();
-        sc2.addCriteria(DealsController.SearchCriteria.Criteria.CATEGORY_NAME, "S2");
+        sc2.addCriteria(DealsController.SearchCriteria.Criteria.CATEGORY_NAME, "item1");
         assertEquals(DealsManager.getDealsBySearchCriteria(sc1).size(), 1);
+        System.out.println();
         assertEquals(DealsManager.getDealsBySearchCriteria(sc2).size(), 1);
 
         assertEquals(DealsManager.getClients(deal1.getDealID()).size(), 1);
         assertEquals(DealsManager.getClients(deal2.getDealID()).size(), 1);
 
         assertTrue(DealsManager.deleteDeal(deal1.getDealID()));
-        assertTrue(DealsManager.deleteDeal(deal2.getDealID()));*/
+        assertTrue(DealsManager.deleteDeal(deal2.getDealID()));
     }
 
 
