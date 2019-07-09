@@ -10,20 +10,11 @@ import java.util.Vector;
  * Class containing sequence of messages
  */
 public class Chat {
-    private int chatID; //-1
-    private Cycle cycle; //null
-    private Timestamp lastUpdateDate; //Need timestamp for exact time
-    private Vector<Message> messages; //default: empty vector
 
-
-    /**
-     * Constructor with only chat id and cycle
-     * @param chatID the id of the chat in DB
-     * @param cycle cycle which the chat is for
-     */
-    public Chat(int chatID, Cycle cycle){
-        this(chatID, cycle, null, null);
-    }
+    private int chatID;               // -1
+    private Cycle cycle;              // null
+    private Timestamp lastUpdateDate; // null
+    private Vector<Message> messages; // null
 
 
     /**
@@ -39,6 +30,25 @@ public class Chat {
         this.cycle = cycle;
         this.lastUpdateDate = (updateDate != null) ? new Timestamp(updateDate.getTime())
                 : new Timestamp((new Date()).getTime());
+    }
+
+
+    /**
+     * Constructor with only chat id and cycle
+     * @param chatID the id of the chat in DB
+     * @param cycle cycle which the chat is for
+     */
+    public Chat(int chatID, Cycle cycle){
+        this(chatID, cycle, null, null);
+    }
+
+
+    /**
+     * Constructor with only cycle
+     * @param cycle cycle which the chat is for
+     */
+    public Chat(Cycle cycle) {
+        this(-1, cycle);
     }
 
 

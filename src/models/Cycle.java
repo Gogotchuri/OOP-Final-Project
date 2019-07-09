@@ -32,7 +32,7 @@ public class Cycle {
      * @param cycleID - ID of a Cycle in DB
      */
     public Cycle(int cycleID) {
-        this(cycleID, null, new ArrayList<>());
+        this(cycleID, null, null);
     }
 
     /**

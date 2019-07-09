@@ -21,7 +21,7 @@ public class ChatManager {
     private static final String GET_MESSAGES_QUERY = "SELECT * FROM messages WHERE chat_id = ?;";
     private static final String INSERT_MESSAGE_QUERY = "INSERT INTO messages (chat_id," +
             " body, author_id, created_at) VALUES (?, ?, ?, ?);";
-    private static final String INSERT_CHAT_QUERY = "INSERT INTO chats (cycle_id, updated_at) VALUES(?, ?);";
+    private static final String INSERT_CHAT_QUERY = "INSERT INTO chats (cycle_id) VALUES(?);";
     private static DatabaseAccessObject DBO = DatabaseAccessObject.getInstance();
 
 
@@ -90,7 +90,6 @@ public class ChatManager {
         try {
             PreparedStatement st = DBO.getPreparedStatement(INSERT_CHAT_QUERY, Statement.RETURN_GENERATED_KEYS);
             st.setInt(1, chat.getCycle().getCycleID());
-            st.setTimestamp(2, chat.getLastUpdateDate());
             if (st.executeUpdate() == 0)
                 throw new SQLException("Creating chat failed, no rows affected.");
             try (ResultSet generatedKeys = st.getGeneratedKeys()) {

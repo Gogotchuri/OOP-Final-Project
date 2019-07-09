@@ -3,6 +3,7 @@ package managers;
 
 import database.DatabaseAccessObject;
 import generalManagers.DeleteManager;
+import models.Chat;
 import models.Cycle;
 import models.Deal;
 import models.ProcessStatus;
@@ -196,8 +197,9 @@ public class CycleManager {
 
 
     /**
+     * @param cycleID - ID of Cycle in DB
      * @param dealID - ID of Deal in DB
-     * @return Whether Cycles accepted or not
+     * @return Whether Offered Cycle accepted or not
      */
     public static boolean acceptCycle(int cycleID, int dealID) {
         try {
@@ -208,12 +210,28 @@ public class CycleManager {
                            " WHERE cycle_id = " + cycleID + " \n" +
                            "   AND deal_id = " + dealID + ";"
             );
-            return statement.executeUpdate() != 0;
+            if (statement.executeUpdate() == 0)
+                return false;
+
+            if (allAccepted(cycleID))
+                return ChatManager.addChatToDB(new Chat(new Cycle(cycleID)));
+
+            return true;
         }
         catch (SQLException e) {
             e.printStackTrace();
             return false;
         }
+    }
+
+
+    /**
+     * TODO
+     * @param cycleID - ID of Cycle in DB
+     * @return Whether Cycle accepted or not
+     */
+    private static boolean allAccepted(int cycleID) {
+        return false;
     }
 
 
