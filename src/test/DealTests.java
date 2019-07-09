@@ -36,8 +36,8 @@ public class DealTests {
         DeleteManager.emptyBase("items");
 
         ItemCategory cat1 = new ItemCategory(1, new ItemSerie("item1"), new ItemType("car"), new ItemBrand("toyota"));
-        ItemCategory cat2 = new ItemCategory(1, new ItemSerie("item2"), new ItemType("fridge"), new ItemBrand("samsung"));
-        ItemCategory cat3 = new ItemCategory(1, new ItemSerie("item3"), new ItemType("lolipop"), new ItemBrand("chupa-chups"));
+        ItemCategory cat2 = new ItemCategory(2, new ItemSerie("item2"), new ItemType("fridge"), new ItemBrand("samsung"));
+        ItemCategory cat3 = new ItemCategory(3, new ItemSerie("item3"), new ItemType("lolipop"), new ItemBrand("chupa-chups"));
         User user1 = new User("one", "1", "o",
                 "ne", "onemail", "111");
         User user2 = new User("two", "2", "t",
@@ -57,7 +57,7 @@ public class DealTests {
         Deal deal1 = new Deal(user1.getUserID(), new ArrayList<>(Arrays.asList(item1, item2)),
                 new ArrayList<>(Arrays.asList(cat3)));
         Deal deal2 = new Deal(user2.getUserID(), new ArrayList<>(Arrays.asList(item3)),
-                new ArrayList<>(Arrays.asList(cat2, cat3)));
+                new ArrayList<>(Arrays.asList(cat2, cat1)));
         assertNotEquals(DealsManager.storeDeal(deal1), 0);
         assertNotEquals(DealsManager.storeDeal(deal2), 0);
 
@@ -74,9 +74,8 @@ public class DealTests {
         DealsController.SearchCriteria sc1 = new DealsController.SearchCriteria();
         sc1.addCriteria(DealsController.SearchCriteria.Criteria.USER_NAME, "one");
         DealsController.SearchCriteria sc2 = new DealsController.SearchCriteria();
-        sc2.addCriteria(DealsController.SearchCriteria.Criteria.CATEGORY_NAME, "item1");
+        sc2.addCriteria(DealsController.SearchCriteria.Criteria.CATEGORY_NAME, cat1.getSerie().getName());
         assertEquals(DealsManager.getDealsBySearchCriteria(sc1).size(), 1);
-        System.out.println();
         assertEquals(DealsManager.getDealsBySearchCriteria(sc2).size(), 1);
 
         assertEquals(DealsManager.getClients(deal1.getDealID()).size(), 1);
