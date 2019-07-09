@@ -64,7 +64,7 @@ CREATE TABLE items
     item_category_id INT(6) UNSIGNED NOT NULL,
     FOREIGN KEY (item_category_id) REFERENCES item_categories(id),
 
-    description VARCHAR(512),
+    description VARCHAR(512) DEFAULT '',
     name VARCHAR(32) NOT NULL,
 
     created_at TIMESTAMP DEFAULT now(),

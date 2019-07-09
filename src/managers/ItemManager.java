@@ -35,7 +35,7 @@ public class ItemManager {
 
 
     /**
-     * @param itemID - ID of Deal in DB
+     * @param itemID - ID of Item in DB
      * @return Fully Filled Item object
      *         Or null if Item with such ID does not exists
      */
@@ -60,6 +60,23 @@ public class ItemManager {
                       updateDate == null)
                 ?
                 null : new Item(itemID, owner, category, images, name, description, createDate, updateDate);
+    }
+
+
+    /**
+     * @param itemIDs - List of IDs of Item in DB
+     * @return List of Fully Filled Item objects
+     *         Or null if some error happens
+     */
+    public static List<Item> getItemsByItemIDs(List<Integer> itemIDs) {
+        List<Item> items = new ArrayList<>(itemIDs.size());
+        for (Integer itemID : itemIDs) {
+            Item item = getItemByID(itemID);
+            if (item == null)
+                return null;
+            items.add(item);
+        }
+        return items;
     }
 
 
@@ -353,4 +370,5 @@ public class ItemManager {
     public static List <ItemCategory> getOwnedItemCategories(int dealID) {
         return null;
     }
+
 }

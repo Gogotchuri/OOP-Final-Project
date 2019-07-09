@@ -34,7 +34,7 @@ public class CategoryManager {
      * @return Fully Filled Category object
      *         Or null if Category with such ID does not exists
      */
-    //TODO : NOT TESTED YET
+    //TODO: Levan daamtavre es
     public static ItemCategory getCategoryByID(int categoryID) {
         ItemCategory category = null;
 
@@ -51,6 +51,24 @@ public class CategoryManager {
         }
         return null;
     }
+
+
+    /**
+     * @param itemCategoryIDs - List of IDs of ItemCategory in DB
+     * @return List of Fully Filled ItemCategory objects
+     *         Or null if some error happens
+     */
+    public static List<ItemCategory> getItemCategoriesByItemCategoryIDs(List<Integer> itemCategoryIDs) {
+        List<ItemCategory> itemCategories = new ArrayList<>(itemCategoryIDs.size());
+        for (Integer itemCategoryID : itemCategoryIDs) {
+            ItemCategory itemCategory = getCategoryByID(itemCategoryID);
+            if (itemCategory == null)
+                return null;
+            itemCategories.add(itemCategory);
+        }
+        return itemCategories;
+    }
+
 
     /**
      * @param dealID - ID of Deal in DB
@@ -299,4 +317,6 @@ public class CategoryManager {
         }
         return false;
     }
+
+
 }
