@@ -34,7 +34,6 @@ public class CategoryManager {
      * @return Fully Filled Category object
      *         Or null if Category with such ID does not exists
      */
-    //TODO: Levan daamtavre es
     public static ItemCategory getCategoryByID(int categoryID) {
         ItemCategory category = null;
 

@@ -6,7 +6,10 @@ import models.Image;
 import models.Item;
 import models.ItemImage;
 import models.User;
+import models.categoryModels.ItemBrand;
 import models.categoryModels.ItemCategory;
+import models.categoryModels.ItemSerie;
+import models.categoryModels.ItemType;
 
 import java.sql.*;
 import java.util.ArrayList;
@@ -360,19 +363,8 @@ public class ItemManager {
      * @return List of categories wanted in one deal
      */
     public static List <ItemCategory> getWantedItemCategories(int dealID) {
-        String query = JOIN_CATEGORIES + " JOIN wanted_items s.id = on wanted_items.deal_id" +
-                " WHERE wanted_items.deal_id = ?;";
+        String query = JOIN_CATEGORIES + " JOIN wanted_items w on s.id = w.item_category_id" +
+                " WHERE w.deal_id = ?;";
         return getItemCategories(dealID, query);
     }
-
-    /**
-     *
-     * @param dealID Id of the deal
-     * @return List of categories owned in one deal
-     */
-    //TODO : გვჭირდება ეს საერთოდ?
-    public static List <ItemCategory> getOwnedItemCategories(int dealID) {
-        return null;
-    }
-
 }
