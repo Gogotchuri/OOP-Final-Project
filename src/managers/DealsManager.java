@@ -120,7 +120,7 @@ public class DealsManager {
     public static List<Deal> getDealsBySearchCriteria(SearchCriteria sc) {
 
         StringBuilder queryBuilder = new StringBuilder (
-            "SELECT d.id AS id_of_deal \n" +
+            "SELECT DISTINCT d.id AS id_of_deal \n" +
             "  FROM deals d \n" +
             "  JOIN users u ON (d.user_id = u.id) \n" +
             "  JOIN wanted_items wi ON (d.id = wi.deal_id) \n" +
