@@ -132,7 +132,6 @@ public class UserManager {
     }
 
     /**
-     * TODO: Krawa
      * Should Store given user to database.
      * return true is user has been store successfully,
      * otherwise (if query violated any constraint returns false)
