@@ -28,15 +28,37 @@ public class DealsManager {
         List<Item> ownedItems = ItemManager.getItemsByDealID(dealID);
         List<ItemCategory> wantedCategories = CategoryManager.getWantedCategoriesByDealID(dealID);
         ProcessStatus.Status dealStatus = StatusManager.getStatusIDByID("deals", dealID);
+        String title = getTitleByDealID(dealID);
         Timestamp dealCreateDate = DateManager.getCreateDateByID("deals", dealID);
 
         return (ownerID == 0 ||
                  ownedItems == null ||
                   wantedCategories == null ||
                    dealStatus == null ||
-                    dealCreateDate == null)
+                    title == null ||
+                     dealCreateDate == null)
                 ?
-                null : new Deal(dealID, ownerID, ownedItems, wantedCategories, dealStatus, dealCreateDate);
+                null : new Deal(dealID, ownerID, ownedItems, wantedCategories, dealStatus, title, dealCreateDate);
+    }
+
+    /**
+     * @param dealID ID of Deal in DB
+     * @return title of the deal, may return null, in that case, it's empty
+     */
+    private static String getTitleByDealID(int dealID) {
+        String query = "SELECT title FROM deals where id = ?;";
+
+        try {
+            PreparedStatement st = DAO.getPreparedStatement(query);
+            st.setInt(1, dealID);
+            ResultSet set = st.executeQuery();
+
+            if(set.next()) return set.getString(1);
+
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return null;
     }
 
 

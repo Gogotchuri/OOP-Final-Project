@@ -14,6 +14,7 @@ public class Deal {
 
     private int dealID;                          // 0
     private int ownerID;                         // 0
+    private String title;                        // null
     private List<Item> ownedItems;               // null
     private List<ItemCategory> wantedCategories; // null
     private ProcessStatus.Status status;         // null
@@ -34,6 +35,7 @@ public class Deal {
                 List<Item> ownedItems,
                 List<ItemCategory> wantedCategories,
                 ProcessStatus.Status status,
+                String title,
                 Timestamp createDate)
     {
         this.dealID = dealID;
@@ -41,6 +43,7 @@ public class Deal {
         this.ownedItems = ownedItems;
         this.wantedCategories = wantedCategories;
         this.status = status;
+        this.title = title;
         this.createDate = createDate;
     }
 
@@ -54,7 +57,7 @@ public class Deal {
     public Deal(int ownerID,
                  List<Item> ownedItems,
                   List<ItemCategory> wantedCategories) {
-        this(0, ownerID, ownedItems, wantedCategories, null, null);
+        this(0, ownerID, ownedItems, wantedCategories, null, "", null);
     }
 
 
@@ -89,6 +92,11 @@ public class Deal {
      */
     public List<ItemCategory> getWantedCategories() { return wantedCategories; }
 
+    /**
+     * @return Title of the deal
+     *         If empty string is returned, means user did not name it
+     */
+    public String getTitle() { return title; }
 
     /**
      * @return Deal Status
