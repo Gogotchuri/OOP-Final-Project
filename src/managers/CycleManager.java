@@ -3,6 +3,8 @@ package managers;
 
 import database.DatabaseAccessObject;
 import generalManagers.DeleteManager;
+import generalManagers.UpdateForm;
+import generalManagers.UpdateManager;
 import models.Chat;
 import models.Cycle;
 import models.Deal;
@@ -210,15 +212,17 @@ public class CycleManager {
             PreparedStatement statement =
                 DAO.getPreparedStatement (
                     "UPDATE offered_cycles \n" +
-                           "   SET status_id = " + ProcessStatus.Status.ONGOING + " \n" +
+                           "   SET status_id = " + ProcessStatus.Status.COMPLETED.getId() + " \n" +
                            " WHERE cycle_id = " + cycleID + " \n" +
                            "   AND deal_id = " + dealID + ";"
             );
             if (statement.executeUpdate() == 0)
                 return false;
 
-            if (allAccepted(cycleID))
-                return ChatManager.addChatToDB(new Chat(new Cycle(cycleID)));
+            if (allAccepted(cycleID)) {
+                return updateCycleStatus(cycleID, ProcessStatus.Status.ONGOING.getId()) &&
+                        ChatManager.addChatToDB(new Chat(new Cycle(cycleID)));
+            }
 
             return true;
         }
@@ -228,14 +232,38 @@ public class CycleManager {
         }
     }
 
+    /**
+     * Updates cycle's status in database
+     * @param cycleID
+     * @param statusID
+     * @return true if successful
+     */
+    private static boolean updateCycleStatus(int cycleID, int statusID){
+        UpdateForm uf = new UpdateForm("cycles", cycleID);
+        uf.addUpdate("status_id", statusID);
+        return UpdateManager.update(uf);
+    }
+
 
     /**
-     * TODO
      * @param cycleID - ID of Cycle in DB
-     * @return Whether Cycle accepted or not
+     * @return Whether All of Users accepted Cycle or not
      */
     private static boolean allAccepted(int cycleID) {
-        return false;
+        try {
+            PreparedStatement statement =
+                DAO.getPreparedStatement (
+                    "SELECT 1 \n" +
+                           "  FROM offered_cycles \n" +
+                           " WHERE cycle_id = " + cycleID + " \n" +
+                           "   AND status_id = " + ProcessStatus.Status.WAITING.getId() + ";"
+                );
+            return !statement.executeQuery().next();
+        }
+        catch (SQLException e) {
+            e.printStackTrace();
+            return false;
+        }
     }
 
 
