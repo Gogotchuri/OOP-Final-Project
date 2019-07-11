@@ -1,0 +1,317 @@
+/*General*/
+.footer{
+    padding: 1.2em;
+    background-color: #232F3E;
+    margin-top: 2px;
+}
+
+.main-footer{
+    text-align: right;
+    color: wheat;
+}
+
+.main-footer > span{
+    font-size: calc(0.8em + 0.6vw);
+}
+
+/* /General*/
+
+/*Deals Page Styling*/
+.deals{
+    display: grid;
+    margin-top: 1.5em;
+    grid-template-columns: repeat(4, 1fr);
+    grid-auto-rows: auto;
+    grid-gap: 1em; 
+    margin-inline: 8%;
+}
+
+.deals > div{
+    background: #eee;
+    padding: 2px;
+}
+
+.deals > .card > .card-title {
+    font-size: calc(0.85em + 0.6vw);
+}
+
+.deals > .card > .card-text {
+    font-size: calc(0.65em + 0.5vw);
+}
+
+
+.pagination-box{
+    border-top: 2px solid #ddd;
+    text-align: center;
+    padding: 10px 14px !important;
+    margin-top: 12px;
+    border-bottom: 2px solid #ddd;
+}
+
+.pagination{
+    display: inline-block;
+}
+
+.pagination > a {
+    color: #0a0023;
+    padding: 5px 10px;
+    text-decoration: none !important;
+    transition: background-color .4s;
+    border: 1px solid #ddd;
+}
+
+.pagination > a.selected {
+    color: white;
+    background-color: cornflowerblue;
+    cursor: context-menu;
+}
+
+.pagination > a.unselectable {
+    cursor: context-menu;
+    background: #838383;
+}
+
+.pagination a:hover:not(.selected .unselectable) {
+    background-color: #ddd;
+}
+
+
+@media(max-width:1000px){
+    .deals{
+        grid-template-columns: repeat(3, 1fr);
+        grid-auto-rows: auto;
+        margin-top: 1.2em;
+    }
+}
+
+@media(max-width:768px){
+    .deals{
+        grid-template-columns: repeat(2, 1fr);
+        grid-auto-rows: auto;
+        margin-inline: 10%;
+        margin-top: 1em;
+    }
+}
+
+@media(max-width:376px){
+    .deals{
+        grid-template-columns: repeat(1, 1fr);
+        grid-auto-rows: auto;
+        margin-inline: 10%;
+        margin-top: 1em;
+    }
+}
+/* /Deals Page Styling*/
+
+
+/*Chats Page*/
+.chats-container{
+    display: grid;
+    margin-top: 1.5em;
+    grid-template-columns: 1fr 2fr 1fr;
+    grid-auto-rows: auto;
+    height: 88vh;
+}
+
+.chats-container > div{
+    border-right: solid;
+    border-width: 1px;
+}
+
+.chats-container > div > div.col-header{
+    text-align: center;
+}
+
+.chats-container > div > div.col-header > h5{
+    text-align: center;
+    padding-bottom: 10px;
+    border-bottom: solid;
+    border-width: 1px
+}
+
+/*Chats list of chats column*/
+.chats-container > div.chats{
+    display: grid;
+    grid-template-rows: 1fr 16fr;
+    overflow-y: auto;
+}
+
+.chats-container > div.chats > div.chats-list{
+    display:grid;
+    grid-template-rows: repeat(10, 1fr);
+    grid-row-gap: 10px;
+    overflow-y: scroll;
+}
+
+.chats-container > div.chats > div.chats-list > div.chat-thumbnail{
+    display: grid;
+    grid-template-columns: 1fr 3fr;
+    grid-gap: 5px;
+    height: 5em;
+    border: 1px solid;
+    margin-left: 3px;
+    cursor: pointer;
+    background-color: #eee;
+}
+
+.chats-container > div.chats > div.chats-list
+> div.chat-thumbnail > div.thumbnail-body > h5{
+    font-size: calc(0.8vw + 0.7em);
+    font-weight: bold;
+}
+
+.chats-container > div.chats > div.chats-list
+> div.chat-thumbnail > div.thumbnail-body > p{
+    font-size: calc(0.5vw + 0.5em);
+    font-style: italic;
+}
+
+.chats-container > div.chats > div.chats-list > div.chat-thumbnail > img{
+    border-radius: 50%;
+    height: 4.38em;
+}
+
+.chats-container > div.parameters{
+    display: grid;
+    grid-template-rows: 1fr 16fr;
+}
+/*!!Chats list of chats column!!*/
+
+/*Conversation column*/
+
+.chats-container > div.conversation{
+    display: grid;
+    grid-template-rows: 1fr 16fr 4fr;
+    overflow-y: auto;
+}
+
+.chats-container > div.conversation > div.messages{
+    display:grid;
+    grid-template-rows: repeat(6, 1fr);
+    grid-row-gap: 10px;
+    overflow-y: scroll;
+}
+
+.chats-container > div.conversation > div.messages > div{
+    display: grid;
+    grid-template-columns: 1fr 3fr 3fr 3fr 1fr;
+    grid-gap: 5px;
+    height: 7em;
+    margin-left: 3px;
+}
+
+.chats-container > div.conversation > div.messages > div.own-message >img{
+    grid-column-start: 5;
+    grid-column-end: 5;
+    height: 4em;
+}
+
+.chats-container > div.conversation > div.messages > div.message >img{
+    height: 4em;
+}
+
+div.messages div.own-message > div.message-bubble {
+    grid-row-start: 1;
+    grid-column-start: 3;
+    grid-column-end: 5;
+    padding-left: 7px;
+    height: 5em;
+    position: relative;
+    background: bisque;
+    border-radius: .4em;
+}
+
+div.messages div.own-message > div.message-bubble:after {
+    content: '';
+    position: absolute;
+    right: 0;
+    top: 20%;
+    border: 12px solid transparent;
+    border-left-color: bisque;
+    border-right: 0;
+    border-bottom: 0;
+    margin-top: 0;
+    margin-right: -12px;
+}
+
+div.messages div.message > div.message-bubble{
+    grid-column-start: 2;
+    grid-column-end: 4;
+    padding-left: 7px;
+    height: 5em;
+    position: relative;
+    background: aquamarine;
+    border-radius: .4em;
+}
+
+
+div.messages div.message > div.message-bubble:after {
+    content: '';
+    position: absolute;
+    left: 0;
+    top: 20%;
+    border: 12px solid transparent;
+    border-right-color: aquamarine;
+    border-left: 0;
+    border-bottom: 0;
+    margin-top: 0;
+    margin-left: -12px;
+}
+
+
+div.messages div.message-bubble{
+    display: grid;
+    grid-template-rows: 1fr 6fr 1fr;
+}
+
+div.messages .message-author{
+    margin-right: 5px;
+    font-style: italic;
+    font-size: calc(0.4em + 0.5vw);
+    font-weight: bold;
+}
+
+div.messages .message-date{
+    margin-right: 5px;
+    font-style: italic;
+    font-size: calc(0.35em + 0.5vw);
+    font-weight: lighter;
+}
+
+div.messages .message-text{
+    font-size: calc(0.5em + 0.5vw);
+    font-weight: normal;
+}
+div.messages div.message .message-author{
+    text-align: left;
+}
+
+div.messages div.own-message .message-author{
+    text-align: right;
+}
+
+div.messages div.message .message-date{
+    text-align: right;
+}
+
+div.messages div.own-message .message-date{
+    text-align: left;
+}
+/*input field*/
+.chats-container > div.conversation > div.message-send{
+    border-top: solid;
+    border-width: 1px;
+    padding: 5px;
+}
+
+.chats-container > div.conversation > div.message-send > textarea{
+    width: 100%
+}
+
+.chats-container > div.conversation > div.message-send > input.send-btn{
+    margin-left: 90%;
+    border-radius: 20%;
+}
+/*!!Conversation column*/
+
+/*!chats*/

@@ -1,8 +1,6 @@
 package servlets.user;
 
 import controllers.front.AuthController;
-import middlewares.AuthenticatedUser;
-import models.User;
 
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
@@ -13,9 +11,15 @@ import java.io.IOException;
 
 @WebServlet(urlPatterns = {"/logout"})
 public class LogoutServlet extends HttpServlet {
+
+    @Override
+    protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+        doPost(req, resp);
+    }
+
     @Override
     protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-        if((new AuthenticatedUser(req, resp).unauthenticated())) return;
+//        if((new AuthenticatedUser(req, resp).unauthenticated())) return;
         //If logged in, logout
         (new AuthController(req, resp, this)).logout();
 

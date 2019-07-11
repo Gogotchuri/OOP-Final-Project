@@ -1,100 +1,139 @@
+
 package models;
 
+import models.categoryModels.ItemCategory;
+
 import java.sql.Timestamp;
-import java.util.ArrayList;
-import java.util.Date;
 import java.util.Iterator;
 import java.util.List;
 
-/**
- * Class representing a single item
- */
-public class Item {
+public class Item implements Comparable<Item> {
 
-    private int userId, id;
-    private Category category;
-    private List<Image> images;
-    private String name, description;
-    private Timestamp createdAt, updatedAt;
+
+    /* Comments means default values
+     * if user does not initializes it. */
+
+    private int itemID;               // 0
+    private int ownerID;              // 0
+    private ItemCategory category;    // null
+    private List<ItemImage> images;   // null
+    private String name, description; // null
+    private Timestamp createDate;     // null
+    private Timestamp updateDate;     // null
 
 
     /**
-     * Constructor of an item
-     * @param createdAt Date, when item was created
-     * @param name Name of the item
-     * @param description Description of the item
+     * Main Constructor
+     * @param itemID - ID of Item in DB
+     * @param ownerID - Owner ID of the Item
+     * @param category - Category of the Item
+     * @param images - List of Images of the Item
+     * @param name - Name of the Item
+     * @param description - Description of the Item
      */
-    public Item(int id, int userId, String name, String description, Category category, Date createdAt) {
-        this.userId = userId;
-        this.id = id;
+    public Item (int itemID,
+                  int ownerID,
+                   ItemCategory category,
+                    List<ItemImage> images,
+                     String name,
+                      String description,
+                       Timestamp createDate,
+                        Timestamp updateDate)
+    {
+        this.itemID = itemID;
+        this.ownerID = ownerID;
+        this.category = category;
+        this.images = images;
         this.name = name;
         this.description = description;
-        this.createdAt = new Timestamp(createdAt.getTime());
-        this.category = category;
-        images = new ArrayList<Image>();
+        this.createDate = createDate;
+        this.updateDate = updateDate;
     }
 
-    /**
-     * @return Name of the item
-     */
-    public String getName() {
-        return name;
-    }
 
     /**
-     * @return Description of the item
+     * @return ID of Item in DB
      */
-    public String getDescription() {
-        return description;
-    }
+    public int getItemID() { return itemID; }
 
     /**
-     * @return Category of the item
+     * Updates item's id
      */
-    public Category getCategory() { return category; }
+    public void setItemID(int id) { this.itemID = id; }
+
 
     /**
-     * @return Images of the item
+     * @return Owner's ID of the Item
      */
-    public Iterator<Image> getImages() {
+    public int getOwnerID() { return ownerID; }
+
+
+    /**
+     * @return Category of the Item
+     */
+    public ItemCategory getCategory() { return category; }
+
+
+    /**
+     * @return List of Images of the Item
+     */
+    public List<ItemImage> getImages() { return images; }
+
+
+    /**
+     * @return Iterator of the images
+     */
+    public Iterator<ItemImage> getImagesIterator() {
         return images.iterator();
     }
 
+
     /**
-     * @return Id of the user
+     * @return Name of the Item
      */
-    public int getUserId() {
-        return userId;
+    public String getName() { return name; }
+
+
+    /**
+     * @return Description of the Item
+     */
+    public String getDescription() { return description; }
+
+
+    /**
+     * @return Deal's Create Date
+     */
+    public Timestamp getCreateDate() { return createDate; }
+
+
+    /**
+     * @return Deal's Update Date
+     */
+    public Timestamp getUpdateDate() { return updateDate; }
+
+
+    /**
+     * !!! Item ID must be Initialized for correct comparing !!!
+     * @param other Passed item
+     * @return Whether two items are equal or not
+     */
+    public boolean equals(Object other) {
+
+        if (this == other) return true;
+        if (!(other instanceof Item)) return false;
+
+        Item otherItem = (Item) other;
+
+        return itemID == otherItem.itemID;
     }
 
-    /**
-     * @return Id of the item
-     */
-    public int getItemId() { return id; }
-
-    /**
-     * Adds an item to the list of items
-     * @param image Image of an item
-     */
-    public void addImage(Image image) {
-        images.add(image);
+    @Override
+    public int compareTo(Item o) {
+        return name.compareTo(o.getName());
     }
 
-    /**
-     * Updates date of an item
-     * @param updatedAt Date, when item was updated
-     */
-    public void updateDate(Date updatedAt) {
-        this.updatedAt.setTime(updatedAt.getTime());
+    @Override
+    public String toString() {
+        return name;
     }
-
-    /**
-     * @return Date, when item was created
-     */
-    public Timestamp getCreatedAt() { return createdAt; }
-
-    /**
-     * @return Date, when item was updated
-     */
-    public Timestamp getUpdatedAt() { return updatedAt; }
 }

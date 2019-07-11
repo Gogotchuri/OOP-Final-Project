@@ -26,7 +26,6 @@ public class DealServlet extends HttpServlet {
 
         int dealID;
         try { dealID = Integer.parseInt(request.getParameter("id")); }
-        //უბრალოდ idც წყოფნის, იგულისხმება წინ რომ დიალისაა. რაც მოკლე მით უკეთესი და ლამაზი
         catch (NumberFormatException e) {
             response.sendError(HttpServletResponse.SC_NOT_FOUND,
                     "This address should be called, with numeric parameter \"id\"!");

@@ -32,7 +32,14 @@ public class DealCreatorServlet extends HttpServlet {
 
 
 	/**
-	 Checks whenever entered data satisfies deal creating rules.
+	 Checks whenever entered data satisfies deal creating rules:
+
+	 Parameters should be type of:
+	 item_id = 1 & item_id = 2 & wanted_id = 3 & wanted_id = 4
+	 that means that
+	 with items with id = 1 and 2 user wants to create Deal
+	 and exchange that items into items with category 3 and 4
+
 	 If satisfies, creates new deal.
 
      returned html:

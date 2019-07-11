@@ -31,24 +31,13 @@ public class DealsServlet extends HttpServlet {
          by 'request' object for indexing deals.
          */
         SearchCriteria sc = new SearchCriteria();
-
-
         Enumeration<String> criteria = request.getParameterNames();
 
         while (criteria.hasMoreElements()) {
             String criteriaName = criteria.nextElement();
             Criteria aCriteria = Criteria.getCriteria(criteriaName);
 
-            if (aCriteria == null) {
-                /*TODO
-                !!!მგონი არ უნდა ერორი აქ, პროსტა თუ არ გამოატანს ვიკიდებთ კრიტერიუმს
-                    და მაგის გარეშე გავფილტროთ. ვაფშე რომ არ გამოატანოს ეგეც მოსული უნდა იყოს
-                    ვინაიდან ტიპი რომ შემოვა პირდაპირ მაგ ლინკზე, ყველა გამოქვეყნებული დიალი უნდა მიიღოს!!!
-                 Such Criteria does not exists.
-                 Return error page.
-                 */
-                return;
-            }
+            if (aCriteria == null) continue;
 
             sc.addCriteria(aCriteria, request.getParameter(criteriaName));
         }

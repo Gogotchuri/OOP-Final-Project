@@ -2,6 +2,7 @@
 package servlets.front;
 
 import controllers.front.HomeController;
+
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
@@ -24,6 +25,9 @@ public class HomeServlet extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
         throws ServletException, IOException {
+//        request.getSession().setAttribute("user",
+//                new User(1,"LG","password","Levan",
+//                        "Gelashvili", "lgela17", "555"));
         new HomeController(request, response, this).index();
     }
 }
