@@ -14,14 +14,14 @@ import javax.websocket.server.ServerEndpoint;
 import java.io.IOException;
 import java.rmi.ServerException;
 
-@ServerEndpoint(value="/user/chats/{chat_id}/{token}", encoders = {MessageEncoder.class}, decoders = {MessageDecoder.class})
+@ServerEndpoint(value="/user/chats/{chat_id}/{username}", encoders = {MessageEncoder.class}, decoders = {MessageDecoder.class})
 public final class ChatEndpoint {
     private static final String USER_KEY = "user";
     private static final String SESSION_CONTROLLER_KEY = "ChatSessionController";
     @OnOpen
-    public void onOpen(@PathParam("chat_id")final int chat_id, @PathParam("token") final String token,final Session session) throws Exception {
+    public void onOpen(@PathParam("chat_id")final int chat_id, @PathParam("username") final String username,final Session session) throws Exception {
         System.out.println("OPEN! for " + chat_id);
-        User user = UserManager.getUserByUsername(token);
+        User user = UserManager.getUserByUsername(username);
 
         if(user == null) throw new AuthenticationException("User authentication failed!");
         else session.getUserProperties().put(USER_KEY, user);
@@ -31,14 +31,8 @@ public final class ChatEndpoint {
 
         try {
             session.getUserProperties().put(SESSION_CONTROLLER_KEY, csc);
-            session.getBasicRemote().sendText("{\"body\":\"Endpoint OPEN!\"}");
         } catch (Exception e) {
             e.printStackTrace();
-            try {
-                session.getBasicRemote().sendText("Endpoint is not open!");
-            } catch (IOException ex) {
-                ex.printStackTrace();
-            }
         }
     }
 
