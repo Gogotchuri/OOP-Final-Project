@@ -146,7 +146,8 @@ public class CycleManager {
                 Statement.RETURN_GENERATED_KEYS
             );
 
-        statement.setInt(1, ProcessStatus.Status.ONGOING.getId());
+        //Freshly created cycle should be waiting for acceptance
+        statement.setInt(1, ProcessStatus.Status.WAITING.getId());
 
         if (statement.executeUpdate() == 0)
             throw new SQLException("Creating Cycle failed, no rows affected.");
@@ -156,7 +157,7 @@ public class CycleManager {
             if (generatedKeys.next()) {
                 insertedCycle = new Cycle (
                         generatedKeys.getInt(1),
-                        ProcessStatus.Status.ONGOING,
+                        ProcessStatus.Status.WAITING,
                         cycle.getDeals()
                 );
                 cycle.setCycleID(insertedCycle.getCycleID());
@@ -180,7 +181,8 @@ public class CycleManager {
                 "INSERT INTO offered_cycles (status_id, deal_id, cycle_id) VALUES (?, ?, ?);"
             );
 
-        statement.setInt(1, ProcessStatus.Status.ONGOING.getId());
+
+        statement.setInt(1, ProcessStatus.Status.WAITING.getId());
         statement.setInt(2, cycleDealID);
         statement.setInt(3, cycleID);
 
@@ -208,7 +210,7 @@ public class CycleManager {
             PreparedStatement statement =
                 DAO.getPreparedStatement (
                     "UPDATE offered_cycles \n" +
-                           "   SET status_id = " + ProcessStatus.Status.COMPLETED + " \n" +
+                           "   SET status_id = " + ProcessStatus.Status.ONGOING + " \n" +
                            " WHERE cycle_id = " + cycleID + " \n" +
                            "   AND deal_id = " + dealID + ";"
             );

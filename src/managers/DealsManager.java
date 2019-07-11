@@ -182,12 +182,9 @@ public class DealsManager {
 
 
     /**
-     Returns list of deals whose
-     Wanted item categories
-     are equal of
-     'deal's Owned item categories
-     Returns at least empty list
-     Or null if some error happens
+     * Returns list of deals whose Wanted item categories are equal of
+     *'deal's Owned item categories Returns at least empty list
+     * Or null if some error happens
      */
     public static List<Deal> getClients(int dealID) {
 
@@ -264,7 +261,8 @@ public class DealsManager {
                 );
 
             statement.setInt(1, deal.getOwnerID());
-            statement.setInt(2, ProcessStatus.Status.ONGOING.getId());
+            //Freshly created deal should be ongoing
+            statement.setInt(2, ProcessStatus.Status.WAITING.getId());
 
 
             if (statement.executeUpdate() == 0)
