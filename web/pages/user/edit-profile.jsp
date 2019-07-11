@@ -1,4 +1,4 @@
-<%--
+<%@ page import="servlets.RoutingConstants" %><%--
   Created by IntelliJ IDEA.
   User: gogotchuri
   Date: 6/21/19
@@ -17,7 +17,9 @@
 <jsp:include page="/pages/partials/navbar.jsp"/>
 <%--Page Content--%>
 <div>
-    HERE goes content!
+    <form method = "POST" action = "${pageContext.request.contextPath}<%=RoutingConstants.USER_EDIT%>">
+        Fields For Updating User Information
+    </form>
 </div>
 <%--Footer--%>
 <jsp:include page="/pages/partials/footer.jsp"/>
