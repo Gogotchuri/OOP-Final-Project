@@ -210,7 +210,7 @@ public class CycleManager {
             PreparedStatement statement =
                 DAO.getPreparedStatement (
                     "UPDATE offered_cycles \n" +
-                           "   SET status_id = " + ProcessStatus.Status.ONGOING + " \n" +
+                           "   SET status_id = " + ProcessStatus.Status.COMPLETED.getId() + " \n" +
                            " WHERE cycle_id = " + cycleID + " \n" +
                            "   AND deal_id = " + dealID + ";"
             );
