@@ -11,7 +11,7 @@ public abstract class RoutingConstants {
 
     //User routes
     public static final String USER_CHATS= "/user/chats";
-    public static final String USER_SINGLE_CHAT = "/user/chats/show";
+    public static final String USER_SINGLE_CHAT = "/user/chats/show"; //FOR API
     public static final String USER_DEALS = "/user/deals";
     public static final String USER_SINGLE_DEAL = "/user/deals/show";
     public static final String USER_DEAL_CREATE = "/user/deals/create";
@@ -20,5 +20,7 @@ public abstract class RoutingConstants {
     public static final String USER_SINGLE_CYCLE = "/user/deals/cycles/show";
     public static final String USER_EDIT = "/user/deals/cycles/show";
     public static final String LOGOUT = "/logout";
+
+
 
 }
