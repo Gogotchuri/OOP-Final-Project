@@ -19,13 +19,14 @@ import java.util.Arrays;
 import java.util.Date;
 
 public class ChatAndMessageTests {
-    private static final String UPDATE_CYCLE_STATUS = "SELECT * FROM chats WHERE cycle_id = ?;";
 
     //Needed to run them together, because the ID-s are automatically generated
     @Test
     public void chatAndMessageTest(){
         DeleteManager.emptyBase("messages");
         DeleteManager.emptyBase("chats");
+        DeleteManager.emptyBase("offered_cycles");
+        DeleteManager.emptyBase("deals");
         DeleteManager.emptyBase("cycles");
         DeleteManager.emptyBase("users");
         User user1 = new User("one", "1", "o",
@@ -98,23 +99,9 @@ public class ChatAndMessageTests {
         Cycle cycle = new Cycle(Arrays.asList(deal1, deal2));
         CycleManager.addCycleToDB(cycle);
 
-        /*
-         * TODO: after implementing CycleManager.allAccept()
-         *  and delete the try/catch code
-         */
         CycleManager.acceptCycle(cycle.getCycleID(), deal1.getDealID());
         CycleManager.acceptCycle(cycle.getCycleID(), deal2.getDealID());
-        try {
-            PreparedStatement statement =
-                    DatabaseAccessObject.getInstance().getPreparedStatement (
-                            "UPDATE cycles \n" +
-                                    "   SET status_id = " + ProcessStatus.Status.ONGOING.getId() + " \n" +
-                                    " WHERE id = " + cycle.getCycleID()  + ";"
-                    );
-            assertTrue(statement.executeUpdate() != 0);
-        } catch (SQLException e) {
-            e.printStackTrace();
-        }
+
 
         assertEquals(ChatManager.getUserChats(user1.getUserID()).size(), 1);
         assertEquals(ChatManager.getUserChats(user2.getUserID()).size(), 1);

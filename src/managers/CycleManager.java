@@ -3,6 +3,8 @@ package managers;
 
 import database.DatabaseAccessObject;
 import generalManagers.DeleteManager;
+import generalManagers.UpdateForm;
+import generalManagers.UpdateManager;
 import models.Chat;
 import models.Cycle;
 import models.Deal;
@@ -218,8 +220,8 @@ public class CycleManager {
                 return false;
 
             if (allAccepted(cycleID)) {
-                // TODO Set Cycle status true
-                return ChatManager.addChatToDB(new Chat(new Cycle(cycleID)));
+                return updateCycleStatus(cycleID, ProcessStatus.Status.ONGOING.getId()) &&
+                        ChatManager.addChatToDB(new Chat(new Cycle(cycleID)));
             }
 
             return true;
@@ -228,6 +230,18 @@ public class CycleManager {
             e.printStackTrace();
             return false;
         }
+    }
+
+    /**
+     * Updates cycle's status in database
+     * @param cycleID
+     * @param statusID
+     * @return true if successful
+     */
+    private static boolean updateCycleStatus(int cycleID, int statusID){
+        UpdateForm uf = new UpdateForm("cycles", cycleID);
+        uf.addUpdate("status_id", statusID);
+        return UpdateManager.update(uf);
     }
 
 
