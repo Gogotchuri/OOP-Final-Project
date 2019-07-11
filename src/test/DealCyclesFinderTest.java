@@ -42,7 +42,7 @@ public class DealCyclesFinderTest {
     private static Item it3 = new Item(3, u2.getUserID(), cat3, null, "Iphone 6s","", time, time);
 
     private static Deal d1 = new Deal(1, u1.getUserID(), Arrays.asList(it1), Arrays.asList(it3.getCategory()), null, "Viyidi aifons", time);
-    private static Deal d2 = new Deal(2, u2.getUserID(), Arrays.asList(it3), Arrays.asList(it1.getCategory()), null, "Viyidi samsungs", time);
+    private static Deal d22 = new Deal(2, u2.getUserID(), Arrays.asList(it3), Arrays.asList(it1.getCategory()), null, "Viyidi samsungs", time);
 
     private void emptyBase() {
         DeleteManager.deleteAndReseed("deals");
@@ -54,8 +54,7 @@ public class DealCyclesFinderTest {
         DeleteManager.deleteAndReseed("cycles");
     }
 
-    @Test
-    public void insert(List<Deal> deals) {
+    public void insert() {
         emptyBase();
 
         CategoryManager.insertCategory(cat1);
@@ -69,20 +68,75 @@ public class DealCyclesFinderTest {
         ItemManager.addItemToDB(it2);
         ItemManager.addItemToDB(it3);
 
-        for (int i=0; i<deals.size()-1; i++) {
-            DealsManager.storeDeal(deals.get(i));
-        }
+        DealsManager.storeDeal(d1);
+        DealsManager.storeDeal(d22);
     }
 
     @Test
     public void test1() {
-        dealsMakeCycleInOrder(Arrays.asList(d1, d2));
+        insert();
+        dealsMakeCycleInOrder(d1, 1);
+        dealsMakeCycleInOrder(d1, 1);
+        dealsMakeCycleInOrder(d22, 1);
     }
 
-    private void dealsMakeCycleInOrder(List<Deal> deals) {
-        insert(deals);
-        new DealCyclesFinder(deals.get(deals.size()-1)).run();
-        assertEquals(getCycleSize(),1);
+
+    private static ItemCategory a = new ItemCategory(1, new ItemSerie("a"), new ItemType("Phone"), new ItemBrand("Samsung"));
+    private static ItemCategory b = new ItemCategory(2, new ItemSerie("b"), new ItemType("Phone"), new ItemBrand("Samsung"));
+    private static ItemCategory c = new ItemCategory(3, new ItemSerie("c"), new ItemType("Phone"), new ItemBrand("Samsung"));
+    private static ItemCategory d = new ItemCategory(4, new ItemSerie("d"), new ItemType("Phone"), new ItemBrand("Samsung"));
+    private static ItemCategory e = new ItemCategory(5, new ItemSerie("e"), new ItemType("Phone"), new ItemBrand("Samsung"));
+    private static ItemCategory f = new ItemCategory(6, new ItemSerie("f"), new ItemType("Phone"), new ItemBrand("Samsung"));
+
+    private static Item a1 = new Item(1, 1, a, null, "Samsung galaxy a","", time, time);
+    private static Item b2 = new Item(2, 2, b, null, "Samsung galaxy b","", time, time);
+    private static Item c2 = new Item(3, 2, c, null, "Samsung galaxy c","", time, time);
+    private static Item d2 = new Item(4, 2, d, null, "Samsung galaxy d","", time, time);
+    private static Item e3 = new Item(5, 3, e, null, "Samsung galaxy e","", time, time);
+    private static Item f3 = new Item(6, 3, f, null, "Samsung galaxy f","", time, time);
+
+    private static Deal deal1 = new Deal(1, 1, Arrays.asList(a1), Arrays.asList(b, c, d), null, "", time);
+    private static Deal deal2 = new Deal(2, 2, Arrays.asList(b2, c2, d2), Arrays.asList(e, f), null, "", time);
+    private static Deal deal3 = new Deal(3, 3, Arrays.asList(e3, f3), Arrays.asList(a), null, "", time);
+
+    @Test
+    public void test2() {
+
+        emptyBase();
+
+        CategoryManager.insertCategory(a);
+        CategoryManager.insertCategory(b);
+        CategoryManager.insertCategory(c);
+        CategoryManager.insertCategory(d);
+        CategoryManager.insertCategory(e);
+        CategoryManager.insertCategory(f);
+
+        UserManager.storeUser(u1);
+        UserManager.storeUser(u2);
+        UserManager.storeUser(u3);
+
+        ItemManager.addItemToDB(a1);
+        ItemManager.addItemToDB(b2);
+        ItemManager.addItemToDB(c2);
+        ItemManager.addItemToDB(d2);
+        ItemManager.addItemToDB(e3);
+        ItemManager.addItemToDB(f3);
+
+        DealsManager.storeDeal(deal1);
+        DealsManager.storeDeal(deal2);
+        DealsManager.storeDeal(deal3);
+
+        assertEquals(0, getCycleSize());
+        dealsMakeCycleInOrder(deal1, 1);
+        dealsMakeCycleInOrder(deal1, 1);
+        dealsMakeCycleInOrder(deal2, 1);
+        dealsMakeCycleInOrder(deal3, 1);
+    }
+
+
+    private void dealsMakeCycleInOrder(Deal deal, int expected) {
+        new DealCyclesFinder(deal).run();
+        assertEquals(expected, getCycleSize());
     }
 
     private int getCycleSize() {

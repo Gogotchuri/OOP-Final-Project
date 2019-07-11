@@ -91,9 +91,9 @@ public class CycleManager {
         Iterator<Deal> i = cycle.getDealsIterator();
 
         /* As we know that, Cycle contains at least two Deal's */
-        queryBuilder.append("iod.deal_id = ").append(i.next().getDealID()).append(" ");
+        queryBuilder.append("ioc.deal_id = ").append(i.next().getDealID()).append(" ");
         while (i.hasNext())
-            queryBuilder.append("OR iod.deal_id = ").append(i.next().getDealID()).append(" ");
+            queryBuilder.append("OR ioc.deal_id = ").append(i.next().getDealID()).append(" ");
 
         queryBuilder.append('\n');
 
