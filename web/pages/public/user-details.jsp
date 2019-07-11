@@ -8,6 +8,10 @@
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <%@ page import="models.User" %>
 <%@ page import="models.Image" %>
+<%@ page import="models.Deal" %>
+<%@ page import="java.util.List" %>
+<%@ page import="static java.lang.Math.min" %>
+<% int maxNumberOfDeals = 5;%>
 <% User user = (User) request.getAttribute("user");%>
 <html>
     <%--HEAD--%>
@@ -39,7 +43,7 @@
         .user-info{
             padding: 5px;
             color:lightslategray;
-            background-color:powderblue;
+            background-color: powderblue;
         }
 
         .image-div{
@@ -62,6 +66,19 @@
             size: 5px;
         }
 
+        .button {
+            background-color: powderblue;
+            border: none;
+            color: lightslategray;
+            padding: 15px 32px;
+            text-align: center;
+            text-decoration: none;
+            display: inline-block;
+            font-size: 16px;
+            margin: 4px 2px;
+            cursor: pointer;
+        }
+
 
     </style>
 <body>
@@ -70,38 +87,43 @@
     <%--Page Content--%>
     <div class="wrapper">
         <div>
+            <% Image img = user.getProfilePicture(); %>
+            <% String imgUrl = img.getUrl();%>
+            <% String name = user.getFirstName(); %>
+            <% String lastName = user.getLastName(); %>
+            <% String userName = user.getUsername(); %>
+            <% String email = user.getEmail();%>
+            <% String phoneNumber = user.getPhoneNumber(); %>
             <div class="image-div">
-                <img src = "imageUrl" alt = "Profile Picture">
+                <img src = "<%= imgUrl%>" alt = "No Profile Picture">
             </div>
             <div>
-                <button></button>
+                <a href="#" class="button">Link Button</a>
             </div>
             <div class = "user-info">
-                <p>Name: </p>
-                <p class= "italic">Username: </p>
+                <p><%= name%></p>
+                <p><%= lastName%></p>
+                <p class= "italic"> <%= userName%> </p>
                 <p>Rating: </p>
                 <p>10 deals completed</p>
-                <p>Email:</p>
-                <p>Phone Number:</p>
+                <p>Email: <%= email%></p>
+                <p>Phone Number: <%= phoneNumber%></p>
             </div>
         </div>
         <div class = "deals-column">
+            <% List<Deal> deals = user.getDeals();%>
+            <% int numToShow = min(maxNumberOfDeals, deals.size());%>
             <h3>Deals:</h3>
             <ul>
+
+                <% for (int i=0; i<numToShow; i++){%>
+                <% Deal curDeal = deals.get(i);%>
                 <li><p>Deal name <label class="statusActive"> active</label></p>
                     <p class="italic">10.08.2018</p>
                 </li>
-                <li><p>Deal name <label class="statusCompleted"> completed</label></p>
-                    <p class="italic">10.08.2018</p>
-                </li>
-                <li><p>Deal name</p>
-                    <p class="italic">10.08.2018</p>
-                </li>
-                <li><p>Deal name</p>
-                    <p class="italic">10.08.2018</p>
-                </li>
-
+                <%}%>
             </ul>
+            <a href="#" class="button">Link Button</a>
         </div>
     </div>
 
