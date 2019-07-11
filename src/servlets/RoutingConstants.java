@@ -18,7 +18,7 @@ public abstract class RoutingConstants {
     public static final String USER_DEAL_CONFIG = "/user/deals/config";
     public static final String USER_CYCLES = "/user/deals/cycles";
     public static final String USER_SINGLE_CYCLE = "/user/deals/cycles/show";
-    public static final String USER_EDIT = "/user/deals/cycles/show";
+    public static final String USER_EDIT = "/user/edit"; // TODO: Ilia url-ebi emtxveoda da es iyos ???
     public static final String LOGOUT = "/logout";
 
 

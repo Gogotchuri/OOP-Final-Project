@@ -19,6 +19,7 @@ public class UpdateManager {
 
         while(it.hasNext()) {
             UpdateForm.Pair cur = it.next();
+            System.out.println(cur.getNewValue());
 
             query += cur.getColumnName() + " = ";
             if(cur.getNewValue() instanceof String) query += "'" + cur.getNewValue() + "'";
@@ -28,6 +29,7 @@ public class UpdateManager {
         query = query.substring(0, query.length() - 1); //To remove an extra ,
         query += " WHERE id = " + form.getId() + " ;";
 
+        System.out.println(query);
         try {
             PreparedStatement st = DAO.getPreparedStatement(query);
             st.executeUpdate();

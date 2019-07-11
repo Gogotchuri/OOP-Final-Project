@@ -20,7 +20,7 @@
                 <a href="${pageContext.request.contextPath}/" class="nav-item nav-link active">Home</a>
                 <a href="${pageContext.request.contextPath}/deals" class="nav-item nav-link">Deals</a>
                 <%if(user != null){%>
-                    <a href="${pageContext.request.contextPath}/user/configuration" class="nav-item nav-link">Profile</a>
+                    <a href="${pageContext.request.contextPath}/users/show?id=<%=user.getUserID()%>" class="nav-item nav-link">Profile</a>
                     <a href="${pageContext.request.contextPath}/logout" class="nav-item nav-link">Logout</a>
                 <%}else{%>
                     <a href="${pageContext.request.contextPath}/login" class="nav-item nav-link">Login</a>

@@ -29,6 +29,7 @@ public class UserController extends Controller {
     }
 
     public void editForm() throws ServletException, IOException {
+        request.setAttribute("user", user);
         dispatchTo("/pages/user/edit-profile.jsp");
     }
 

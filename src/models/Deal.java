@@ -57,7 +57,7 @@ public class Deal {
     public Deal(int ownerID,
                  List<Item> ownedItems,
                   List<ItemCategory> wantedCategories) {
-        this(0, ownerID, ownedItems, wantedCategories, null, "", null);
+        this(0, ownerID, ownedItems, wantedCategories, ProcessStatus.Status.WAITING, "", null);
     }
 
 

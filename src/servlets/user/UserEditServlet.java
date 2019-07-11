@@ -44,7 +44,7 @@ public class UserEditServlet extends HttpServlet {
 	    dispatch to user.UserEditServlet (GET) (user configuration form)
 	 */
 	@Override
-	protected void doPut(HttpServletRequest request,
+	protected void doPost(HttpServletRequest request, // TODO: Ilia doPut()
 						  HttpServletResponse response)
 		throws ServletException, IOException {
 
