@@ -6,9 +6,13 @@
   To change this template use File | Settings | File Templates.
 --%>
 <%@ page contentType="text/html;charset=UTF-8"%>
+<%@ page import="models.Chat" %>
 <%@ page import="models.User" %>
+<%@ page import="java.util.List" %>
 <html>
-<% User user = (User) session.getAttribute("user"); %>
+<%  User user = (User) session.getAttribute("user");
+    List<Chat> chats = (List<Chat>) request.getAttribute("chats");
+%>
     <%--HEAD--%>
     <jsp:include page="/pages/partials/head.jsp">
         <jsp:param name="title" value="chats"/>
@@ -25,135 +29,27 @@
             </div>
             <div class="chats-list">
                 <!-- Repetable -->
-                <div class="chat-thumbnail">
-                    <img src="http://cdn.shopify.com/s/files/1/0257/6087/products/Pikachu_Single_Front_dc998741-c845-43a8-91c9-c1c97bec17a4.png?v=1523938908">
-                    <div class="thumbnail-body">
-                        <h5>სამსუნგის ჩათი</h5>
-                        <p>ვასო, სოსო, ტასო</p>
+                <%for(Chat ch : chats){%>
+                    <div id="chat-<%=ch.getChatID()%>" class="chat-thumbnail" onclick="changeChat(<%=ch.getChatID()%>)">
+                        <img src="http://cdn.shopify.com/s/files/1/0257/6087/products/Pikachu_Single_Front_dc998741-c845-43a8-91c9-c1c97bec17a4.png?v=1523938908">
+                        <div class="thumbnail-body">
+                            <h5>ჩათი ნომერი <%=ch.getChatID()%></h5>
+                            <p>
+                                <%for(String name : ch.getParticipantNames()){%>
+                                    <%=name%>,
+                                <%}%>
+                            </p>
+                        </div>
                     </div>
-                </div>
-                <div class="chat-thumbnail">
-                    <img src="http://cdn.shopify.com/s/files/1/0257/6087/products/Pikachu_Single_Front_dc998741-c845-43a8-91c9-c1c97bec17a4.png?v=1523938908">
-                    <div class="thumbnail-body">
-                        <h5>სამსუნგის ჩათი</h5>
-                        <p>ვასო, სოსო, ტასო</p>
-                    </div>
-                </div>
-                <div class="chat-thumbnail">
-                    <img src="http://cdn.shopify.com/s/files/1/0257/6087/products/Pikachu_Single_Front_dc998741-c845-43a8-91c9-c1c97bec17a4.png?v=1523938908">
-                    <div class="thumbnail-body">
-                        <h5>სამსუნგის ჩათი</h5>
-                        <p>ვასო, სოსო, ტასო</p>
-                    </div>
-                </div>
-                <!-- Repetable -->
-                <div class="chat-thumbnail">
-                    <img src="http://cdn.shopify.com/s/files/1/0257/6087/products/Pikachu_Single_Front_dc998741-c845-43a8-91c9-c1c97bec17a4.png?v=1523938908">
-                    <div class="thumbnail-body">
-                        <h5>სამსუნგის ჩათი</h5>
-                        <p>ვასო, სოსო, ტასო</p>
-                    </div>
-                </div>
-                <div class="chat-thumbnail">
-                    <img src="http://cdn.shopify.com/s/files/1/0257/6087/products/Pikachu_Single_Front_dc998741-c845-43a8-91c9-c1c97bec17a4.png?v=1523938908">
-                    <div class="thumbnail-body">
-                        <h5>სამსუნგის ჩათი</h5>
-                        <p>ვასო, სოსო, ტასო</p>
-                    </div>
-                </div>
-                <div class="chat-thumbnail">
-                    <img src="http://cdn.shopify.com/s/files/1/0257/6087/products/Pikachu_Single_Front_dc998741-c845-43a8-91c9-c1c97bec17a4.png?v=1523938908">
-                    <div class="thumbnail-body">
-                        <h5>სამსუნგის ჩათი</h5>
-                        <p>ვასო, სოსო, ტასო</p>
-                    </div>
-                </div>
-                <!-- Repetable -->
-                <div class="chat-thumbnail">
-                    <img src="http://cdn.shopify.com/s/files/1/0257/6087/products/Pikachu_Single_Front_dc998741-c845-43a8-91c9-c1c97bec17a4.png?v=1523938908">
-                    <div class="thumbnail-body">
-                        <h5>სამსუნგის ჩათი</h5>
-                        <p>ვასო, სოსო, ტასო</p>
-                    </div>
-                </div>
-                <div class="chat-thumbnail">
-                    <img src="http://cdn.shopify.com/s/files/1/0257/6087/products/Pikachu_Single_Front_dc998741-c845-43a8-91c9-c1c97bec17a4.png?v=1523938908">
-                    <div class="thumbnail-body">
-                        <h5>სამსუნგის ჩათი</h5>
-                        <p>ვასო, სოსო, ტასო</p>
-                    </div>
-                </div>
-                <div class="chat-thumbnail">
-                    <img src="http://cdn.shopify.com/s/files/1/0257/6087/products/Pikachu_Single_Front_dc998741-c845-43a8-91c9-c1c97bec17a4.png?v=1523938908">
-                    <div class="thumbnail-body">
-                        <h5>სამსუნგის ჩათი</h5>
-                        <p>ვასო, სოსო, ტასო</p>
-                    </div>
-                </div>
-                <!-- Repetable -->
-                <div class="chat-thumbnail">
-                    <img src="http://cdn.shopify.com/s/files/1/0257/6087/products/Pikachu_Single_Front_dc998741-c845-43a8-91c9-c1c97bec17a4.png?v=1523938908">
-                    <div class="thumbnail-body">
-                        <h5>სამსუნგის ჩათი</h5>
-                        <p>ვასო, სოსო, ტასო</p>
-                    </div>
-                </div>
-                <div class="chat-thumbnail">
-                    <img src="http://cdn.shopify.com/s/files/1/0257/6087/products/Pikachu_Single_Front_dc998741-c845-43a8-91c9-c1c97bec17a4.png?v=1523938908">
-                    <div class="thumbnail-body">
-                        <h5>სამსუნგის ჩათი</h5>
-                        <p>ვასო, სოსო, ტასო</p>
-                    </div>
-                </div>
-                <div class="chat-thumbnail">
-                    <img src="http://cdn.shopify.com/s/files/1/0257/6087/products/Pikachu_Single_Front_dc998741-c845-43a8-91c9-c1c97bec17a4.png?v=1523938908">
-                    <div class="thumbnail-body">
-                        <h5>სამსუნგის ჩათი</h5>
-                        <p>ვასო, სოსო, ტასო</p>
-                    </div>
-                </div>
-
+                <%}%>
             </div>
         </div>
         <div class="conversation">
             <div class="col-header">
                 <h5>Conversation</h5>
             </div>
-            <div id="messages" class="messages" >
-                <div class="message">
-                    <img src="https://vignette.wikia.nocookie.net/pokemon/images/3/3e/039Jigglypuff.png/revision/latest?cb=20140328193313">
-                    <div class="message-bubble">პიკა პიკა პიკა, პიკა პიკა?</div>
-                </div>
-                <div class="own-message">
-                    <img src="http://cdn.shopify.com/s/files/1/0257/6087/products/Pikachu_Single_Front_dc998741-c845-43a8-91c9-c1c97bec17a4.png?v=1523938908">
-                    <div class="message-bubble">პიკა პიკა, პიკა?</div>
-                </div>
-                <div class="message">
-                    <img src="https://vignette.wikia.nocookie.net/pokemon/images/3/3e/039Jigglypuff.png/revision/latest?cb=20140328193313">
-                    <div class="message-bubble">პიკა, პიკა?</div>
-                </div>
-                <div class="own-message">
-                    <img src="http://cdn.shopify.com/s/files/1/0257/6087/products/Pikachu_Single_Front_dc998741-c845-43a8-91c9-c1c97bec17a4.png?v=1523938908">
-                    <div class="message-bubble">პიკა, პიკა პიკა?</div>
-                </div>
-                <div class="message">
-                    <img src="https://vignette.wikia.nocookie.net/pokemon/images/3/3e/039Jigglypuff.png/revision/latest?cb=20140328193313">
-                    <div class="message-bubble">
-                        <span class="message-author">ილია</span>
-                        <span class="message-text">ვიცი რომ ამ პოკემონს სხვა ხმა აქვს ხო...</span>
-                        <span class="message-date"> 10/10/1000 10:10</span>
-                    </div>
-                </div>
-                <div class="own-message">
-                    <img src="http://cdn.shopify.com/s/files/1/0257/6087/products/Pikachu_Single_Front_dc998741-c845-43a8-91c9-c1c97bec17a4.png?v=1523938908">
-                    <div class="message-bubble">
-                        <span class="message-author">ილია</span>
-                        <span class="message-text">ვიცი რომ ამ პოკემონს სხვა ხმა აქვს ხო...</span>
-                        <span class="message-date"> 10/10/1000 10:10</span>
-                    </div>
-                </div>
-            </div>
-            <div class="message-send">
+            <div id="messages" class="messages" ></div>
+            <div class="message-send" id="message-send" style="display: none">
                 <textarea id="msg-text" rows="5"></textarea>
                 <input class="btn-primary send-btn" type="button" value="send" onclick="sendMessage()">
             </div>
@@ -168,33 +64,40 @@
         </div>
     </div>
 </body>
-    <script src="${pageContext.request.contextPath}/assets/js/chat.js"></script>
+    <script src="${pageContext.request.contextPath}/assets/js/helpers.js"></script>
 <script>
-    const chat_id = 1;
-    const localUserId = "<%=user.getId()%>";
-    const localUserName = "<%=user.getUsername()%>";
-    const token = "<%=user.getUsername()%>"; //TODO change to valid token
-    const endpoint_addr = "ws://localhost:8080/OOP_Final_Project/user/chats/" + chat_id + "/" + token;
 
-    //Callback to handle receiving messages from server
-    let handleMessage = msg => {
-        console.log(msg);
-        let parsedMessage = JSON.parse(msg.data);
-        let messageClass = (parsedMessage.user_id === localUserId) ? "own-message" : "message";
+    //Variables
+    const http = new HTTP("http://localhost:8080/OOP_Final_Project");
+    let chatSocket = null;
+    const localUserId = "<%=user.getUserID()%>";
+
+
+    //functions
+    let getChatEndpointAddr = chatID => "ws://localhost:8080/OOP_Final_Project/user/chats/" + chatID + "/" + "<%=user.getUsername()%>";
+
+    let handleMessage = parsedMessage => {
+        let messageClass = (parsedMessage.user_id == localUserId) ? "own-message" : "message";
         let messages = document.getElementById("messages");
         let newMessageElement = '<div class="' + messageClass + '"> \n' +
             '<img src="http://cdn.shopify.com/s/files/1/0257/6087/products/Pikachu_Single_Front_dc998741-c845-43a8-91c9-c1c97bec17a4.png?v=1523938908"> \n'+
             '<div class="message-bubble"> \n' +
-                '<span class="message-author">' + parsedMessage.username+'</span>' +
-                '<span class="message-text">' + parsedMessage.body + '</span>' +
-                '<span class="message-date">' + parsedMessage.date.substr(0, 19) + '</span>' +
+            '<span class="message-author">' + parsedMessage.username+'</span>' +
+            '<span class="message-text">' + parsedMessage.body + '</span>' +
+            '<span class="message-date">' + parsedMessage.date.substr(0, 19) + '</span>' +
             '</div> \n' + '</div>';
         let currMessages = messages.innerHTML;
         messages.innerHTML = currMessages + newMessageElement;
         messages.scrollTop = messages.scrollHeight;
     };
 
-    const chatSocket = new ChatSocket(endpoint_addr, handleMessage);
+    //Callback to handle receiving messages from server
+    let handleRawMessage = msg => {
+        console.log(msg);
+        let parsedMessage = JSON.parse(msg.data);
+        handleMessage(parsedMessage)
+    };
+
 
     //Callback to act when send button is pressed
     let sendMessage = () => {
@@ -202,5 +105,21 @@
         if(text === "") return;
         chatSocket.send(text);
     };
+
+
+    let changeChat = (chat_id) => {
+        if(chatSocket != null) chatSocket.close(); //Close connection to old chat
+        chatSocket = new ChatSocket(getChatEndpointAddr(chat_id), handleRawMessage);
+        document.getElementById("message-send").style.display = ""; //Show input form when user asks for a chat
+        http.GET("/user/chats/show?id=" + chat_id)
+            .then(data => {
+                let messages = JSON.parse(data.messages);
+                document.getElementById("messages").innerHTML = "";
+                messages.forEach(message => {
+                    handleMessage(message);
+                })
+            })
+            .catch(err => console.error(err));
+    }
 </script>
 </html>

@@ -1,10 +1,7 @@
 package models;
 
-import java.sql.Time;
-import java.util.Date;
 import java.sql.Timestamp;
-import java.util.Iterator;
-import java.util.Vector;
+import java.util.*;
 
 /**
  * Class containing sequence of messages
@@ -14,7 +11,7 @@ public class Chat {
     private int chatID;               // -1
     private Cycle cycle;              // null
     private Timestamp lastUpdateDate; // null
-    private Vector<Message> messages; // null
+    private Vector<Message> messages; // should be empty vector
 
 
     /**
@@ -39,7 +36,7 @@ public class Chat {
      * @param cycle cycle which the chat is for
      */
     public Chat(int chatID, Cycle cycle){
-        this(chatID, cycle, null, null);
+        this(chatID, cycle, null, new Vector<>());
     }
 
 
@@ -64,8 +61,8 @@ public class Chat {
     /**
      * @return  iterator containing every message in the chat
      */
-    public Iterator getMessages(){
-        return messages.iterator();
+    public List<Message> getMessages(){
+        return messages;
     }
 
     /**
@@ -142,5 +139,21 @@ public class Chat {
     public boolean isParticipant(int user_id){
        return true;
        //TODO implement me
+    }
+
+    /**
+     * Returns list of users participating in this chat (cycle in general)
+     * */
+    public List<User> getParticipants(){
+        return null;
+        //TODO implement me
+    }
+
+    /**
+     * Returns list of user names participating in this chat (cycle in general)
+     * */
+    public List<String> getParticipantNames(){
+        return Arrays.asList("ვასო", "ტასო", "ამირანი");
+        //TODO implement me
     }
 }

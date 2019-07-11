@@ -1,6 +1,7 @@
 package controllers.user;
 
 import models.Chat;
+import models.Cycle;
 import models.Message;
 
 import javax.websocket.EncodeException;
@@ -19,7 +20,7 @@ public class ChatSessionController{
     private static final Map<Integer, ChatSessionController> chatSessionControllerMap = new ConcurrentHashMap<>();
 
     private ChatSessionController(int chat_id) throws Exception {
-//        chat = new Chat(chat_id, 1);
+        chat = new Chat(chat_id, new Cycle(1));
         //TODO uncomment and check
 //        chat = ChatManager.getChatByID(chat_id);
 //        if(chat == null) throw new Exception("Chat not found!");

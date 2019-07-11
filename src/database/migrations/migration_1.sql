@@ -28,6 +28,7 @@ CREATE TABLE deals
   FOREIGN KEY (user_id) REFERENCES users(id),
   status_id INT(6) UNSIGNED NOT NULL,
   FOREIGN KEY (status_id) REFERENCES process_statuses(id),
+  title varchar(256),
 
   created_at TIMESTAMP DEFAULT now(),
   updated_at TIMESTAMP DEFAULT now()

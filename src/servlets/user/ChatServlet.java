@@ -28,40 +28,14 @@ public class ChatServlet extends HttpServlet{
 		//Checking if user is authorized
 		if((new AuthenticatedUser(request, response)).unauthenticated()) return;
 
-		int cycle_id;
-		try { cycle_id = Integer.parseInt(request.getParameter("cycle_id")); }
+		int id;
+		try { id = Integer.parseInt(request.getParameter("id")); }
 		catch (NumberFormatException e) {
 			response.sendError(HttpServletResponse.SC_NOT_FOUND,
-					"This address should be called, with numeric parameter \"cycle_id\"!");
+					"This address should be called, with numeric parameter \"id\"!");
 			return;
 		}
 
-		(new ChatsController(request, response, this)).show(cycle_id);
-	}
-
-
-	/**
-	 Sends new message in some chat
-
-	 returned html:
-	 dispatch to user.ChatServlet (GET) (chat where message was sent)
-	 */
-	@Override
-	protected void doPost(HttpServletRequest request,
-						   HttpServletResponse response)
-		throws ServletException, IOException {
-		//Checking if user is authorized
-		if((new AuthenticatedUser(request, response)).unauthenticated()) return;
-
-		int cycle_id;
-		try { cycle_id = Integer.parseInt(request.getParameter("cycle_id")); }
-		catch (NumberFormatException e) {
-			response.sendError(HttpServletResponse.SC_NOT_FOUND,
-					"This address should be called, with numeric parameter \"cycle_id\"!");
-			return;
-		}
-
-		(new ChatsController(request, response, this)).sendMessage(cycle_id);
-
+		(new ChatsController(request, response, this)).show(id);
 	}
 }

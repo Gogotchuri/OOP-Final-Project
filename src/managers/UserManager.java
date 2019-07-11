@@ -178,7 +178,10 @@ public class UserManager {
      * @return user with specified email
      */
     public static User getUserByEmail(String email) {
-        return getUsersByColumn("email", email, false).get(0);
+        List<User> usersWithEmail = getUsersByColumn("email", email, false);
+        if(usersWithEmail.isEmpty())
+            return null;
+        return usersWithEmail.get(0);
     }
 
     /**
