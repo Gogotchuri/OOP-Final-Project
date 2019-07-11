@@ -3,6 +3,7 @@ package servlets.front;
 
 import controllers.front.AuthController;
 import services.RequestValidator;
+import servlets.RoutingConstants;
 
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
@@ -10,13 +11,12 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
-import java.io.PrintWriter;
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-@WebServlet(urlPatterns = {"/register"})
+@WebServlet(urlPatterns = {RoutingConstants.REGISTER})
 public class RegistrationServlet extends HttpServlet {
 
 	/**

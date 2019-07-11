@@ -11,18 +11,19 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 
-@WebServlet(urlPatterns = {RoutingConstants.USER_DEALS})
-public class DealsServlet extends HttpServlet {
+@WebServlet(urlPatterns = {RoutingConstants.USER_SINGLE_DEAL})
+public class DealServlet extends HttpServlet {
 
     /**
      returned html main components:
-     list of the links to the user.DealServlet (GET) (view of deal).
+     Rep
      */
     @Override
     protected void doGet(HttpServletRequest request,
-                         HttpServletResponse response)
-            throws ServletException, IOException {
+                          HttpServletResponse response)
+        throws ServletException, IOException {
 
-        (new DealsController(request, response, this)).index();
+        int id = 0; //TODO check auth and correct parsing
+        (new DealsController(request, response, this)).show(id);
     }
 }

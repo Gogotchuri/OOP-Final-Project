@@ -1,8 +1,11 @@
+
 package controllers.user;
 
 import controllers.Controller;
 import managers.CycleManager;
+import managers.DealsManager;
 import models.Cycle;
+import models.Deal;
 import models.User;
 
 import javax.servlet.ServletException;
@@ -20,19 +23,46 @@ public class CyclesController extends Controller {
      * Creates a controller, usually called from servlet, which is also
      * passed by parameter. servlet method passes taken request and response.
      *
-     * @param req
-     * @param res
-     * @param servlet
+     * @param request request sent by user
+     * @param response servlet response
+     * @param servlet servlet calling this controller
      */
-    public CyclesController(HttpServletRequest req, HttpServletResponse res, HttpServlet servlet) throws ServletException {
-        super(req, res, servlet);
+    public CyclesController(HttpServletRequest request,
+                             HttpServletResponse response,
+                              HttpServlet servlet)
+        throws ServletException {
+        super(request, response, servlet);
         user = (User) session.getAttribute("user");
-        if(user == null) throw new ServletException("Unauthorized user!");
+        if (user == null)
+            throw new ServletException("Unauthorized user!");
     }
 
-    public void show(int cycle_id) throws ServletException, IOException {
-        //TODO if cycle not found send error
-        Cycle cycle = CycleManager.getCycleByID(cycle_id);
+
+    public void index() throws ServletException, IOException {
+        List<Cycle> userCycles = CycleManager.getUserCycles(user.getUserID());
+        request.setAttribute("cycles", userCycles);
+        dispatchTo("/pages/user/deals/cycles.jsp");
+    }
+    /**
+     * @param cycleID - ID of Cycle in DB
+     * Sets Cycle object for cycle.jsp
+     */
+    public void show(int cycleID) throws ServletException, IOException {
+        Cycle cycle = CycleManager.getCycleByCycleID(cycleID);
+
+        if (cycle == null) {
+            sendError(404, "Cycle is hasn't been found! " +
+                    "(controllers.user.CyclesController:show:47)");
+            return;
+        }
+
+        //We should restrict access for users who isn't involved in this cycle
+        if(!CycleManager.userParticipatesInCycle(user.getUserID(), cycleID)){
+            sendError(401, "Cycle doesn't belong to you! " +
+                    "(controllers.user.CyclesController:show:53)");
+            return;
+        }
+
         request.setAttribute("cycle", cycle);
         dispatchTo("/pages/user/deals/cycle.jsp");
     }
@@ -43,17 +73,70 @@ public class CyclesController extends Controller {
      * return - Suggested Cycles for given Deal
      */
     public void dealCycles(int dealID) throws ServletException, IOException {
+        Deal deal = DealsManager.getDealByDealID(dealID);
+        if(deal == null){
+            sendError(404, "Deal doesn't exist");
+            return;
+        }
+        if(deal.getOwnerID() != user.getUserID()){
+            sendError(401, "Deal doesn't belong to you. Hence, no cycles for you!");
+        }
+
         List<Cycle> cycles = CycleManager.getCyclesByDealID(dealID);
+        if (cycles == null) {
+            sendError(500, "cycles == null");
+            return;
+        }
         request.setAttribute("cycles", cycles);
         dispatchTo("/pages/user/deals/deal-cycles.jsp");
     }
 
 
-    public void acceptCycle(int cycle_id){
-        //TODO implement accepting logic
+    /**
+     * Accepts
+     * @param cycleID - ID of Cycle in DB
+     * Accepts cycle
+     */
+    public void acceptCycle(int cycleID, int dealID) throws IOException {
+        if(!CycleManager.userParticipatesInCycle(user.getUserID(), cycleID)){
+            sendError(401, "Cycle doesn't belong to you! " +
+                    "(controllers.user.CyclesController:acceptCycle:105)");
+            return;
+        }
+
+        if(!CycleManager.acceptCycle(cycleID, dealID)){
+            sendError(404, "Cycle couldn't be accepted " +
+                    "(controllers.user.CyclesController:acceptCycle:115)");
+            return;
+        }
+
+        //TODO change with constant
+        //After successful acceptance redirect to all cycles page
+        response.sendRedirect("/user/deals");
+
     }
 
-    public void rejectCycle(int cycle_id){
-        CycleManager.deleteCycle(cycle_id);
+
+    /**
+     * @param cycleID - ID of Cycle in DB
+     * Deletes Cycle
+     */
+    public void rejectCycle(int cycleID) throws IOException {
+        if(!CycleManager.userParticipatesInCycle(user.getUserID(), cycleID)){
+            sendError(401, "Cycle doesn't belong to you! " +
+                    "(controllers.user.CyclesController:acceptCycle:126)");
+            return;
+        }
+
+        if(!CycleManager.deleteCycle(cycleID)){
+            sendError(404, "Cycle couldn't be accepted " +
+                    "(controllers.user.CyclesController:acceptCycle:132)");
+            return;
+        }
+
+        //TODO change with constant
+        //After successful rejection redirect to all cycles page
+        response.sendRedirect("/user/deals");
     }
+
 }

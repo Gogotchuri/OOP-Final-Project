@@ -5,10 +5,7 @@ import controllers.front.DealsController.SearchCriteria;
 import controllers.front.DealsController.SearchCriteria.Criteria;
 import database.DatabaseAccessObject;
 import generalManagers.DeleteManager;
-import models.Deal;
-import models.Item;
-import models.ProcessStatus;
-import models.User;
+import models.*;
 import models.categoryModels.ItemCategory;
 
 import java.sql.*;
@@ -18,52 +15,96 @@ import java.util.List;
 
 public class DealsManager {
 
-
     private static DatabaseAccessObject DAO = DatabaseAccessObject.getInstance();
-
 
     /**
      * @param dealID - ID of Deal in DB
      * @return Fully Filled Deal object which's ID = dealID
-     *         Or null if Deal with such ID does not exists
+     *         Or null if some error happens
      */
     public static Deal getDealByDealID(int dealID) {
 
-        User owner = UserManager.getUserByDealID(dealID);
+        int ownerID = UserManager.getUserIDByDealID(dealID);
         List<Item> ownedItems = ItemManager.getItemsByDealID(dealID);
         List<ItemCategory> wantedCategories = CategoryManager.getWantedCategoriesByDealID(dealID);
-        ProcessStatus.Status dealStatus = getDealStatusByDealID(dealID);
-        Timestamp dealCreateDate = null; // TODO
+        ProcessStatus.Status dealStatus = StatusManager.getStatusIDByID("deals", dealID);
+        String title = getTitleByDealID(dealID);
+        Timestamp dealCreateDate = DateManager.getCreateDateByID("deals", dealID);
 
-        return (owner == null ||
+        return (ownerID == 0 ||
                  ownedItems == null ||
                   wantedCategories == null ||
-                   dealStatus == null)
+                   dealStatus == null ||
+                    title == null ||
+                     dealCreateDate == null)
                 ?
-                null : new Deal(dealID, owner, ownedItems, wantedCategories, dealStatus, dealCreateDate);
+                null : new Deal(dealID, ownerID, ownedItems, wantedCategories, dealStatus, title, dealCreateDate);
+    }
+
+    /**
+     * @param dealID ID of Deal in DB
+     * @return title of the deal, may return null, in that case, it's empty
+     */
+    private static String getTitleByDealID(int dealID) {
+        String query = "SELECT title FROM deals where id = ?;";
+
+        try {
+            PreparedStatement st = DAO.getPreparedStatement(query);
+            st.setInt(1, dealID);
+            ResultSet set = st.executeQuery();
+
+            if(set.next()) return set.getString(1);
+
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return null;
     }
 
 
     /**
      * @param userID - ID of User in DB
      * @return List of fully filled deals of User with ID = userID
+     *         Or null if some error happens
      */
     public static List<Deal> getDealsByUserID(int userID) {
-
         List<Deal> deals = new ArrayList<>();
-
         try {
-
             PreparedStatement statement =
                 DAO.getPreparedStatement (
-                    "SELECT id AS id_of_deal FROM deals WHERE user_id = " + userID + ";"
+                    "SELECT id AS id_of_deal" +
+                           "  FROM deals" +
+                           " WHERE user_id = " + userID + ";"
                 );
-
             queryDeals(deals, statement);
-
+        } catch (SQLException e) {
+            e.printStackTrace();
+            return null;
         }
-        catch (SQLException e) { e.printStackTrace(); }
+        return deals;
+    }
 
+
+    /**
+     * @param cycleID - ID of Cycle in DB
+     * @return List of fully filled deals of Cycle with ID = cycleID
+     *         Or null if some error happens
+     */
+    public static List<Deal> getDealsByCycleID(int cycleID) {
+        List<Deal> deals = new ArrayList<>();
+        try {
+            PreparedStatement statement =
+                    DAO.getPreparedStatement (
+                    "SELECT deal_id AS id_of_deal" +
+                           "  FROM offered_cycles" +
+                           " WHERE cycle_id = " + cycleID + ";"
+                    );
+            queryDeals(deals, statement);
+        }
+        catch (SQLException e) {
+            e.printStackTrace();
+            return null;
+        }
         return deals;
     }
 
@@ -91,40 +132,14 @@ public class DealsManager {
 
 
     /**
-     * @param dealID - ID of Deal in DB
-     * @return ProcessStatus of Deal with given dealID.
-     *         If such deal does not exists returns null.
-     */
-    private static ProcessStatus.Status getDealStatusByDealID(int dealID) {
-
-        int statusID = 0;
-
-        try {
-
-            PreparedStatement statement =
-                DAO.getPreparedStatement (
-                        "SELECT status_id FROM deals WHERE id = " + dealID + ";"
-                );
-
-            ResultSet resultSet = statement.executeQuery();
-
-            if (resultSet.next())
-                statusID = resultSet.getBigDecimal("status_id").intValue();
-
-        } catch (SQLException e) { e.printStackTrace(); }
-
-        return statusID == 0 ? null : ProcessStatus.getStatusByID(statusID);
-    }
-
-
-    /**
      * @param sc - SearchCriteria, based on which we query deals
      * @return List of deals based on given criteria
+     *         Or null if some error happens
      */
     public static List<Deal> getDealsBySearchCriteria(SearchCriteria sc) {
 
         StringBuilder queryBuilder = new StringBuilder (
-            "SELECT d.id AS id_of_deal \n" +
+            "SELECT DISTINCT d.id AS id_of_deal \n" +
             "  FROM deals d \n" +
             "  JOIN users u ON (d.user_id = u.id) \n" +
             "  JOIN wanted_items wi ON (d.id = wi.deal_id) \n" +
@@ -141,12 +156,12 @@ public class DealsManager {
             if (criteria == Criteria.USER_NAME) {
 
                 String userName = sc.getCriteriaValue(Criteria.USER_NAME);
-                queryBuilder.append(" AND u.user_name = ").append(userName).append(" \n");
+                queryBuilder.append(" AND u.user_name = \'").append(userName).append("\' \n");
 
             } else if (criteria == Criteria.CATEGORY_NAME) {
 
                 String category = sc.getCriteriaValue(Criteria.CATEGORY_NAME);
-                queryBuilder.append(" AND ic.name = ").append(category).append(" \n");
+                queryBuilder.append(" AND ic.name = \'").append(category).append("\' \n");
 
             } else if (criteria == Criteria.DEAL_CREATE_DATE) {
 
@@ -162,30 +177,20 @@ public class DealsManager {
 
         queryBuilder.append(';');
 
-        List<Deal> list = new ArrayList<>();
-
-        try {
-            PreparedStatement statement = DAO.getPreparedStatement(queryBuilder.toString());
-            queryDeals(list, statement);
-        }
-        catch (SQLException e) { e.printStackTrace(); }
-
-        return list;
+        return getDealList(queryBuilder.toString());
     }
 
 
     /**
-     Returns list of deals whose
-     Wanted item categories
-     are equal of
-     'deal's Owned item categories
-     Returns at least empty list
+     * Returns list of deals whose Wanted item categories are equal of
+     *'deal's Owned item categories Returns at least empty list
+     * Or null if some error happens
      */
     public static List<Deal> getClients(int dealID) {
 
         String query =
             "SELECT d.id AS id_of_deal FROM deals d \n" +
-            "WHERE d.id IN ( \n" +
+            " WHERE d.id IN ( \n" +
             "    SELECT result.deal_id FROM \n" +
             "    (SELECT a.deal_id AS deal_id, \n" +
             "            COUNT(*) AS row_num FROM \n" +
@@ -209,14 +214,24 @@ public class DealsManager {
             "    ) result \n" +
             ");";
 
-        List<Deal> deals = new ArrayList<>();
+        return getDealList(query);
+    }
 
+
+    /**
+     * @param query - query to execute
+     * @return List of Deals got by query
+     *         Or null if some error happens
+     */
+    private static List<Deal> getDealList(String query) {
+        List<Deal> deals = new ArrayList<>();
         try {
             PreparedStatement statement = DAO.getPreparedStatement(query);
             queryDeals(deals, statement);
+        } catch (SQLException e) {
+            e.printStackTrace();
+            return null;
         }
-        catch (SQLException e) { e.printStackTrace(); }
-
         return deals;
     }
 
@@ -245,8 +260,9 @@ public class DealsManager {
                     Statement.RETURN_GENERATED_KEYS
                 );
 
-            statement.setInt(1, deal.getOwner().getUserID());
-            statement.setInt(2, ProcessStatus.Status.ONGOING.getId());
+            statement.setInt(1, deal.getOwnerID());
+            //Freshly created deal should be ongoing
+            statement.setInt(2, ProcessStatus.Status.WAITING.getId());
 
 
             if (statement.executeUpdate() == 0)
@@ -254,9 +270,11 @@ public class DealsManager {
 
 
             try (ResultSet generatedKeys = statement.getGeneratedKeys()) {
-                if (generatedKeys.next())
-                    dealID =generatedKeys.getInt(1);
-                else
+                if (generatedKeys.next()) {
+                    dealID = generatedKeys.getInt(1);
+                    deal.setDealID(dealID);
+
+                } else
                     throw new SQLException("Storing Deal failed, no ID obtained.");
             }
 
@@ -282,6 +300,9 @@ public class DealsManager {
      * @return true if Deal deleted successfully
      */
     public static boolean deleteDeal(int dealID) {
+        List<Cycle> ls = CycleManager.getCyclesByDealID(dealID);
+        for(Cycle c : ls)
+            CycleManager.deleteCycle(c.getCycleID());
         return DeleteManager.delete("deals", "id", dealID);
     }
 

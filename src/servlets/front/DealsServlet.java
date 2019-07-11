@@ -4,6 +4,8 @@ package servlets.front;
 import controllers.front.DealsController;
 import controllers.front.DealsController.SearchCriteria;
 import controllers.front.DealsController.SearchCriteria.Criteria;
+import servlets.RoutingConstants;
+
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
@@ -11,9 +13,8 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.util.Enumeration;
-import java.util.Iterator;
 
-@WebServlet(urlPatterns = {"/deals"})
+@WebServlet(urlPatterns = {RoutingConstants.DEALS})
 public class DealsServlet extends HttpServlet {
 
     /**

@@ -3,6 +3,7 @@ package servlets.user;
 
 import controllers.user.ChatsController;
 import middlewares.AuthenticatedUser;
+import servlets.RoutingConstants;
 
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
@@ -11,7 +12,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 
-@WebServlet(urlPatterns = {"/user/chats"})
+@WebServlet(urlPatterns = {RoutingConstants.USER_CHATS})
 public class ChatsServlet extends HttpServlet {
 
 	/**

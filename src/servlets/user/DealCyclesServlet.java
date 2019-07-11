@@ -3,6 +3,7 @@ package servlets.user;
 
 import controllers.user.CyclesController;
 import middlewares.AuthenticatedUser;
+import servlets.RoutingConstants;
 
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
@@ -11,7 +12,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 
-@WebServlet(urlPatterns = {"/user/deals/cycles"})
+@WebServlet(urlPatterns = {RoutingConstants.USER_CYCLES})
 public class DealCyclesServlet extends HttpServlet {
 
 	/**
@@ -34,7 +35,7 @@ public class DealCyclesServlet extends HttpServlet {
 			return;
 		}
 
-		(new CyclesController(request, response, this)).dealCycles(deal_id);
+		(new CyclesController(request, response, this)).index();
 
 	}
 }

@@ -1,6 +1,8 @@
 package models;
 
 import com.google.gson.JsonObject;
+import com.google.gson.annotations.JsonAdapter;
+import services.encoders.MessageJsonAdapter;
 
 import java.sql.Timestamp;
 import java.util.Date;
@@ -8,6 +10,7 @@ import java.util.Date;
 /**
  * Simple message class based on the "messages" table in the database
  */
+@JsonAdapter(MessageJsonAdapter.class)
 public class Message {
     private int chatID;
     private int messageID;

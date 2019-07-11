@@ -2,44 +2,52 @@
 package models;
 
 import models.categoryModels.ItemCategory;
+
+import java.sql.Timestamp;
 import java.util.Iterator;
 import java.util.List;
 
-public class Item {
+public class Item implements Comparable<Item> {
 
 
     /* Comments means default values
      * if user does not initializes it. */
 
     private int itemID;               // 0
-    private User owner;               // null
+    private int ownerID;              // 0
     private ItemCategory category;    // null
-    private List<ItemImage> images;       // null
+    private List<ItemImage> images;   // null
     private String name, description; // null
+    private Timestamp createDate;     // null
+    private Timestamp updateDate;     // null
 
 
     /**
      * Main Constructor
      * @param itemID - ID of Item in DB
-     * @param owner - Owner of the Item
+     * @param ownerID - Owner ID of the Item
      * @param category - Category of the Item
      * @param images - List of Images of the Item
      * @param name - Name of the Item
      * @param description - Description of the Item
      */
     public Item (int itemID,
-                  User owner,
+                  int ownerID,
                    ItemCategory category,
                     List<ItemImage> images,
                      String name,
-                      String description)
+                      String description,
+                       Timestamp createDate,
+                        Timestamp updateDate)
     {
         this.itemID = itemID;
-        this.owner = owner;
+        this.ownerID = ownerID;
         this.category = category;
         this.images = images;
         this.name = name;
         this.description = description;
+        this.createDate = createDate;
+        this.updateDate = updateDate;
     }
 
 
@@ -48,11 +56,16 @@ public class Item {
      */
     public int getItemID() { return itemID; }
 
+    /**
+     * Updates item's id
+     */
+    public void setItemID(int id) { this.itemID = id; }
+
 
     /**
-     * @return Owner of the Item
+     * @return Owner's ID of the Item
      */
-    public User getOwner() { return owner; }
+    public int getOwnerID() { return ownerID; }
 
 
     /**
@@ -88,6 +101,18 @@ public class Item {
 
 
     /**
+     * @return Deal's Create Date
+     */
+    public Timestamp getCreateDate() { return createDate; }
+
+
+    /**
+     * @return Deal's Update Date
+     */
+    public Timestamp getUpdateDate() { return updateDate; }
+
+
+    /**
      * !!! Item ID must be Initialized for correct comparing !!!
      * @param other Passed item
      * @return Whether two items are equal or not
@@ -102,4 +127,13 @@ public class Item {
         return itemID == otherItem.itemID;
     }
 
+    @Override
+    public int compareTo(Item o) {
+        return name.compareTo(o.getName());
+    }
+
+    @Override
+    public String toString() {
+        return name;
+    }
 }

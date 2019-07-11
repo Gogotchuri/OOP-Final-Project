@@ -3,10 +3,13 @@ package managers;
 
 import database.DatabaseAccessObject;
 import generalManagers.DeleteManager;
+import generalManagers.UpdateForm;
+import generalManagers.UpdateManager;
 import models.User;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -18,7 +21,7 @@ public class UserManager {
     private static final String STORE_USER_QUERY = "INSERT INTO users (user_name , password , first_name, last_name, " +
             "email, phone_number, created_at, updated_at) VALUES(?, ?, ?, ?, ?, ?, ?, ?);";
 
-    private static final String GET_USERID_BY_DEAL_QUERY = "SELECT user_id FROM deals WHERE deal_id = ?;";
+    private static final String GET_USER_ID_BY_DEAL_QUERY = "SELECT user_id FROM deals WHERE id = ?;";
 
 
     /**
@@ -40,22 +43,21 @@ public class UserManager {
      *         If such dealID does not exists in DB
      *         returns null
      */
-    public static User getUserByDealID(int dealID) {
+    public static int getUserIDByDealID(int dealID) {
 
         int userID = 0;
 
         try {
-            PreparedStatement statement = DAO.getPreparedStatement(GET_USERID_BY_DEAL_QUERY);
+            PreparedStatement statement = DAO.getPreparedStatement(GET_USER_ID_BY_DEAL_QUERY);
             statement.setInt(1, dealID);
             ResultSet resultSet = statement.executeQuery();
-            if (resultSet.getFetchSize() != 0) {
-                resultSet.next();
+            if (resultSet.next()) {
                 userID = resultSet.getBigDecimal("user_id").intValue();
             }
         }
         catch (SQLException e) { e.printStackTrace(); }
 
-        return userID == 0 ? null : UserManager.getUserByID(userID);
+        return userID;
     }
 
 
@@ -123,12 +125,13 @@ public class UserManager {
             resultSet.getString("phone_number"),
             ImagesManager.getUserProfileImage(userID),
             DealsManager.getDealsByUserID(userID),
-            ChatManager.getUserChats(userID)
+            ChatManager.getUserChats(userID),
+            resultSet.getTimestamp("created_at"),
+            resultSet.getTimestamp("updated_at")
         );
     }
 
     /**
-     * TODO: Krawa
      * Should Store given user to database.
      * return true is user has been store successfully,
      * otherwise (if query violated any constraint returns false)
@@ -136,8 +139,8 @@ public class UserManager {
      * @return
      */
     public static boolean storeUser(User user){
-        /*try {
-            PreparedStatement st = DBAO.getPreparedStatement(STORE_USER_QUERY);
+        try {
+            PreparedStatement st = DAO.getPreparedStatement(STORE_USER_QUERY, Statement.RETURN_GENERATED_KEYS);
 
             st.setString(1, user.getUsername());
             st.setString(2, user.getPassword());
@@ -145,15 +148,21 @@ public class UserManager {
             st.setString(4, user.getLastName());
             st.setString(5, user.getEmail());
             st.setString(6, user.getPhoneNumber());
-            st.setTimestamp(7, user.getCreatedDate());
-            st.setTimestamp(8, user.getUpdatedDate());
+            st.setTimestamp(7, user.getCreateDate());
+            st.setTimestamp(8, user.getUpdateDate());
 
             st.executeUpdate();
+            try (ResultSet generatedKeys = st.getGeneratedKeys()) {
+                if (generatedKeys.next()) {
+                    user.setUserID(generatedKeys.getInt(1));
+                } else
+                    throw new SQLException("Storing user failed, no ID obtained.");
+            }
 
         } catch (SQLException e) {
             e.printStackTrace();
             return false;
-        }*/
+        }
         return true;
     }
 
@@ -169,7 +178,10 @@ public class UserManager {
      * @return user with specified email
      */
     public static User getUserByEmail(String email) {
-        return getUsersByColumn("email", email, false).get(0);
+        List<User> usersWithEmail = getUsersByColumn("email", email, false);
+        if(usersWithEmail.isEmpty())
+            return null;
+        return usersWithEmail.get(0);
     }
 
     /**
@@ -178,7 +190,7 @@ public class UserManager {
      * @return true if update was successful
      */
     public static boolean updateExistingUser(User user) {
-        /*UpdateForm uf = new UpdateForm("users", user.getUserID());
+        UpdateForm uf = new UpdateForm("users", user.getUserID());
         uf.addUpdate("user_name", user.getUsername());
         uf.addUpdate("password", user.getPassword());
         uf.addUpdate("first_name", user.getFirstName());
@@ -186,9 +198,8 @@ public class UserManager {
         uf.addUpdate("email", user.getEmail());
         uf.addUpdate("phone_number", user.getPhoneNumber());
         //Updating created_at isn't really necessary, but just in case
-        uf.addUpdate("created_at", user.getCreatedDate());
-        uf.addUpdate("updated_at", user.getUpdatedDate());
-        return UpdateManager.update(uf);*/
-        return false;
+        uf.addUpdate("created_at", user.getCreateDate());
+        uf.addUpdate("updated_at", user.getUpdateDate());
+        return UpdateManager.update(uf);
     }
 }

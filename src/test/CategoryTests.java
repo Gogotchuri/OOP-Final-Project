@@ -33,8 +33,7 @@ public class CategoryTests {
     private static final ItemCategory oCat3 = makeCategory("Iphone", "other", "other");
     private static final ItemCategory oCat4 = makeCategory("S3", "other", "Samsung");
 
-    @Test
-    public void resetBase() {
+    private void resetBase() {
 
         // In a query this translates like 'WHERE 1 = 1' and deletes everything
         DeleteManager.delete(SERIE_TABLE, "1", 1);
@@ -49,6 +48,7 @@ public class CategoryTests {
 
     @Test
     public void insertCategory() {
+        resetBase();
         assertTrue(CategoryManager.insertCategory(cat1));
         assertTrue(CategoryManager.insertCategory(cat2));
         assertTrue(CategoryManager.insertCategory(cat3));
@@ -63,6 +63,15 @@ public class CategoryTests {
         assertFalse(CategoryManager.insertCategory(cat1));
         assertFalse(CategoryManager.insertCategory(oCat2));
         assertFalse(CategoryManager.insertCategory(oCat4));
+    }
+
+    @Test
+    public void checkIDs() {
+        assertEquals(CategoryManager.getCategoryByID(1), cat1);
+        assertEquals(CategoryManager.getCategoryByID(3), cat3);
+        assertEquals(CategoryManager.getCategoryByID(5555), null);
+        assertEquals(CategoryManager.getCategoryByID(6), oCat1);
+        assertNotEquals(CategoryManager.getCategoryByID(1), cat2);
     }
 
     @Test

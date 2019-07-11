@@ -19,8 +19,9 @@ public class ChatManager {
     private static final String GET_CHAT_BY_CYCLE_QUERY = "SELECT * FROM chats WHERE cycle_id = ?;";
     private static final String GET_CHAT_BY_ID_QUERY = "SELECT * FROM chats WHERE id = ?;";
     private static final String GET_MESSAGES_QUERY = "SELECT * FROM messages WHERE chat_id = ?;";
-    private static final String INSERT_MESSAGE_QUERY = "INSERT INTO messages (chat_id, body, created_at) VALUES (?, ?, ?);";
-    private static final String INSERT_CHAT_QUERY = "INSERT INTO chats (cycle_id, updated_at) VALUES(?, ?);";
+    private static final String INSERT_MESSAGE_QUERY = "INSERT INTO messages (chat_id," +
+            " body, author_id, created_at) VALUES (?, ?, ?, ?);";
+    private static final String INSERT_CHAT_QUERY = "INSERT INTO chats (cycle_id) VALUES(?);";
     private static DatabaseAccessObject DBO = DatabaseAccessObject.getInstance();
 
 
@@ -34,7 +35,8 @@ public class ChatManager {
             PreparedStatement st = DBO.getPreparedStatement(INSERT_MESSAGE_QUERY, Statement.RETURN_GENERATED_KEYS);
             st.setInt(1, msg.getChatID());
             st.setString(2, msg.getBody());
-            st.setTimestamp(3, msg.getDate());
+            st.setInt(3, msg.getUserId());
+            st.setTimestamp(4, msg.getDate());
             if (st.executeUpdate() == 0)
                 throw new SQLException("Creating message failed, no rows affected.");
             try (ResultSet generatedKeys = st.getGeneratedKeys()) {
@@ -88,7 +90,6 @@ public class ChatManager {
         try {
             PreparedStatement st = DBO.getPreparedStatement(INSERT_CHAT_QUERY, Statement.RETURN_GENERATED_KEYS);
             st.setInt(1, chat.getCycle().getCycleID());
-            st.setTimestamp(2, chat.getLastUpdateDate());
             if (st.executeUpdate() == 0)
                 throw new SQLException("Creating chat failed, no rows affected.");
             try (ResultSet generatedKeys = st.getGeneratedKeys()) {
@@ -137,7 +138,7 @@ public class ChatManager {
             PreparedStatement st = DBO.getPreparedStatement(GET_CHAT_BY_CYCLE_QUERY);
             st.setInt(1, cycleID);
             ResultSet set = st.executeQuery();
-            set.next();
+            if(set.next())
             ch = new Chat(set.getBigDecimal("id").intValue(),
                     new Cycle(cycleID), set.getTimestamp("updated_at"), new Vector<>());
             getMessagesForChat(ch);
@@ -147,7 +148,11 @@ public class ChatManager {
         return ch;
     }
 
-    //TODO WARNING! not tested yet, please test
+    /**
+     * Finds user's active chats in database
+     * @param user_id
+     * @return list of chats
+     */
     public static List<Chat> getUserChats(int user_id){
         List<Chat> chats = new ArrayList<>();
         String query = "SELECT ch.id " +
@@ -158,7 +163,6 @@ public class ChatManager {
                 "WHERE cycles.status_id = " + ProcessStatus.Status.ONGOING.getId() +
                 " AND d.user_id = " + user_id +
                 " ORDER BY ch.updated_at";
-        //TODO is this right?? no idea
 
         try {
             PreparedStatement st = DBO.getPreparedStatement(query);

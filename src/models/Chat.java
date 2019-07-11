@@ -1,28 +1,17 @@
 package models;
 
-import java.util.Date;
 import java.sql.Timestamp;
-import java.util.Iterator;
-import java.util.Vector;
+import java.util.*;
 
 /**
  * Class containing sequence of messages
  */
 public class Chat {
-    private int chatID; //-1
-    private Cycle cycle; //null
-    private Timestamp lastUpdateDate; //Need timestamp for exact time
-    private Vector<Message> messages; //default: empty vector
 
-
-    /**
-     * Constructor with only chat id and cycle
-     * @param chatID the id of the chat in DB
-     * @param cycle cycle which the chat is for
-     */
-    public Chat(int chatID, Cycle cycle){
-        this(chatID, cycle, null, null);
-    }
+    private int chatID;               // -1
+    private Cycle cycle;              // null
+    private Timestamp lastUpdateDate; // null
+    private Vector<Message> messages; // should be empty vector
 
 
     /**
@@ -32,12 +21,31 @@ public class Chat {
      * @param updateDate time of last update
      * @param messages collection of messages
      */
-    public Chat(int chatID, Cycle cycle, Date updateDate, Vector<Message> messages){
+    public Chat(int chatID, Cycle cycle, Timestamp updateDate, Vector<Message> messages){
         this.messages = messages;
         this.chatID = chatID;
         this.cycle = cycle;
         this.lastUpdateDate = (updateDate != null) ? new Timestamp(updateDate.getTime())
                 : new Timestamp((new Date()).getTime());
+    }
+
+
+    /**
+     * Constructor with only chat id and cycle
+     * @param chatID the id of the chat in DB
+     * @param cycle cycle which the chat is for
+     */
+    public Chat(int chatID, Cycle cycle){
+        this(chatID, cycle, null, new Vector<>());
+    }
+
+
+    /**
+     * Constructor with only cycle
+     * @param cycle cycle which the chat is for
+     */
+    public Chat(Cycle cycle) {
+        this(-1, cycle);
     }
 
 
@@ -53,8 +61,8 @@ public class Chat {
     /**
      * @return  iterator containing every message in the chat
      */
-    public Iterator getMessages(){
-        return messages.iterator();
+    public List<Message> getMessages(){
+        return messages;
     }
 
     /**
@@ -131,5 +139,21 @@ public class Chat {
     public boolean isParticipant(int user_id){
        return true;
        //TODO implement me
+    }
+
+    /**
+     * Returns list of users participating in this chat (cycle in general)
+     * */
+    public List<User> getParticipants(){
+        return null;
+        //TODO implement me
+    }
+
+    /**
+     * Returns list of user names participating in this chat (cycle in general)
+     * */
+    public List<String> getParticipantNames(){
+        return Arrays.asList("ვასო", "ტასო", "ამირანი");
+        //TODO implement me
     }
 }

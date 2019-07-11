@@ -2,6 +2,7 @@ package managers;
 
 import database.DatabaseAccessObject;
 import models.Image;
+import models.ImageCategories;
 import models.ItemImage;
 
 import java.sql.*;
@@ -9,19 +10,19 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class ImagesManager {
-    private static final String GET_USER_PROFILE_IMAGE = "SELECT id, image_category_id, url," +
-            " item_id, created_at FROM item_images WHERE user_id = ?;";
-    private static final String GET_ITEM_IMAGE_BY_ID = "SELECT image_category_id, url, user_id," +
-            " item_id, created_at FROM item_images WHERE user_id = ?;";
-    private static final String GET_ITEM_IMAGE_BY_ITEM_ID = "SELECT image_category_id, url, user_id," +
+    private static final String GET_USER_PROFILE_IMAGE = "SELECT * FROM profile_images WHERE user_id = ?;";
+    private static final String GET_ITEM_IMAGE_BY_ID = "SELECT id, image_category_id, url, user_id," +
+            " item_id, created_at FROM item_images WHERE id = ?;";
+    private static final String GET_ITEM_IMAGE_BY_ITEM_ID = "SELECT id, image_category_id, url, user_id," +
             " item_id, created_at FROM item_images WHERE item_id = ?;";
+    private static final String GET_ITEM_IMAGE_BY_USER_ID = "SELECT id, image_category_id, url, user_id," +
+            " item_id, created_at FROM item_images WHERE user_id = ?;";
 
     private static final String INSERT_ITEM_IMAGE_QUERY = "INSERT INTO item_images (image_category_id, url, user_id, item_id," +
             " created_at) VALUES(?, ?, ?, ?, ?);";
     private static final String INSERT_PROFILE_IMAGE_QUERY = "INSERT INTO profile_images (url, user_id," +
             " created_at) VALUES(?, ?, ?);";
 
-    private static final String INSERT_IMAGE_CATEGORY_QUERY = "INSERT INTO image_categories VALUES(?, ?);";
     private static DatabaseAccessObject DBO = DatabaseAccessObject.getInstance();
 
     /**
@@ -29,7 +30,7 @@ public class ImagesManager {
      * @return Fully Filled Image object.
      *         Or null if Image with such ID does not exists.
      */
-    public static ItemImage getImageByID(int imageID) {
+    public static ItemImage getItemImageByID(int imageID) {
         Image img = null;
 
         try {
@@ -66,7 +67,7 @@ public class ImagesManager {
         try {
             PreparedStatement st = DBO.getPreparedStatement(INSERT_ITEM_IMAGE_QUERY);
 
-            st.setInt(1, img.getImageCategory());
+            st.setInt(1, img.getImageCategory().getId());
             st.setString(2, img.getUrl());
             st.setInt(3, img.getUserId());
             st.setInt(4, img.getItemId());
@@ -126,7 +127,7 @@ public class ImagesManager {
      * @return All images of items that passed user owns
      */
     public static List<ItemImage> getItemImagesByUserID(int userId) {
-        return getItemImages(userId, GET_ITEM_IMAGE_BY_ID);
+        return getItemImages(userId, GET_ITEM_IMAGE_BY_USER_ID);
     }
 
     /**
@@ -177,11 +178,11 @@ public class ImagesManager {
      * @throws SQLException
      */
     private static ItemImage parseItemImage(ResultSet set) throws SQLException {
-        return new ItemImage(set.getBigDecimal("id").intValue(),
-                set.getBigDecimal("image_category_id").intValue(),
+        return new ItemImage(set.getInt("id"),
                 set.getString("url"),
-                set.getBigDecimal("user_id").intValue(),
-                set.getBigDecimal("item_id").intValue(),
+                set.getInt("user_id"),
+                set.getInt("item_id"),
+                ImageCategories.getCategoryByID(set.getInt("image_category_id")),
                 new Timestamp(set.getDate("created_at").getTime()));
     }
 }

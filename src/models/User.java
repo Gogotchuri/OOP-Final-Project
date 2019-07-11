@@ -3,6 +3,7 @@ package models;
 
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
+import java.sql.Timestamp;
 import java.util.List;
 
 public class User {
@@ -27,6 +28,8 @@ public class User {
 
     private List<Chat> chats;     // null
 
+    private Timestamp createDate, updateDate; // null
+
 
     /**
      * Main Constructor
@@ -50,7 +53,10 @@ public class User {
                  String phoneNumber,
                  Image profilePicture,
                  List<Deal> deals,
-                 List<Chat> chats)
+                 List<Chat> chats,
+                 Timestamp createDate,
+                 Timestamp updateDate
+                 )
     {
         this.userID = userID;
         this.username = username;
@@ -62,6 +68,8 @@ public class User {
         this.profilePicture = profilePicture;
         this.deals = deals;
         this.chats = chats;
+        this.createDate = createDate;
+        this.updateDate = updateDate;
     }
 
 
@@ -91,6 +99,8 @@ public class User {
             phoneNumber,
             null,
             null,
+            null,
+            null,
             null
         );
     }
@@ -100,6 +110,12 @@ public class User {
      * @return ID of User in DB
      */
     public int getUserID() { return userID; }
+
+
+    /**
+     * Updates user's id
+     */
+    public void setUserID(int userID) { this.userID = userID; }
 
 
     /**
@@ -154,6 +170,18 @@ public class User {
      * @return Chats of User
      */
     public List<Chat> getChats() { return chats; }
+
+
+    /**
+     * @return User's Create Date
+     */
+    public Timestamp getCreateDate() { return createDate; }
+
+
+    /**
+     * @return User's Update Date
+     */
+    public Timestamp getUpdateDate() { return updateDate; }
 
 
     /**

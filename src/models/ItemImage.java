@@ -8,21 +8,30 @@ import java.sql.Timestamp;
  */
 public class ItemImage extends Image {
 
-    private int itemId, imageCategory;
+    private int itemId;
+    private ImageCategories.ImageCategory category;
 
-    public ItemImage(int id, int userId, String url, int itemId, int imageCategory, Timestamp createdAt) {
-        super(id, userId, url, createdAt);
+    public ItemImage(int id, String url, int userID, int itemId, ImageCategories.ImageCategory category, Timestamp createdAt) {
+        super(id, userID, url, createdAt);
         this.itemId = itemId;
-        this.imageCategory = imageCategory;
+        this.category = category;
+    }
+
+    public ItemImage(String url, int userID, int itemID, ImageCategories.ImageCategory category) {
+        this(0, url, userID, itemID, category, new Timestamp(System.currentTimeMillis()));
     }
 
     /**
      * @return ID of an item
      */
-    public int getItemId() { return itemId; }
+    public int getItemId() {
+        return itemId;
+    }
 
     /**
      * @return Category of an image
      */
-    public int getImageCategory() { return imageCategory; }
+    public ImageCategories.ImageCategory getImageCategory() {
+        return category;
+    }
 }

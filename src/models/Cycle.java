@@ -1,19 +1,18 @@
 
 package models;
 
-import java.util.HashSet;
+import java.util.ArrayList;
 import java.util.Iterator;
-import java.util.Set;
+import java.util.List;
 
 public class Cycle {
-
 
     /* Comments means default values
      * if user does not initializes it. */
 
     private int cycleID;                      // 0
     private ProcessStatus.Status cycleStatus; // null
-    private Set<Deal> deals;                  // null
+    private List<Deal> deals;                 // null
 
 
     /**
@@ -22,7 +21,7 @@ public class Cycle {
      * @param cycleStatus - Process Status of a Cycle
      * @param deals - Set of Deals which contains Cycle
      */
-    public Cycle(int cycleID, ProcessStatus.Status cycleStatus, Set<Deal> deals) {
+    public Cycle(int cycleID, ProcessStatus.Status cycleStatus, List<Deal> deals) {
         this.cycleID = cycleID;
         this.cycleStatus = cycleStatus;
         this.deals = deals;
@@ -33,7 +32,7 @@ public class Cycle {
      * @param cycleID - ID of a Cycle in DB
      */
     public Cycle(int cycleID) {
-        this(cycleID, null, new HashSet<>());
+        this(cycleID, null, null);
     }
 
     /**
@@ -44,7 +43,7 @@ public class Cycle {
      * 3) Initialized Set of Deals
      * @param deals - Set of Deals which contains Cycle
      */
-    public Cycle(Set<Deal> deals) {
+    public Cycle(List<Deal> deals) {
         this(0, null, deals);
     }
 
@@ -59,7 +58,7 @@ public class Cycle {
 
     /**
      * Updates cycle ID
-     * @param cycleID
+     * @param cycleID - ID of a Cycle in DB
      */
     public void setCycleID(int cycleID) {
         this.cycleID = cycleID;
@@ -79,7 +78,7 @@ public class Cycle {
      *         If returned null that means that
      *         Cycle's Set of Deals is not initialized yet.
      */
-    public Set<Deal> getDeals() { return deals; }
+    public List<Deal> getDeals() { return deals; }
 
 
     /**
@@ -87,6 +86,7 @@ public class Cycle {
      * @throws NullPointerException if deals in not initialized
      */
     public Iterator<Deal> getDealsIterator() {
+        if(deals == null) return null;
         return deals.iterator();
     }
 
