@@ -28,6 +28,7 @@ CREATE TABLE deals
   FOREIGN KEY (user_id) REFERENCES users(id),
   status_id INT(6) UNSIGNED NOT NULL,
   FOREIGN KEY (status_id) REFERENCES process_statuses(id),
+  title varchar(256),
 
   created_at TIMESTAMP DEFAULT now(),
   updated_at TIMESTAMP DEFAULT now()
@@ -64,7 +65,7 @@ CREATE TABLE items
     item_category_id INT(6) UNSIGNED NOT NULL,
     FOREIGN KEY (item_category_id) REFERENCES item_categories(id),
 
-    description VARCHAR(512),
+    description VARCHAR(512) DEFAULT '',
     name VARCHAR(32) NOT NULL,
 
     created_at TIMESTAMP DEFAULT now(),
@@ -114,10 +115,10 @@ CREATE TABLE offered_cycles
     FOREIGN KEY (status_id) REFERENCES process_statuses(id),
     
     deal_id INT(6) UNSIGNED NOT NULL,
-    FOREIGN KEY (deal_id) REFERENCES deals(id),
+    FOREIGN KEY (deal_id) REFERENCES deals(id) on delete cascade,
 
     cycle_id INT(6) UNSIGNED NOT NULL,
-    FOREIGN KEY (cycle_id) REFERENCES cycles(id)
+    FOREIGN KEY (cycle_id) REFERENCES cycles(id) on delete cascade
 );
 
 

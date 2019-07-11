@@ -14,7 +14,7 @@ public class Item implements Comparable<Item> {
      * if user does not initializes it. */
 
     private int itemID;               // 0
-    private User owner;               // null
+    private int ownerID;              // 0
     private ItemCategory category;    // null
     private List<ItemImage> images;   // null
     private String name, description; // null
@@ -25,14 +25,14 @@ public class Item implements Comparable<Item> {
     /**
      * Main Constructor
      * @param itemID - ID of Item in DB
-     * @param owner - Owner of the Item
+     * @param ownerID - Owner ID of the Item
      * @param category - Category of the Item
      * @param images - List of Images of the Item
      * @param name - Name of the Item
      * @param description - Description of the Item
      */
     public Item (int itemID,
-                  User owner,
+                  int ownerID,
                    ItemCategory category,
                     List<ItemImage> images,
                      String name,
@@ -41,7 +41,7 @@ public class Item implements Comparable<Item> {
                         Timestamp updateDate)
     {
         this.itemID = itemID;
-        this.owner = owner;
+        this.ownerID = ownerID;
         this.category = category;
         this.images = images;
         this.name = name;
@@ -56,11 +56,16 @@ public class Item implements Comparable<Item> {
      */
     public int getItemID() { return itemID; }
 
+    /**
+     * Updates item's id
+     */
+    public void setItemID(int id) { this.itemID = id; }
+
 
     /**
-     * @return Owner of the Item
+     * @return Owner's ID of the Item
      */
-    public User getOwner() { return owner; }
+    public int getOwnerID() { return ownerID; }
 
 
     /**

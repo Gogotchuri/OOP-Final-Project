@@ -5,10 +5,7 @@ import controllers.front.DealsController.SearchCriteria;
 import controllers.front.DealsController.SearchCriteria.Criteria;
 import database.DatabaseAccessObject;
 import generalManagers.DeleteManager;
-import models.Deal;
-import models.Item;
-import models.ProcessStatus;
-import models.User;
+import models.*;
 import models.categoryModels.ItemCategory;
 
 import java.sql.*;
@@ -27,19 +24,41 @@ public class DealsManager {
      */
     public static Deal getDealByDealID(int dealID) {
 
-        User owner = UserManager.getUserByDealID(dealID);
+        int ownerID = UserManager.getUserIDByDealID(dealID);
         List<Item> ownedItems = ItemManager.getItemsByDealID(dealID);
         List<ItemCategory> wantedCategories = CategoryManager.getWantedCategoriesByDealID(dealID);
         ProcessStatus.Status dealStatus = StatusManager.getStatusIDByID("deals", dealID);
+        String title = getTitleByDealID(dealID);
         Timestamp dealCreateDate = DateManager.getCreateDateByID("deals", dealID);
 
-        return (owner == null ||
+        return (ownerID == 0 ||
                  ownedItems == null ||
                   wantedCategories == null ||
                    dealStatus == null ||
-                    dealCreateDate == null)
+                    title == null ||
+                     dealCreateDate == null)
                 ?
-                null : new Deal(dealID, owner, ownedItems, wantedCategories, dealStatus, dealCreateDate);
+                null : new Deal(dealID, ownerID, ownedItems, wantedCategories, dealStatus, title, dealCreateDate);
+    }
+
+    /**
+     * @param dealID ID of Deal in DB
+     * @return title of the deal, may return null, in that case, it's empty
+     */
+    private static String getTitleByDealID(int dealID) {
+        String query = "SELECT title FROM deals where id = ?;";
+
+        try {
+            PreparedStatement st = DAO.getPreparedStatement(query);
+            st.setInt(1, dealID);
+            ResultSet set = st.executeQuery();
+
+            if(set.next()) return set.getString(1);
+
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return null;
     }
 
 
@@ -120,7 +139,7 @@ public class DealsManager {
     public static List<Deal> getDealsBySearchCriteria(SearchCriteria sc) {
 
         StringBuilder queryBuilder = new StringBuilder (
-            "SELECT d.id AS id_of_deal \n" +
+            "SELECT DISTINCT d.id AS id_of_deal \n" +
             "  FROM deals d \n" +
             "  JOIN users u ON (d.user_id = u.id) \n" +
             "  JOIN wanted_items wi ON (d.id = wi.deal_id) \n" +
@@ -137,12 +156,12 @@ public class DealsManager {
             if (criteria == Criteria.USER_NAME) {
 
                 String userName = sc.getCriteriaValue(Criteria.USER_NAME);
-                queryBuilder.append(" AND u.user_name = ").append(userName).append(" \n");
+                queryBuilder.append(" AND u.user_name = \'").append(userName).append("\' \n");
 
             } else if (criteria == Criteria.CATEGORY_NAME) {
 
                 String category = sc.getCriteriaValue(Criteria.CATEGORY_NAME);
-                queryBuilder.append(" AND ic.name = ").append(category).append(" \n");
+                queryBuilder.append(" AND ic.name = \'").append(category).append("\' \n");
 
             } else if (criteria == Criteria.DEAL_CREATE_DATE) {
 
@@ -244,7 +263,7 @@ public class DealsManager {
                     Statement.RETURN_GENERATED_KEYS
                 );
 
-            statement.setInt(1, deal.getOwner().getUserID());
+            statement.setInt(1, deal.getOwnerID());
             statement.setInt(2, ProcessStatus.Status.ONGOING.getId());
 
 
@@ -283,6 +302,9 @@ public class DealsManager {
      * @return true if Deal deleted successfully
      */
     public static boolean deleteDeal(int dealID) {
+        List<Cycle> ls = CycleManager.getCyclesByDealID(dealID);
+        for(Cycle c : ls)
+            CycleManager.deleteCycle(c.getCycleID());
         return DeleteManager.delete("deals", "id", dealID);
     }
 

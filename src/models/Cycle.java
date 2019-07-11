@@ -32,7 +32,7 @@ public class Cycle {
      * @param cycleID - ID of a Cycle in DB
      */
     public Cycle(int cycleID) {
-        this(cycleID, null, new ArrayList<>());
+        this(cycleID, null, null);
     }
 
     /**
@@ -86,6 +86,7 @@ public class Cycle {
      * @throws NullPointerException if deals in not initialized
      */
     public Iterator<Deal> getDealsIterator() {
+        if(deals == null) return null;
         return deals.iterator();
     }
 

@@ -42,7 +42,7 @@ public class CyclesController extends Controller {
     public void show(int cycleID) throws ServletException, IOException {
         Cycle cycle = CycleManager.getCycleByCycleID(cycleID);
         if (cycle == null) {
-            // TODO: Send Error
+            sendError(500, "cycle == null");
             return;
         }
         request.setAttribute("cycle", cycle);
@@ -57,7 +57,7 @@ public class CyclesController extends Controller {
     public void dealCycles(int dealID) throws ServletException, IOException {
         List<Cycle> cycles = CycleManager.getCyclesByDealID(dealID);
         if (cycles == null) {
-            // TODO: Send Error
+            sendError(500, "cycles == null");
             return;
         }
         request.setAttribute("cycles", cycles);

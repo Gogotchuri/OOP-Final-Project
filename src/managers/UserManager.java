@@ -43,7 +43,7 @@ public class UserManager {
      *         If such dealID does not exists in DB
      *         returns null
      */
-    public static User getUserByDealID(int dealID) {
+    public static int getUserIDByDealID(int dealID) {
 
         int userID = 0;
 
@@ -57,7 +57,7 @@ public class UserManager {
         }
         catch (SQLException e) { e.printStackTrace(); }
 
-        return userID == 0 ? null : UserManager.getUserByID(userID);
+        return userID;
     }
 
 
@@ -132,7 +132,6 @@ public class UserManager {
     }
 
     /**
-     * TODO: Krawa
      * Should Store given user to database.
      * return true is user has been store successfully,
      * otherwise (if query violated any constraint returns false)

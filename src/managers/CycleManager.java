@@ -3,6 +3,7 @@ package managers;
 
 import database.DatabaseAccessObject;
 import generalManagers.DeleteManager;
+import models.Chat;
 import models.Cycle;
 import models.Deal;
 import models.ProcessStatus;
@@ -121,6 +122,7 @@ public class CycleManager {
             Cycle insertedCycle = insertCycle(cycle);
 
             Iterator<Deal> i = cycle.getDealsIterator();
+            if(i != null)
             while (i.hasNext())
                 insertCycleToOffered(i.next().getDealID(), insertedCycle.getCycleID());
 
@@ -175,11 +177,12 @@ public class CycleManager {
 
         PreparedStatement statement =
             DAO.getPreparedStatement (
-                "INSERT INTO offered_cycles (deal_id, cycle_id) VALUES (?, ?);"
+                "INSERT INTO offered_cycles (status_id, deal_id, cycle_id) VALUES (?, ?, ?);"
             );
 
-        statement.setInt(1, cycleDealID);
-        statement.setInt(2, cycleID);
+        statement.setInt(1, ProcessStatus.Status.ONGOING.getId());
+        statement.setInt(2, cycleDealID);
+        statement.setInt(3, cycleID);
 
         if (statement.executeUpdate() == 0)
             throw new SQLException("Creating Offered Cycle failed, no rows affected.");
@@ -196,8 +199,9 @@ public class CycleManager {
 
 
     /**
+     * @param cycleID - ID of Cycle in DB
      * @param dealID - ID of Deal in DB
-     * @return Whether Cycles accepted or not
+     * @return Whether Offered Cycle accepted or not
      */
     public static boolean acceptCycle(int cycleID, int dealID) {
         try {
@@ -208,7 +212,13 @@ public class CycleManager {
                            " WHERE cycle_id = " + cycleID + " \n" +
                            "   AND deal_id = " + dealID + ";"
             );
-            return statement.executeUpdate() != 0;
+            if (statement.executeUpdate() == 0)
+                return false;
+
+            if (allAccepted(cycleID))
+                return ChatManager.addChatToDB(new Chat(new Cycle(cycleID)));
+
+            return true;
         }
         catch (SQLException e) {
             e.printStackTrace();
@@ -218,11 +228,20 @@ public class CycleManager {
 
 
     /**
+     * TODO
+     * @param cycleID - ID of Cycle in DB
+     * @return Whether Cycle accepted or not
+     */
+    private static boolean allAccepted(int cycleID) {
+        return false;
+    }
+
+
+    /**
      * Deletes a Cycle from DB
      * @param cycleID - ID of Cycle in DB
      */
     public static boolean deleteCycle(int cycleID){
-        deleteOfferedCycles(cycleID);
         return DeleteManager.delete("cycles", "id", cycleID);
     }
 

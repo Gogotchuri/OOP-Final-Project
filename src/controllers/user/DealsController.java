@@ -4,7 +4,9 @@ package controllers.user;
 import controllers.Controller;
 import controllers.ResourceController;
 import events.DealCyclesFinder;
+import managers.CategoryManager;
 import managers.DealsManager;
+import managers.ItemManager;
 import models.Deal;
 import models.Item;
 import models.ProcessStatus;
@@ -102,20 +104,27 @@ public class DealsController extends Controller implements ResourceController {
         List<Integer> ownedIDs = getIntegerListOf("item_id"),
                         wantedIDs = getIntegerListOf("wanted_id");
 
+        List<Item> ownedItems = ItemManager.getItemsByItemIDs(ownedIDs);
+        if (ownedItems == null) {
+            sendError(500, "ownedItems == null");
+            return;
+        }
 
-        List<Item> ownedItems = null; // TODO ItemManager.getItemsByIDs(ownedIDs);
-        List<ItemCategory> wantedCategories = null; // TODO CategoryManager.getCategoriesByIDs(wantedIDs);
+        List<ItemCategory> wantedCategories = CategoryManager.getItemCategoriesByItemCategoryIDs(wantedIDs);
+        if (wantedCategories == null) {
+            sendError(500, "wantedCategories == null");
+            return;
+        }
 
-
-        Deal deal = new Deal(user, ownedItems, wantedCategories);
+        Deal deal = new Deal(user.getUserID(), ownedItems, wantedCategories);
         deal.setDealID(DealsManager.storeDeal(deal));
 
         int dealID = deal.getDealID();
 
-        if (dealID == -1) { // Deal did not insert into DB
+        if (dealID == 0) { // Deal did not insert into DB
             sendError(500, "Internal server error! \n" +
                 "While Inserting new deal to database, 0 was returned as value of deal id" +
-                "(User.DealsController:102)");
+                "(User.DealsController:113)");
             return;
         }
 
@@ -204,7 +213,7 @@ public class DealsController extends Controller implements ResourceController {
             sendError(404, "Deal not found!");
             return false;
         }
-        if(deal.getOwner().getUserID() != this.user.getUserID()){
+        if(deal.getOwnerID() != this.user.getUserID()){
             sendError(401, "Not authorized to edit this deal!");
             return false;
         }
