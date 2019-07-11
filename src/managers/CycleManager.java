@@ -247,4 +247,50 @@ public class CycleManager {
         return DeleteManager.delete("cycles", "id", cycleID);
     }
 
+    public static boolean userParticipatesInCycle(int user_id, int cycle_id){
+        String stmtString = "SELECT count(oc.id) as num_id \n" +
+                    "FROM offered_cycles oc \n" +
+                    "WHERE oc.user_id = " + user_id + " AND \n" +
+                    "WHERE oc.cycle_id = " + cycle_id +";";
+        try {
+            PreparedStatement statement =
+                    DAO.getPreparedStatement (stmtString);
+            ResultSet rs = statement.executeQuery();
+            rs.next();
+            return rs.getInt("num_id") > 0;
+
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+
+        return false;
+    }
+
+    /**
+     * Returns all cycles for the user with given id
+     * @param userID User id for whom to get cycles
+     * @return returns List of cycle if everything went well, if query crashed
+     *          prints stack trace and returns null
+     */
+    public static List<Cycle> getUserCycles(int userID) {
+        List<Cycle> cycles = new ArrayList<>();
+        try {
+            PreparedStatement statement =
+                    DAO.getPreparedStatement (
+                            "SELECT oc.cycle_id \n" +
+                                    "FROM offered_cycles oc \n" +
+                                    "WHERE oc.user_id = " + userID + ";"
+                    );
+            ResultSet resultSet = statement.executeQuery();
+            while (resultSet.next())
+                cycles.add (
+                        getCycleByCycleID(resultSet.getInt("cycle_id"))
+                );
+        }
+        catch (SQLException e) {
+            e.printStackTrace();
+            return null;
+        }
+        return cycles;
+    }
 }

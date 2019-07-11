@@ -3,6 +3,7 @@ package servlets.user;
 
 import controllers.user.CyclesController;
 import middlewares.AuthenticatedUser;
+import servlets.RoutingConstants;
 
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
@@ -11,7 +12,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 
-@WebServlet(urlPatterns = {"/user/deals/cycles/show"})
+@WebServlet(urlPatterns = {RoutingConstants.USER_SINGLE_CYCLE})
 public class DealCycleServlet extends HttpServlet{
 
 	/**
@@ -43,9 +44,6 @@ public class DealCycleServlet extends HttpServlet{
 
 
 	/**
-	 TODO: Ilia, authenticated ki sheidzleba iyos mara xo sheidzleba
-	       hacker iyos da sxvisi cycle_id da deal_id gamogzavnos ???
-
 	 Accepts offered cycle, takes cycle_id and deal_id as request parameter
 
 	 returned html:
