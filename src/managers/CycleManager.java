@@ -215,8 +215,10 @@ public class CycleManager {
             if (statement.executeUpdate() == 0)
                 return false;
 
-            if (allAccepted(cycleID))
+            if (allAccepted(cycleID)) {
+                // TODO Set Cycle status true
                 return ChatManager.addChatToDB(new Chat(new Cycle(cycleID)));
+            }
 
             return true;
         }
@@ -228,12 +230,24 @@ public class CycleManager {
 
 
     /**
-     * TODO
      * @param cycleID - ID of Cycle in DB
-     * @return Whether Cycle accepted or not
+     * @return Whether All of Users accepted Cycle or not
      */
     private static boolean allAccepted(int cycleID) {
-        return false;
+        try {
+            PreparedStatement statement =
+                DAO.getPreparedStatement (
+                    "SELECT 1 \n" +
+                           "  FROM offered_cycles \n" +
+                           " WHERE cycle_id = " + cycleID + " \n" +
+                           "   AND status_id = " + ProcessStatus.Status.WAITING.getId() + ";"
+                );
+            return !statement.executeQuery().next();
+        }
+        catch (SQLException e) {
+            e.printStackTrace();
+            return false;
+        }
     }
 
 
