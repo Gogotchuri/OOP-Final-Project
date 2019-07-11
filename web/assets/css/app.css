@@ -314,4 +314,83 @@ div.messages div.own-message .message-date{
 }
 /*!!Conversation column*/
 
+/*Deal Creation Page Style*/
+.dealFormContainer{
+    display: grid;
+    grid-template-rows: 1fr 1fr;
+    height: 89vh;
+}
+
+.dealFormContainer div{
+    margin: 5px;
+}
+.dealFormContainer
+> div.dealFields{
+    background-color: white;
+}
+
+.dealFormContainer
+ > div.itemContainer {
+    border-bottom: 1px solid;
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+}
+
+.dealFormContainer
+> div.itemContainer
+> div.newItemContainer{
+    border-right: 1px solid;
+}
+
+.dealFormContainer
+> div.itemContainer
+> div.newItemContainer
+> div.newItem{
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+}
+
+.dealFormContainer
+> div.itemContainer
+> div.dealItems table{
+    background-color: #eeee;
+    height: 80%;
+}
+
+.dealFormContainer
+> div.itemContainer
+> div.dealItems
+> div.tableWrapper{
+    overflow-y: auto;
+    height: 40vh;
+}
+
+
+.dealFormContainer
+> div.lowerContainer {
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr;
+}
+
+.dealFormContainer
+> div.lowerContainer
+> div.wantedCategories {
+    background-color: white;
+
+}
+
+.dealFormContainer
+> div.lowerContainer
+> div.categoryTableContainer {
+    border: 1px solid;
+    border-top: 0;
+    overflow-y: auto;
+}
+
+.dealFormContainer
+> div.lowerContainer
+> div.tableWrapper {
+    overflow-y: scroll;
+}
+
 /*!chats*/
