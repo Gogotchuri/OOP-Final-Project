@@ -18,26 +18,50 @@
     <style>
         .wrapper{
             display: grid;
-            grid-template-columns: 1fr 2fr;
-            grid-gap: 5px;
-            grid-auto-rows: minmax(200px, auto);
+            grid-template-columns: 1fr 1fr;
+            grid-gap: 10px;
         }
 
-        .box{
-            background:  #205369;
-            color: #ffffff;
-
+        .wrapper > div{
+            grid-gap: 10px;
         }
 
         img {
-            max-width: 100%;
-            height: auto;
+            max-width: 100px;
+            max-height: 100px;
         }
 
         p.italic {
             font-style: italic;
-            font-size: 14px;
+            font-size: 0.5em;
         }
+
+        .user-info{
+            padding: 5px;
+            color:lightslategray;
+            background-color:powderblue;
+        }
+
+        .image-div{
+            min-height: 50%;
+        }
+
+        .deals-column{
+            padding: 5px;
+            color:lightcyan;
+            background-color:#4a778a;
+        }
+
+        label.statusCompleted{
+            color: lightgreen;
+            size: 5px;
+        }
+
+        label.statusActive{
+            color:rgb(228, 153, 153);
+            size: 5px;
+        }
+
 
     </style>
 <body>
@@ -45,20 +69,40 @@
     <jsp:include page="/pages/partials/navbar.jsp"/>
     <%--Page Content--%>
     <div class="wrapper">
-        <% Image profileImage = user.getProfilePicture();%>
-        <% String imageUrl = profileImage.getUrl();%>
-        <% String username = user.getUsername();%>
-        <% String userFullName = " (" + user.getFirstName() + " " + user.getLastName() + ")";%>
-        <% String email = user.getEmail();%>
-        <% String number = user.getPhoneNumber();%>
-        <div><img src = "<%= imageUrl%>" alt= "Profile Picture"></div>
-        <div class = "box">dzveli dilebi</div>
-        <div class = "box">
-            User: <%= username%> <br> <p class="italic"><%= userFullName %></p>
-            Email: <%= email%>
-            Phone Number: <%= number%>
+        <div>
+            <div class="image-div">
+                <img src = "imageUrl" alt = "Profile Picture">
+            </div>
+            <div>
+                <button></button>
+            </div>
+            <div class = "user-info">
+                <p>Name: </p>
+                <p class= "italic">Username: </p>
+                <p>Rating: </p>
+                <p>10 deals completed</p>
+                <p>Email:</p>
+                <p>Phone Number:</p>
+            </div>
         </div>
-        <div class = "box">axlandeli dilebi</div>
+        <div class = "deals-column">
+            <h3>Deals:</h3>
+            <ul>
+                <li><p>Deal name <label class="statusActive"> active</label></p>
+                    <p class="italic">10.08.2018</p>
+                </li>
+                <li><p>Deal name <label class="statusCompleted"> completed</label></p>
+                    <p class="italic">10.08.2018</p>
+                </li>
+                <li><p>Deal name</p>
+                    <p class="italic">10.08.2018</p>
+                </li>
+                <li><p>Deal name</p>
+                    <p class="italic">10.08.2018</p>
+                </li>
+
+            </ul>
+        </div>
     </div>
 
     <%--Footer--%>
