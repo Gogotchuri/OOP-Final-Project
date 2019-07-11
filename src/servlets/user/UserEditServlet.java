@@ -48,7 +48,6 @@ public class UserEditServlet extends HttpServlet {
 						  HttpServletResponse response)
 		throws ServletException, IOException {
 
-		System.out.println("aeeeeeee");
 		//Checking if user is authorized
 		if((new AuthenticatedUser(request, response)).unauthenticated()) return;
 

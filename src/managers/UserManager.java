@@ -198,8 +198,8 @@ public class UserManager {
         uf.addUpdate("email", user.getEmail());
         uf.addUpdate("phone_number", user.getPhoneNumber());
         //Updating created_at isn't really necessary, but just in case
-        uf.addUpdate("created_at", user.getCreateDate());
-        uf.addUpdate("updated_at", user.getUpdateDate());
+        // uf.addUpdate("created_at", user.getCreateDate().toString());
+        uf.addUpdate("updated_at", user.getUpdateDate().toString());
         return UpdateManager.update(uf);
     }
 }
