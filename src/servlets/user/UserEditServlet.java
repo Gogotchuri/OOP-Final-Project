@@ -15,6 +15,12 @@ import java.io.IOException;
 @WebServlet(urlPatterns = {RoutingConstants.USER_EDIT})
 public class UserEditServlet extends HttpServlet {
 
+	@Override
+	protected void service(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+		if((new AuthenticatedUser(req, resp)).unauthenticated()) return;
+		super.service(req, resp);
+	}
+
 	/**
      returned html main components:
      1) filled fields with information of user, for updating.
@@ -24,9 +30,6 @@ public class UserEditServlet extends HttpServlet {
 	protected void doGet(HttpServletRequest request,
 						  HttpServletResponse response)
 		throws ServletException, IOException {
-
-		//Checking if user is authorized
-		if((new AuthenticatedUser(request, response)).unauthenticated()) return;
 
 		(new UserController(request, response, this)).editForm();
 
@@ -48,11 +51,6 @@ public class UserEditServlet extends HttpServlet {
 						  HttpServletResponse response)
 		throws ServletException, IOException {
 
-		//Checking if user is authorized
-		if((new AuthenticatedUser(request, response)).unauthenticated()) return;
-
 		(new UserController(request, response, this)).update();
-
-
 	}
 }

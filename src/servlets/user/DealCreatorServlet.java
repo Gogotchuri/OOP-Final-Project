@@ -15,6 +15,12 @@ import java.io.IOException;
 @WebServlet(urlPatterns = {RoutingConstants.USER_DEAL_CREATE})
 public class DealCreatorServlet extends HttpServlet {
 
+	//Checking if user is authenticated before entering any method
+	@Override
+	protected void service(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+		if((new AuthenticatedUser(req,resp)).unauthenticated()) return;
+		super.service(req, resp);
+	}
 	/**
      returned html main components:
      1) fields for creating deal
@@ -24,8 +30,6 @@ public class DealCreatorServlet extends HttpServlet {
 	protected void doGet(HttpServletRequest request,
 						  HttpServletResponse response)
 		throws ServletException, IOException {
-		//Checking if user is authorized
-		if((new AuthenticatedUser(request, response)).unauthenticated()) return;
 
 		(new DealsController(request, response, this)).create();
 
@@ -53,8 +57,6 @@ public class DealCreatorServlet extends HttpServlet {
 	protected void doPost(HttpServletRequest request,
 						   HttpServletResponse response)
 		throws ServletException, IOException {
-		//Checking if user is authorized
-		if((new AuthenticatedUser(request, response)).unauthenticated()) return;
 
 		(new DealsController(request, response, this)).store();
 	}

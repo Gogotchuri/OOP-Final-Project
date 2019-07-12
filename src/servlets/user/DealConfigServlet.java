@@ -15,6 +15,12 @@ import java.io.IOException;
 @WebServlet(urlPatterns = {RoutingConstants.USER_DEAL_CONFIG})
 public class DealConfigServlet extends HttpServlet {
 
+	//Checking if user is authenticated before entering any method
+	@Override
+	protected void service(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+		if((new AuthenticatedUser(req,resp)).unauthenticated()) return;
+		super.service(req, resp);
+	}
 	/**
      returned html main components:
      1) filled fields with information of deal, for updating.
@@ -81,8 +87,6 @@ public class DealConfigServlet extends HttpServlet {
 	protected void doDelete(HttpServletRequest request,
 						  	 HttpServletResponse response)
 		throws ServletException, IOException {
-		//Checking if user is authorized
-		if((new AuthenticatedUser(request, response)).unauthenticated()) return;
 
 		int dealID;
 		try { dealID = Integer.parseInt(request.getParameter("id")); }

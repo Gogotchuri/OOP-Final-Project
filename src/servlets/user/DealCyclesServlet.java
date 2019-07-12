@@ -15,6 +15,12 @@ import java.io.IOException;
 @WebServlet(urlPatterns = {RoutingConstants.USER_CYCLES})
 public class DealCyclesServlet extends HttpServlet {
 
+	//Checking if user is authenticated before entering any method
+	@Override
+	protected void service(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+		if((new AuthenticatedUser(req,resp)).unauthenticated()) return;
+		super.service(req, resp);
+	}
 	/**
 	 returned html main components:
      1) list of the links to the user.DealCycleServlet (GET) (some cycle)

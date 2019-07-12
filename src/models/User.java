@@ -201,7 +201,17 @@ public class User {
         this.email = email;
     }
 
+    public void setFirstName(String firstName) {
+        this.firstName = firstName;
+    }
 
+    public void setLastName(String lastName) {
+        this.lastName = lastName;
+    }
+
+    public void setPhoneNumber(String phoneNumber) {
+        this.phoneNumber = phoneNumber;
+    }
     /**
      * @param unprotected - Unprotected Password
      * @return Whether passed password equals of User's password
