@@ -8,23 +8,24 @@ public class Tester {
     /**
      * Truncates all data in all tables in Data Base
      */
-    public static void emptyDataBase() {
-        DeleteManager.emptyBase("profile_images");
-        DeleteManager.emptyBase("item_images");
-        DeleteManager.emptyBase("image_categories");
-        DeleteManager.emptyBase("messages");
-        DeleteManager.emptyBase("chats");
-        DeleteManager.emptyBase("offered_cycles");
-        DeleteManager.emptyBase("cycles");
-        DeleteManager.emptyBase("wanted_items");
-        DeleteManager.emptyBase("owned_items");
-        DeleteManager.emptyBase("items");
-        DeleteManager.emptyBase("item_categories");
-        DeleteManager.emptyBase("item_brands");
-        DeleteManager.emptyBase("item_types");
-        DeleteManager.emptyBase("deals");
-        DeleteManager.emptyBase("process_statuses");
-        DeleteManager.emptyBase("users");
+    public static boolean emptyDataBase() {
+        return
+        DeleteManager.deleteAndReseed("profile_images") &&
+        DeleteManager.deleteAndReseed("item_images") &&
+        DeleteManager.deleteAndReseed("image_categories") &&
+        DeleteManager.deleteAndReseed("messages") &&
+        DeleteManager.deleteAndReseed("chats") &&
+        DeleteManager.deleteAndReseed("offered_cycles") &&
+        DeleteManager.deleteAndReseed("cycles") &&
+        DeleteManager.deleteAndReseed("wanted_items") &&
+        DeleteManager.deleteAndReseed("owned_items") &&
+        DeleteManager.deleteAndReseed("items") &&
+        DeleteManager.deleteAndReseed("item_categories") &&
+        DeleteManager.deleteAndReseed("item_brands") &&
+        DeleteManager.deleteAndReseed("item_types") &&
+        DeleteManager.deleteAndReseed("deals") &&
+        DeleteManager.deleteAndReseed("process_statuses") &&
+        DeleteManager.deleteAndReseed("users");
     }
 
 }
