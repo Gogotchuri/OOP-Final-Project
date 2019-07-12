@@ -4,6 +4,8 @@ package controllers.front;
 import controllers.Controller;
 import managers.UserManager;
 import models.User;
+import servlets.RoutingConstants;
+
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
@@ -56,7 +58,7 @@ public class AuthController extends Controller {
 
         if (errors.isEmpty()) {
             session.setAttribute("user", user);
-            redirectTo("/home");
+            redirectTo(RoutingConstants.HOME);
             return;
         }
 
@@ -90,7 +92,7 @@ public class AuthController extends Controller {
 
         if (errors.isEmpty()) {
             request.setAttribute("success", "You have registered successfully!");
-            redirectTo("/login");
+            redirectTo(RoutingConstants.LOGIN);
             return;
         }
 
@@ -104,6 +106,6 @@ public class AuthController extends Controller {
      */
     public void logout() throws IOException {
         session.removeAttribute("user");
-        redirectTo("/home");
+        redirectTo(RoutingConstants.HOME);
     }
 }

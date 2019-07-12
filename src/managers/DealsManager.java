@@ -166,12 +166,12 @@ public class DealsManager {
             } else if (criteria == Criteria.DEAL_CREATE_DATE) {
 
                 String date = sc.getCriteriaValue(Criteria.DEAL_CREATE_DATE);
-                queryBuilder.append(" AND d.created_at = ").append(date).append(" \n");
+                queryBuilder.append(" AND d.created_at = \'").append(date).append("\' \n");
 
             } else if(criteria == Criteria.DEAL_UPDATE_DATE) {
 
                 String date = sc.getCriteriaValue(Criteria.DEAL_UPDATE_DATE);
-                queryBuilder.append(" AND d.updated_at = ").append(date).append(" \n");
+                queryBuilder.append(" AND d.updated_at = \'").append(date).append("\' \n");
             }
         }
 
@@ -183,7 +183,7 @@ public class DealsManager {
 
     /**
      * Returns list of deals whose Wanted item categories are equal of
-     *'deal's Owned item categories Returns at least empty list
+     * 'deal's Owned item categories Returns at least empty list
      * Or null if some error happens
      */
     public static List<Deal> getClients(int dealID) {

@@ -15,6 +15,13 @@ import java.io.IOException;
 @WebServlet(urlPatterns = {RoutingConstants.USER_SINGLE_CHAT})
 public class ChatServlet extends HttpServlet{
 
+	//Checking if user is authenticated before entering any method
+	@Override
+	protected void service(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+		if((new AuthenticatedUser(req,resp)).unauthenticated()) return;
+		super.service(req, resp);
+	}
+
 	/**
 	 Returns one of chats of the user
 
@@ -26,8 +33,6 @@ public class ChatServlet extends HttpServlet{
 	protected void doGet(HttpServletRequest request,
 						  HttpServletResponse response)
 		throws ServletException, IOException {
-		//Checking if user is authorized
-		if((new AuthenticatedUser(request, response)).unauthenticated()) return;
 
 		int id;
 		try { id = Integer.parseInt(request.getParameter("id")); }

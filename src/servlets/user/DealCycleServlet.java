@@ -15,6 +15,12 @@ import java.io.IOException;
 @WebServlet(urlPatterns = {RoutingConstants.USER_SINGLE_CYCLE})
 public class DealCycleServlet extends HttpServlet{
 
+	//Checking if user is authenticated before entering any method
+	@Override
+	protected void service(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+		if((new AuthenticatedUser(req,resp)).unauthenticated()) return;
+		super.service(req, resp);
+	}
 	/**
 	 Returns some possible cycle of some deal
 
@@ -27,8 +33,6 @@ public class DealCycleServlet extends HttpServlet{
 	protected void doGet(HttpServletRequest request,
 						  HttpServletResponse response)
 		throws ServletException, IOException {
-		//Checking if user is authorized
-		if((new AuthenticatedUser(request, response)).unauthenticated()) return;
 
 		int cycle_id;
 		try { cycle_id = Integer.parseInt(request.getParameter("cycle_id")); }
@@ -53,8 +57,6 @@ public class DealCycleServlet extends HttpServlet{
 	protected void doPut(HttpServletRequest request,
 						 HttpServletResponse response)
 			throws ServletException, IOException {
-		//Checking if user is authorized
-		if((new AuthenticatedUser(request, response)).unauthenticated()) return;
 
 		int cycle_id, deal_id;
 		try {

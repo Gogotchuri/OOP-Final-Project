@@ -11,7 +11,7 @@ public abstract class RoutingConstants {
 
     //User routes
     public static final String USER_CHATS= "/user/chats";
-    public static final String USER_SINGLE_CHAT = "/user/chats/show";
+    public static final String USER_SINGLE_CHAT = "/user/chats/show"; //FOR API
     public static final String USER_DEALS = "/user/deals";
     public static final String USER_SINGLE_DEAL = "/user/deals/show";
     public static final String USER_DEAL_CREATE = "/user/deals/create";
@@ -20,5 +20,21 @@ public abstract class RoutingConstants {
     public static final String USER_SINGLE_CYCLE = "/user/deals/cycles/show";
     public static final String USER_EDIT = "/user/edit"; // TODO: Ilia url-ebi emtxveoda da es iyos ???
     public static final String LOGOUT = "/logout";
+
+    //User API
+
+    /**
+     * Supports
+     * GET - returns all user items
+     * DELETE - with param id deletes item
+     * PUT - with param id, updates given item resource
+     */
+    public static final String USER_ITEMS= "/user/items";
+    /**
+     * supports
+     * GET - with param id, returns json for single item object
+     * */
+    public static final String USER_SINGLE_ITEM = "/user/items/show"; //FOR API
+
 
 }

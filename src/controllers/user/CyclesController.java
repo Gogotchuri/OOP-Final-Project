@@ -7,6 +7,7 @@ import managers.DealsManager;
 import models.Cycle;
 import models.Deal;
 import models.User;
+import servlets.RoutingConstants;
 
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
@@ -110,9 +111,8 @@ public class CyclesController extends Controller {
             return;
         }
 
-        //TODO change with constant
         //After successful acceptance redirect to all cycles page
-        response.sendRedirect("/user/deals");
+        redirectTo(RoutingConstants.USER_DEALS);
 
     }
 
@@ -134,9 +134,9 @@ public class CyclesController extends Controller {
             return;
         }
 
-        //TODO change with constant
-        //After successful rejection redirect to all cycles page
-        response.sendRedirect("/user/deals");
+
+        //After successful acceptance redirect to all cycles page
+        redirectTo(RoutingConstants.USER_DEALS);
     }
 
 }
