@@ -1,12 +1,15 @@
 
 package models;
 
+import com.google.gson.annotations.JsonAdapter;
 import models.categoryModels.ItemCategory;
+import services.encoders.ItemJsonAdapter;
 
 import java.sql.Timestamp;
 import java.util.Iterator;
 import java.util.List;
 
+@JsonAdapter(ItemJsonAdapter.class)
 public class Item implements Comparable<Item> {
 
 

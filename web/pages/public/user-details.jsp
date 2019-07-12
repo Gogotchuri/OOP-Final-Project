@@ -11,6 +11,8 @@
 <%@ page import="models.Deal" %>
 <%@ page import="java.util.List" %>
 <%@ page import="static java.lang.Math.min" %>
+<%@ page import="java.text.SimpleDateFormat" %>
+<%@ page import="models.ProcessStatus" %>
 <% int maxNumberOfDeals = 5;%>
 <% User user = (User) request.getAttribute("user");%>
 <html>
@@ -35,7 +37,7 @@
             max-height: 100px;
         }
 
-        p.italic {
+        p.side-text {
             font-style: italic;
             font-size: 0.5em;
         }
@@ -56,12 +58,12 @@
             background-color:#4a778a;
         }
 
-        label.statusCompleted{
+        label.completed{
             color: lightgreen;
             size: 5px;
         }
 
-        label.statusActive{
+        label.ongoing{
             color:rgb(228, 153, 153);
             size: 5px;
         }
@@ -88,42 +90,60 @@
     <div class="wrapper">
         <div>
             <% Image img = user.getProfilePicture(); %>
-            <% String imgUrl = img.getUrl();%>
+            <% String imgUrl = "";
+            if(img != null){
+                imgUrl = img.getUrl();
+            } %>
             <% String name = user.getFirstName(); %>
             <% String lastName = user.getLastName(); %>
             <% String userName = user.getUsername(); %>
-            <% String email = user.getEmail();%>
+            <% String email = user.getEmail(); %>
             <% String phoneNumber = user.getPhoneNumber(); %>
             <div class="image-div">
                 <img src = "<%= imgUrl%>" alt = "No Profile Picture">
             </div>
             <div>
-                <a href="#" class="button">Link Button</a>
+                <a href="#" class="button">Edit Profile</a>
             </div>
             <div class = "user-info">
-                <p><%= name%></p>
-                <p><%= lastName%></p>
-                <p class= "italic"> <%= userName%> </p>
-                <p>Rating: </p>
-                <p>10 deals completed</p>
-                <p>Email: <%= email%></p>
-                <p>Phone Number: <%= phoneNumber%></p>
+                <p><%= name %></p>
+                <p><%= lastName %></p>
+                <p> <%= userName %> </p>
+                <!--<p>Rating: </p>
+                <p>10 deals completed</p> -->
+                <p>Email: <%= email %></p>
+                <p>Phone Number: <%= phoneNumber %></p>
             </div>
         </div>
         <div class = "deals-column">
-            <% List<Deal> deals = user.getDeals();%>
-            <% int numToShow = min(maxNumberOfDeals, deals.size());%>
+            <% List<Deal> deals = user.getDeals(); %>
+            <% int numToShow = min(maxNumberOfDeals, deals.size()); %>
             <h3>Deals:</h3>
             <ul>
 
-                <% for (int i=0; i<numToShow; i++){%>
-                <% Deal curDeal = deals.get(i);%>
-                <li><p>Deal name <label class="statusActive"> active</label></p>
-                    <p class="italic">10.08.2018</p>
+                <% if(numToShow == 0){ %>
+                    <p>this user has no deals</p>
+                <% }else{
+                    for (int i=0; i<numToShow; i++){ %>
+                <% Deal curDeal = deals.get(i); %>
+                <% String title = curDeal.getTitle(); %>
+                <% String dateCreated = new SimpleDateFormat("yyyy.MM.dd").format(curDeal.getCreateDate());%>
+                <% ProcessStatus.Status status = curDeal.getStatus(); %>
+                <% String statusName = status.getName(); %>
+                <% String className = statusName; %>
+                <li><p><%= title %>
+                    <label class="<%= className %>">
+                        <%= statusName %></label></p>
+                    <p class="side-text"> <%= dateCreated %> </p>
                 </li>
-                <%}%>
+                <% }
+                } %>
             </ul>
-            <a href="#" class="button">Link Button</a>
+            <% User thisUser = (User)session.getAttribute("user"); %>
+            <% int thisId = thisUser.getUserID(); %>
+            <%if(user.getUserID() == thisId){ %>
+                <a href="#" class="button">See all Deals</a>
+            <% } %>
         </div>
     </div>
 

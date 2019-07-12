@@ -14,33 +14,23 @@
 <%@ page import="models.categoryModels.ItemType" %>
 <%@ page import="models.categoryModels.ItemBrand" %>
 <%@ page import="models.categoryModels.ItemSerie" %>
+<%@ page import="managers.UserManager" %>
 <% Deal deal= (Deal)request.getAttribute("deal");%>
 <html>
     <%--HEAD--%>
     <jsp:include page="/pages/partials/head.jsp">
         <jsp:param name="title" value="Deal number ${id}"/>
     </jsp:include>
-s
+
     <style>
         .wrapper{
             display: grid;
-            grid-template-columns: 3fr 3fr 4fr;
+            grid-template-columns: 1fr 1fr 1fr;
             grid-gap: 5px;
-            grid-auto-rows: minmax(200px, auto);
         }
 
-        .wrapper >div{
-            background:  #205369;
-            color: #ffffff;
-            padding: 1em;
-        }
-
-        .box1{
-            grid-row: 1/3;
-        }
-
-        .box2{
-            grid-row: 1/3;
+        .wrapper > div{
+            height: 200%;
         }
 
         p.italic {
@@ -48,6 +38,17 @@ s
             font-size: 14px;
         }
 
+        .information-column{
+            padding: 5px;
+            color:lightslategray;
+            background-color:powderblue;
+        }
+
+        .deal-columns{
+            padding: 5px;
+            color:lightcyan;
+            background-color:#4a778a;
+        }
 
     </style>
 
@@ -62,10 +63,11 @@ s
         <% User thisUser = (User)session.getAttribute("user");%>
         <% int thisId = thisUser.getUserID();%>
 
-        <div>
-            <% User user = deal.getOwner();%>
+         <div class="information-column">
+            <% int ownerId = deal.getOwnerID();%>
+            <% User user = UserManager.getUserByID(ownerId);%>
             <% String deleteMethod = "user.DealConfigServlet.doDelete()";%>
-            <% if(user.getUserID() == thisId){ %>
+            <% if(ownerId == thisId){ %>
                 <input type="button" onclick= "<%= deleteMethod%>" value="Delete Deal">
             <%}%>
 
@@ -86,40 +88,39 @@ s
                         <li><%= cycleInfo%> <br> <p class="italic"><%= statusName %></>p></li>
                         <%}%>
                     </ul>
-        </div>
+         </div>
 
-        <div class = "box1">
-            <% List<Item> OwnedItems = deal.getOwnedItems();%>
-            <h3>What i give</h3>
-            <ul>
-                <% for(Item i : OwnedItems){%>
-                <% ItemCategory cat = i.getCategory();%>
-                <% ItemType type = cat.getType();%>
-                <% ItemBrand brand = cat.getBrand();%>
-                <% ItemSerie serie = cat.getSerie();%>
-                <% String catInfo = type + "-" + brand + "-" + serie;%>
-                    <%-- <% String date = new SimpleDateFormat("yyyy.MM.dd.HH.mm.ss").format(i.getCreatedAt());%>
-                    aitemis tarigia sawiro --%>
+         <div class="deal-columns">
+             <% List<Item> OwnedItems = deal.getOwnedItems();%>
+             <h3>What i give</h3>
+             <ul>
+             <% for(Item i : OwnedItems){%>
+             <% ItemCategory cat = i.getCategory();%>
+             <% ItemType type = cat.getType();%>
+             <% ItemBrand brand = cat.getBrand();%>
+             <% ItemSerie serie = cat.getSerie();%>
+             <% String catInfo = type + "-" + brand + "-" + serie;%>
+                 <%-- <% String date = new SimpleDateFormat("yyyy.MM.dd.HH.mm.ss").format(i.getCreatedAt());%>
+                 aitemis tarigia sawiro --%>
+                 <li><%= i.getName() %> <br> <%= catInfo%> <%-- <br> <p class="italic"><%= date%></p>> --%></li>
+                 <% } %>
+             </ul>
+         </div>
 
-                    <li><%= i.getName() %> <br> <%= catInfo%> <%-- <br> <p class="italic"><%= date%></p>> --%></li>
-                    <% } %>
-                </ul>
-            </div>
-
-            <div class="box2">
-                <h3>What i get</h3>
-                <% List<ItemCategory> WantedItemCategories = deal.getWantedCategories(); %>
-                <ul>
-                    <% for(ItemCategory cat : WantedItemCategories){ %>
-                    <% ItemType type = cat.getType();%>
-                    <% ItemBrand brand = cat.getBrand();%>
-                    <% ItemSerie serie = cat.getSerie();%>
-                    <% String catInfo = type + "-" + brand + "-" + serie;%>
-                    <li><%= catInfo%></li>
-                    <% } %>
-                </ul>
-            </div>
-        </div>
+         <div class="deal-columns">
+             <h3>What i get</h3>
+             <% List<ItemCategory> WantedItemCategories = deal.getWantedCategories(); %>
+             <ul>
+                 <% for(ItemCategory cat : WantedItemCategories){ %>
+                 <% ItemType type = cat.getType();%>
+                 <% ItemBrand brand = cat.getBrand();%>
+                 <% ItemSerie serie = cat.getSerie();%>
+                 <% String catInfo = type + "-" + brand + "-" + serie;%>
+                 <li><%= catInfo%></li>
+                 <% } %>
+             </ul>
+         </div>
+    </div>
 
 
 

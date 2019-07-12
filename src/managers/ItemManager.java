@@ -2,6 +2,7 @@
 package managers;
 
 import database.DatabaseAccessObject;
+import generalManagers.DeleteManager;
 import models.Image;
 import models.Item;
 import models.ItemImage;
@@ -366,5 +367,15 @@ public class ItemManager {
         String query = JOIN_CATEGORIES + " JOIN wanted_items w on s.id = w.item_category_id" +
                 " WHERE w.deal_id = ?;";
         return getItemCategories(dealID, query);
+    }
+
+
+    /**
+     *
+     * @param itemId Id of the item
+     * @return List of categories wanted in one deal
+     */
+    public boolean deleteItemById(int itemId){
+        return DeleteManager.delete("items", "id", itemId);
     }
 }
