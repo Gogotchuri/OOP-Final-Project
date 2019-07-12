@@ -20,30 +20,18 @@ public class CategoryTests {
     private static final String BRAND_TABLE = "item_brands";
     private static final String SERIE_TABLE = "item_categories";
     private static final String TYPE_TABLE = "item_types";
-    private static final String OTHER = "other";
 
-    private static final ItemCategory cat1 = makeCategory("S3", "Phone", "Samsung");
-    private static final ItemCategory cat2 = makeCategory("S2", "Phone", "Samsung");
-    private static final ItemCategory cat3 = makeCategory("iMac", "Computer", "Apple");
-    private static final ItemCategory cat4 = makeCategory("Iphone", "Phone", "Apple");
-    private static final ItemCategory cat5 = makeCategory("E40", "Fridge", "Samsung");
+    private static final ItemCategory cat1 = new ItemCategory(1,"S3", "Phone", "Samsung");
+    private static final ItemCategory cat2 = new ItemCategory(2,"S2", "Phone", "Samsung");
+    private static final ItemCategory cat3 = new ItemCategory(3,"Iphone 6", "Phone", "Apple");
+    private static final ItemCategory cat4 = new ItemCategory(4,"Iphone 7", "Phone", "Apple");
+    private static final ItemCategory cat5 = new ItemCategory(5,"iMac", "Computer", "Apple");
 
-    private static final ItemCategory oCat1 = makeCategory("Phone", "other", "Samsung");
-    private static final ItemCategory oCat2 = makeCategory("Samsung", "other", "other");
-    private static final ItemCategory oCat3 = makeCategory("Iphone", "other", "other");
-    private static final ItemCategory oCat4 = makeCategory("S3", "other", "Samsung");
 
     private void resetBase() {
-
-        // In a query this translates like 'WHERE 1 = 1' and deletes everything
-        DeleteManager.delete(SERIE_TABLE, "1", 1);
-        DeleteManager.delete(TYPE_TABLE, "1", 1);
-        DeleteManager.delete(BRAND_TABLE, "1", 1);
-
-        //Reseeds every table to 1
-        UpdateManager.reseedTable(TYPE_TABLE, 1);
-        UpdateManager.reseedTable(BRAND_TABLE, 1);
-        UpdateManager.reseedTable(SERIE_TABLE, 1);
+        DeleteManager.deleteAndReseed(SERIE_TABLE);
+        DeleteManager.deleteAndReseed(BRAND_TABLE);
+        DeleteManager.deleteAndReseed(TYPE_TABLE);
     }
 
     @Test
@@ -55,54 +43,52 @@ public class CategoryTests {
         assertTrue(CategoryManager.insertCategory(cat4));
         assertTrue(CategoryManager.insertCategory(cat5));
 
-        assertTrue(CategoryManager.insertCategory(oCat1));
-        assertTrue(CategoryManager.insertCategory(oCat2));
-        assertTrue(CategoryManager.insertCategory(oCat3));
-        assertTrue(CategoryManager.insertCategory(oCat4));
-
         assertFalse(CategoryManager.insertCategory(cat1));
-        assertFalse(CategoryManager.insertCategory(oCat2));
-        assertFalse(CategoryManager.insertCategory(oCat4));
+        assertFalse(CategoryManager.insertCategory(cat4));
     }
 
     @Test
     public void checkIDs() {
+        equalLists(CategoryManager.getItemCategoriesByItemCategoryIDs(Arrays.asList(1,2,3)), Arrays.asList(cat1,cat2,cat3));
+        equalLists(CategoryManager.getItemCategoriesByItemCategoryIDs(Arrays.asList(4,5)), Arrays.asList(cat4,cat5));
+        assertEquals(CategoryManager.getItemCategoriesByItemCategoryIDs(Arrays.asList(3,55555)), null);
+        assertEquals(CategoryManager.getItemCategoriesByItemCategoryIDs(Arrays.asList(55555)), null);
+
         assertEquals(CategoryManager.getCategoryByID(1), cat1);
         assertEquals(CategoryManager.getCategoryByID(3), cat3);
-        assertEquals(CategoryManager.getCategoryByID(5555), null);
-        assertEquals(CategoryManager.getCategoryByID(6), oCat1);
-        assertNotEquals(CategoryManager.getCategoryByID(1), cat2);
+        assertEquals(CategoryManager.getCategoryByID(55555), null);
     }
 
     @Test
-    public void selectFromDB() {
-        //Simple
-        equalLists(CategoryManager.getCategories(cat1), Arrays.asList(cat1));
-        equalLists(CategoryManager.getCategories(cat3), Arrays.asList(cat3));
-        equalLists(CategoryManager.getCategories(cat5), Arrays.asList(cat5));
-
-        //Edge, with other inputs
-        equalLists(CategoryManager.getCategories(oCat1), Arrays.asList(cat1,cat2));
-        equalLists(CategoryManager.getCategories(oCat2), Arrays.asList(cat1,cat2,cat5,oCat1,oCat2,oCat4));
-        equalLists(CategoryManager.getCategories(makeCategory("Phone",OTHER,OTHER)), Arrays.asList(cat1,cat2,cat4,oCat1));
-        equalLists(CategoryManager.getCategories(oCat3), Arrays.asList(oCat3, cat4));
-        equalLists(CategoryManager.getCategories(oCat4), Arrays.asList(oCat4, cat1));
-        equalLists(CategoryManager.getCategories(makeCategory("Apple",OTHER, OTHER)), Arrays.asList(cat3,cat4));
-        equalLists(CategoryManager.getCategories(makeCategory("Computer",OTHER,OTHER)), Arrays.asList(cat3));
-        equalLists(CategoryManager.getCategories(makeCategory("Computer","Samsung", OTHER)), Arrays.asList());
-
-        //Just for branching
-        equalLists(CategoryManager.getCategories(makeCategory("E40","Fridge", OTHER)), Arrays.asList(cat5));
-        equalLists(CategoryManager.getCategories(makeCategory("E40",OTHER, "Samsung")), Arrays.asList(cat5));
-        equalLists(CategoryManager.getCategories(makeCategory("E40",OTHER, OTHER)), Arrays.asList(cat5));
+    public void checkBrandAndType() {
+        //Type : Phone -> 1, Computer -> 2
+        //Type : Samsung -> 1, Apple -> 2
+        assertEquals(CategoryManager.getCategoriesWithBrandAndType(1, 1), Arrays.asList(cat1, cat2));
+        assertEquals(CategoryManager.getCategoriesWithBrandAndType(1, 2), Arrays.asList(cat3, cat4));
+        assertEquals(CategoryManager.getCategoriesWithBrandAndType(2, 2), Arrays.asList(cat5));
+        assertEquals(CategoryManager.getCategoriesWithBrandAndType(2, 1), Arrays.asList());
+        assertEquals(CategoryManager.getCategoriesWithBrandAndType(5555, 1), Arrays.asList());
+        assertEquals(CategoryManager.getCategoriesWithBrandAndType(1, 5555), Arrays.asList());
+        assertEquals(CategoryManager.getCategoriesWithBrandAndType(5555, 5555), Arrays.asList());
     }
 
-    private static ItemCategory makeCategory(String serie, String type, String brand) {
-        return new ItemCategory(new ItemSerie(serie), new ItemType(type), new ItemBrand(brand));
+    @Test
+    public void equalsWithoutOrder() {
+        assertTrue(CategoryManager.listsEqualsIgnoreOrder(Arrays.asList(), Arrays.asList()));
+        assertFalse(CategoryManager.listsEqualsIgnoreOrder(null, Arrays.asList()));
+        assertTrue(CategoryManager.listsEqualsIgnoreOrder(null, null));
+        assertTrue(CategoryManager.listsEqualsIgnoreOrder(Arrays.asList(cat1, cat2, cat4), Arrays.asList(cat4, cat1, cat2)));
+        assertTrue(CategoryManager.listsEqualsIgnoreOrder(Arrays.asList(cat3, cat2), Arrays.asList(cat2, cat3)));
+        assertTrue(CategoryManager.listsEqualsIgnoreOrder(Arrays.asList(cat1, cat2, cat3, cat4, cat5), Arrays.asList(cat4, cat3, cat1, cat5, cat2)));
+        assertFalse(CategoryManager.listsEqualsIgnoreOrder(Arrays.asList(cat1), Arrays.asList(cat4)));
+        assertFalse(CategoryManager.listsEqualsIgnoreOrder(Arrays.asList(cat1, cat3), Arrays.asList(cat1, cat2)));
+        assertFalse(CategoryManager.listsEqualsIgnoreOrder(Arrays.asList(cat2, cat3, cat4, cat5), Arrays.asList(cat1, cat2, cat3, cat4)));
+        assertFalse(CategoryManager.listsEqualsIgnoreOrder(Arrays.asList(cat2, cat3, cat4, cat5), Arrays.asList(cat1, cat2, cat3)));
     }
 
     private void equalLists(List<ItemCategory> l1, List<ItemCategory> l2) {
         Collections.sort(l1);
         Collections.sort(l2);
+        assertEquals(l1,l2);
     }
 }

@@ -34,7 +34,18 @@ public class ItemCategory implements Comparable<ItemCategory> {
      * @param brand Brand
      */
     public ItemCategory(ItemSerie serie, ItemType type, ItemBrand brand) {
-        this(-1, serie, type, brand);
+        this(0, serie, type, brand);
+    }
+
+    /**
+     * Alternate constructor, with strings, for simplicity, used in tests
+     * @param id
+     * @param serie
+     * @param type
+     * @param brand
+     */
+    public ItemCategory(int id, String serie, String type, String brand) {
+        this(id, new ItemSerie(0,serie), new ItemType(0, type), new ItemBrand(0, brand));
     }
 
     public int getId() { return id; }
