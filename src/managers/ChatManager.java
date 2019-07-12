@@ -2,10 +2,7 @@ package managers;
 
 import database.DatabaseAccessObject;
 import generalManagers.DeleteManager;
-import models.Chat;
-import models.Cycle;
-import models.Message;
-import models.ProcessStatus;
+import models.*;
 
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -196,5 +193,49 @@ public class ChatManager {
             e.printStackTrace();
         }
         return ch;
+    }
+
+    /**
+     *
+     * @param chat_id id of the chat
+     * @return List<User> users who participate in given chat
+     */
+    public static List<User> getChatParticipants(int chat_id){
+        List<User> result = new ArrayList<>();
+        List<String> userNames = getChatUserNames(chat_id);
+        for(String a : userNames){
+            result.add(UserManager.getUserByUsername(a));
+        }
+
+        return result;
+    }
+
+    /**
+     *
+     * @param chat_id id of the chat
+     * @return List<String> usernames of users who participate
+     * in given chat
+     */
+    public static List<String> getChatUserNames(int chat_id){
+        List<String> result = new ArrayList<>();
+
+        String statement = "SELECT user_name FROM cycles" +
+                "JOIN offered_cycles ON cycles.id = offered_cycle.cycle_id" +
+                "JOIN deals ON offered_cycles.deal_id = deals.id" +
+                "WHERE id = " + chat_id +";";
+
+        try {
+            PreparedStatement st = DBO.getPreparedStatement(statement);
+            ResultSet set = st.executeQuery();
+
+            while(set.next()){
+                result.add(set.getString("user_name"));
+            }
+
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+
+        return result;
     }
 }
