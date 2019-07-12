@@ -13,6 +13,7 @@
 <%@ page import="static java.lang.Math.min" %>
 <%@ page import="java.text.SimpleDateFormat" %>
 <%@ page import="models.ProcessStatus" %>
+<%@ page import="servlets.RoutingConstants" %>
 <% int maxNumberOfDeals = 5;%>
 <% User user = (User) request.getAttribute("user");%>
 <html>
@@ -103,7 +104,7 @@
                 <img src = "<%= imgUrl%>" alt = "No Profile Picture">
             </div>
             <div>
-                <a href="#" class="button">Edit Profile</a>
+                <a href="${pageContext.request.contextPath}<%=RoutingConstants.USER_EDIT%>" class="button">Edit Profile</a>
             </div>
             <div class = "user-info">
                 <p><%= name %></p>

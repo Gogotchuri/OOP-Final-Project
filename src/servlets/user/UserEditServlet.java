@@ -24,7 +24,7 @@ public class UserEditServlet extends HttpServlet {
 	/**
      returned html main components:
      1) filled fields with information of user, for updating.
-     2) link to the user.UserEditServlet (PUT) (submit user changes button)
+     2) link to the user.UserEditServlet (POST) (submit user changes button)
 	 */
 	@Override
 	protected void doGet(HttpServletRequest request,
@@ -47,8 +47,8 @@ public class UserEditServlet extends HttpServlet {
 	    dispatch to user.UserEditServlet (GET) (user configuration form)
 	 */
 	@Override
-	protected void doPost(HttpServletRequest request, // TODO: Ilia doPut()
-						  HttpServletResponse response)
+	protected void doPost(HttpServletRequest request,
+						   HttpServletResponse response)
 		throws ServletException, IOException {
 
 		(new UserController(request, response, this)).update();

@@ -4,6 +4,7 @@ import controllers.Controller;
 import managers.UserManager;
 import models.User;
 import services.RequestValidator;
+import servlets.RoutingConstants;
 
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
@@ -80,7 +81,7 @@ public class UserController extends Controller {
             return;
         }
 
-        editForm();
+        redirectTo(RoutingConstants.PUBLIC_PROFILE + "?id=" + user.getUserID());
 
     }
 

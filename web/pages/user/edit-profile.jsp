@@ -38,10 +38,10 @@
         <input type="text" id="last_name" name="last_name" value="<%=user.getLastName()%>">
         <br>
         <label for="email"> E-Mail: </label>
-        <input type="text" id="email" name="email" value="<%=user.getEmail()%>">
+        <input type="email" id="email" name="email" value="<%=user.getEmail()%>">
         <br>
         <label for="phone_number"> Phone Number: </label>
-        <input type="text" id="phone_number" name="phone_number" value="<%=user.getPhoneNumber()%>">
+        <input type="number" id="phone_number" name="phone_number" value="<%=user.getPhoneNumber()%>">
         <br>
         <button type="submit"> Submit Changes </button>
     </form>
