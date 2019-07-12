@@ -22,9 +22,9 @@ public class StatusManager {
         try {
             PreparedStatement statement =
                 DAO.getPreparedStatement (
-                        "SELECT status_id \n" +
-                               "  FROM " + tableName + '\n' +
-                               " WHERE id = " + ID + ";"
+                    "SELECT status_id \n" +
+                           "  FROM " + tableName + '\n' +
+                           " WHERE id = " + ID + ";"
                 );
             ResultSet resultSet = statement.executeQuery();
             if (resultSet.next())

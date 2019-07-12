@@ -45,11 +45,11 @@ public class DateManager {
         Timestamp date = null;
         try {
             PreparedStatement statement =
-                    DAO.getPreparedStatement (
-                            "SELECT " + dateName + '\n' +
-                                   "  FROM " + tableName + '\n' +
-                                   "  WHERE id = " + ID + ";"
-                    );
+                DAO.getPreparedStatement (
+                        "SELECT " + dateName + '\n' +
+                               "  FROM " + tableName + '\n' +
+                               " WHERE id = " + ID + ";"
+                );
             ResultSet resultSet = statement.executeQuery();
             if (resultSet.next())
                 date = resultSet.getTimestamp(dateName);
