@@ -118,15 +118,30 @@ public class CategoryManager {
         return l1.equals(l2);
     }
 
+    /**
+     * @param brandID Brand id
+     * @return All categories with given type
+     */
+    public static List<ItemCategory> getCategoriesWithBrand(int brandID) {
+        return getCategoriesWithParameterID("b.id", brandID);
+    }
 
     /**
-     * @param typeID id of a type
-     * @param brandID id of a brand
-     * @return All categories matching type and brand ids
+     * @param typeID Type id
+     * @return All categories with given type
      */
-    public static List<ItemCategory> getCategoriesWithBrandAndType(int typeID, int brandID) {
+    public static List<ItemCategory> getCategoriesWithType(int typeID) {
+        return getCategoriesWithParameterID("t.id", typeID);
+    }
+
+    /**
+     * @param columnName Name of a column
+     * @param id Id
+     * @return List of categories matching passed criteria
+     */
+    private static List<ItemCategory> getCategoriesWithParameterID(String columnName, int id) {
         List<ItemCategory> list = new ArrayList<>();
-        String query = JOIN_QUERY + " WHERE t.id = " + typeID + " AND b.id = " + brandID + ";";
+        String query = JOIN_QUERY + " WHERE " + columnName + " = " + id + ";";
 
         try {
             PreparedStatement st = DAO.getPreparedStatement(query);
@@ -137,6 +152,27 @@ public class CategoryManager {
         } catch (SQLException e) {
             e.printStackTrace();
         }
+        return list;
+    }
+
+    /**
+     * @param typeID id of a type
+     * @param brandID id of a brand
+     * @return All categories matching type and brand ids
+     */
+    public static List<ItemCategory> getCategoriesWithBrandAndType(int typeID, int brandID) {
+        List<ItemCategory> list = new ArrayList<>();
+        String query = JOIN_QUERY + " WHERE t.id = " + typeID + " AND b.id = " + brandID + ";";
+        try {
+            PreparedStatement st = DAO.getPreparedStatement(query);
+            ResultSet set = st.executeQuery();
+
+            while(set.next()) list.add(ItemCategory.parseCategory(set));
+
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+
 
         return list;
     }
