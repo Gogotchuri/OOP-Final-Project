@@ -60,9 +60,29 @@ public class CategoryTests {
     }
 
     @Test
+    public void checkBrand() {
+        equalLists(CategoryManager.getCategoriesWithBrand(1), Arrays.asList(cat1, cat2));
+        equalLists(CategoryManager.getCategoriesWithBrand(2), Arrays.asList(cat3, cat4, cat5));
+        equalLists(CategoryManager.getCategoriesWithBrand(5555), Arrays.asList());
+        assertNotEquals(CategoryManager.getCategoriesWithBrand(1), Arrays.asList(cat1));
+        assertNotEquals(CategoryManager.getCategoriesWithBrand(2), Arrays.asList(cat1, cat2));
+        assertNotEquals(CategoryManager.getCategoriesWithBrand(2), Arrays.asList(cat3, cat5));
+    }
+
+    @Test
+    public void checkType() {
+        equalLists(CategoryManager.getCategoriesWithType(1), Arrays.asList(cat1, cat2, cat4, cat3));
+        equalLists(CategoryManager.getCategoriesWithType(2), Arrays.asList(cat5));
+        assertEquals(CategoryManager.getCategoriesWithType(55555), Arrays.asList());
+        assertNotEquals(CategoryManager.getCategoriesWithType(1), Arrays.asList(cat1, cat2, cat3));
+        assertNotEquals(CategoryManager.getCategoriesWithType(2), Arrays.asList(cat5, cat4));
+        assertNotEquals(CategoryManager.getCategoriesWithType(2), Arrays.asList());
+    }
+
+    @Test
     public void checkBrandAndType() {
         //Type : Phone -> 1, Computer -> 2
-        //Type : Samsung -> 1, Apple -> 2
+        //Brand : Samsung -> 1, Apple -> 2
         assertEquals(CategoryManager.getCategoriesWithBrandAndType(1, 1), Arrays.asList(cat1, cat2));
         assertEquals(CategoryManager.getCategoriesWithBrandAndType(1, 2), Arrays.asList(cat3, cat4));
         assertEquals(CategoryManager.getCategoriesWithBrandAndType(2, 2), Arrays.asList(cat5));
