@@ -219,9 +219,9 @@ public class ChatManager {
     public static List<String> getChatUserNames(int chat_id){
         List<String> result = new ArrayList<>();
 
-        String statement = "SELECT user_name FROM cycles" +
-                "JOIN offered_cycles ON cycles.id = offered_cycle.cycle_id" +
-                "JOIN deals ON offered_cycles.deal_id = deals.id" +
+        String statement = "SELECT user_name FROM cycles c " +
+                "JOIN offered_cycles oc ON c.id = oc.cycle_id " +
+                "JOIN deals d ON oc.deal_id = d.id " +
                 "WHERE id = " + chat_id +";";
 
         try {

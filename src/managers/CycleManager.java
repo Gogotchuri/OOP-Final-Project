@@ -275,6 +275,13 @@ public class CycleManager {
         return DeleteManager.delete("cycles", "id", cycleID);
     }
 
+
+    /**
+     * checks if user participates in chat
+     * @param cycle_id given cycle
+     * @param user_id id of the user
+     * @return true if given user participates in given cycle
+     */
     public static boolean userParticipatesInCycle(int user_id, int cycle_id){
         String stmtString = "SELECT count(oc.id) as num_id \n" +
                     "FROM offered_cycles oc \n" +

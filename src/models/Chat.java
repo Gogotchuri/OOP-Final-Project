@@ -1,5 +1,9 @@
 package models;
 
+import managers.ChatManager;
+import managers.CycleManager;
+
+import java.sql.ResultSet;
 import java.sql.Timestamp;
 import java.util.*;
 
@@ -137,23 +141,21 @@ public class Chat {
      * @return true if user can participate in chat
      */
     public boolean isParticipant(int user_id){
-       return true;
-       //TODO implement me
+        return CycleManager.userParticipatesInCycle(user_id, cycle.getCycleID());
     }
 
     /**
      * Returns list of users participating in this chat (cycle in general)
      * */
     public List<User> getParticipants(){
-        return null;
-        //TODO implement me
+        return ChatManager.getChatParticipants(chatID);
     }
 
     /**
      * Returns list of user names participating in this chat (cycle in general)
      * */
     public List<String> getParticipantNames(){
-        return Arrays.asList("ვასო", "ტასო", "ამირანი");
-        //TODO implement me
+        return ChatManager.getChatUserNames(chatID);
+        //TODO test me
     }
 }
