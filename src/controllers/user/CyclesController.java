@@ -42,6 +42,7 @@ public class CyclesController extends Controller {
     public void index() throws ServletException, IOException {
         List<Cycle> userCycles = CycleManager.getUserCycles(user.getUserID());
         request.setAttribute("cycles", userCycles);
+        request.setAttribute("userID", user.getUserID());
         dispatchTo("/pages/user/deals/cycles.jsp");
     }
     /**
