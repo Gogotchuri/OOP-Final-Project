@@ -1,0 +1,110 @@
+<html>
+    <head>
+        <title>View cycle</title>
+        <style>
+            .cycleContainer{
+                display: grid;
+                grid-template-columns: 2fr 3fr 2fr;
+                grid-auto-rows: auto;
+                grid-template-rows: auto;
+
+            }
+
+            .cycleContainer 
+                >div.cycles{
+                grid-column-start: 2;
+                height: 90vh;
+                width: 50vw;
+            }
+
+            .cycleContainer 
+                > div.cycles > div.deal{
+                display: grid;
+                grid-template-columns: 1fr 1fr;
+                background: wheat;
+                margin-inline: 10%;
+                width: 80%;
+                height: 40%;
+                border-radius: 10%;
+            }
+
+            .cycleContainer 
+                > div.cycles > div.dealArrow > img{
+                width: 20%;
+                margin-inline: 40%;
+            } 
+
+            .cycleContainer 
+                > div.cycles > div.dealUpArrow > img{
+                height: 30%;
+                width: 30%;
+                margin-inline: 95%;
+            } 
+
+            .cycleContainer 
+                > div.cycles > div.button{
+                    margin-inline: 40%;
+            } 
+
+            .cycleContainer 
+                > div.cycles > div.deal > img {
+                float: right;
+                margin: 10px;
+                max-height: 90%;
+                max-width: 90%;
+                border-radius: 10%;
+            } 
+
+            .cycleContainer 
+                > div.cycles > div.deal > div.info{
+                margin: 5%;
+            }           
+        </style>
+    </head>
+    <body>
+        <nav>NIAVI</nav>
+        <div class="cycleContainer">
+            <div class="cycles">
+                <div class="button">
+                    <form action="/action_page.php" method="get">
+                        <button type="submit">Accept cycle</button>
+                    </form> 
+                </div>
+                <div class="deal">
+                    <img src="https://media.istockphoto.com/photos/green-apple-picture-id475190419?k=6&m=475190419&s=612x612&w=0&h=G01aHVafnPd01ugi6dmJKtNHS-nz0GrQAbpzDcjuXI0=" alt="green-apple-picture-id475190419?k">
+                    <div class="info">
+                        <a href=""> deal name1 </a>
+                        <p> Lorem ipsum dolor, sit amet consectetur adipisicing elit. Libero iusto repellendus voluptates deleniti, atque autem laudantium rem illum laborum quisquam. </p>
+                        <a href=""> View user1's profile </a>
+                    </div>
+                </div>
+                <div class="dealArrow">
+                    <img src="https://www.stickpng.com/assets/images/58f8bcf70ed2bdaf7c128307.png">
+                </div>
+                <div class="deal">
+                    <img src="https://media.istockphoto.com/photos/green-apple-picture-id475190419?k=6&m=475190419&s=612x612&w=0&h=G01aHVafnPd01ugi6dmJKtNHS-nz0GrQAbpzDcjuXI0=" alt="green-apple-picture-id475190419?k" >
+                    <div class="info">
+                        <a href=""> deal name2 </a>
+                        <p> Lorem ipsum dolor, sit amet consectetur adipisicing elit. Libero iusto repellendus voluptates deleniti, atque autem laudantium rem illum laborum quisquam. </p>
+                        <a href=""> View user2's profile </a>
+                    </div>
+                </div>
+                <div class="dealArrow">
+                    <img src="https://www.stickpng.com/assets/images/58f8bcf70ed2bdaf7c128307.png">
+                </div>
+                <div class="deal">
+                    <img src="https://media.istockphoto.com/photos/green-apple-picture-id475190419?k=6&m=475190419&s=612x612&w=0&h=G01aHVafnPd01ugi6dmJKtNHS-nz0GrQAbpzDcjuXI0=" alt="green-apple-picture-id475190419?k" >
+                    <div class="info">
+                        <a href=""> deal name3 </a>
+                        <p> Lorem ipsum dolor, sit amet consectetur adipisicing elit. Libero iusto repellendus voluptates deleniti, atque autem laudantium rem illum laborum quisquam. </p>
+                        <a href=""> View user3's profile </a>
+                    </div>
+                </div>
+
+                <div class="dealUpArrow">
+                    <img src="https://imageog.flaticon.com/icons/png/512/20/20901.png?size=1200x630f&pad=10,10,10,10&ext=png&bg=FFFFFFFF" alt="up arrow">
+                </div>
+            </div>
+        </div>
+    </body>
+</html>
