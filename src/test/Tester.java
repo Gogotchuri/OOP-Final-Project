@@ -68,7 +68,7 @@ public class Tester {
      * @param table Name of the table
      * @return Number of rows in given table
      */
-    public int tableSize(String table) {
+    public static int tableSize(String table) {
         try {
             PreparedStatement st = DatabaseAccessObject.getInstance().getPreparedStatement("SELECT COUNT(*) FROM " + table + ";");
             ResultSet set = st.executeQuery();
