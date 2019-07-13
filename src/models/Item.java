@@ -6,6 +6,7 @@ import models.categoryModels.ItemCategory;
 import services.encoders.ItemJsonAdapter;
 
 import java.sql.Timestamp;
+import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 
@@ -53,6 +54,18 @@ public class Item implements Comparable<Item> {
         this.updateDate = updateDate;
     }
 
+    /**
+     * Constructor for freshly creating an Item instance
+     * @param ownerID - User id of the owner
+     * @param category - Category of the item
+     * @param name - Name of the item
+     * @param description - Description of the item
+     */
+    public Item (int ownerID, ItemCategory category, String name, String description){
+        this(0, ownerID, category, new ArrayList<>(), name, description,
+                new Timestamp(System.currentTimeMillis()),
+                    new Timestamp(System.currentTimeMillis()));
+    }
 
     /**
      * @return ID of Item in DB
@@ -114,7 +127,18 @@ public class Item implements Comparable<Item> {
      */
     public Timestamp getUpdateDate() { return updateDate; }
 
-
+    /**
+     * This method adds image to item images
+     * @param image image to add
+     */
+    public void addImage(ItemImage image){
+        try {
+            this.images.add(image);
+        }catch (NullPointerException e){
+            this.images = new ArrayList<>();
+            this.images.add(image);
+        }
+    }
     /**
      * !!! Item ID must be Initialized for correct comparing !!!
      * @param other Passed item

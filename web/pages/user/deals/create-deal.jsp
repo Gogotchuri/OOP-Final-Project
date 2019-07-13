@@ -1,4 +1,4 @@
-<%--
+<%@ page import="servlets.RoutingConstants" %><%--
   Created by IntelliJ IDEA.
   User: gogotchuri
   Date: 6/22/19
@@ -24,9 +24,9 @@
                     <p>Item details:</p>
                     <form>
                         <label for="name">Name:</label><br>
-                        <input id="item-name" type="text"><br>
+                        <input id="item-name" type="text" required><br>
                         <label for="item-description">Description:</label><br>
-                        <textarea id="item-description" type="text" style="height: 30%"></textarea><br>
+                        <textarea id="item-description" type="text" style="height: 30%" required></textarea><br>
                         <label for="itemImage">choose Image:</label><br>
                         <input type="file" id="itemImage" accept="image/*"><br>
                     </form>
@@ -34,26 +34,28 @@
                 <div>
                     <p>Categorise item:</p>
                     <label for="item-type">Type:</label><br>
-                    <select id="item-type">
-                        <option>Type1</option>
-                        <option>Type2</option>
-                        <option>Type3</option>
+                    <select id="item-type" required>
+                        <option value="type1">Type1</option>
+                        <option value="type2">Type2</option>
+                        <option value="type3">Type3</option>
                     </select><br>
-                    <label for="item-manufacturer">Manufacturer:</label><br>
-                    <select id="item-manufacturer">
-                        <option>manufacturer1</option>
-                        <option>manufacturer2</option>
-                        <option>manufacturer3</option>
-                    </select><br>
-                    <label for="item-model">Model (choose or create new):</label><br>
-                    <select id="item-model">
-                        <option>model1</option>
-                        <option>model2</option>
-                        <option>model3</option>
+                    <label for="item-manufacturer">Manufacturer (choose or add):</label><br>
+                    <select id="item-manufacturer" required>
+                        <option value="maunf1">manufacturer1</option>
+                        <option value="manuf2">manufacturer2</option>
+                        <option value="manuf3">manufacturer3</option>
                     </select>
-                    <input type="text" id="itemCategoryName">
+                    <input type="text" id="item-manufacturer-name">
+                    <br>
+                    <label for="item-model">Model (choose or create new):</label><br>
+                    <select id="item-model" required>
+                        <option value="model1">model1</option>
+                        <option value="model2">model2</option>
+                        <option value="model3">model3</option>
+                    </select>
+                    <input type="text" id="item-model-name">
                     <br><br>
-                    <input type="button" value="Add Item" onclick="addItem()" style="width: 100px; height: 30px; color:green">
+                    <input type="submit" value="Add Item" onclick="addItem()" style="width: 100px; height: 30px; color:green">
                 </div>
             </div>
         </div>
@@ -167,6 +169,37 @@
     </div>
 
 </div>
-<%--Footer--%>
-<jsp:include page="/pages/partials/footer.jsp"/>
 </body>
+<script src="${pageContext.request.contextPath}/assets/js/helpers.js"></script>
+<script src="${pageContext.request.contextPath}/assets/js/Http.service.js"></script>
+<script>
+    let addItem = () => {
+        let item = {};
+        item["name"] = document.getElementById("item-name").value;
+        item["description"] = document.getElementById("item-description").value;
+        item["type_name"] = document.getElementById("item-type").value;
+        item["manufacturer_name"] = (document.getElementById("item-manufacturer-name").value === "") ?
+            document.getElementById("item-manufacturer").value : document.getElementById("item-manufacturer-name").value;
+        item["model_name"] = (document.getElementById("item-model-name").value === "") ?
+            document.getElementById("item-model").value : document.getElementById("item-model-name").value;
+
+        if(item["name"] === "") {
+            window.alert("Please enter the name first!");
+            return;
+        }
+        if(item["description"] === "") {
+            window.alert("Please enter the description first!");
+            return;
+        }
+
+        http.POST("<%=RoutingConstants.USER_ITEMS%>", item)
+            .then(data => console.log(data))
+            .catch(reason => {
+                if(reason.error != null)
+                    console.error(reason.error);
+                if(reason.errors != null)
+                    console.error(JSON.parse(reason.errors));
+            });
+    }
+</script>
+</html>

@@ -1,12 +1,8 @@
 package test;
 
 import generalManagers.DeleteManager;
-import generalManagers.UpdateManager;
 import managers.CategoryManager;
-import models.categoryModels.ItemBrand;
 import models.categoryModels.ItemCategory;
-import models.categoryModels.ItemSerie;
-import models.categoryModels.ItemType;
 import org.junit.jupiter.api.Test;
 
 import java.util.Arrays;
@@ -37,14 +33,14 @@ public class CategoryTests {
     @Test
     public void insertCategory() {
         resetBase();
-        assertTrue(CategoryManager.insertCategory(cat1));
-        assertTrue(CategoryManager.insertCategory(cat2));
-        assertTrue(CategoryManager.insertCategory(cat3));
-        assertTrue(CategoryManager.insertCategory(cat4));
-        assertTrue(CategoryManager.insertCategory(cat5));
+        assertTrue(CategoryManager.insertCategory(cat1) > 0);
+        assertTrue(CategoryManager.insertCategory(cat2) > 0);
+        assertTrue(CategoryManager.insertCategory(cat3) > 0);
+        assertTrue(CategoryManager.insertCategory(cat4) > 0);
+        assertTrue(CategoryManager.insertCategory(cat5) > 0);
 
-        assertFalse(CategoryManager.insertCategory(cat1));
-        assertFalse(CategoryManager.insertCategory(cat4));
+        assertFalse(CategoryManager.insertCategory(cat1) > 0);
+        assertFalse(CategoryManager.insertCategory(cat4) > 0);
     }
 
     @Test

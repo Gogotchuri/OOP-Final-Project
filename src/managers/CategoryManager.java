@@ -1,14 +1,8 @@
 package managers;
 
-import com.mysql.cj.protocol.Resultset;
 import database.DatabaseAccessObject;
-import models.Image;
-import models.categoryModels.ItemBrand;
 import models.categoryModels.ItemCategory;
-import models.categoryModels.ItemSerie;
-import models.categoryModels.ItemType;
 
-import javax.xml.transform.Result;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -178,20 +172,27 @@ public class CategoryManager {
     }
 
     /**
+     * Inserts given category into the database
+     * If category already present there, returns id of the entry
+     * Otherwise adds it to the database and return id of the entry
      * @param cat Insert passed category into database
-     * @return Success of insertion
+     * @return Id of the inserted category.
+     *  If after calling this method category isn't present in database returns -1;
      */
-    public static boolean insertCategory(ItemCategory cat) {
+    public static int insertCategory(ItemCategory cat) {
 
         //If this row is present with all fields, we don't add it at all
-        if(baseContainsRow(cat.getSerie().getName(), cat.getType().getName(), cat.getBrand().getName())) return false;
+        if(baseContainsRow(cat.getSeries().getName(), cat.getType().getName(), cat.getBrand().getName())) return -1; //ჩამატების შემთხვევა შესაცვლელია აქ
 
         //Else we get inserted ids of brand and type (of already present, just return ids)
         int typeID = checkAndReturnID(TYPE_TABLE, cat.getType().getName());
         int brandID = checkAndReturnID(BRAND_TABLE, cat.getBrand().getName());
 
         //And add new entry to the base
-        return insertIntoParentTable(SERIE_TABLE, cat.getSerie().getName(), typeID, brandID);
+        insertIntoParentTable(SERIE_TABLE, cat.getSeries().getName(), typeID, brandID);
+
+        //TODO:Levan tu თუ ვერც იპოვა და ვერ ჩაამატა -1, თუ იპოვა ან ჩაამატა, ენთრის ნომერი
+        return -1;
     }
 
     /**

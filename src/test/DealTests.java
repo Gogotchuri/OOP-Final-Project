@@ -12,17 +12,14 @@ import models.Item;
 import models.User;
 import models.categoryModels.ItemBrand;
 import models.categoryModels.ItemCategory;
-import models.categoryModels.ItemSerie;
+import models.categoryModels.ItemSeries;
 import models.categoryModels.ItemType;
-import org.junit.Before;
-import org.junit.BeforeClass;
-import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
-import static org.junit.jupiter.api.Assertions.*;
 
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.Date;
+
+import static org.junit.jupiter.api.Assertions.*;
 
 public class DealTests {
 
@@ -35,9 +32,9 @@ public class DealTests {
         DeleteManager.emptyBase("users");
         DeleteManager.emptyBase("items");
 
-        ItemCategory cat1 = new ItemCategory(1, new ItemSerie("item1"), new ItemType("car"), new ItemBrand("toyota"));
-        ItemCategory cat2 = new ItemCategory(2, new ItemSerie("item2"), new ItemType("fridge"), new ItemBrand("samsung"));
-        ItemCategory cat3 = new ItemCategory(3, new ItemSerie("item3"), new ItemType("lolipop"), new ItemBrand("chupa-chups"));
+        ItemCategory cat1 = new ItemCategory(1, new ItemSeries("item1"), new ItemType("car"), new ItemBrand("toyota"));
+        ItemCategory cat2 = new ItemCategory(2, new ItemSeries("item2"), new ItemType("fridge"), new ItemBrand("samsung"));
+        ItemCategory cat3 = new ItemCategory(3, new ItemSeries("item3"), new ItemType("lolipop"), new ItemBrand("chupa-chups"));
         User user1 = new User("one", "1", "o",
                 "ne", "onemail", "111");
         User user2 = new User("two", "2", "t",
@@ -74,7 +71,7 @@ public class DealTests {
         DealsController.SearchCriteria sc1 = new DealsController.SearchCriteria();
         sc1.addCriteria(DealsController.SearchCriteria.Criteria.USER_NAME, "one");
         DealsController.SearchCriteria sc2 = new DealsController.SearchCriteria();
-        sc2.addCriteria(DealsController.SearchCriteria.Criteria.CATEGORY_NAME, cat1.getSerie().getName());
+        sc2.addCriteria(DealsController.SearchCriteria.Criteria.CATEGORY_NAME, cat1.getSeries().getName());
         assertEquals(DealsManager.getDealsBySearchCriteria(sc1).size(), 1);
         assertEquals(DealsManager.getDealsBySearchCriteria(sc2).size(), 1);
 
@@ -87,6 +84,6 @@ public class DealTests {
 
 
     private static ItemCategory makeCategory(String serie, String type, String brand) {
-        return new ItemCategory(new ItemSerie(serie), new ItemType(type), new ItemBrand(brand));
+        return new ItemCategory(new ItemSeries(serie), new ItemType(type), new ItemBrand(brand));
     }
 }
