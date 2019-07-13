@@ -8,7 +8,7 @@ CREATE TABLE users
     first_name VARCHAR(64),
     last_name VARCHAR(64),
 
-    email VARCHAR(128) UNIQUE,
+    email VARCHAR(128) UNIQUE NOT NULL,
     phone_number VARCHAR(32),
 
     created_at TIMESTAMP DEFAULT now(),

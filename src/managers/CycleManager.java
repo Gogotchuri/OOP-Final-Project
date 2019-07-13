@@ -318,7 +318,9 @@ public class CycleManager {
                     DAO.getPreparedStatement (
                             "SELECT oc.cycle_id \n" +
                                     "FROM offered_cycles oc \n" +
-                                    "WHERE oc.user_id = " + userID + ";"
+                                    "JOIN deals d \n" +
+                                    "ON d.id = oc.deal_id \n" +
+                                    "WHERE d.user_id = " + userID + ";"
                     );
             ResultSet resultSet = statement.executeQuery();
             while (resultSet.next())

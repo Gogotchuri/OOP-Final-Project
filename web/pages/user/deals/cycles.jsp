@@ -35,13 +35,14 @@
 <jsp:include page="/pages/partials/navbar.jsp"/>
 <%--Page Content--%>
     <% List<Cycle> cycles = (List<Cycle>)request.getAttribute("cycles");%>
-    <% int userID = (int)request.getAttribute("userID");%>
+    <% int userID = (int)request.getAttribute("userID");
+    String param = RoutingConstants.USER_SINGLE_CYCLE + "?cycleid=";%>
 
     <div class="wrapper">
         <% for(Cycle c : cycles){%>
             <div class="cycle-div">
                 <% int cycleID = c.getCycleID();%>
-                <% List<Deal> deals = DealsManager.getUsersDealsByCycleId(userID, cycleID);%>
+                <% List<Deal> deals = c.getUserDeals(userID);%>
                 <% for(Deal d : deals){%>
                     <h3><%= d.getTitle()%></h3>
                 <%}%>
@@ -51,7 +52,7 @@
                 <p><%= statusName%></p>
                 <%--<% String cycleCreated = new SimpleDateFormat("yyyy.MM.dd").format(c.);%>
                 <p>date_created</p>--%>
-                <form method="POST" action="${pageContext.request.contextPath}<%=RoutingConstants.USER_SINGLE_CYCLE%>">
+                <form method="GET" action="${pageContext.request.contextPath}<%=param + cycleID%>">
                     <button type="submit">Go to cycle page</button>
                 </form>
             </div>

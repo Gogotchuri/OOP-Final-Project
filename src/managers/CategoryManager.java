@@ -170,6 +170,42 @@ public class CategoryManager {
     }
 
     /**
+     * @return All item types from database
+     */
+    public static List<ItemType> getAllTypes() {
+        List<ItemType> list = new ArrayList<>();
+
+        try {
+            PreparedStatement st = DAO.getPreparedStatement("SELECT * FROM item_types;");
+            ResultSet set = st.executeQuery();
+            while(set.next()) {
+                list.add(new ItemType(set.getInt(1), set.getString(2)));
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return list;
+    }
+
+    /**
+     * @return All item brands from database
+     */
+    public static List<ItemBrand> getAllBrands() {
+        List<ItemBrand> list = new ArrayList<>();
+
+        try {
+            PreparedStatement st = DAO.getPreparedStatement("SELECT * FROM item_brands;");
+            ResultSet set = st.executeQuery();
+            while(set.next()) {
+                list.add(new ItemBrand(set.getInt(1), set.getString(2)));
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return list;
+    }
+
+    /**
      * @param cat Insert passed category into database
      * @return Returns id of inserted category, or doesn't insert if already there
      */
