@@ -33,9 +33,10 @@ public class DealCycleServlet extends HttpServlet{
 	protected void doGet(HttpServletRequest request,
 						  HttpServletResponse response)
 		throws ServletException, IOException {
-
 		int cycle_id;
-		try { cycle_id = Integer.parseInt(request.getParameter("cycle_id")); }
+		try {
+			cycle_id = Integer.parseInt(request.getParameter("cycleid"));
+		}
 		catch (NumberFormatException e) {
 			response.sendError(HttpServletResponse.SC_NOT_FOUND,
 					"This address should be called, with numeric parameter \"cycle_id\"!");
