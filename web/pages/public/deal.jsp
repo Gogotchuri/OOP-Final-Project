@@ -13,7 +13,7 @@
 <%@ page import="models.categoryModels.ItemCategory" %>
 <%@ page import="models.categoryModels.ItemType" %>
 <%@ page import="models.categoryModels.ItemBrand" %>
-<%@ page import="models.categoryModels.ItemSerie" %>
+<%@ page import="models.categoryModels.ItemSeries" %>
 <%@ page import="managers.UserManager" %>
 <%@ page import="servlets.RoutingConstants" %>
 <% Deal deal= (Deal)request.getAttribute("deal");%>
@@ -100,8 +100,8 @@
              <% ItemCategory cat = i.getCategory();%>
              <% ItemType type = cat.getType();%>
              <% ItemBrand brand = cat.getBrand();%>
-             <% ItemSerie serie = cat.getSerie();%>
-             <% String catInfo = type + "-" + brand + "-" + serie;%>
+             <% ItemSeries series = cat.getSeries();%>
+             <% String catInfo = type + "-" + brand + "-" + series;%>
                  <%-- <% String date = new SimpleDateFormat("yyyy.MM.dd.HH.mm.ss").format(i.getCreatedAt());%>
                  aitemis tarigia sawiro --%>
                  <li><%= i.getName() %> <br> <%= catInfo%> <%-- <br> <p class="italic"><%= date%></p>> --%></li>
@@ -116,8 +116,8 @@
                  <% for(ItemCategory cat : WantedItemCategories){ %>
                  <% ItemType type = cat.getType();%>
                  <% ItemBrand brand = cat.getBrand();%>
-                 <% ItemSerie serie = cat.getSerie();%>
-                 <% String catInfo = type + "-" + brand + "-" + serie;%>
+                 <% ItemSeries series = cat.getSeries();%>
+                 <% String catInfo = type + "-" + brand + "-" + series;%>
                  <li><%= catInfo%></li>
                  <% } %>
              </ul>

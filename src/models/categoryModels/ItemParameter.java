@@ -1,7 +1,7 @@
 package models.categoryModels;
 
 //Class representing all three child models of an item category
-public class ItemParameter{
+public class ItemParameter {
 
     private int id;
     private String name;

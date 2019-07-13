@@ -2,13 +2,15 @@ package controllers.user;
 
 import com.google.gson.Gson;
 import com.google.gson.JsonObject;
+import controllers.ApiResourceController;
 import controllers.Controller;
-import controllers.ResourceController;
+import managers.CategoryManager;
 import managers.DealsManager;
 import managers.ItemManager;
 import models.Deal;
 import models.Item;
 import models.User;
+import models.categoryModels.ItemCategory;
 import services.RequestValidator;
 
 import javax.servlet.ServletException;
@@ -16,24 +18,19 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
-import java.io.PrintWriter;
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
 //Mainly used as an api crud class
-public class ItemController extends Controller implements ResourceController {
+public class ItemController extends Controller implements ApiResourceController {
     //The local user
     private User user;
 
     /**
      * Creates a controller, usually called from servlet, which is also
      * passed by parameter. servlet method passes taken request and response.
-     *
-     * @param req
-     * @param res
-     * @param servlet
      */
     public ItemController(HttpServletRequest req, HttpServletResponse res, HttpServlet servlet) throws ServletException {
         super(req, res, servlet);
@@ -44,187 +41,162 @@ public class ItemController extends Controller implements ResourceController {
 
     /**
      * Return all items for given deal, json formatted
-     *
-     * @throws IOException
-     * @throws ServletException
      */
     @Override
-    public void index() throws IOException, ServletException {
-        PrintWriter pw = response.getWriter();
+    public void index() throws IOException{
         int deal_id;
         try {
             deal_id = Integer.parseInt(request.getParameter("deal_id"));
         }catch (NumberFormatException e){
-            response.setStatus(404);
-            pw.println("{\"error\":\"This path should be called with parameter (positive integer) 'deal_id'\"}");
-            pw.flush();
+            sendApiError(404, "This path should be called with parameter (positive integer) 'deal_id'");
             return;
         }
 
         if(!checkDealOwnedShip(deal_id)) return;
 
         List<Item> items = ItemManager.getItemsByDealID(deal_id);
+        if(items == null){
+            sendApiError(500, "Items returned as null! (user.ItemController)");
+            return;
+        }
         JsonObject jo = new JsonObject();
         Gson gson = new Gson();
         jo.addProperty("items", gson.toJson(items));
-        pw.print(jo.toString());
-        pw.flush();
+
+        sendJson(200, jo);
     }
 
     /**
      * Return single item with given id, json formatted
      *
      * @param id item id
-     * @throws IOException
-     * @throws ServletException
      */
     @Override
-    public void show(int id) throws IOException, ServletException {
-        if(!checkItemOwnedShip(id)) return;
+    public void show(int id) throws IOException{
+        if(!checkItemOwnership(id)) return;
         Item item = ItemManager.getItemByID(id);
         Gson gson = new Gson();
         JsonObject jo = new JsonObject();
         jo.addProperty("item", gson.toJson(item));
-        PrintWriter pw = response.getWriter();
-        pw.print(jo.toString());
-        pw.flush();
+        sendJson(200, jo);
     }
-
-    /**
-     * This method usually returns create form for the resource
-     * No need to return create form while using through api
-     *
-     * @throws IOException
-     * @throws ServletException
-     */
-    @Override
-    @Deprecated
-    public void create() throws IOException, ServletException {}
 
     /**
      * Parses request parameters
-     * Validates request parameters
-     * And stores resource in db,
-     * if stored with success return json representation of the resource
-     * otherwise returns error
-     *
-     * @throws IOException
-     * @throws ServletException
+     * Validates request parameters And stores resource in db,
+     * if stored with success return json representation of the resource otherwise returns error
      */
     @Override
-    public void store() throws IOException, ServletException {
-        PrintWriter pw = response.getWriter();
+    public void store() throws IOException{
+        if(!validateRequestForStore()) return;
         Gson gson = new Gson();
+        JsonObject jo = new JsonObject();
 
-        Map<String, List<String>> rules = new HashMap<>();
-        //Validation rules
-        rules.put("name", Arrays.asList("required", "min_len:3", "max_len:35"));
-        rules.put("description", Arrays.asList("required", "min_len:10", "max_len:250"));
-        rules.put("type_id", Arrays.asList("required", "type:integer", "min_num:1"));
-        rules.put("manufacturer_id", Arrays.asList("required", "type:integer", "min_num:1"));
-        rules.put("model_id", Arrays.asList("type:integer","min_num:1"));
-        rules.put("model_name", Arrays.asList("min_len:3", "max_len:35"));
+        ItemCategory cat = new ItemCategory(
+                request.getParameter("model_name"), request.getParameter("manufacturer_name"),
+                request.getParameter("type_name"));
+        cat.setId(CategoryManager.insertCategory(cat));
+        if(cat.getId() < 1){
+            sendApiError(500, "Something went wrong during adding an category to the database! (user.ItemController:store)");
+            return;
+        }
+        Item item = new Item(user.getUserID(), cat,
+                request.getParameter("name"), request.getParameter("description"));
 
-        RequestValidator validator = new RequestValidator(request, rules);
-        if(validator.failed()){
-            List<String> errors = validator.getErrors();
-            JsonObject jo = new JsonObject();
-            response.setStatus(422); //Unprocessable entity
-            jo.addProperty("errors", gson.toJson(errors));
-            pw.println(jo.toString());
-            pw.flush();
+        if(!ItemManager.addItemToDB(item)){
+            sendApiError(500, "Something went wrong during adding an item to the database! (user.ItemController:store)");
             return;
         }
 
-        //TODO create and store Category and Item, return stored item
-        Item item = null;
-        response.setStatus(201); //Entity created
-        JsonObject jo = new JsonObject();
         jo.addProperty("item", gson.toJson(item));
-        pw.print(jo.toString());
-        pw.flush();
+        sendJson(201, jo); //Entity created return item
     }
 
+    /**
+     * Should update a deal
+     * @param id of the resource
+     */
     @Override
-    public void update(int id) throws IOException, ServletException {
-        if(!checkItemOwnedShip(id)) return;
+    public void update(int id) throws IOException{
+        if(!checkItemOwnership(id)) return;
         //Not needed for now
 
     }
 
     /**
-     * This method usually returns edit form
-     * No need for that when using api
-     *
-     * @param id
-     * @throws IOException
-     * @throws ServletException
-     */
-    @Override
-    @Deprecated
-    public void edit(int id) throws IOException, ServletException {}
-
-    /**
      * Destroys item with given id
      * Return errors/response with json
      *
-     * @param id
-     * @throws IOException
-     * @throws ServletException
+     * @param id of the item which should be destroyed
      */
     @Override
-    public void destroy(int id) throws IOException, ServletException {
-        if(!checkItemOwnedShip(id)) return;
-        PrintWriter pw = response.getWriter();
+    public void destroy(int id) throws IOException{
+        if(!checkItemOwnership(id)) return;
         if(!ItemManager.deleteItemById(id)) {
-            response.setStatus(500);
-            pw.print("{\"Error\":\"Couldn't delete item from database, internal error! (user.ItemController:destroy)\"}");
-            pw.flush();
+            sendApiError(500, "Couldn't delete item from database, internal error! (user.ItemController:destroy)");
             return;
         }
 
-        response.setStatus(200);
-        pw.print("{\"message\":\"success\"}");
-        pw.flush();
+        JsonObject jo = new JsonObject();
+        jo.addProperty("message", "success");
+        sendJson(200, jo);
     }
 
     private boolean checkDealOwnedShip(int deal_id) throws IOException {
         Deal deal = DealsManager.getDealByDealID(deal_id);
-        PrintWriter pw = response.getWriter();
         if(deal == null){
-            response.setStatus(404);
-            pw.println("{\"error\":\"No Deal found with the given id!\"}");
-            pw.flush();
+            sendApiError(404, "No Deal found with the given id!");
             return false;
         }
 
         if(deal.getOwnerID() != user.getUserID()){
-            response.setStatus(401);
-            pw.println("{\"error\":\"No Deal with the given id belongs to you!\"}");
-            pw.flush();
+            sendApiError(401, "No Deal with the given id belongs to you!");
             return false;
         }
 
         return true;
     }
 
-    private boolean checkItemOwnedShip(int item_id) throws IOException {
+    private boolean checkItemOwnership(int item_id) throws IOException {
         Item item = ItemManager.getItemByID(item_id);
-        PrintWriter pw = response.getWriter();
         if(item == null){
-            response.setStatus(404);
-            pw.println("{\"error\":\"No Item found with the given id!\"}");
-            pw.flush();
+            sendApiError(404, "No Item found with the given id!");
             return false;
         }
 
         if(item.getOwnerID()!= user.getUserID()){
-            response.setStatus(401);
-            pw.println("{\"error\":\"No Item with the given id belongs to you!\"}");
-            pw.flush();
+            sendApiError(401, "No Item with the given id belongs to you!");
             return false;
         }
 
         return true;
     }
+
+    /**
+     * Validates a request, intended for storing purposes
+     * @return true if validation was a success otherwise send errors to client and return false;
+     * @throws IOException Print Writer exception
+     */
+    private boolean validateRequestForStore() throws IOException {
+        Gson gson = new Gson();
+        JsonObject jo = new JsonObject();
+
+        Map<String, List<String>> rules = new HashMap<>();
+        //Validation rules
+        rules.put("name", Arrays.asList("required", "min_len:3", "max_len:35"));
+        rules.put("description", Arrays.asList("required", "min_len:10", "max_len:250"));
+        rules.put("type_name", Arrays.asList("required", "min_len:3", "max_len:35"));
+        rules.put("manufacturer_name", Arrays.asList("required", "min_len:3", "max_len:35"));
+        rules.put("model_name", Arrays.asList("required", "min_len:3", "max_len:35"));
+
+        RequestValidator validator = new RequestValidator(request, rules);
+        if(validator.failed()){
+            List<String> errors = validator.getErrors();
+            jo.addProperty("errors", gson.toJson(errors));
+            sendJson(422,jo);
+            return false;
+        }
+        return true;
+    }
+
 }

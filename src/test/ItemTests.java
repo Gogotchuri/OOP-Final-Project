@@ -10,7 +10,7 @@ import models.Item;
 import models.User;
 import models.categoryModels.ItemBrand;
 import models.categoryModels.ItemCategory;
-import models.categoryModels.ItemSerie;
+import models.categoryModels.ItemSeries;
 import models.categoryModels.ItemType;
 import org.junit.jupiter.api.Test;
 
@@ -28,9 +28,9 @@ public class ItemTests {
     private static User u1 = new User(1,"mudamtqveny", "password", "levan", "gelashvili", "lgela17", "123", null, null, null, time, time);
     private static User u2 = new User(2,"king", "heat","lebron","james","ljame03", "6", null, null, null, time, time);
 
-    private static final ItemCategory cat1 = new ItemCategory(1, new ItemSerie("S3"), new ItemType("Phone"), new ItemBrand("Samsung"));
-    private static final ItemCategory cat2 = new ItemCategory(2, new ItemSerie("E40"), new ItemType("Fridge"), new ItemBrand("Samsung"));
-    private static final ItemCategory cat3 = new ItemCategory(3, new ItemSerie("FinalsTrophy"), new ItemType("Trophy"), new ItemBrand("NBA"));
+    private static final ItemCategory cat1 = new ItemCategory(1, new ItemSeries("S3"), new ItemType("Phone"), new ItemBrand("Samsung"));
+    private static final ItemCategory cat2 = new ItemCategory(2, new ItemSeries("E40"), new ItemType("Fridge"), new ItemBrand("Samsung"));
+    private static final ItemCategory cat3 = new ItemCategory(3, new ItemSeries("FinalsTrophy"), new ItemType("Trophy"), new ItemBrand("NBA"));
 
     private static final Item it1 = new Item(1, u1.getUserID(), cat1, null, "Samsung Galaxy s3", "Karg mdgomareobashi", time, time);
     private static final Item it2 = new Item(2, u1.getUserID(), cat2, null, "Macivari", "aciebs", time, time);

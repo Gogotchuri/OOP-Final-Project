@@ -7,7 +7,7 @@ import java.sql.*;
 
 public class DatabaseAccessObject {
     private static final String MYSQL_USERNAME = "root";
-    private static final String MYSQL_PASSWORD = "luka1234";
+    private static final String MYSQL_PASSWORD = "password";
     private static final String MYSQL_DATABASE_SERVER = "localhost";
     private static final String MYSQL_DATABASE_NAME = "oop";
 

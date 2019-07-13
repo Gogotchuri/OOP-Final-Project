@@ -1,22 +1,17 @@
 package test;
 
-import database.DatabaseAccessObject;
 import generalManagers.DeleteManager;
 import managers.*;
 import models.*;
 import models.categoryModels.ItemBrand;
 import models.categoryModels.ItemCategory;
-import models.categoryModels.ItemSerie;
+import models.categoryModels.ItemSeries;
 import models.categoryModels.ItemType;
 import org.junit.jupiter.api.Test;
 import static org.junit.jupiter.api.Assertions.*;
 
-import java.sql.PreparedStatement;
-import java.sql.SQLException;
-import java.sql.Timestamp;
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.Date;
 
 public class ChatAndMessageTests {
 
@@ -71,9 +66,9 @@ public class ChatAndMessageTests {
         DeleteManager.emptyBase("users");
         DeleteManager.emptyBase("items");
 
-        ItemCategory cat1 = new ItemCategory(1, new ItemSerie("item1"), new ItemType("car"), new ItemBrand("toyota"));
-        ItemCategory cat2 = new ItemCategory(2, new ItemSerie("item2"), new ItemType("fridge"), new ItemBrand("samsung"));
-        ItemCategory cat3 = new ItemCategory(3, new ItemSerie("item3"), new ItemType("lolipop"), new ItemBrand("chupa-chups"));
+        ItemCategory cat1 = new ItemCategory(1, new ItemSeries("item1"), new ItemType("car"), new ItemBrand("toyota"));
+        ItemCategory cat2 = new ItemCategory(2, new ItemSeries("item2"), new ItemType("fridge"), new ItemBrand("samsung"));
+        ItemCategory cat3 = new ItemCategory(3, new ItemSeries("item3"), new ItemType("lolipop"), new ItemBrand("chupa-chups"));
         User user1 = new User("one", "1", "o",
                 "ne", "onemail", "111");
         User user2 = new User("two", "2", "t",

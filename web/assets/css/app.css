@@ -353,8 +353,9 @@ div.messages div.own-message .message-date{
 .dealFormContainer
 > div.itemContainer
 > div.dealItems table{
-    background-color: #eeee;
+    background-color: rgba(249, 249, 249, 0.93);
     height: 80%;
+    width: 90%;
 }
 
 .dealFormContainer

@@ -3,14 +3,9 @@ package managers;
 
 import database.DatabaseAccessObject;
 import generalManagers.DeleteManager;
-import models.Image;
 import models.Item;
 import models.ItemImage;
-import models.User;
-import models.categoryModels.ItemBrand;
 import models.categoryModels.ItemCategory;
-import models.categoryModels.ItemSerie;
-import models.categoryModels.ItemType;
 
 import java.sql.*;
 import java.util.ArrayList;
@@ -198,6 +193,8 @@ public class ItemManager {
 
 
     /**
+     * Inserts item into database, if insertion fails print stack trace and returns false
+     * If insertion ends with a success sets item id to the given object and returns true;
      * @param item Item, which needs to added to database
      */
     public static boolean addItemToDB(Item item) {

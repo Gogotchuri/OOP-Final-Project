@@ -12,7 +12,7 @@ import models.Item;
 import models.User;
 import models.categoryModels.ItemBrand;
 import models.categoryModels.ItemCategory;
-import models.categoryModels.ItemSerie;
+import models.categoryModels.ItemSeries;
 import models.categoryModels.ItemType;
 import org.junit.jupiter.api.Test;
 
@@ -21,7 +21,6 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Timestamp;
 import java.util.Arrays;
-import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
@@ -33,9 +32,9 @@ public class DealCyclesFinderTest {
     private static User u2 = new User(2,"b","b","b","b","b","b,",null,null,null,time,time);
     private static User u3 = new User(3,"c","c","c","c","c","c,",null,null,null,time,time);
 
-    private static ItemCategory cat1 = new ItemCategory(1, new ItemSerie("S3"), new ItemType("Phone"), new ItemBrand("Samsung"));
-    private static ItemCategory cat2 = new ItemCategory(2, new ItemSerie("S2"), new ItemType("Phone"), new ItemBrand("Samsung"));
-    private static ItemCategory cat3 = new ItemCategory(3, new ItemSerie("Iphone"), new ItemType("Phone"), new ItemBrand("Apple"));
+    private static ItemCategory cat1 = new ItemCategory(1, new ItemSeries("S3"), new ItemType("Phone"), new ItemBrand("Samsung"));
+    private static ItemCategory cat2 = new ItemCategory(2, new ItemSeries("S2"), new ItemType("Phone"), new ItemBrand("Samsung"));
+    private static ItemCategory cat3 = new ItemCategory(3, new ItemSeries("Iphone"), new ItemType("Phone"), new ItemBrand("Apple"));
 
     private static Item it1 = new Item(1, u1.getUserID(), cat1, null, "Samsung galaxy s3","", time, time);
     private static Item it2 = new Item(2, u1.getUserID(), cat2, null, "Samsung galaxy s2","", time, time);
@@ -81,12 +80,12 @@ public class DealCyclesFinderTest {
     }
 
 
-    private static ItemCategory a = new ItemCategory(1, new ItemSerie("a"), new ItemType("Phone"), new ItemBrand("Samsung"));
-    private static ItemCategory b = new ItemCategory(2, new ItemSerie("b"), new ItemType("Phone"), new ItemBrand("Samsung"));
-    private static ItemCategory c = new ItemCategory(3, new ItemSerie("c"), new ItemType("Phone"), new ItemBrand("Samsung"));
-    private static ItemCategory d = new ItemCategory(4, new ItemSerie("d"), new ItemType("Phone"), new ItemBrand("Samsung"));
-    private static ItemCategory e = new ItemCategory(5, new ItemSerie("e"), new ItemType("Phone"), new ItemBrand("Samsung"));
-    private static ItemCategory f = new ItemCategory(6, new ItemSerie("f"), new ItemType("Phone"), new ItemBrand("Samsung"));
+    private static ItemCategory a = new ItemCategory(1, new ItemSeries("a"), new ItemType("Phone"), new ItemBrand("Samsung"));
+    private static ItemCategory b = new ItemCategory(2, new ItemSeries("b"), new ItemType("Phone"), new ItemBrand("Samsung"));
+    private static ItemCategory c = new ItemCategory(3, new ItemSeries("c"), new ItemType("Phone"), new ItemBrand("Samsung"));
+    private static ItemCategory d = new ItemCategory(4, new ItemSeries("d"), new ItemType("Phone"), new ItemBrand("Samsung"));
+    private static ItemCategory e = new ItemCategory(5, new ItemSeries("e"), new ItemType("Phone"), new ItemBrand("Samsung"));
+    private static ItemCategory f = new ItemCategory(6, new ItemSeries("f"), new ItemType("Phone"), new ItemBrand("Samsung"));
 
     private static Item a1 = new Item(1, 1, a, null, "Samsung galaxy a","", time, time);
     private static Item b2 = new Item(2, 2, b, null, "Samsung galaxy b","", time, time);

@@ -1,14 +1,7 @@
 package managers;
 
-import com.mysql.cj.protocol.Resultset;
 import database.DatabaseAccessObject;
-import models.Image;
-import models.categoryModels.ItemBrand;
 import models.categoryModels.ItemCategory;
-import models.categoryModels.ItemSerie;
-import models.categoryModels.ItemType;
-
-import javax.xml.transform.Result;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -219,7 +212,7 @@ public class CategoryManager {
     public static int insertCategory(ItemCategory cat) {
 
         //If this row is present with all fields, we don't add it at all
-        int rowID = baseContainsRow(cat.getSerie().getName(), cat.getType().getName(), cat.getBrand().getName());
+        int rowID = baseContainsRow(cat.getSeries().getName(), cat.getType().getName(), cat.getBrand().getName());
         if(rowID != -1) return rowID;
 
         //Else we get inserted ids of brand and type (of already present, just return ids)
@@ -227,7 +220,7 @@ public class CategoryManager {
         int brandID = checkAndReturnID(BRAND_TABLE, cat.getBrand().getName());
 
         //And add new entry to the base
-        return insertIntoParentTable(SERIE_TABLE, cat.getSerie().getName(), typeID, brandID);
+        return insertIntoParentTable(SERIE_TABLE, cat.getSeries().getName(), typeID, brandID);
     }
 
     /**
