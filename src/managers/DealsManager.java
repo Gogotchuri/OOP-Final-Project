@@ -114,7 +114,7 @@ public class DealsManager {
      * @return List of fully filled deals of Cycle with ID = cycleID
      *         and deal owner is user with userID
      */
-    public static List<Deal> getUsersDealByCycleId(int userID, int cycleID){
+    public static List<Deal> getUsersDealsByCycleId(int userID, int cycleID){
         List<Deal> result = new ArrayList<>();
         List<Deal> cycleDeals = getDealsByCycleID(cycleID);
         for(Deal d : cycleDeals){

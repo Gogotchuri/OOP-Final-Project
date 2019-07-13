@@ -13,6 +13,7 @@
 <%@ page import="static java.lang.Math.min" %>
 <%@ page import="java.text.SimpleDateFormat" %>
 <%@ page import="models.ProcessStatus" %>
+<%@ page import="servlets.RoutingConstants" %>
 <% int maxNumberOfDeals = 5;%>
 <% User user = (User) request.getAttribute("user");%>
 <html>
@@ -46,10 +47,6 @@
             padding: 5px;
             color:lightslategray;
             background-color: powderblue;
-        }
-
-        .image-div{
-            min-height: 50%;
         }
 
         .deals-column{
@@ -91,7 +88,9 @@
         <div>
             <% Image img = user.getProfilePicture(); %>
             <% String imgUrl = "";
-            if(img != null){
+            if(img == null){
+                imgUrl = "https://zenbooks.ca/wp-content/uploads/2017/09/placeholder-female-square.png";
+            }else{
                 imgUrl = img.getUrl();
             } %>
             <% String name = user.getFirstName(); %>
@@ -100,10 +99,16 @@
             <% String email = user.getEmail(); %>
             <% String phoneNumber = user.getPhoneNumber(); %>
             <div class="image-div">
-                <img src = "<%= imgUrl%>" alt = "No Profile Picture">
+                <img src = "<%= imgUrl%>" alt = "No Profile Picture" style="width: 1000px">
             </div>
             <div>
-                <a href="#" class="button">Edit Profile</a>
+                <% User thisUser = (User)session.getAttribute("user"); %>
+                <% int thisId = thisUser.getUserID(); %>
+                <%if(user.getUserID() == thisId){ %>
+                <form method="POST" action="${pageContext.request.contextPath}<%=RoutingConstants.USER_EDIT%>">
+                    <button type="submit">Edit Profile</button>
+                </form>
+                <% } %>
             </div>
             <div class = "user-info">
                 <p><%= name %></p>
@@ -117,7 +122,7 @@
         </div>
         <div class = "deals-column">
             <% List<Deal> deals = user.getDeals(); %>
-            <% int numToShow = min(maxNumberOfDeals, deals.size()); %>
+            <% int numToShow = deals.size(); %>
             <h3>Deals:</h3>
             <ul>
 
@@ -139,11 +144,16 @@
                 <% }
                 } %>
             </ul>
-            <% User thisUser = (User)session.getAttribute("user"); %>
-            <% int thisId = thisUser.getUserID(); %>
+
             <%if(user.getUserID() == thisId){ %>
-                <a href="#" class="button">See all Deals</a>
+                <form method="POST" action="${pageContext.request.contextPath}<%=RoutingConstants.USER_DEALS%>">
+                    <button type="submit">See all deals</button>
+                </form>
             <% } %>
+
+            <form method="POST" action="${pageContext.request.contextPath}<%=RoutingConstants.USER_DEAL_CONFIG%>">
+                <button type="submit">See suggested cycles</button>
+            </form>
         </div>
     </div>
 
