@@ -16,7 +16,9 @@
 <%  Cycle cycle = (Cycle) request.getAttribute("cycle");
     List<Deal> deals = cycle.getDeals();
     Deal deal = null;
-    String param = RoutingConstants.USER_SINGLE_CYCLE;
+    String paramUser = RoutingConstants.PUBLIC_PROFILE;
+    String paramDeal = RoutingConstants.SINGLE_DEAL;
+    String paramCycle = RoutingConstants.USER_SINGLE_CYCLE;
 %>
 
 <html>
@@ -29,9 +31,9 @@
     <div class="cycleContainer">
         <div class="cycles">
 
-                                                            <%-- TODO: BUTTON --%>
+                                        <%-- TODO: ACCEPT BUTTON --%>
             <div class="button">
-              <form action="${pageContext.request.contextPath}<%=param%>" method="PUT">
+              <form action="${pageContext.request.contextPath}<%=paramCycle%>" method="PUT">
                   <button type="submit">Accept cycle</button>
                   <input name="cycle_id" type="hidden" value="<%=cycle.getCycleID()%>"/>
                   <input name="deal_id" type="hidden" value="<%=cycle.getUserDeals(((User)session.getAttribute("user")).getUserID())%>"/>
@@ -45,9 +47,15 @@
                 <div class="deal">
                     <img src="<%=deal.getOwnedItems().get(0).getImages().get(0).getUrl()%>">
                     <div class="info">
-                        <a href="${pageContext.request.contextPath}<%=RoutingConstants.USER_SINGLE_DEAL%>"> <%=deal.getTitle()%> </a>
+                        <form method="GET" action="${pageContext.request.contextPath}<%=paramDeal%>">
+                            <button type="submit" class = "link">Go to <%=deal.getTitle()%> page</button>
+                            <input name="id" type="hidden" value="<%=deal.getDealID()%>"/>
+                        </form>
                         <p> <%=deal.getOwnedItems().get(0).getDescription()%> </p>
-                        <a href="${pageContext.request.contextPath}<%=RoutingConstants.PUBLIC_PROFILE%>"> View owner's profile </a>
+                        <form method="GET" action="${pageContext.request.contextPath}<%=paramUser%>">
+                            <button type="submit" class = "link">owner's profile</button>
+                            <input name="id" type="hidden" value="<%=deal.getOwnerID()%>"/>
+                        </form>
                     </div>
                 </div>
                 <div class="dealArrow">
@@ -58,9 +66,15 @@
             <div class="deal">
                 <img src="<%=deal.getOwnedItems().get(0).getImages().get(0).getUrl()%>">
                 <div class="info">
-                    <a href="${pageContext.request.contextPath}<%=RoutingConstants.USER_SINGLE_DEAL%>"> <%=deal.getTitle()%> </a>
+                    <form method="GET" action="${pageContext.request.contextPath}<%=paramDeal%>">
+                        <button type="submit" class = "link">Go to <%=deal.getTitle()%> page</button>
+                        <input name="id" type="hidden" value="<%=deal.getDealID()%>"/>
+                    </form>
                     <p> <%=deal.getOwnedItems().get(0).getDescription()%> </p>
-                    <a href="${pageContext.request.contextPath}<%=RoutingConstants.PUBLIC_PROFILE%>"> View owner's profile </a>
+                    <form method="GET" action="${pageContext.request.contextPath}<%=paramUser%>">
+                        <button type="submit" class = "link">owner's profile</button>
+                        <input name="id" type="hidden" value="<%=deal.getOwnerID()%>"/>
+                    </form>
                 </div>
             </div>
             <div class="dealUpArrow">
