@@ -1,5 +1,6 @@
 package services.encoders;
 
+import com.google.gson.Gson;
 import com.google.gson.TypeAdapter;
 import com.google.gson.stream.JsonReader;
 import com.google.gson.stream.JsonWriter;
@@ -12,6 +13,7 @@ import java.util.List;
 public class ItemJsonAdapter extends TypeAdapter<Item> {
     @Override
     public void write(JsonWriter jw, Item item) throws IOException {
+        Gson gson = new Gson();
         jw.beginObject();
         jw.name("id");
         jw.value(item.getItemID());
@@ -19,7 +21,8 @@ public class ItemJsonAdapter extends TypeAdapter<Item> {
         jw.value(item.getName());
         jw.name("description");
         jw.value(item.getDescription());
-
+        jw.name("category");
+        jw.value(gson.toJson(item.getCategory()));
         jw.name("image_url");
         List<ItemImage> itemImages = item.getImages();
         if(itemImages != null && !itemImages.isEmpty())
