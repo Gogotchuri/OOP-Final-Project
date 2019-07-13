@@ -219,10 +219,12 @@ public class ChatManager {
     public static List<String> getChatUserNames(int chat_id){
         List<String> result = new ArrayList<>();
 
-        String statement = "SELECT user_name FROM cycles c " +
-                "JOIN offered_cycles oc ON c.id = oc.cycle_id " +
-                "JOIN deals d ON oc.deal_id = d.id " +
-                "WHERE id = " + chat_id +";";
+        String statement = "SELECT u.user_name FROM chats ch" +
+                "JOIN cycles c ON ch.cycle_id = c.id" +
+                "JOIN offered_cycles oc ON c.id = oc.cycle_id" +
+                "JOIN deals d ON oc.deal_id = d.id" +
+                "JOIN users u ON d.user_id=u.id" +
+                "WHERE ch.id = " + chat_id +";";
 
         try {
             PreparedStatement st = DBO.getPreparedStatement(statement);
