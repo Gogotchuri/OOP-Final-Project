@@ -66,7 +66,6 @@ public class CyclesController extends Controller {
                     "(controllers.user.CyclesController:show:53)");
             return;
         }
-
         request.setAttribute("cycle", cycle);
         dispatchTo("/pages/user/deals/cycle.jsp");
     }

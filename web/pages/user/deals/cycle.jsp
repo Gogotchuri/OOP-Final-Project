@@ -11,10 +11,12 @@
 <%@ page import="models.Deal" %>
 <%@ page import="java.util.List" %>
 <%@ page import="servlets.RoutingConstants" %>
+<%@ page import="models.User" %>
 
-<%  Cycle cycle = (Cycle) session.getAttribute("cycle");
+<%  Cycle cycle = (Cycle) request.getAttribute("cycle");
     List<Deal> deals = cycle.getDeals();
     Deal deal = null;
+    String param = RoutingConstants.USER_SINGLE_CYCLE;
 %>
 
 <html>
@@ -29,8 +31,10 @@
 
                                                             <%-- TODO: BUTTON --%>
             <div class="button">
-              <form action="" method="get">
+              <form action="${pageContext.request.contextPath}<%=param%>" method="PUT">
                   <button type="submit">Accept cycle</button>
+                  <input name="cycle_id" type="hidden" value="<%=cycle.getCycleID()%>"/>
+                  <input name="deal_id" type="hidden" value="<%=cycle.getUserDeals(((User)session.getAttribute("user")).getUserID())%>"/>
               </form> 
             </div>
 
