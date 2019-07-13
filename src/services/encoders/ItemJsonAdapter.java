@@ -26,7 +26,7 @@ public class ItemJsonAdapter extends TypeAdapter<Item> {
             jw.value(itemImages.get(0).getUrl());
         else
             jw.value("http://bandtanimalkingdom.weebly.com/uploads/3/9/9/4/39943199/s320981046200626688_p7_i1_w500.jpeg");
-
+        jw.endObject();
     }
 
     @Override

@@ -18,11 +18,13 @@ public abstract class RoutingConstants {
     public static final String USER_DEAL_CONFIG = "/user/deals/config";
     public static final String USER_CYCLES = "/user/deals/cycles";
     public static final String USER_SINGLE_CYCLE = "/user/deals/cycles/show";
-    public static final String USER_EDIT = "/user/edit"; // TODO: Ilia url-ebi emtxveoda da es iyos ???
+    public static final String USER_EDIT = "/user/edit";
     public static final String LOGOUT = "/logout";
 
-    //User API
+    //Public API
+    public static final String ITEM_CATEGORIES = "/items/categories";
 
+    //User API
     /**
      * Supports
      * GET - returns all user items

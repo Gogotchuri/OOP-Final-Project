@@ -22,14 +22,12 @@
             <div class="newItem">
                 <div>
                     <p>Item details:</p>
-                    <form>
-                        <label for="name">Name:</label><br>
-                        <input id="item-name" type="text" required><br>
-                        <label for="item-description">Description:</label><br>
-                        <textarea id="item-description" type="text" style="height: 30%" required></textarea><br>
-                        <label for="itemImage">choose Image:</label><br>
-                        <input type="file" id="itemImage" accept="image/*"><br>
-                    </form>
+                    <label for="name">Name:</label><br>
+                    <input id="item-name" type="text" required><br>
+                    <label for="item-description">Description:</label><br>
+                    <textarea id="item-description" type="text" style="height: 30%" required></textarea><br>
+                    <label for="itemImage">choose Image:</label><br>
+                    <input type="file" id="itemImage" accept="image/*"><br>
                 </div>
                 <div>
                     <p>Categorise item:</p>
@@ -62,41 +60,13 @@
         <div class="dealItems">
             <h3>Owned Items:</h3>
             <div class="tableWrapper">
-                <table>
+                <table id="deal-items">
                     <tr>
                         <th>ID:</th>
                         <th>Image:</th>
                         <th>Item name:</th>
                         <th>Item description:</th>
                         <th>Actions:</th>
-                    </tr>
-                    <tr>
-                        <td>1</td>
-                        <td>
-                            <img src="http://bandtanimalkingdom.weebly.com/uploads/3/9/9/4/39943199/s320981046200626688_p7_i1_w500.jpeg" style="width:11vw">
-                        </td>
-                        <td>Item 1</td>
-                        <td>Lorem ipsum dolor sit amet consectetur adipisicing elit. Unde reiciendis ipsa ipsam quisquam minima maiores necessitatibus</td>
-                        <td><button style="color:red">DELETE</button></td>
-                    </tr>
-                    <tr>
-                        <td>2</td>
-                        <td>
-                            <img src="http://bandtanimalkingdom.weebly.com/uploads/3/9/9/4/39943199/s320981046200626688_p7_i1_w500.jpeg" style="width:11vw">
-                        </td>
-                        <td>Item 2</td>
-                        <td>Lorem ipsum dolor sit amet consectetur adipisicing elit. Unde reiciendis ipsa ipsam quisquam minima maiores necessitatibus</td>
-                        <td><button style="color:red">DELETE</button></td>
-
-                    </tr>
-                    <tr>
-                        <td>3</td>
-                        <td>
-                            <img src="http://bandtanimalkingdom.weebly.com/uploads/3/9/9/4/39943199/s320981046200626688_p7_i1_w500.jpeg" style="width:11vw">
-                        </td>
-                        <td>Item 3</td>
-                        <td>Lorem ipsum dolor sit amet consectetur adipisicing elit. Unde reiciendis ipsa ipsam quisquam minima maiores necessitatibus</td>
-                        <td><button style="color:red">DELETE</button></td>
                     </tr>
                 </table>
             </div>
@@ -154,17 +124,15 @@
         </div>
         <div class="dealForm">
             <p>Deal Description</p>
-            <form>
-                <label for="name">Deal Name:</label>
-                <br>
-                <input id="name" type="text">
-                <br>
-                <label for="description">Deal description:</label>
-                <br>
-                <textarea id="description"></textarea>
-                <br>
-                <button>Save Deal</button>
-            </form>
+            <label for="name">Deal Name:</label>
+            <br>
+            <input id="name" type="text">
+            <br>
+            <label for="description">Deal description:</label>
+            <br>
+            <textarea id="description"></textarea>
+            <br>
+            <button>Save Deal</button>
         </div>
     </div>
 
@@ -173,7 +141,14 @@
 <script src="${pageContext.request.contextPath}/assets/js/helpers.js"></script>
 <script src="${pageContext.request.contextPath}/assets/js/Http.service.js"></script>
 <script>
-    let addItem = () => {
+
+    function fetchTypes
+    function deleteItem(id){
+        console.log("should delete item with id: "+id);
+        document.getElementById("deal-item-"+id).remove();
+    }
+
+    function getItemData(){
         let item = {};
         item["name"] = document.getElementById("item-name").value;
         item["description"] = document.getElementById("item-description").value;
@@ -185,15 +160,41 @@
 
         if(item["name"] === "") {
             window.alert("Please enter the name first!");
-            return;
+            return null;
         }
         if(item["description"] === "") {
             window.alert("Please enter the description first!");
-            return;
+            return null;
         }
+        return item;
+    }
+
+    function displayItem (item) {
+        let itemsTable = document.getElementById("deal-items");
+        let row = itemsTable.insertRow();
+        row.id = "deal-item-"+item.id;
+        let idCol = row.insertCell(0);
+        let imageCol = row.insertCell(1);
+        let nameCol = row.insertCell(2);
+        let descCol = row.insertCell(3);
+        let actionCol = row.insertCell(4);
+        idCol.innerHTML = item.id;
+        imageCol.innerHTML = '<img src="' +item.image_url + '" style="width:11vw;">';
+        nameCol.innerHTML = item.name;
+        descCol.innerHTML = item.description;
+        actionCol.innerHTML = '<button style="color:red" onclick="deleteItem('+item.id+')">DELETE</button>';
+    }
+
+    let addItem = () => {
+        let item = getItemData();
+        if(item == null) return;
 
         http.POST("<%=RoutingConstants.USER_ITEMS%>", item)
-            .then(data => console.log(data))
+            .then(data => {
+                console.log(data);
+                let item = JSON.parse(data.item);
+                displayItem(item);
+            })
             .catch(reason => {
                 if(reason.error != null)
                     console.error(reason.error);

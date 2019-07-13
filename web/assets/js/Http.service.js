@@ -24,10 +24,8 @@ class HTTP{
 
     POST(uri, baggage = null){
         this.options["method"] ="POST";
-        if(baggage){
-            let urlEncoded = Object.keys(baggage).map(key => encodeURIComponent(key) + '=' + encodeURIComponent(baggage[key])).join("&");
-            uri += "?" + urlEncoded;
-        }
+        if(baggage)
+            uri += HTTP.encodeForUrl(baggage);
 
         return this.makeRequest(uri);
     }
@@ -35,21 +33,21 @@ class HTTP{
     GET(uri, baggage = null){
         this.options["method"] ="GET";
         if(baggage)
-            this.options["body"] = JSON.stringify(baggage);
+            uri += HTTP.encodeForUrl(baggage);
         return this.makeRequest(uri);
     }
 
     PUT(uri, baggage = null){
         this.options["method"] ="PUT";
         if(baggage)
-            this.options["body"] = JSON.stringify(baggage);
+            uri += HTTP.encodeForUrl(baggage);
         return this.makeRequest(uri);
     }
 
     DELETE(uri, baggage = null){
         this.options["method"] ="DELETE";
         if(baggage)
-            this.options["body"] = JSON.stringify(baggage);
+            uri += HTTP.encodeForUrl(baggage);
         return this.makeRequest(uri);
     }
 
@@ -64,6 +62,11 @@ class HTTP{
                 resolve(data);
             }
         })
+    }
+
+    static encodeForUrl(baggage) {
+        let urlEncoded = Object.keys(baggage).map(key => encodeURIComponent(key) + '=' + encodeURIComponent(baggage[key])).join("&");
+        return "?" + urlEncoded;
     }
 }
 

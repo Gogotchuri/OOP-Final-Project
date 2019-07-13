@@ -88,21 +88,18 @@ public class ItemController extends Controller implements ApiResourceController 
      */
     @Override
     public void store() throws IOException{
-        System.out.println(request.getParameterNames());
-        System.out.println(request.getHeaderNames());
         if(!validateRequestForStore()) return;
         Gson gson = new Gson();
         JsonObject jo = new JsonObject();
 
         ItemCategory cat = new ItemCategory(
-                request.getParameter("series"), request.getParameter("brand"),
-                request.getParameter(""));
+                request.getParameter("model_name"), request.getParameter("manufacturer_name"),
+                request.getParameter("type_name"));
         cat.setId(CategoryManager.insertCategory(cat));
         if(cat.getId() < 1){
             sendApiError(500, "Something went wrong during adding an category to the database! (user.ItemController:store)");
             return;
         }
-
         Item item = new Item(user.getUserID(), cat,
                 request.getParameter("name"), request.getParameter("description"));
 
