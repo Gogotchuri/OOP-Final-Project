@@ -456,4 +456,14 @@ div.messages div.own-message .message-date{
     margin: 5%;
 }
 
+.cycleContainer
+ > div.cycles > div.deal > div.info .link{
+    margin: 0;
+    border: 0;
+    background: none;
+    overflow: visible;
+    color: blue;
+    cursor: pointer;
+ }
+
 /*!!cycle.jsp column*/

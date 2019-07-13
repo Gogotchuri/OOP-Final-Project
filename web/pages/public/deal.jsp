@@ -87,7 +87,7 @@
                         <%-- <% String date = new SimpleDateFormat("yyyy.MM.dd.HH.mm.ss").format(c.get);%> date unda amas ciklis --%>
                         <% String statusName = c.getCycleStatus().getName();%>
                         <% String cycleInfo = "Cycle" + i;%>
-                        <li><%= cycleInfo%> <br> <p class="italic"><%= statusName %></>p></li>
+                        <li><%= cycleInfo%> <br> <p class="italic"><%= statusName %></></li>
                         <%}%>
                     </ul>
          </div>
