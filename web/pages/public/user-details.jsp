@@ -154,7 +154,7 @@
                 </form>
             <% } %>
 
-            <form method="POST" action="${pageContext.request.contextPath}<%=RoutingConstants.USER_DEAL_CONFIG%>">
+            <form method="POST" action="${pageContext.request.contextPath}<%=RoutingConstants.USER_CYCLES%>">
                 <button type="submit">See suggested cycles</button>
             </form>
         </div>
