@@ -55,9 +55,9 @@ public class DealTests {
         ItemManager.addItemToDB(item2);
         ItemManager.addItemToDB(item3);
         Deal deal1 = new Deal(user1.getUserID(), new ArrayList<>(Arrays.asList(item1, item2)),
-                new ArrayList<>(Arrays.asList(cat3)));
+                new ArrayList<>(Arrays.asList(cat3)), "deal1");
         Deal deal2 = new Deal(user2.getUserID(), new ArrayList<>(Arrays.asList(item3)),
-                new ArrayList<>(Arrays.asList(cat2, cat1)));
+                new ArrayList<>(Arrays.asList(cat2, cat1)), "deal2");
         assertNotEquals(DealsManager.storeDeal(deal1), 0);
         assertNotEquals(DealsManager.storeDeal(deal2), 0);
 
