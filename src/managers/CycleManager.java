@@ -285,8 +285,12 @@ public class CycleManager {
     public static boolean userParticipatesInCycle(int user_id, int cycle_id){
         String stmtString = "SELECT count(oc.id) as num_id \n" +
                     "FROM offered_cycles oc \n" +
-                    "WHERE oc.user_id = " + user_id + " AND \n" +
-                    "WHERE oc.cycle_id = " + cycle_id +";";
+                    "JOIN deals d \n" +
+                    "ON oc.deal_id = d.id \n" +
+                    "JOIN users u \n" +
+                    "ON u.id = d.user_id \n" +
+                    "WHERE u.id = " + user_id + " AND \n" +
+                    "oc.cycle_id = " + cycle_id +";";
         try {
             PreparedStatement statement =
                     DAO.getPreparedStatement (stmtString);

@@ -74,7 +74,7 @@ public class ImageTests {
     @Test
     public void insertIntoBase() {
         emptyBase();
-        assertTrue(CategoryManager.insertCategory(dummy));
+        assertEquals(CategoryManager.insertCategory(dummy), dummy.getId());
         assertTrue(UserManager.storeUser(u1));
         assertTrue(UserManager.storeUser(u2));
         assertTrue(ItemManager.addItemToDB(it1));
