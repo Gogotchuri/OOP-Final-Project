@@ -46,24 +46,24 @@ public class DealCyclesFinderTest extends Tester {
     private static ItemCategory h = new ItemCategory(8, new ItemSeries("h"), new ItemType("t"), new ItemBrand("b"));
 
     private void setUp() {
-        emptyDataBase();
+        assertTrue(emptyDataBase());
 
-        UserManager.storeUser(u1);
-        UserManager.storeUser(u2);
-        UserManager.storeUser(u3);
+        assertTrue(UserManager.storeUser(u1));
+        assertTrue(UserManager.storeUser(u2));
+        assertTrue(UserManager.storeUser(u3));
 
-        CategoryManager.insertCategory(a);
-        CategoryManager.insertCategory(b);
-        CategoryManager.insertCategory(c);
-        CategoryManager.insertCategory(d);
-        CategoryManager.insertCategory(e);
-        CategoryManager.insertCategory(f);
-        CategoryManager.insertCategory(g);
-        CategoryManager.insertCategory(h);
+        assertEquals(CategoryManager.insertCategory(a), 1);
+        assertEquals(CategoryManager.insertCategory(b), 2);
+        assertEquals(CategoryManager.insertCategory(c), 3);
+        assertEquals(CategoryManager.insertCategory(d), 4);
+        assertEquals(CategoryManager.insertCategory(e), 5);
+        assertEquals(CategoryManager.insertCategory(f), 6);
+        assertEquals(CategoryManager.insertCategory(g), 7);
+        assertEquals(CategoryManager.insertCategory(h), 8);
     }
 
-    @After public void tearDown() throws Exception {
-        emptyDataBase();
+    @After public void tearDown() {
+        assertTrue(emptyDataBase());
     }
 
     /****** run() tests ******/

@@ -148,7 +148,7 @@ public class CycleManager {
                 Statement.RETURN_GENERATED_KEYS
             );
 
-        //Freshly created cycle should be waiting for acceptance
+        // Freshly created cycle should be waiting for acceptance
         statement.setInt(1, ProcessStatus.Status.WAITING.getId());
 
         if (statement.executeUpdate() == 0)
@@ -232,10 +232,11 @@ public class CycleManager {
         }
     }
 
+
     /**
      * Updates cycle's status in database
-     * @param cycleID
-     * @param statusID
+     * @param cycleID - ID of Cycle in DB
+     * @param statusID - ID of Status in DB
      * @return true if successful
      */
     private static boolean updateCycleStatus(int cycleID, int statusID){

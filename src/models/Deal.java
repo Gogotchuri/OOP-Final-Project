@@ -78,7 +78,7 @@ public class Deal {
 
     /**
      * @return ID of the Deal.
-     *         If returned -1 that means that
+     *         If returned 0 that means that
      *         Deal's ID is not initialized yet.
      */
     public int getDealID() { return dealID; }
