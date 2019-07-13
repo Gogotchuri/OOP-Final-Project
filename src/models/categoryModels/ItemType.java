@@ -8,6 +8,7 @@ import services.encoders.ItemParameterJsonAdapter;
 @JsonAdapter(ItemParameterJsonAdapter.class)
 public class ItemType extends ItemParameter implements Comparable <ItemType>{
 
+
     public ItemType(int id, String name) {
         super(id, name);
     }
