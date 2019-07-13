@@ -49,6 +49,10 @@
             background-color: powderblue;
         }
 
+        .image-div{
+            min-height: 50%;
+        }
+
         .deals-column{
             padding: 5px;
             color:lightcyan;
@@ -144,7 +148,6 @@
                 <% }
                 } %>
             </ul>
-
             <%if(user.getUserID() == thisId){ %>
                 <form method="POST" action="${pageContext.request.contextPath}<%=RoutingConstants.USER_DEALS%>">
                     <button type="submit">See all deals</button>

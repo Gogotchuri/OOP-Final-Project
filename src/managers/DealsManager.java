@@ -167,28 +167,13 @@ public class DealsManager {
         Iterator<Criteria> i = sc.getCriteriaIterator();
 
         while (i.hasNext()) {
-
             Criteria criteria = i.next();
-
             if (criteria == Criteria.USER_NAME) {
-
                 String userName = sc.getCriteriaValue(Criteria.USER_NAME);
                 queryBuilder.append(" AND u.user_name = \'").append(userName).append("\' \n");
-
             } else if (criteria == Criteria.CATEGORY_NAME) {
-
                 String category = sc.getCriteriaValue(Criteria.CATEGORY_NAME);
                 queryBuilder.append(" AND ic.name = \'").append(category).append("\' \n");
-
-            } else if (criteria == Criteria.DEAL_CREATE_DATE) {
-
-                String date = sc.getCriteriaValue(Criteria.DEAL_CREATE_DATE);
-                queryBuilder.append(" AND d.created_at = \'").append(date).append("\' \n");
-
-            } else if(criteria == Criteria.DEAL_UPDATE_DATE) {
-
-                String date = sc.getCriteriaValue(Criteria.DEAL_UPDATE_DATE);
-                queryBuilder.append(" AND d.updated_at = \'").append(date).append("\' \n");
             }
         }
 
@@ -314,12 +299,13 @@ public class DealsManager {
     /**
      * Deletes deal with given id in database
      * @param dealID - ID of Deal in DB
-     * @return true if Deal deleted successfully
+     * @return True iff Deal deleted successfully
      */
     public static boolean deleteDeal(int dealID) {
-        List<Cycle> ls = CycleManager.getCyclesByDealID(dealID);
-        for(Cycle c : ls)
-            CycleManager.deleteCycle(c.getCycleID());
+        List<Cycle> cycles = CycleManager.getCyclesByDealID(dealID);
+        if (cycles == null) return false;
+        for (Cycle cycle : cycles)
+            CycleManager.deleteCycle(cycle.getCycleID());
         return DeleteManager.delete("deals", "id", dealID);
     }
 

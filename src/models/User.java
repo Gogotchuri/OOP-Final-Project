@@ -55,8 +55,7 @@ public class User {
                  List<Deal> deals,
                  List<Chat> chats,
                  Timestamp createDate,
-                 Timestamp updateDate
-                 )
+                 Timestamp updateDate)
     {
         this.userID = userID;
         this.username = username;

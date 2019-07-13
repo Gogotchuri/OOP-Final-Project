@@ -175,10 +175,8 @@ public class ItemController extends Controller implements ResourceController {
     @Override
     public void destroy(int id) throws IOException, ServletException {
         if(!checkItemOwnedShip(id)) return;
-        //TODO ItemManager need a method for deleting an item
         PrintWriter pw = response.getWriter();
-        //if deleting fails:
-        if(true) {
+        if(!ItemManager.deleteItemById(id)) {
             response.setStatus(500);
             pw.print("{\"Error\":\"Couldn't delete item from database, internal error! (user.ItemController:destroy)\"}");
             pw.flush();

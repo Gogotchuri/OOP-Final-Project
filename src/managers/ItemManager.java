@@ -375,7 +375,7 @@ public class ItemManager {
      * @param itemId Id of the item
      * @return List of categories wanted in one deal
      */
-    public boolean deleteItemById(int itemId){
+    public static boolean deleteItemById(int itemId){
         return DeleteManager.delete("items", "id", itemId);
     }
 }
