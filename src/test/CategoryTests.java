@@ -35,20 +35,28 @@ public class CategoryTests {
     }
 
     @Test
-    public void insertCategory() {
-        resetBase();
-        assertTrue(CategoryManager.insertCategory(cat1));
-        assertTrue(CategoryManager.insertCategory(cat2));
-        assertTrue(CategoryManager.insertCategory(cat3));
-        assertTrue(CategoryManager.insertCategory(cat4));
-        assertTrue(CategoryManager.insertCategory(cat5));
-
-        assertFalse(CategoryManager.insertCategory(cat1));
-        assertFalse(CategoryManager.insertCategory(cat4));
+    public void allTests() {
+        insertCategory();
+        checkIDs();
+        checkBrand();
+        checkType();
+        checkBrandAndType();
+        equalsWithoutOrder();
     }
 
-    @Test
-    public void checkIDs() {
+    private void insertCategory() {
+        resetBase();
+        assertEquals(CategoryManager.insertCategory(cat1), cat1.getId());
+        assertEquals(CategoryManager.insertCategory(cat2), cat2.getId());
+        assertEquals(CategoryManager.insertCategory(cat3), cat3.getId());
+        assertEquals(CategoryManager.insertCategory(cat4), cat4.getId());
+        assertEquals(CategoryManager.insertCategory(cat5), cat5.getId());
+
+        assertEquals(CategoryManager.insertCategory(cat1), cat1.getId());
+        assertEquals(CategoryManager.insertCategory(cat4), cat4.getId());
+    }
+
+    private void checkIDs() {
         equalLists(CategoryManager.getItemCategoriesByItemCategoryIDs(Arrays.asList(1,2,3)), Arrays.asList(cat1,cat2,cat3));
         equalLists(CategoryManager.getItemCategoriesByItemCategoryIDs(Arrays.asList(4,5)), Arrays.asList(cat4,cat5));
         assertEquals(CategoryManager.getItemCategoriesByItemCategoryIDs(Arrays.asList(3,55555)), null);
@@ -59,8 +67,7 @@ public class CategoryTests {
         assertEquals(CategoryManager.getCategoryByID(55555), null);
     }
 
-    @Test
-    public void checkBrand() {
+    private void checkBrand() {
         equalLists(CategoryManager.getCategoriesWithBrand(1), Arrays.asList(cat1, cat2));
         equalLists(CategoryManager.getCategoriesWithBrand(2), Arrays.asList(cat3, cat4, cat5));
         equalLists(CategoryManager.getCategoriesWithBrand(5555), Arrays.asList());
@@ -69,8 +76,7 @@ public class CategoryTests {
         assertNotEquals(CategoryManager.getCategoriesWithBrand(2), Arrays.asList(cat3, cat5));
     }
 
-    @Test
-    public void checkType() {
+    private void checkType() {
         equalLists(CategoryManager.getCategoriesWithType(1), Arrays.asList(cat1, cat2, cat4, cat3));
         equalLists(CategoryManager.getCategoriesWithType(2), Arrays.asList(cat5));
         assertEquals(CategoryManager.getCategoriesWithType(55555), Arrays.asList());
@@ -79,8 +85,7 @@ public class CategoryTests {
         assertNotEquals(CategoryManager.getCategoriesWithType(2), Arrays.asList());
     }
 
-    @Test
-    public void checkBrandAndType() {
+    private void checkBrandAndType() {
         //Type : Phone -> 1, Computer -> 2
         //Brand : Samsung -> 1, Apple -> 2
         assertEquals(CategoryManager.getCategoriesWithBrandAndType(1, 1), Arrays.asList(cat1, cat2));
@@ -92,8 +97,7 @@ public class CategoryTests {
         assertEquals(CategoryManager.getCategoriesWithBrandAndType(5555, 5555), Arrays.asList());
     }
 
-    @Test
-    public void equalsWithoutOrder() {
+    private void equalsWithoutOrder() {
         assertTrue(CategoryManager.listsEqualsIgnoreOrder(Arrays.asList(), Arrays.asList()));
         assertFalse(CategoryManager.listsEqualsIgnoreOrder(null, Arrays.asList()));
         assertTrue(CategoryManager.listsEqualsIgnoreOrder(null, null));
