@@ -33,6 +33,8 @@ public class DealCyclesServlet extends HttpServlet {
 		//Checking if user is authorized
 		if((new AuthenticatedUser(request, response)).unauthenticated()) return;
 
+		//TODO: აქ რა საჭიროა ეს ვერ ვხვდები
+		/*
 		int deal_id;
 		try { deal_id = Integer.parseInt(request.getParameter("deal_id")); }
 		catch (NumberFormatException e) {
@@ -40,6 +42,7 @@ public class DealCyclesServlet extends HttpServlet {
 					"This address should be called, with numeric parameter \"deal_id\"!");
 			return;
 		}
+		 */
 
 		(new CyclesController(request, response, this)).index();
 

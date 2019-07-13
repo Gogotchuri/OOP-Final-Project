@@ -148,15 +148,15 @@
                 <% }
                 } %>
             </ul>
-            <%if(user.getUserID() == thisId){ %>
                 <form method="POST" action="${pageContext.request.contextPath}<%=RoutingConstants.USER_DEALS%>">
                     <button type="submit">See all deals</button>
                 </form>
-            <% } %>
 
-            <form method="POST" action="${pageContext.request.contextPath}<%=RoutingConstants.USER_CYCLES%>">
-                <button type="submit">See suggested cycles</button>
-            </form>
+            <%if(user.getUserID() == thisId){ %>
+                <form method="GET" action="${pageContext.request.contextPath}<%=RoutingConstants.USER_CYCLES%>">
+                    <button type="submit">See suggested cycles</button>
+                </form>
+            <% } %>
         </div>
     </div>
 

@@ -14,6 +14,7 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.List;
 
 public class CyclesController extends Controller {
@@ -41,6 +42,7 @@ public class CyclesController extends Controller {
 
     public void index() throws ServletException, IOException {
         List<Cycle> userCycles = CycleManager.getUserCycles(user.getUserID());
+        if(userCycles == null) userCycles = new ArrayList<>();
         request.setAttribute("cycles", userCycles);
         request.setAttribute("userID", user.getUserID());
         dispatchTo("/pages/user/deals/cycles.jsp");
