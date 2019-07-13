@@ -1,8 +1,12 @@
 package models.categoryModels;
+import com.google.gson.annotations.JsonAdapter;
+import services.encoders.ItemCategoryJsonAdapter;
+
 import java.sql.ResultSet;
 import java.sql.SQLException;
 
 //Class encapsulating a single category
+@JsonAdapter(ItemCategoryJsonAdapter.class)
 public class ItemCategory implements Comparable<ItemCategory> {
 
     private int id;

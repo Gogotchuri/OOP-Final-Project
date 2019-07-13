@@ -3,6 +3,7 @@ package managers;
 import database.DatabaseAccessObject;
 import models.categoryModels.ItemBrand;
 import models.categoryModels.ItemCategory;
+import models.categoryModels.ItemSeries;
 import models.categoryModels.ItemType;
 
 import java.sql.PreparedStatement;
@@ -163,6 +164,30 @@ public class CategoryManager {
             ResultSet set = st.executeQuery();
 
             while(set.next()) list.add(ItemCategory.parseCategory(set));
+
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+
+
+        return list;
+    }
+
+    /**
+     * @param type id of a type
+     * @param brand id of a brand
+     * @return All categories matching type and brand ids
+     */
+    public static List<ItemSeries> getSeriesWithBrandAndType(String type, String brand) {
+        List<ItemSeries> list = new ArrayList<>();
+        String query = JOIN_QUERY + " WHERE t.name = '" + type + "' AND b.name = '" + brand + "';";
+        try {
+            PreparedStatement st = DAO.getPreparedStatement(query);
+            ResultSet set = st.executeQuery();
+            while(set.next()) {
+                ItemCategory ic = ItemCategory.parseCategory(set);
+                list.add(ic.getSeries());
+            }
 
         } catch (SQLException e) {
             e.printStackTrace();

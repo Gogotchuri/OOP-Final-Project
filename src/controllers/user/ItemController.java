@@ -52,7 +52,7 @@ public class ItemController extends Controller implements ApiResourceController 
             return;
         }
 
-        if(!checkDealOwnedShip(deal_id)) return;
+        if(!checkDealOwnership(deal_id)) return;
 
         List<Item> items = ItemManager.getItemsByDealID(deal_id);
         if(items == null){
@@ -93,8 +93,8 @@ public class ItemController extends Controller implements ApiResourceController 
         JsonObject jo = new JsonObject();
 
         ItemCategory cat = new ItemCategory(
-                request.getParameter("model_name"), request.getParameter("manufacturer_name"),
-                request.getParameter("type_name"));
+                request.getParameter("model_name"), request.getParameter("type_name"),
+                request.getParameter("manufacturer_name"));
         cat.setId(CategoryManager.insertCategory(cat));
         if(cat.getId() < 1){
             sendApiError(500, "Something went wrong during adding an category to the database! (user.ItemController:store)");
@@ -142,7 +142,7 @@ public class ItemController extends Controller implements ApiResourceController 
         sendJson(200, jo);
     }
 
-    private boolean checkDealOwnedShip(int deal_id) throws IOException {
+    private boolean checkDealOwnership(int deal_id) throws IOException {
         Deal deal = DealsManager.getDealByDealID(deal_id);
         if(deal == null){
             sendApiError(404, "No Deal found with the given id!");
@@ -186,8 +186,8 @@ public class ItemController extends Controller implements ApiResourceController 
         rules.put("name", Arrays.asList("required", "min_len:3", "max_len:35"));
         rules.put("description", Arrays.asList("required", "min_len:10", "max_len:250"));
         rules.put("type_name", Arrays.asList("required", "min_len:3", "max_len:35"));
-        rules.put("manufacturer_name", Arrays.asList("required", "min_len:3", "max_len:35"));
-        rules.put("model_name", Arrays.asList("required", "min_len:3", "max_len:35"));
+        rules.put("manufacturer_name", Arrays.asList("required", "min_len:1", "max_len:35"));
+        rules.put("model_name", Arrays.asList("required", "min_len:1", "max_len:35"));
 
         RequestValidator validator = new RequestValidator(request, rules);
         if(validator.failed()){
@@ -196,6 +196,7 @@ public class ItemController extends Controller implements ApiResourceController 
             sendJson(422,jo);
             return false;
         }
+
         return true;
     }
 

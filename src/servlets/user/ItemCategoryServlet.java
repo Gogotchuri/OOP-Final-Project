@@ -9,7 +9,6 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 
-//TODO implement me
 @WebServlet
 public class ItemCategoryServlet extends HttpServlet {
     @Override
@@ -17,4 +16,5 @@ public class ItemCategoryServlet extends HttpServlet {
         if((new AuthenticatedUser(req, resp)).unauthenticated()) return;
         super.service(req, resp);
     }
+
 }

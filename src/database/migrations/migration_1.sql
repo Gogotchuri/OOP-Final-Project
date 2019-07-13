@@ -37,13 +37,13 @@ CREATE TABLE deals
 CREATE TABLE item_types
 (
     id INT(6) UNSIGNED AUTO_INCREMENT PRIMARY KEY,
-    name varchar(64) NOT NULL
+    name varchar(64) NOT NULL UNIQUE
 );
 
 CREATE TABLE item_brands
 (
     id INT(6) UNSIGNED AUTO_INCREMENT PRIMARY KEY,
-    name varchar(64) NOT NULL
+    name varchar(64) NOT NULL UNIQUE
 );
 
 CREATE TABLE item_categories
