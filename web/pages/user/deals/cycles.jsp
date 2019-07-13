@@ -1,4 +1,9 @@
-<%--
+<%@ page import="java.util.*" %>
+<%@ page import="models.Cycle" %>
+<%@ page import="managers.DealsManager" %>
+<%@ page import="models.Deal" %>
+<%@ page import="java.text.SimpleDateFormat" %>
+<%@ page import="servlets.RoutingConstants" %><%--
   Created by IntelliJ IDEA.
   User: gogotchuri
   Date: 6/21/19
@@ -12,13 +17,46 @@
     <jsp:param name="title" value="Cycles"/>
 </jsp:include>
 
+<style>
+    .wrapper{
+        display: grid;
+        grid-template-rows: repeat(4, 1fr);
+        grid-gap: 5px;
+        padding: 10px;
+    }
+
+    .cycle-div{
+        color:lightcyan;
+        background-color:#4a778a;
+    }
+</style>
 <body>
 <%--Navbar--%>
 <jsp:include page="/pages/partials/navbar.jsp"/>
 <%--Page Content--%>
-<div>
-    HERE goes content!
-</div>
+    <% List<Cycle> cycles = (List<Cycle>)request.getAttribute("cycles");%>
+    <% int userID = (int)request.getAttribute("userID");%>
+
+    <div class="wrapper">
+        <% for(Cycle c : cycles){%>
+            <div class="cycle-div">
+                <% int cycleID = c.getCycleID();%>
+                <% List<Deal> deals = DealsManager.getUsersDealsByCycleId(userID, cycleID);%>
+                <% for(Deal d : deals){%>
+                    <h3><%= d.getTitle()%></h3>
+                <%}%>
+                <%List<Deal> allDeals = c.getDeals();%>
+                <p><%= allDeals.size()%></p>
+                <% String statusName = c.getCycleStatus().getName();%>
+                <p><%= statusName%></p>
+                <%--<% String cycleCreated = new SimpleDateFormat("yyyy.MM.dd").format(c.);%>
+                <p>date_created</p>--%>
+                <form method="POST" action="${pageContext.request.contextPath}<%=RoutingConstants.USER_SINGLE_CYCLE%>">
+                    <button type="submit">Go to cycle page</button>
+                </form>
+            </div>
+        <%}%>
+    </div>
 <%--Footer--%>
 <jsp:include page="/pages/partials/footer.jsp"/>
 </body>

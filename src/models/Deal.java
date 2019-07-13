@@ -55,9 +55,24 @@ public class Deal {
      * @param wantedCategories - Wanted Categories of Deal
      */
     public Deal(int ownerID,
-                 List<Item> ownedItems,
-                  List<ItemCategory> wantedCategories) {
+                List<Item> ownedItems,
+                List<ItemCategory> wantedCategories) {
         this(0, ownerID, ownedItems, wantedCategories, ProcessStatus.Status.WAITING, null, null);
+    }
+
+
+    /**
+     * Constructor.
+     * @param ownerID - User which has this Deal
+     * @param ownedItems - Owned Items of Deal
+     * @param wantedCategories - Wanted Categories of Deal
+     * @param title - title of the deal
+     */
+    public Deal(int ownerID,
+                List<Item> ownedItems,
+                List<ItemCategory> wantedCategories,
+                String title) {
+        this(0, ownerID, ownedItems, wantedCategories, ProcessStatus.Status.WAITING, title, null);
     }
 
 

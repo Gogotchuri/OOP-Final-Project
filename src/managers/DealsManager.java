@@ -30,7 +30,6 @@ public class DealsManager {
         ProcessStatus.Status dealStatus = StatusManager.getStatusIDByID("deals", dealID);
         String title = getTitleByDealID(dealID);
         Timestamp dealCreateDate = DateManager.getCreateDateByID("deals", dealID);
-
         return (ownerID == 0 ||
                  ownedItems == null ||
                   wantedCategories == null ||
@@ -106,6 +105,23 @@ public class DealsManager {
             return null;
         }
         return deals;
+    }
+
+    /**
+     * @param cycleID - ID of Cycle
+     * @param userID - ID of user, whose deals are looked for
+     * @return List of fully filled deals of Cycle with ID = cycleID
+     *         and deal owner is user with userID
+     */
+    public static List<Deal> getUsersDealsByCycleId(int userID, int cycleID){
+        List<Deal> result = new ArrayList<>();
+        List<Deal> cycleDeals = getDealsByCycleID(cycleID);
+        for(Deal d : cycleDeals){
+            if(userID == d.getOwnerID()){
+                result.add(d);
+            }
+        }
+        return result;
     }
 
 
@@ -240,14 +256,15 @@ public class DealsManager {
         try {
             PreparedStatement statement =
                 DAO.getPreparedStatement (
-                "INSERT INTO deals (user_id, status_id) " +
-                        "VALUES (?, ?);",
+                "INSERT INTO deals (user_id, status_id, title) " +
+                        "VALUES (?, ?, ?);",
                     Statement.RETURN_GENERATED_KEYS
                 );
 
             statement.setInt(1, deal.getOwnerID());
             //Freshly created deal should be ongoing
             statement.setInt(2, ProcessStatus.Status.WAITING.getId());
+            statement.setString(3, ((deal.getTitle() == null) ? "" : deal.getTitle()));
 
 
             if (statement.executeUpdate() == 0)

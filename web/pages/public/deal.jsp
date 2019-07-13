@@ -15,6 +15,7 @@
 <%@ page import="models.categoryModels.ItemBrand" %>
 <%@ page import="models.categoryModels.ItemSeries" %>
 <%@ page import="managers.UserManager" %>
+<%@ page import="servlets.RoutingConstants" %>
 <% Deal deal= (Deal)request.getAttribute("deal");%>
 <html>
     <%--HEAD--%>
@@ -66,9 +67,10 @@
          <div class="information-column">
             <% int ownerId = deal.getOwnerID();%>
             <% User user = UserManager.getUserByID(ownerId);%>
-            <% String deleteMethod = "user.DealConfigServlet.doDelete()";%>
             <% if(ownerId == thisId){ %>
-                <input type="button" onclick= "<%= deleteMethod%>" value="Delete Deal">
+             <form method="POST" action="${pageContext.request.contextPath}<%=RoutingConstants.USER_DEAL_CONFIG%>">
+                 <button type="submit">Delete deal</button>
+             </form>
             <%}%>
 
             <% String userFullName = " (" + user.getFirstName() + " " + user.getLastName() + ")";%>

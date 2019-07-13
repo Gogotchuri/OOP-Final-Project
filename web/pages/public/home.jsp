@@ -16,9 +16,39 @@
     <%--Navbar--%>
     <jsp:include page="/pages/partials/navbar.jsp"/>
     <%--Page Content--%>
-    <div>
-        HERE goes content!
+
+    <div class="slideshow">
+
+        <div id="myCarousel" class="carousel slide" data-ride="carousel">
+
+            <ol class="carousel-indicators">
+                <li data-target="#myCarousel" data-slide-to="0" class="active"></li>
+                <li data-target="#myCarousel" data-slide-to="1"></li>
+                <li data-target="#myCarousel" data-slide-to="2"></li>
+                <li data-target="#myCarousel" data-slide-to="3"></li>
+            </ol>
+
+            <div class="carousel-inner">
+
+                <div class="carousel-item active">
+                    <img src="../../images/a.jpg" alt="a">
+                </div>
+                <div class="carousel-item">
+                    <img src="../../images/b.jpg" alt="b">
+                </div>
+                <div class="carousel-item">
+                    <img src="../../images/c.jpg" alt="c">
+                </div>
+                <div class="carousel-item">
+                    <img src="../../images/d.jpg" alt="d">
+                </div>
+
+            </div>
+
+        </div>
+
     </div>
+
     <%--Footer--%>
     <jsp:include page="/pages/partials/footer.jsp"/>
 </body>

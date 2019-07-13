@@ -394,3 +394,65 @@ div.messages div.own-message .message-date{
 }
 
 /*!chats*/
+
+/*cycle.jsp column*/
+
+.cycleContainer{
+    display: grid;
+    grid-template-columns: 2fr 3fr 2fr;
+    grid-auto-rows: auto;
+    grid-template-rows: auto;
+
+}
+
+.cycleContainer
+>div.cycles{
+    grid-column-start: 2;
+    height: 90vh;
+    width: 50vw;
+}
+
+.cycleContainer
+> div.cycles > div.deal{
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    background: wheat;
+    margin-inline: 10%;
+    width: 80%;
+    height: 40%;
+    border-radius: 10%;
+}
+
+.cycleContainer
+> div.cycles > div.dealArrow > img{
+    width: 20%;
+    margin-inline: 40%;
+}
+
+.cycleContainer
+> div.cycles > div.dealUpArrow > img{
+    height: 30%;
+    width: 30%;
+    margin-inline: 95%;
+}
+
+.cycleContainer
+> div.cycles > div.button{
+    margin-inline: 40%;
+}
+
+.cycleContainer
+> div.cycles > div.deal > img {
+    float: right;
+    margin: 10px;
+    max-height: 90%;
+    max-width: 90%;
+    border-radius: 10%;
+}
+
+.cycleContainer
+> div.cycles > div.deal > div.info{
+    margin: 5%;
+}
+
+/*!!cycle.jsp column*/
