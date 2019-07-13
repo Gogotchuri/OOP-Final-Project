@@ -76,8 +76,8 @@ public class DealCyclesFinderTest extends Tester {
     private static Item t1_item2 = new Item(2, u1.getUserID(), b, null, b.getSeries().getName(),"", time, time);
     private static Item t1_item3 = new Item(3, u2.getUserID(), c, null, c.getSeries().getName(),"", time, time);
 
-    private static Deal t1_deal1 = new Deal(1, u1.getUserID(), Arrays.asList(t1_item1), Arrays.asList(t1_item2.getCategory()), null, "", time);
-    private static Deal t1_deal2 = new Deal(2, u2.getUserID(), Arrays.asList(t1_item2), Arrays.asList(t1_item1.getCategory()), null, "", time);
+    private static Deal t1_deal1 = new Deal(1, u1.getUserID(), Arrays.asList(t1_item1), Arrays.asList(t1_item2.getCategory()), null, "", "", time);
+    private static Deal t1_deal2 = new Deal(2, u2.getUserID(), Arrays.asList(t1_item2), Arrays.asList(t1_item1.getCategory()), null, "", "", time);
 
 
     @Test public void test1() { setUp();
@@ -108,10 +108,10 @@ public class DealCyclesFinderTest extends Tester {
     private static Item g2 = new Item(7, 3, g, null, "g","", time, time);
     private static Item h2 = new Item(8, 3, h, null, "h","", time, time);
 
-    private static Deal t2_deal1 = new Deal(1, u1.getUserID(), Arrays.asList(a1), Arrays.asList(b, c, d), null, "", time);
-    private static Deal t2_deal2 = new Deal(2, u2.getUserID(), Arrays.asList(b2, c2, d2), Arrays.asList(e, f), null, "", time);
-    private static Deal t2_deal3 = new Deal(3, u3.getUserID(), Arrays.asList(e3, f3), Arrays.asList(g, h), null, "", time);
-    private static Deal t2_deal4 = new Deal(4, u2.getUserID(), Arrays.asList(g2, h2), Arrays.asList(a), null, "", time);
+    private static Deal t2_deal1 = new Deal(1, u1.getUserID(), Arrays.asList(a1), Arrays.asList(b, c, d), null, "", "", time);
+    private static Deal t2_deal2 = new Deal(2, u2.getUserID(), Arrays.asList(b2, c2, d2), Arrays.asList(e, f), null, "", "", time);
+    private static Deal t2_deal3 = new Deal(3, u3.getUserID(), Arrays.asList(e3, f3), Arrays.asList(g, h), null, "", "", time);
+    private static Deal t2_deal4 = new Deal(4, u2.getUserID(), Arrays.asList(g2, h2), Arrays.asList(a), null, "", "", time);
 
     @Test public void test2() { setUp();
 

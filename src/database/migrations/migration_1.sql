@@ -8,7 +8,7 @@ CREATE TABLE users
     first_name VARCHAR(64),
     last_name VARCHAR(64),
 
-    email VARCHAR(128) UNIQUE NOT NULL,
+    email VARCHAR(128) NOT NULL UNIQUE,
     phone_number VARCHAR(32),
 
     created_at TIMESTAMP DEFAULT now(),
@@ -29,6 +29,7 @@ CREATE TABLE deals
   status_id INT(6) UNSIGNED NOT NULL,
   FOREIGN KEY (status_id) REFERENCES process_statuses(id),
   title VARCHAR(256) DEFAULT '',
+  description VARCHAR(256) DEFAULT '',
 
   created_at TIMESTAMP DEFAULT now(),
   updated_at TIMESTAMP DEFAULT now()

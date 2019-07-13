@@ -33,8 +33,8 @@ public class CycleManagerTest extends Tester {
     private static Item i1 = new Item(1, u1.getUserID(), ic1, null, ic1.getSeries().getName(),"", time, time);
     private static Item i2 = new Item(2, u1.getUserID(), ic2, null, ic2.getSeries().getName(),"", time, time);
 
-    private static Deal d1 = new Deal(1, u1.getUserID(), Arrays.asList(i1), Arrays.asList(i2.getCategory()), null, "", time);
-    private static Deal d2 = new Deal(2, u2.getUserID(), Arrays.asList(i2), Arrays.asList(i1.getCategory()), null, "", time);
+    private static Deal d1 = new Deal(1, u1.getUserID(), Arrays.asList(i1), Arrays.asList(i2.getCategory()), null, "", "", time);
+    private static Deal d2 = new Deal(2, u2.getUserID(), Arrays.asList(i2), Arrays.asList(i1.getCategory()), null, "", "", time);
 
     private static Cycle c = new Cycle(1, ProcessStatus.Status.WAITING, Arrays.asList(d1, d2));
 

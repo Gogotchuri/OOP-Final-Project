@@ -15,6 +15,7 @@ public class Deal {
     private int dealID;                          // 0
     private int ownerID;                         // 0
     private String title;                        // null
+    private String description;                  // null
     private List<Item> ownedItems;               // null
     private List<ItemCategory> wantedCategories; // null
     private ProcessStatus.Status status;         // null
@@ -36,6 +37,7 @@ public class Deal {
                 List<ItemCategory> wantedCategories,
                 ProcessStatus.Status status,
                 String title,
+                String description,
                 Timestamp createDate)
     {
         this.dealID = dealID;
@@ -44,6 +46,7 @@ public class Deal {
         this.wantedCategories = wantedCategories;
         this.status = status;
         this.title = title;
+        this.description = description;
         this.createDate = createDate;
     }
 
@@ -57,7 +60,8 @@ public class Deal {
     public Deal(int ownerID,
                 List<Item> ownedItems,
                 List<ItemCategory> wantedCategories) {
-        this(0, ownerID, ownedItems, wantedCategories, ProcessStatus.Status.WAITING, null, null);
+        this(0, ownerID, ownedItems, wantedCategories, ProcessStatus.Status.WAITING,
+             null, null, null);
     }
 
 
@@ -72,7 +76,8 @@ public class Deal {
                 List<Item> ownedItems,
                 List<ItemCategory> wantedCategories,
                 String title) {
-        this(0, ownerID, ownedItems, wantedCategories, ProcessStatus.Status.WAITING, title, null);
+        this(0, ownerID, ownedItems, wantedCategories, ProcessStatus.Status.WAITING, title,
+             null, null);
     }
 
 

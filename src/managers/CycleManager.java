@@ -193,13 +193,13 @@ public class CycleManager {
     }
 
 
-    /**
+    /*
      * Deletes offered Cycles associated with passed Cycle id.
      * @param cycleID - ID of Cycle in DB
-     */
+     *
     private static void deleteOfferedCycles(int cycleID){
         DeleteManager.delete("offered_cycles", "cycle_id", cycleID);
-    }
+    }*/
 
 
     /**
