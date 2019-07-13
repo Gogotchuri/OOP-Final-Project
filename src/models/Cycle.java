@@ -1,6 +1,8 @@
 
 package models;
 
+import managers.DealsManager;
+
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
@@ -98,6 +100,15 @@ public class Cycle {
      */
     public void addDeal(Deal deal) {
         deals.add(deal);
+    }
+
+    /**
+     * find users deals
+     * @param userId ID of user, whose deals are looked for
+     * @return List<Deal> deals of given user in this cycle
+     */
+    public List<Deal> getUserDeals(int userId){
+        return DealsManager.getUsersDealsByCycleId(userId, cycleID);
     }
 
 

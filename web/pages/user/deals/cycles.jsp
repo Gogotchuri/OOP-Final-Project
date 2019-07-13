@@ -41,7 +41,7 @@
         <% for(Cycle c : cycles){%>
             <div class="cycle-div">
                 <% int cycleID = c.getCycleID();%>
-                <% List<Deal> deals = DealsManager.getUsersDealsByCycleId(userID, cycleID);%>
+                <% List<Deal> deals = c.getUserDeals(userID);%>
                 <% for(Deal d : deals){%>
                     <h3><%= d.getTitle()%></h3>
                 <%}%>
