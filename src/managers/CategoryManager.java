@@ -35,7 +35,6 @@ public class CategoryManager {
      *         Or null if Category with such ID does not exists
      */
     public static ItemCategory getCategoryByID(int categoryID) {
-        ItemCategory category = null;
 
         String query = JOIN_QUERY + " WHERE s.id = " + categoryID + ";";
 
@@ -179,12 +178,13 @@ public class CategoryManager {
 
     /**
      * @param cat Insert passed category into database
-     * @return Success of insertion
+     * @return Returns id of inserted category, or doesn't insert if already there
      */
-    public static boolean insertCategory(ItemCategory cat) {
+    public static int insertCategory(ItemCategory cat) {
 
         //If this row is present with all fields, we don't add it at all
-        if(baseContainsRow(cat.getSerie().getName(), cat.getType().getName(), cat.getBrand().getName())) return false;
+        int rowID = baseContainsRow(cat.getSerie().getName(), cat.getType().getName(), cat.getBrand().getName());
+        if(rowID != -1) return rowID;
 
         //Else we get inserted ids of brand and type (of already present, just return ids)
         int typeID = checkAndReturnID(TYPE_TABLE, cat.getType().getName());
@@ -270,23 +270,25 @@ public class CategoryManager {
      * @param name Name of string
      * @param typeID typeID
      * @param brandID brandID
-     * @return Success of insertion
+     * @return Returns id of insertion, or -1 if unsuccessful
      */
-    private static boolean insertIntoParentTable(String tableName, String name, int typeID, int brandID) {
+    private static int insertIntoParentTable(String tableName, String name, int typeID, int brandID) {
         String query = "INSERT INTO " + tableName + " (name, type_id, brand_id) VALUES (?, ?, ?);";
 
         try {
-            PreparedStatement st = DAO.getPreparedStatement(query);
+            PreparedStatement st = DAO.getPreparedStatement(query,  Statement.RETURN_GENERATED_KEYS);
             st.setString(1, name);
             st.setInt(2, typeID);
             st.setInt(3, brandID);
             st.executeUpdate();
 
+            ResultSet set = st.getGeneratedKeys();
+            if(set.next()) return set.getInt(1);
+
         } catch (SQLException e) {
             e.printStackTrace();
-            return false;
         }
-        return true;
+        return -1;
     }
 
     /**
@@ -313,19 +315,20 @@ public class CategoryManager {
      * @param serie Serie name
      * @param type Type name
      * @param brand Brand name
-     * @return Whether database contains this row
+     * @return If database contains row returns id, else -1
      */
-    private static boolean baseContainsRow(String serie, String type, String brand) {
+    private static int baseContainsRow(String serie, String type, String brand) {
 
-        String query = JOIN_QUERY + " WHERE s.name LIKE '%" + serie +
-                "%' AND t.name LIKE '%" + type + "%' AND b.name LIKE '%" + brand + "%';";
+        String query = JOIN_QUERY + " WHERE s.name = '" + serie +
+                "' AND t.name = '" + type + "' AND b.name = '" + brand + "';";
 
         try {
             PreparedStatement st = DAO.getPreparedStatement(query);
-            return st.executeQuery().next();
+            ResultSet set = st.executeQuery();
+            if(set.next()) return set.getInt(1);
         } catch (SQLException e) {
             e.printStackTrace();
         }
-        return false;
+        return -1;
     }
 }
