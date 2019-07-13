@@ -17,7 +17,7 @@ public class ChatManager {
     private static final String GET_CHAT_BY_ID_QUERY = "SELECT * FROM chats WHERE id = ?;";
     private static final String GET_MESSAGES_QUERY = "SELECT * FROM messages WHERE chat_id = ?;";
     private static final String INSERT_MESSAGE_QUERY = "INSERT INTO messages (chat_id," +
-            " body, author_id, created_at) VALUES (?, ?, ?, ?);";
+            " author_id, body, created_at) VALUES (?, ?, ?, ?);";
     private static final String INSERT_CHAT_QUERY = "INSERT INTO chats (cycle_id) VALUES(?);";
     private static DatabaseAccessObject DBO = DatabaseAccessObject.getInstance();
 
@@ -31,8 +31,8 @@ public class ChatManager {
         try {
             PreparedStatement st = DBO.getPreparedStatement(INSERT_MESSAGE_QUERY, Statement.RETURN_GENERATED_KEYS);
             st.setInt(1, msg.getChatID());
-            st.setString(2, msg.getBody());
-            st.setInt(3, msg.getUserId());
+            st.setInt(2, msg.getUserId());
+            st.setString(3, msg.getBody());
             st.setTimestamp(4, msg.getDate());
             if (st.executeUpdate() == 0)
                 throw new SQLException("Creating message failed, no rows affected.");
@@ -219,11 +219,11 @@ public class ChatManager {
     public static List<String> getChatUserNames(int chat_id){
         List<String> result = new ArrayList<>();
 
-        String statement = "SELECT u.user_name FROM chats ch" +
-                "JOIN cycles c ON ch.cycle_id = c.id" +
-                "JOIN offered_cycles oc ON c.id = oc.cycle_id" +
-                "JOIN deals d ON oc.deal_id = d.id" +
-                "JOIN users u ON d.user_id=u.id" +
+        String statement = "SELECT u.user_name FROM chats ch \n" +
+                "JOIN cycles c ON ch.cycle_id = c.id \n" +
+                "JOIN offered_cycles oc ON c.id = oc.cycle_id \n" +
+                "JOIN deals d ON oc.deal_id = d.id \n" +
+                "JOIN users u ON d.user_id=u.id \n" +
                 "WHERE ch.id = " + chat_id +";";
 
         try {
