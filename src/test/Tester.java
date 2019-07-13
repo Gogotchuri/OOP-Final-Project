@@ -1,8 +1,12 @@
 
 package test;
 
+import database.DatabaseAccessObject;
 import generalManagers.DeleteManager;
 
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.SQLException;
 import java.util.Collections;
 import java.util.List;
 
@@ -18,7 +22,6 @@ public class Tester {
         return
         DeleteManager.deleteAndReseed("profile_images") &&
         DeleteManager.deleteAndReseed("item_images") &&
-        DeleteManager.deleteAndReseed("image_categories") &&
         DeleteManager.deleteAndReseed("messages") &&
         DeleteManager.deleteAndReseed("chats") &&
         DeleteManager.deleteAndReseed("offered_cycles") &&
@@ -30,7 +33,6 @@ public class Tester {
         DeleteManager.deleteAndReseed("item_brands") &&
         DeleteManager.deleteAndReseed("item_types") &&
         DeleteManager.deleteAndReseed("deals") &&
-        DeleteManager.deleteAndReseed("process_statuses") &&
         DeleteManager.deleteAndReseed("users");
     }
 
@@ -56,10 +58,25 @@ public class Tester {
      * @param l2 Second list
      * @param <T> Generic java class symbol
      */
-    public static <T extends Comparable<T>> void inequalLists(List<T> l1, List<T> l2) {
+    public static <T extends Comparable<T>> void inEqualLists(List<T> l1, List<T> l2) {
         Collections.sort(l1);
         Collections.sort(l2);
         assertNotEquals(l1,l2);
+    }
+
+    /**
+     * @param table Name of the table
+     * @return Number of rows in given table
+     */
+    public int tableSize(String table) {
+        try {
+            PreparedStatement st = DatabaseAccessObject.getInstance().getPreparedStatement("SELECT COUNT(*) FROM " + table + ";");
+            ResultSet set = st.executeQuery();
+            if(set.next()) return set.getInt(1);
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return -1;
     }
 
 }
