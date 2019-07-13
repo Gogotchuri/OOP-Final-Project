@@ -1,7 +1,10 @@
 package managers;
 
 import database.DatabaseAccessObject;
+import models.categoryModels.ItemBrand;
 import models.categoryModels.ItemCategory;
+import models.categoryModels.ItemType;
+
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
