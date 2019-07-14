@@ -32,11 +32,14 @@ public abstract class RoutingConstants {
      * PUT - with param id, updates given item resource
      */
     public static final String USER_ITEMS= "/user/items";
+
     /**
      * supports
      * GET - with param id, returns json for single item object
      * */
-    public static final String USER_SINGLE_ITEM = "/user/items/show"; //FOR API
+    public static final String USER_SINGLE_ITEM = "/user/items/show";
+
+    public static final String USER_ITEM_CATEGORIES = "/user/items/categories";
 
 
 }

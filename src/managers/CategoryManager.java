@@ -3,6 +3,7 @@ package managers;
 import database.DatabaseAccessObject;
 import models.categoryModels.ItemBrand;
 import models.categoryModels.ItemCategory;
+import models.categoryModels.ItemSeries;
 import models.categoryModels.ItemType;
 
 import java.sql.PreparedStatement;
@@ -67,12 +68,9 @@ public class CategoryManager {
     /**
      * @param dealID - ID of Deal in DB
      * @return List of Categories which Deal with dealID wants to get
-     *         If such dealID does not exists in DB
-     *         returns null
      */
     public static List<ItemCategory> getWantedCategoriesByDealID(int dealID) {
         List<Integer> categoryIDs = new ArrayList<>();
-        boolean flag = false;
 
         try {
             PreparedStatement st = DAO.getPreparedStatement(GET_WANTED_CATEGORIES_BY_DEAL_QUERY);
@@ -80,14 +78,12 @@ public class CategoryManager {
             ResultSet set = st.executeQuery();
 
             while (set.next()) {
-                flag = true;
                 categoryIDs.add(set.getBigDecimal("item_category_id").intValue());
             }
         } catch (SQLException e) {
             e.printStackTrace();
+            return null;
         }
-
-        if(!flag) return null;
 
         List<ItemCategory> categories = new ArrayList<>();
         for (Integer categoryID : categoryIDs)
@@ -163,6 +159,30 @@ public class CategoryManager {
             ResultSet set = st.executeQuery();
 
             while(set.next()) list.add(ItemCategory.parseCategory(set));
+
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+
+
+        return list;
+    }
+
+    /**
+     * @param type id of a type
+     * @param brand id of a brand
+     * @return All categories matching type and brand ids
+     */
+    public static List<ItemSeries> getSeriesWithBrandAndType(String type, String brand) {
+        List<ItemSeries> list = new ArrayList<>();
+        String query = JOIN_QUERY + " WHERE t.name = '" + type + "' AND b.name = '" + brand + "';";
+        try {
+            PreparedStatement st = DAO.getPreparedStatement(query);
+            ResultSet set = st.executeQuery();
+            while(set.next()) {
+                ItemCategory ic = ItemCategory.parseCategory(set);
+                list.add(ic.getSeries());
+            }
 
         } catch (SQLException e) {
             e.printStackTrace();

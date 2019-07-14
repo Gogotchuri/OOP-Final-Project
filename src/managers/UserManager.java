@@ -13,7 +13,7 @@ import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.List;
 
-public class UserManager {
+public class UserManager{
 
 
     private static DatabaseAccessObject DAO = DatabaseAccessObject.getInstance();

@@ -55,6 +55,7 @@ class HTTP{
         return new Promise(async (resolve, reject) => {
             let resp = await fetch(this.base_url + uri, this.options);
             let status = resp.status;
+            // console.log(resp);
             let data = await resp.json();
             if(status >= 400){
                 reject(data);
