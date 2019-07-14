@@ -258,42 +258,6 @@ public class CategoryManager {
     }
 
     /**
-     * @param table Name of table
-     * @param str String value to compare to
-     * @return ID of that row
-     */
-    private static int getIdByName(String table, String str) {
-        return ((Long) getValueBy(table, "id", "name", str)).intValue();
-    }
-
-    /**
-     * @param tableName Name of table
-     * @param returnColumn Column values of which we need
-     * @param compareColumn Column values of which we compare to passed object
-     * @param obj Passed object
-     * @return Value by passed criteria
-     */
-    private static Object getValueBy(String tableName, String returnColumn, String compareColumn, Object obj) {
-
-        String query = "SELECT " + returnColumn + " FROM " + tableName + " WHERE " + compareColumn + " = ?;";
-        Object res = null;
-
-        try {
-            PreparedStatement st = DAO.getPreparedStatement(query);
-            if(obj instanceof String) st.setString(1, (String) obj);
-            else st.setInt(1, ((Long) obj).intValue());
-
-            ResultSet set = st.executeQuery();
-            if(set.next()) res = set.getObject(1);
-            else return null;
-
-        } catch (SQLException e) {
-            e.printStackTrace();
-        }
-        return res;
-    }
-
-    /**
      * @param tableName Name of passed table
      * @param str       String value
      * @return id that it was inserted in

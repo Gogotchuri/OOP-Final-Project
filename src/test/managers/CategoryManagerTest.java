@@ -4,6 +4,7 @@ package test.managers;
 import managers.CategoryManager;
 import models.categoryModels.ItemBrand;
 import models.categoryModels.ItemCategory;
+import models.categoryModels.ItemSeries;
 import models.categoryModels.ItemType;
 import org.junit.After;
 import org.junit.Before;
@@ -114,6 +115,13 @@ public class CategoryManagerTest extends Tester {
         assertNotEquals(CategoryManager.getCategoriesWithType(1), Arrays.asList(cat1, cat2, cat3));
         assertNotEquals(CategoryManager.getCategoriesWithType(2), Arrays.asList(cat5, cat4));
         assertNotEquals(CategoryManager.getCategoriesWithType(2), Arrays.asList());
+    }
+
+    @Test
+    public void getSeriesWithBrandAndType() {
+        assertEquals(CategoryManager.getSeriesWithBrandAndType("Phone", "Samsung"), Arrays.asList(cat1.getSeries(), cat2.getSeries()));
+        assertEquals(CategoryManager.getSeriesWithBrandAndType("Computer", "Apple"), Arrays.asList(cat5.getSeries()));
+        assertEquals(CategoryManager.getSeriesWithBrandAndType("Computer", "Samsung"), Arrays.asList());
     }
 
     @Test

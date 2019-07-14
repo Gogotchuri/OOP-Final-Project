@@ -258,16 +258,6 @@ public class ItemManager {
         return getItemsByColumn("items","user_id", userId + "");
     }
 
-
-    /**
-     *
-     * @param dealId Id of the deal
-     * @return List of items
-     */
-    public static List<Item> getOwnedItems(int dealId) {
-        return getItemsByColumn("items", "owned_items.deal_id", dealId + "");
-    }
-
     /**
      * @param rs ResultSet
      * @return Item, parsed from ResultSet

@@ -45,7 +45,10 @@
                 deal = deals.get(i);
                 %>
                 <div class="deal">
-                    <img src="<%=deal.getOwnedItems().get(0).getImages().get(0).getUrl()%>">
+                    <%String url = deal.getOwnedItems().get(0).getImages().get(0).getUrl();
+                      if(url == null || url == "") url = "https://cdn.theatlantic.com/assets/media/img/mt/2018/11/shutterstock_552503470/lead_720_405.jpg?mod=1541605820";
+                    %>
+                    <img src="<%=url%>">
                     <div class="info">
                         <form method="GET" action="${pageContext.request.contextPath}<%=paramDeal%>">
                             <button type="submit" class = "link">Go to <%=deal.getTitle()%> page</button>

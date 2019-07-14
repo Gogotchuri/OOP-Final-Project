@@ -119,8 +119,8 @@ public class DealsController extends Controller implements ResourceController {
             return;
         }
 
-        Deal deal = new Deal(user.getUserID(), ownedItems, wantedCategories, request.getParameter("name"));
-        deal.setDescription(request.getParameter("description"));
+        Deal deal = new Deal(user.getUserID(), ownedItems, wantedCategories,
+                request.getParameter("name"), request.getParameter("description"));
         deal.setDealID(DealsManager.storeDeal(deal));
         if(deal.getDealID() < 1){
             sendApiError(500, "Deal couldn't be saved! (user.DealsController:store)");

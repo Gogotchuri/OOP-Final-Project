@@ -44,6 +44,8 @@ public class UserManagerTest extends Tester {
         oldSize = Tester.tableSize("users");
         UserManager.deleteUserByUsername("something wrong");
         assertEquals(oldSize, Tester.tableSize("users"));
+
+        UserManager.updateExistingUser(u3);
     }
 
     @Test
@@ -56,7 +58,7 @@ public class UserManagerTest extends Tester {
 
     @Test
     public void getUserIDByDealID() {
-
+        //Tested in dealsTests
     }
 
     @Test
