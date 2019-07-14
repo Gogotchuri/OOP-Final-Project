@@ -135,7 +135,7 @@ public class DealsManagerTest extends Tester { // TODO: Krawa
         assertEquals(deals.get(0).getDealID(), 5);
         assertEquals(deals.get(0).getDescription(), "desc5");
         assertEquals(deals.get(0).getTitle(), "deal5");
-        assertEquals(deals.get(0).getStatus(), ProcessStatus.Status.WAITING);
+        assertEquals(deals.get(0).getStatus(), ProcessStatus.Status.ONGOING);
         assertNotEquals(deals.get(0).getCreateDate(), null);
         deals = DealsManager.getDealsByUserID(2);
         assertEquals(deals.size(), 3);

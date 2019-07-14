@@ -285,7 +285,7 @@ public class DealsManager {
 
             statement.setInt(1, deal.getOwnerID());
             //Freshly created deal should be ongoing
-            statement.setInt(2, ProcessStatus.Status.WAITING.getId());
+            statement.setInt(2, ProcessStatus.Status.ONGOING.getId());
             statement.setString(3, ((deal.getTitle() == null) ? "" : deal.getTitle()));
             statement.setString(4, (deal.getDescription() == null)? "" : deal.getDescription());
 
