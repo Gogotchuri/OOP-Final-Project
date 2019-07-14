@@ -68,12 +68,9 @@ public class CategoryManager {
     /**
      * @param dealID - ID of Deal in DB
      * @return List of Categories which Deal with dealID wants to get
-     *         If such dealID does not exists in DB
-     *         returns null
      */
     public static List<ItemCategory> getWantedCategoriesByDealID(int dealID) {
         List<Integer> categoryIDs = new ArrayList<>();
-        boolean flag = false;
 
         try {
             PreparedStatement st = DAO.getPreparedStatement(GET_WANTED_CATEGORIES_BY_DEAL_QUERY);
@@ -81,14 +78,11 @@ public class CategoryManager {
             ResultSet set = st.executeQuery();
 
             while (set.next()) {
-                flag = true;
                 categoryIDs.add(set.getBigDecimal("item_category_id").intValue());
             }
         } catch (SQLException e) {
             e.printStackTrace();
         }
-
-        if(!flag) return null;
 
         List<ItemCategory> categories = new ArrayList<>();
         for (Integer categoryID : categoryIDs)
