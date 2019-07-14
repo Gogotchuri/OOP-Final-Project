@@ -169,7 +169,7 @@ public class ImagesManager {
         return new Image(set.getBigDecimal("id").intValue(),
                 user_id,
                 set.getString("url"),
-                new Timestamp(set.getDate("created_at").getTime()));
+                new Timestamp(set.getTimestamp("created_at").getTime()));
     }
 
     /**
@@ -183,6 +183,6 @@ public class ImagesManager {
                 set.getInt("user_id"),
                 set.getInt("item_id"),
                 ImageCategories.getCategoryByID(set.getInt("image_category_id")),
-                new Timestamp(set.getDate("created_at").getTime()));
+                new Timestamp(set.getTimestamp("created_at").getTime()));
     }
 }

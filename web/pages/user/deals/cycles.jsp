@@ -17,19 +17,6 @@
     <jsp:param name="title" value="Cycles"/>
 </jsp:include>
 
-<style>
-    .wrapper{
-        display: grid;
-        grid-template-rows: repeat(4, 1fr);
-        grid-gap: 5px;
-        padding: 10px;
-    }
-
-    .cycle-div{
-        color:lightcyan;
-        background-color:#4a778a;
-    }
-</style>
 <body>
 <%--Navbar--%>
 <jsp:include page="/pages/partials/navbar.jsp"/>
@@ -38,7 +25,12 @@
     <% int userID = (int)request.getAttribute("userID");
     String param = RoutingConstants.USER_SINGLE_CYCLE;%>
 
-    <div class="wrapper">
+    <div class="cycles-wrapper">
+        <%if(cycles.size() == 0){%>
+            <div class="cycle-div">
+                <p>No suggested cycles</p>
+            </div>
+        <%}%>
         <% for(Cycle c : cycles){%>
             <div class="cycle-div">
                 <% int cycleID = c.getCycleID();%>
@@ -47,7 +39,7 @@
                     <h3><%= d.getTitle()%></h3>
                 <%}%>
                 <%List<Deal> allDeals = c.getDeals();%>
-                <p><%= allDeals.size()%></p>
+                <p><%= allDeals.size()%> participants in deal</p>
                 <% String statusName = c.getCycleStatus().getName();%>
                 <p><%= statusName%></p>
                 <%--<% String cycleCreated = new SimpleDateFormat("yyyy.MM.dd").format(c.);%>
