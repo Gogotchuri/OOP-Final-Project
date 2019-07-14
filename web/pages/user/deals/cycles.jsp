@@ -39,7 +39,7 @@
                     <h3><%= d.getTitle()%></h3>
                 <%}%>
                 <%List<Deal> allDeals = c.getDeals();%>
-                <p><%= allDeals.size()%></p>
+                <p><%= allDeals.size()%> participants in deal</p>
                 <% String statusName = c.getCycleStatus().getName();%>
                 <p><%= statusName%></p>
                 <%--<% String cycleCreated = new SimpleDateFormat("yyyy.MM.dd").format(c.);%>
