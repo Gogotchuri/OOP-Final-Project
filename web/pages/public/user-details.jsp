@@ -14,7 +14,7 @@
 <%@ page import="java.text.SimpleDateFormat" %>
 <%@ page import="models.ProcessStatus" %>
 <%@ page import="servlets.RoutingConstants" %>
-<% int maxNumberOfDeals = 5;%>
+<% int maxNumberOfDeals = 3;%>
 <% User user = (User) request.getAttribute("user");%>
 <html>
     <%--HEAD--%>
@@ -64,7 +64,7 @@
         </div>
         <div class = "deals-column">
             <% List<Deal> deals = user.getDeals(); %>
-            <% int numToShow = deals.size(); %>
+            <% int numToShow = min(deals.size(), maxNumberOfDeals); %>
             <h3>Deals:</h3>
             <ul>
 
@@ -86,8 +86,9 @@
                 <% }
                 } %>
             </ul>
-                <form method="POST" action="${pageContext.request.contextPath}<%=RoutingConstants.USER_DEALS%>">
+                <form method="GET" action="${pageContext.request.contextPath}<%=RoutingConstants.DEALS%>">
                     <button type="submit">See all deals</button>
+                    <input name="user_name" type="hidden" value="<%=user.getUsername()%>"/>
                 </form>
 
             <%if(user.getUserID() == thisId){ %>
