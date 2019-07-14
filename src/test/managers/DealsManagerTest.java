@@ -20,7 +20,7 @@ import java.util.List;
 import static org.junit.Assert.*;
 import static org.junit.jupiter.api.Assertions.assertNotEquals;
 
-public class DealsManagerTest extends Tester { // TODO: Krawa
+public class DealsManagerTest extends Tester {
 
     private static ItemCategory cat1 = new ItemCategory(1, new ItemSeries("item1"), new ItemType("car"), new ItemBrand("toyota"));
     private static ItemCategory cat2 = new ItemCategory(2, new ItemSeries("item2"), new ItemType("fridge"), new ItemBrand("samsung"));
@@ -160,10 +160,7 @@ public class DealsManagerTest extends Tester { // TODO: Krawa
     public void getDealsBySearchCriteria() {
         DealsController.SearchCriteria sc1 = new DealsController.SearchCriteria();
         sc1.addCriteria(DealsController.SearchCriteria.Criteria.USER_NAME, "two");
-        DealsController.SearchCriteria sc2 = new DealsController.SearchCriteria();
-        sc2.addCriteria(DealsController.SearchCriteria.Criteria.CATEGORY_NAME, cat4.getSeries().getName());
         assertEquals(DealsManager.getDealsBySearchCriteria(sc1).size(), 3);
-        assertEquals(DealsManager.getDealsBySearchCriteria(sc2).size(), 2);
     }
 
     @Test
