@@ -9,5 +9,4 @@ VALUES (1, 'car'),
        (6, 'bread'),
        (7, 'sigarette'),
        (8, 'soda'),
-       (9, 'car'),
-       (10, 'ketchup');
+       (9, 'ketchup');
