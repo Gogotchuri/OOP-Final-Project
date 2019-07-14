@@ -41,6 +41,7 @@ public class CycleManager {
 
 
     /**
+     * get all cycles with this deal in it
      * @param dealID - ID of Cycle in DB
      * @return Fully Filled List of Cycle objects of Deal
      *         Which out site has offered to User
@@ -70,9 +71,9 @@ public class CycleManager {
 
 
     /**
-     Returns true iff:
-     Data Base contains such cycle
-     @param cycle - Cycle (at least) initialized with only Set of Deals
+     * Returns true iff:
+     * Data Base contains such cycle
+     * @param cycle - Cycle (at least) initialized with only Set of Deals
      */
     public static boolean containsDB(Cycle cycle) throws SQLException {
 
@@ -172,6 +173,7 @@ public class CycleManager {
 
 
     /**
+     * inserts offered cycle in database
      * @param cycleDealID ID of Deal to add in offered_cycles
      * @param cycleID ID of a cycle, that deal belongs to
      */
@@ -251,6 +253,7 @@ public class CycleManager {
 
 
     /**
+     * chacks if all participants have accepted the cycle
      * @param cycleID - ID of Cycle in DB
      * @return Whether All of Users accepted Cycle or not
      */

@@ -12,6 +12,7 @@ public class DateManager {
     private static DatabaseAccessObject DAO = DatabaseAccessObject.getInstance();
 
     /**
+     * finds time when given row was created
      * @param tableName - Name Of table
      * @param ID - ID of Some Object in DB
      * @return Creation Date of Object with given ID.
@@ -23,6 +24,7 @@ public class DateManager {
 
 
     /**
+     * finds time when given row was last updated
      * @param tableName - Name Of table
      * @param ID - ID of Some Object in DB
      * @return Update Date of Object with given ID.

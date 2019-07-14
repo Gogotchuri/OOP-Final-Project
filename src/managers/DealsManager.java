@@ -46,6 +46,7 @@ public class DealsManager {
 
 
     /**
+     * returns title of the given deal
      * @param dealID ID of Deal in DB
      * @return title of the deal, may return null, in that case, it's empty
      */
@@ -56,6 +57,7 @@ public class DealsManager {
 
 
     /**
+     * get description of given deal
      * @param dealID ID of Deal in DB
      * @return description of the deal, may return null, in that case, it's empty
      */
@@ -67,6 +69,7 @@ public class DealsManager {
 
     /**
      * Helper Function
+     * returns first row of given query
      * @param query - SQL query
      * @return First Result of the query as String
      */
@@ -86,6 +89,7 @@ public class DealsManager {
 
 
     /**
+     * get all deals of given user
      * @param userID - ID of User in DB
      * @return List of fully filled deals of User with ID = userID
      *         Or null if some error happens
@@ -109,6 +113,7 @@ public class DealsManager {
 
 
     /**
+     * get all deals which participates in given cycle
      * @param cycleID - ID of Cycle in DB
      * @return List of fully filled deals of Cycle with ID = cycleID
      *         Or null if some error happens
@@ -132,6 +137,7 @@ public class DealsManager {
     }
 
     /**
+     * gets deals of given user which are in given cycle
      * @param cycleID - ID of Cycle
      * @param userID - ID of user, whose deals are looked for
      * @return List of fully filled deals of Cycle with ID = cycleID

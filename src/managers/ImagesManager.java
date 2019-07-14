@@ -123,6 +123,7 @@ public class ImagesManager {
     }
 
     /**
+     * returns all images of given user
      * @param userId Id of a user
      * @return All images of items that passed user owns
      */
@@ -131,6 +132,7 @@ public class ImagesManager {
     }
 
     /**
+     * returns all images of given items
      * @param itemId ID of an item
      * @return All images of a single item
      */
@@ -139,6 +141,8 @@ public class ImagesManager {
     }
 
     /**
+     * executes given query and gets all images
+     * based oon item or user id
      * @param id Passed id, item or user id
      * @param query String query
      * @return Returns all images of a user or item

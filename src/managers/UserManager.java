@@ -38,6 +38,8 @@ public class UserManager{
 
 
     /**
+     * get owner of given deal
+     *
      * @param dealID - ID of Deal in DB
      * @return Owner (User) of Deal with ID = dealID
      *         If such dealID does not exists in DB
@@ -106,6 +108,8 @@ public class UserManager{
 
 
     /**
+     * parses user from given result set
+     *
      * @param resultSet - 'Row' of 'users' table
      * @return Fully Filled User
      * @throws SQLException - If some error happens while getting params from ResultSet

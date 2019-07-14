@@ -125,7 +125,7 @@ public class ChatManager {
 
 
     /**
-     *
+     * gets chat of given cycle
      * @param cycleID id of the cycle, which the chat is related to
      * @return chat related to cycle with cycleID
      */
@@ -196,7 +196,7 @@ public class ChatManager {
     }
 
     /**
-     *
+     * gets all chat participants
      * @param chat_id id of the chat
      * @return List<User> users who participate in given chat
      */
@@ -211,7 +211,7 @@ public class ChatManager {
     }
 
     /**
-     *
+     * gets usernames of participants with given chats
      * @param chat_id id of the chat
      * @return List<String> usernames of users who participate
      * in given chat
