@@ -1,5 +1,3 @@
-DELETE FROM item_categories WHERE true;
-
 INSERT INTO item_categories(id, name, type_id, brand_id)
 VALUES  (1, 'prius', 1, 1),
         (2, 'freezer3000', 2, 2),
