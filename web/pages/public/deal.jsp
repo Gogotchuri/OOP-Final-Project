@@ -31,7 +31,7 @@
 
         <%--<% HttpSession session = request.getSession();%>--%>
         <% User thisUser = (User)session.getAttribute("user");%>
-        <% int thisId = thisUser.getUserID();%>
+        <% int thisId = thisUser == null ? -1 : thisUser.getUserID();%>
 
          <div class="information-column">
             <% int ownerId = deal.getOwnerID();%>

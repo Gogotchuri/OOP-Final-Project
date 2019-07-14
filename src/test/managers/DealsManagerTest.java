@@ -160,10 +160,7 @@ public class DealsManagerTest extends Tester { // TODO: Krawa
     public void getDealsBySearchCriteria() {
         DealsController.SearchCriteria sc1 = new DealsController.SearchCriteria();
         sc1.addCriteria(DealsController.SearchCriteria.Criteria.USER_NAME, "two");
-        DealsController.SearchCriteria sc2 = new DealsController.SearchCriteria();
-        sc2.addCriteria(DealsController.SearchCriteria.Criteria.CATEGORY_NAME, cat4.getSeries().getName());
         assertEquals(DealsManager.getDealsBySearchCriteria(sc1).size(), 3);
-        assertEquals(DealsManager.getDealsBySearchCriteria(sc2).size(), 2);
     }
 
     @Test
