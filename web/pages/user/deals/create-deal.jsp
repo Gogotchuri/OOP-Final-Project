@@ -15,7 +15,7 @@
 <%--Navbar--%>
 <jsp:include page="/pages/partials/navbar.jsp"/>
 <%--Page Content--%>
-<div class="dealFormContainer">
+<div class="dealFormContainer" style="background-image: url('${pageContext.request.contextPath}/images/Gradient.jpg');">
     <div class="itemContainer">
         <div class="newItemContainer">
             <h3>Add Owned item</h3>
