@@ -59,7 +59,7 @@ public class DealsManagerTest extends Tester { // TODO: Krawa
     private static ItemImage image5 = new ItemImage("https://cdn.pixabay.com/photo/2018/05/07/10/48/husky-3380548__340.jpg",
             2, item5.getItemID(), ImageCategories.ImageCategory.FEATURED);
     private static ItemImage image6 = new ItemImage("https://boygeniusreport.files.wordpress.com/2016/11/puppy-dog.jpg?quality=98&strip=all&w=782",
-            3, item5.getItemID(), ImageCategories.ImageCategory.FEATURED);
+            3, item6.getItemID(), ImageCategories.ImageCategory.FEATURED);
     private static Deal deal1 = new Deal(1, new ArrayList<>(Arrays.asList(item1, item2)),
             new ArrayList<>(Arrays.asList(cat3)), "deal1", "desc1");
     private static Deal deal2 = new Deal(2, new ArrayList<>(Arrays.asList(item3)),
