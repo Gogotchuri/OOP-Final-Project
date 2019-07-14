@@ -48,6 +48,7 @@ public class CategoryManager {
 
 
     /**
+     * item categories with the given category id
      * @param itemCategoryIDs - List of IDs of ItemCategory in DB
      * @return List of Fully Filled ItemCategory objects
      *         Or null if some error happens
@@ -65,6 +66,7 @@ public class CategoryManager {
 
 
     /**
+     * all wanted categories with give deal id
      * @param dealID - ID of Deal in DB
      * @return List of Categories which Deal with dealID wants to get
      */
@@ -109,6 +111,7 @@ public class CategoryManager {
     }
 
     /**
+     * get all categories with given brand id
      * @param brandID Brand id
      * @return All categories with given type
      */
@@ -168,6 +171,7 @@ public class CategoryManager {
     }
 
     /**
+     * all categories with given type and brand
      * @param type id of a type
      * @param brand id of a brand
      * @return All categories matching type and brand ids
@@ -192,6 +196,7 @@ public class CategoryManager {
     }
 
     /**
+     * All item types from database
      * @return All item types from database
      */
     public static List<ItemType> getAllTypes() {
@@ -210,6 +215,7 @@ public class CategoryManager {
     }
 
     /**
+     * All item brands from database
      * @return All item brands from database
      */
     public static List<ItemBrand> getAllBrands() {
@@ -246,6 +252,9 @@ public class CategoryManager {
     }
 
     /**
+     * returns id of give name in database
+     * if such not present, inserts and return id
+     * anyway
      * @param tableName Name of table
      * @param name String value to compare to
      * @return ID of a row, newly inserted or already existing
@@ -257,6 +266,7 @@ public class CategoryManager {
     }
 
     /**
+     * inserts into database and returns new id
      * @param tableName Name of passed table
      * @param str       String value
      * @return id that it was inserted in
@@ -280,7 +290,8 @@ public class CategoryManager {
         return -1;
     }
 
-    /**
+    /**inserts given information in database
+     * returns id of insertion, or -1 if unsuccessful
      * @param tableName Name of the table
      * @param name Name of string
      * @param typeID typeID
@@ -307,8 +318,9 @@ public class CategoryManager {
     }
 
     /**
+     * selects id of the row with given name in given table
      * @param tableName Name of passed table
-     * @param str       String to compare values to
+     * @param str String to compare values to
      * @return ID of the value we search for, returns -1 if doesn't exist
      */
     private static int baseContains(String tableName, String str) {
@@ -327,6 +339,7 @@ public class CategoryManager {
     }
 
     /**
+     * If database contains row returns id, else -1
      * @param serie Serie name
      * @param type Type name
      * @param brand Brand name
