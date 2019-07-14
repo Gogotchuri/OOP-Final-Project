@@ -83,6 +83,7 @@ public class CyclesController extends Controller {
 
         request.setAttribute("user_deal_ids_json", gson.toJson(user_deal_ids));
         request.setAttribute("cycle", cycle);
+        request.setAttribute("is_accepted", CycleManager.isOfferedCycleAccepted(cycleID, user.getUserID()));
         dispatchTo("/pages/user/deals/cycle.jsp");
     }
 

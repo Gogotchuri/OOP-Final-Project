@@ -339,4 +339,35 @@ public class CycleManager {
         }
         return cycles;
     }
+
+    /**
+     * Checks if there exists an offered cycle for
+     * cycle_id and user_id with ONGOING status
+     * @param cycle_id id of cycle
+     * @param user_id id of user
+     * @return true if there exists an offered cycle for
+     * cycle_id and user_id with ONGOING status
+     */
+    public static boolean isOfferedCycleAccepted(int cycle_id, int user_id){
+        try {
+            PreparedStatement statement =
+                    DatabaseAccessObject.getInstance().getPreparedStatement(
+                            "SELECT COUNT(oc.status_id) AS counter FROM offered_cycles oc \n" +
+                                    "JOIN deals d \n" +
+                                    "ON oc.deal_id = d.id \n" +
+                                    "WHERE d.user_id = ? \n" +
+                                    "AND oc.status_id = ? \n" +
+                                    "AND oc.cycle_id = ?;"
+                    );
+            statement.setInt(1, user_id);
+            statement.setInt(2, ProcessStatus.Status.COMPLETED.getId());
+            statement.setInt(3, cycle_id);
+            ResultSet resultSet = statement.executeQuery();
+            if(!resultSet.next()) return false;
+            return (resultSet.getInt(1) > 0);
+        } catch (SQLException e) {
+            e.printStackTrace();
+            return false;
+        }
+    }
 }
