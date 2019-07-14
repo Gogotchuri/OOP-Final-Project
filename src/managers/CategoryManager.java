@@ -1,14 +1,11 @@
 package managers;
 
-import com.mysql.cj.protocol.Resultset;
 import database.DatabaseAccessObject;
-import models.Image;
 import models.categoryModels.ItemBrand;
 import models.categoryModels.ItemCategory;
-import models.categoryModels.ItemSerie;
+import models.categoryModels.ItemSeries;
 import models.categoryModels.ItemType;
 
-import javax.xml.transform.Result;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -71,12 +68,9 @@ public class CategoryManager {
     /**
      * @param dealID - ID of Deal in DB
      * @return List of Categories which Deal with dealID wants to get
-     *         If such dealID does not exists in DB
-     *         returns null
      */
     public static List<ItemCategory> getWantedCategoriesByDealID(int dealID) {
         List<Integer> categoryIDs = new ArrayList<>();
-        boolean flag = false;
 
         try {
             PreparedStatement st = DAO.getPreparedStatement(GET_WANTED_CATEGORIES_BY_DEAL_QUERY);
@@ -84,14 +78,12 @@ public class CategoryManager {
             ResultSet set = st.executeQuery();
 
             while (set.next()) {
-                flag = true;
                 categoryIDs.add(set.getBigDecimal("item_category_id").intValue());
             }
         } catch (SQLException e) {
             e.printStackTrace();
+            return null;
         }
-
-        if(!flag) return null;
 
         List<ItemCategory> categories = new ArrayList<>();
         for (Integer categoryID : categoryIDs)
@@ -177,13 +169,73 @@ public class CategoryManager {
     }
 
     /**
+     * @param type id of a type
+     * @param brand id of a brand
+     * @return All categories matching type and brand ids
+     */
+    public static List<ItemSeries> getSeriesWithBrandAndType(String type, String brand) {
+        List<ItemSeries> list = new ArrayList<>();
+        String query = JOIN_QUERY + " WHERE t.name = '" + type + "' AND b.name = '" + brand + "';";
+        try {
+            PreparedStatement st = DAO.getPreparedStatement(query);
+            ResultSet set = st.executeQuery();
+            while(set.next()) {
+                ItemCategory ic = ItemCategory.parseCategory(set);
+                list.add(ic.getSeries());
+            }
+
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+
+
+        return list;
+    }
+
+    /**
+     * @return All item types from database
+     */
+    public static List<ItemType> getAllTypes() {
+        List<ItemType> list = new ArrayList<>();
+
+        try {
+            PreparedStatement st = DAO.getPreparedStatement("SELECT * FROM item_types;");
+            ResultSet set = st.executeQuery();
+            while(set.next()) {
+                list.add(new ItemType(set.getInt(1), set.getString(2)));
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return list;
+    }
+
+    /**
+     * @return All item brands from database
+     */
+    public static List<ItemBrand> getAllBrands() {
+        List<ItemBrand> list = new ArrayList<>();
+
+        try {
+            PreparedStatement st = DAO.getPreparedStatement("SELECT * FROM item_brands;");
+            ResultSet set = st.executeQuery();
+            while(set.next()) {
+                list.add(new ItemBrand(set.getInt(1), set.getString(2)));
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return list;
+    }
+
+    /**
      * @param cat Insert passed category into database
      * @return Returns id of inserted category, or doesn't insert if already there
      */
     public static int insertCategory(ItemCategory cat) {
 
         //If this row is present with all fields, we don't add it at all
-        int rowID = baseContainsRow(cat.getSerie().getName(), cat.getType().getName(), cat.getBrand().getName());
+        int rowID = baseContainsRow(cat.getSeries().getName(), cat.getType().getName(), cat.getBrand().getName());
         if(rowID != -1) return rowID;
 
         //Else we get inserted ids of brand and type (of already present, just return ids)
@@ -191,7 +243,7 @@ public class CategoryManager {
         int brandID = checkAndReturnID(BRAND_TABLE, cat.getBrand().getName());
 
         //And add new entry to the base
-        return insertIntoParentTable(SERIE_TABLE, cat.getSerie().getName(), typeID, brandID);
+        return insertIntoParentTable(SERIE_TABLE, cat.getSeries().getName(), typeID, brandID);
     }
 
     /**

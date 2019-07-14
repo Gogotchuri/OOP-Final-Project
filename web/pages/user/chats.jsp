@@ -64,11 +64,9 @@
         </div>
     </div>
 </body>
-    <script src="${pageContext.request.contextPath}/assets/js/helpers.js"></script>
+<script src="${pageContext.request.contextPath}/assets/js/helpers.js"></script>
+<script src="${pageContext.request.contextPath}/assets/js/Http.service.js"></script>
 <script>
-
-    //Variables
-    const http = new HTTP("http://localhost:8080/OOP_Final_Project");
     let chatSocket = null;
     const localUserId = "<%=user.getUserID()%>";
 

@@ -9,7 +9,7 @@ import managers.UserManager;
 import models.*;
 import models.categoryModels.ItemBrand;
 import models.categoryModels.ItemCategory;
-import models.categoryModels.ItemSerie;
+import models.categoryModels.ItemSeries;
 import models.categoryModels.ItemType;
 import org.junit.jupiter.api.Test;
 
@@ -37,7 +37,7 @@ public class ImageTests {
 
     private static User u1 = new User(1,"mudamtqveny", "password", "levan", "gelashvili", "lgela17", "123", null, null, null, time, time);
     private static User u2 = new User(2,"king", "heat","lebron","james","ljame03", "6", null, null, null, time, time);
-    private static final ItemCategory dummy = new ItemCategory(1, new ItemSerie("a"), new ItemType("b"), new ItemBrand("c"));
+    private static final ItemCategory dummy = new ItemCategory(1, new ItemSeries("a"), new ItemType("b"), new ItemBrand("c"));
 
     private static Item it1 = new Item(1, u1.getUserID(), dummy, null, "Samsung A20", "", time, time);
     private static Item it2 = new Item(2, u1.getUserID(), dummy, null, "Hp laptop", "",time, time);

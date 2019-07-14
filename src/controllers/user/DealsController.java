@@ -1,6 +1,9 @@
 
 package controllers.user;
 
+import com.google.gson.Gson;
+import com.google.gson.JsonObject;
+import com.google.gson.reflect.TypeToken;
 import controllers.Controller;
 import controllers.ResourceController;
 import events.DealCyclesFinder;
@@ -9,10 +12,10 @@ import managers.DealsManager;
 import managers.ItemManager;
 import models.Deal;
 import models.Item;
-import models.ProcessStatus;
 import models.User;
 import models.categoryModels.ItemCategory;
 import services.RequestValidator;
+
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
@@ -85,66 +88,50 @@ public class DealsController extends Controller implements ResourceController {
      Stores entry in database
      */
     public void store() throws IOException, ServletException {
-
+        Gson gson = new Gson();
+        JsonObject jo = new JsonObject();
         Map<String, List<String>> rules = new HashMap<>();
-        rules.put("item_id", Arrays.asList("type:numeric", "min:1"));
-        rules.put("wanted_id", Arrays.asList("type:numeric", "min:1"));
+        rules.put("name", Arrays.asList("required", "min_len:5", "max_len:35"));
+        rules.put("description", Arrays.asList("required", "min_len:10", "max_len:250"));
+        rules.put("wanted_ids", Arrays.asList("required", "type:array")); //TODO need to add array type
+        rules.put("owned_ids", Arrays.asList("required", "type:array"));
         RequestValidator validator = new RequestValidator(request, rules);
 
         if (validator.failed()) {
-            request.setAttribute("errors", validator.getErrors());
-            List<String> errors = new ArrayList<>();
-            errors.add("Passed parameters are invalid!");
-            request.setAttribute("errors", errors);
-            create();
+            jo.addProperty("errors", gson.toJson(validator.getErrors()));
+            sendJson(422, jo);
             return;
         }
 
+        List<Integer> ownedIDs = gson.fromJson(request.getParameter("owned_ids"), new TypeToken<List<Integer>>(){}.getType());
+        List<Integer> wantedIDs = gson.fromJson(request.getParameter("wanted_ids"), new TypeToken<List<Integer>>(){}.getType());
 
-        List<Integer> ownedIDs = getIntegerListOf("item_id"),
-                        wantedIDs = getIntegerListOf("wanted_id");
 
         List<Item> ownedItems = ItemManager.getItemsByItemIDs(ownedIDs);
         if (ownedItems == null) {
-            sendError(500, "ownedItems == null");
+            sendApiError(500, "Something went wring wrong during getting items(user.DealsController:store)");
             return;
         }
 
         List<ItemCategory> wantedCategories = CategoryManager.getItemCategoriesByItemCategoryIDs(wantedIDs);
         if (wantedCategories == null) {
-            sendError(500, "wantedCategories == null");
+            sendApiError(500, "Something went wring wrong during getting categories(user.DealsController:store)");
             return;
         }
 
-        Deal deal = new Deal(user.getUserID(), ownedItems, wantedCategories);
+        Deal deal = new Deal(user.getUserID(), ownedItems, wantedCategories, request.getParameter("name"));
+        deal.setDescription(request.getParameter("description"));
         deal.setDealID(DealsManager.storeDeal(deal));
-
-        int dealID = deal.getDealID();
-
-        if (dealID == 0) { // Deal did not insert into DB
-            sendError(500, "Internal server error! \n" +
-                "While Inserting new deal to database, 0 was returned as value of deal id" +
-                "(User.DealsController:113)");
+        if(deal.getDealID() < 1){
+            sendApiError(500, "Deal couldn't be saved! (user.DealsController:store)");
             return;
         }
 
-        show(dealID);
-
+        jo.addProperty("message", "deal saved!");
+        jo.addProperty("deal", gson.toJson(deal));
+        sendJson(201, jo);
         // Starts new thread for finding cycles
         new DealCyclesFinder(deal).start();
-    }
-
-    /**
-     Returns List of Integers
-     !!! (with assuming that parameters are numeric type) !!!
-     of passed parameter with key 'paramKey'
-     */
-    private List<Integer> getIntegerListOf(String paramKey) {
-        List<Integer> list = new ArrayList<>();
-        String[] values = request.getParameterValues(paramKey);
-        for (String value : values)
-            list.add(Integer.parseInt(value));
-        return list;
     }
 
     /**

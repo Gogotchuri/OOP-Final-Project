@@ -29,30 +29,54 @@ public class DealsManager {
         List<ItemCategory> wantedCategories = CategoryManager.getWantedCategoriesByDealID(dealID);
         ProcessStatus.Status dealStatus = StatusManager.getStatusIDByID("deals", dealID);
         String title = getTitleByDealID(dealID);
+        String description = getDescriptionByDealID(dealID);
         Timestamp dealCreateDate = DateManager.getCreateDateByID("deals", dealID);
+
         return (ownerID == 0 ||
                  ownedItems == null ||
                   wantedCategories == null ||
                    dealStatus == null ||
                     title == null ||
-                     dealCreateDate == null)
+                     description == null ||
+                      dealCreateDate == null)
                 ?
-                null : new Deal(dealID, ownerID, ownedItems, wantedCategories, dealStatus, title, dealCreateDate);
+                null : new Deal(dealID, ownerID, ownedItems, wantedCategories, dealStatus,
+                                 title,  description, dealCreateDate);
     }
+
 
     /**
      * @param dealID ID of Deal in DB
      * @return title of the deal, may return null, in that case, it's empty
      */
     private static String getTitleByDealID(int dealID) {
-        String query = "SELECT title FROM deals where id = ?;";
+        String query = "SELECT title FROM deals where id = " + dealID + ";";
+        return firstResultAsString(query);
+    }
 
+
+    /**
+     * @param dealID ID of Deal in DB
+     * @return description of the deal, may return null, in that case, it's empty
+     */
+    private static String getDescriptionByDealID(int dealID) {
+        String query = "SELECT description FROM deals where id = " + dealID + ";";
+        return firstResultAsString(query);
+    }
+
+
+    /**
+     * Helper Function
+     * @param query - SQL query
+     * @return First Result of the query as String
+     */
+    private static String firstResultAsString(String query) {
         try {
-            PreparedStatement st = DAO.getPreparedStatement(query);
-            st.setInt(1, dealID);
-            ResultSet set = st.executeQuery();
+            PreparedStatement statement = DAO.getPreparedStatement(query);
+            ResultSet resultSet = statement.executeQuery();
 
-            if(set.next()) return set.getString(1);
+            if (resultSet.next())
+                return resultSet.getString(1);
 
         } catch (SQLException e) {
             e.printStackTrace();
@@ -116,11 +140,9 @@ public class DealsManager {
     public static List<Deal> getUsersDealsByCycleId(int userID, int cycleID){
         List<Deal> result = new ArrayList<>();
         List<Deal> cycleDeals = getDealsByCycleID(cycleID);
-        for(Deal d : cycleDeals){
-            if(userID == d.getOwnerID()){
+        for (Deal d : cycleDeals)
+            if (userID == d.getOwnerID())
                 result.add(d);
-            }
-        }
         return result;
     }
 
@@ -256,8 +278,8 @@ public class DealsManager {
         try {
             PreparedStatement statement =
                 DAO.getPreparedStatement (
-                "INSERT INTO deals (user_id, status_id, title) " +
-                        "VALUES (?, ?, ?);",
+                "INSERT INTO deals (user_id, status_id, title, description) " +
+                        "VALUES (?, ?, ?, ?);",
                     Statement.RETURN_GENERATED_KEYS
                 );
 
@@ -265,6 +287,7 @@ public class DealsManager {
             //Freshly created deal should be ongoing
             statement.setInt(2, ProcessStatus.Status.WAITING.getId());
             statement.setString(3, ((deal.getTitle() == null) ? "" : deal.getTitle()));
+            statement.setString(4, (deal.getDescription() == null)? "" : deal.getDescription());
 
 
             if (statement.executeUpdate() == 0)

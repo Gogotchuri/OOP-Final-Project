@@ -32,4 +32,9 @@ public class DealsServlet extends HttpServlet {
 
         (new DealsController(request, response, this)).index();
     }
+
+    @Override
+    protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+        (new DealsController(req, resp, this)).store();
+    }
 }
