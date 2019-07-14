@@ -63,7 +63,7 @@ public class Deal {
     public Deal(int ownerID,
                 List<Item> ownedItems,
                 List<ItemCategory> wantedCategories) {
-        this(0, ownerID, ownedItems, wantedCategories, ProcessStatus.Status.WAITING,
+        this(0, ownerID, ownedItems, wantedCategories, ProcessStatus.Status.ONGOING,
              null, null, null);
     }
 
@@ -80,7 +80,7 @@ public class Deal {
                 List<Item> ownedItems,
                 List<ItemCategory> wantedCategories,
                 String title, String description) {
-        this(0, ownerID, ownedItems, wantedCategories, ProcessStatus.Status.WAITING, title,
+        this(0, ownerID, ownedItems, wantedCategories, ProcessStatus.Status.ONGOING, title,
              description, new Timestamp(System.currentTimeMillis()));
     }
 

@@ -22,8 +22,7 @@ public class CategoryManager {
     private static final String TYPE_TABLE = "item_types";
     private static final String JOIN_QUERY = "SELECT * from item_categories s JOIN item_types t on s.type_id = t.id" +
             " JOIN item_brands b on s.brand_id = b.id ";
-    private static final String GET_WANTED_CATEGORIES_BY_DEAL_QUERY = "SELECT i.item_category_id FROM items i " +
-            "JOIN wanted_items wi ON i.item_category_id = wi.item_category_id " +
+    private static final String GET_WANTED_CATEGORIES_BY_DEAL_QUERY = "SELECT wi.item_category_id FROM wanted_items wi " +
             "WHERE wi.deal_id = ?;";
 
     /**
