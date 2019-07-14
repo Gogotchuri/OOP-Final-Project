@@ -17,6 +17,7 @@
 <%  Cycle cycle = (Cycle) request.getAttribute("cycle");
     List<Deal> deals = cycle.getDeals();
     String userDealsJson = (String)request.getAttribute("user_deal_ids_json");
+    boolean isAccepted = (Boolean) request.getAttribute("is_accepted");
     String paramUser = RoutingConstants.PUBLIC_PROFILE;
     String paramDeal = RoutingConstants.SINGLE_DEAL;
 %>
@@ -30,9 +31,11 @@
     <jsp:include page="/pages/partials/navbar.jsp"/>
     <div class="cycleContainer">
         <div class="cycles">
-            <div class="button">
-                <button id="accept-btn" type="submit" onclick="accept()">Accept Cycle</button>
-                <button onclick="rejectCycle()">Reject Cycle</button>
+            <div class="button" id="buttons">
+                <%if(!isAccepted){%>
+                    <button type="submit" onclick="accept()">Accept Cycle</button>
+                    <button onclick="rejectCycle()">Reject Cycle</button>
+                <%}%>
             </div>
 
 
@@ -77,29 +80,27 @@
   <script>
       const userDeals = JSON.parse('<%=userDealsJson%>');
       const cycleId = "<%=cycle.getCycleID()%>";
-      let notAccepted = true;
+      let buttonsPresent = true;
 
+      function removeButtons(message){
+          if(!buttonsPresent) return;
+          buttonsPresent = false;
+          document.getElementById("buttons").remove();
+          window.alert(message);
+      }
       function acceptCycle(deal_id){
           const bag = {};
           bag.cycle_id = cycleId;
           bag.deal_id = deal_id;
           http.POST("<%=RoutingConstants.USER_SINGLE_CYCLE%>", bag)
-          .then(data => {
-            if(notAccepted) {
-                notAccepted = false;
-                window.alert(data.message);
-                document.getElementById("accept-btn").remove();
-            }
-
-          }).catch(reason => {
-              console.error(reason);
-          });
+              .then(data => removeButtons(data.message))
+              .catch(reason => console.error(reason));
       }
 
       function rejectCycle(){
           http.DELETE("<%=RoutingConstants.USER_SINGLE_CYCLE%>", {"cycle_id": cycleId })
               .then(() => {
-                  window.alert("Cycle Deleted!");
+                  removeButtons("Cycle Rejected!");
                   window.location.href = "${pageContext.request.contextPath}<%=RoutingConstants.USER_CYCLES%>";
               })
               .catch(reason => console.error(reason));

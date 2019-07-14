@@ -26,6 +26,7 @@
     <%     }
        } %>
     <% User user = (User) request.getAttribute("user"); %>
+    <%--                              TODO: UPLOAD IMAGE                        --%>
     <form method="POST" action="${pageContext.request.contextPath}<%=RoutingConstants.USER_EDIT%>">
         <br>
         <label for="password"> Password: </label>

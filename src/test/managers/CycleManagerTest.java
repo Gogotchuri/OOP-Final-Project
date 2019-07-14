@@ -126,4 +126,10 @@ public class CycleManagerTest extends Tester {
         assertNotNull(cycleList);
         assertEquals(cycleList.size(), expectedSize);
     }
+
+    @Test public void isOfferedCycleAcceptedTest() {
+        assertFalse(CycleManager.isOfferedCycleAccepted(c.getCycleID(), d1.getOwnerID()));
+        CycleManager.acceptCycle(c.getCycleID(), d1.getDealID());
+        assertTrue(CycleManager.isOfferedCycleAccepted(c.getCycleID(), d1.getOwnerID()));
+    }
 }
