@@ -88,7 +88,7 @@ public class DealsController extends Controller {
 
 			/* Possible Criteria */
 			USER_NAME("user_name"),
-			CATEGORY_NAME("category_name");
+			TITLE("title");
 
 			private String criteriaName;
 
