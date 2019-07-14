@@ -219,9 +219,13 @@ public class CycleManager {
             if (statement.executeUpdate() == 0)
                 return false;
 
-            if (allAccepted(cycleID)) {
-                return updateCycleStatus(cycleID, ProcessStatus.Status.ONGOING.getId()) &&
-                        ChatManager.addChatToDB(new Chat(new Cycle(cycleID)));
+            synchronized (CycleManager.class) {
+
+                if (allAccepted(cycleID) &&
+                     StatusManager.getStatusIDByID("cycles", cycleID) == ProcessStatus.Status.WAITING)
+
+                    return updateCycleStatus(cycleID, ProcessStatus.Status.ONGOING.getId()) &&
+                            ChatManager.addChatToDB(new Chat(new Cycle(cycleID)));
             }
 
             return true;
