@@ -29,8 +29,10 @@ public class ImagesManagerTest extends Tester {
     private static ItemImage itemImage3;
 
 
-    @BeforeClass
-    public static void setUp() throws Exception {
+    @Before
+    public void setUp() throws Exception {
+        Tester.emptyDataBase();
+
         User user1 = new User("user1", "123456", "", "", "email1", "1");
         User user2 = new User("user2", "123456", "", "", "email2", "2");
         //User user3 = new User("user3", "123456", "", "", "", "3");
@@ -65,32 +67,26 @@ public class ImagesManagerTest extends Tester {
         ItemManager.addItemToDB(item3);
 
         itemImage1 = new ItemImage("image3", user1ID, 1, ImageCategories.ImageCategory.FEATURED);
-        itemImage2 = new ItemImage("image4", user1ID, 1, ImageCategories.ImageCategory.FEATURED);
-        itemImage3 = new ItemImage("image5", user2ID, 1, ImageCategories.ImageCategory.FEATURED);
-    }
+        itemImage2 = new ItemImage("image4", user1ID, 2, ImageCategories.ImageCategory.FEATURED);
+        itemImage3 = new ItemImage("image5", user2ID, 3, ImageCategories.ImageCategory.FEATURED);
 
-    @AfterClass
-    public static void tearDown() throws Exception {
-        DeleteManager.deleteAndReseed("deals");
-        DeleteManager.deleteAndReseed("items");
-        DeleteManager.deleteAndReseed("item_categories");
-        DeleteManager.deleteAndReseed("item_brands");
-        DeleteManager.deleteAndReseed("item_types");
-        DeleteManager.deleteAndReseed("users");
-        DeleteManager.deleteAndReseed("cycles");
-        DeleteManager.deleteAndReseed("item_images");
-        DeleteManager.deleteAndReseed("profile_images");
-    }
-
-
-
-    @Test
-    public void addImage() {
         assertTrue(ImagesManager.addImage(profile1));
         assertTrue(ImagesManager.addImage(profile2));
         assertTrue(ImagesManager.addImage(itemImage1));
         assertTrue(ImagesManager.addImage(itemImage2));
         assertTrue(ImagesManager.addImage(itemImage3));
+    }
+
+    @After
+    public void tearDown() throws Exception {
+
+    }
+
+
+
+    //tested before
+    @Test
+    public void addImage() {
     }
 
     @Test
@@ -112,12 +108,14 @@ public class ImagesManagerTest extends Tester {
     public void getItemImagesByUserID() {
         List<ItemImage> userImages1 = ImagesManager.getItemImagesByUserID(1);
         List<ItemImage> userImages2 = ImagesManager.getItemImagesByUserID(2);
+        List<ItemImage> userImages3 = ImagesManager.getItemImagesByUserID(11);
         assertTrue(userImages1.contains(itemImage1));
         assertTrue(userImages1.contains(itemImage2));
         assertFalse(userImages1.contains(itemImage3));
         assertFalse(userImages2.contains(itemImage1));
         assertFalse(userImages2.contains(itemImage2));
-        assertFalse(userImages2.contains(itemImage3));
+        assertTrue(userImages2.contains(itemImage3));
+        assertTrue(userImages3.size() == 0);
     }
 
     @Test
@@ -125,9 +123,11 @@ public class ImagesManagerTest extends Tester {
         List<ItemImage> itemImages1 = ImagesManager.getItemImagesByItemID(1);
         List<ItemImage> itemImages2 = ImagesManager.getItemImagesByItemID(2);
         List<ItemImage> itemImages3 = ImagesManager.getItemImagesByItemID(3);
+        List<ItemImage> itemImages4 = ImagesManager.getItemImagesByItemID(19);
         assertTrue(itemImages1.contains(itemImage1));
         assertFalse(itemImages1.contains(itemImage2));
         assertTrue(itemImages2.contains(itemImage2));
         assertTrue(itemImages3.contains(itemImage3));
+        assertTrue(itemImages4.size()==0);
     }
 }
