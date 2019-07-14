@@ -12,6 +12,7 @@
 <%@ page import="java.util.List" %>
 <%@ page import="servlets.RoutingConstants" %>
 <%@ page import="models.User" %>
+<%@ page import="models.ItemImage" %>
 
 <%  Cycle cycle = (Cycle) request.getAttribute("cycle");
     List<Deal> deals = cycle.getDeals();
@@ -41,12 +42,14 @@
             </div>
 
 
-            <%for(int i = 0; i < deals.size() - 1; i++){
+            <%for(int i = 0; i < deals.size(); i++){
                 deal = deals.get(i);
                 %>
                 <div class="deal">
-                    <%String url = deal.getOwnedItems().get(0).getImages().get(0).getUrl();
-                      if(url == null || url == "") url = "https://cdn.theatlantic.com/assets/media/img/mt/2018/11/shutterstock_552503470/lead_720_405.jpg?mod=1541605820";
+                    <%  List<ItemImage> images = deal.getOwnedItems().get(0).getImages();
+                        String url;
+                        if(images == null || images.isEmpty()) url = "https://cdn.theatlantic.com/assets/media/img/mt/2018/11/shutterstock_552503470/lead_720_405.jpg?mod=1541605820";
+                        else url = deal.getOwnedItems().get(0).getImages().get(0).getUrl();
                     %>
                     <img src="<%=url%>">
                     <div class="info">
@@ -61,66 +64,15 @@
                         </form>
                     </div>
                 </div>
-                <div class="dealArrow">
-                    <img src="https://www.stickpng.com/assets/images/58f8bcf70ed2bdaf7c128307.png">
-                </div>
-            <%}%>
-            <%deal = deals.get(deals.size() - 1);%>
-            <div class="deal">
-                <img src="<%=deal.getOwnedItems().get(0).getImages().get(0).getUrl()%>">
-                <div class="info">
-                    <form method="GET" action="${pageContext.request.contextPath}<%=paramDeal%>">
-                        <button type="submit" class = "link">Go to <%=deal.getTitle()%> page</button>
-                        <input name="id" type="hidden" value="<%=deal.getDealID()%>"/>
-                    </form>
-                    <p> <%=deal.getOwnedItems().get(0).getDescription()%> </p>
-                    <form method="GET" action="${pageContext.request.contextPath}<%=paramUser%>">
-                        <button type="submit" class = "link">owner's profile</button>
-                        <input name="id" type="hidden" value="<%=deal.getOwnerID()%>"/>
-                    </form>
-                </div>
-            </div>
-            <div class="dealUpArrow">
-                <img src="https://imageog.flaticon.com/icons/png/512/20/20901.png?size=1200x630f&pad=10,10,10,10&ext=png&bg=FFFFFFFF" alt="up arrow">
-            </div>
 
-                                                                <%--
-            <div class="deal">
-              <img src="https://media.istockphoto.com/photos/green-apple-picture-id475190419?k=6&m=475190419&s=612x612&w=0&h=G01aHVafnPd01ugi6dmJKtNHS-nz0GrQAbpzDcjuXI0=" alt="green-apple-picture-id475190419?k">
-              <div class="info">
-                  <a href=""> deal name1 </a>
-                  <p> Lorem ipsum dolor, sit amet consectetur adipisicing elit. Libero iusto repellendus voluptates deleniti, atque autem laudantium rem illum laborum quisquam. </p>
-                  <a href=""> View user1's profile </a>
-              </div>
-            </div>
-
-            <div class="dealArrow">
-              <img src="https://www.stickpng.com/assets/images/58f8bcf70ed2bdaf7c128307.png">
-            </div>
-            <div class="deal">
-              <img src="https://media.istockphoto.com/photos/green-apple-picture-id475190419?k=6&m=475190419&s=612x612&w=0&h=G01aHVafnPd01ugi6dmJKtNHS-nz0GrQAbpzDcjuXI0=" alt="green-apple-picture-id475190419?k" >
-              <div class="info">
-                  <a href=""> deal name2 </a>
-                  <p> Lorem ipsum dolor, sit amet consectetur adipisicing elit. Libero iusto repellendus voluptates deleniti, atque autem laudantium rem illum laborum quisquam. </p>
-                  <a href=""> View user2's profile </a>
-              </div>
-            </div>
-            <div class="dealArrow">
-              <img src="https://www.stickpng.com/assets/images/58f8bcf70ed2bdaf7c128307.png">
-            </div>
-            <div class="deal">
-              <img src="https://media.istockphoto.com/photos/green-apple-picture-id475190419?k=6&m=475190419&s=612x612&w=0&h=G01aHVafnPd01ugi6dmJKtNHS-nz0GrQAbpzDcjuXI0=" alt="green-apple-picture-id475190419?k" >
-              <div class="info">
-                <a href=""> deal name3 </a>
-                <p> Lorem ipsum dolor, sit amet consectetur adipisicing elit. Libero iusto repellendus voluptates deleniti, atque autem laudantium rem illum laborum quisquam. </p>
-                <a href=""> View user3's profile </a>
-              </div>
-            </div>
-
-            <div class="dealUpArrow">
-              <img src="https://imageog.flaticon.com/icons/png/512/20/20901.png?size=1200x630f&pad=10,10,10,10&ext=png&bg=FFFFFFFF" alt="up arrow">
-            </div>
-            --%>
+                <%if(i < deals.size() -1){%>
+                    <div class="dealArrow">
+                        <img src="https://www.stickpng.com/assets/images/58f8bcf70ed2bdaf7c128307.png">
+                    </div>
+            <%}}%>
+        </div>
+        <div class="dealUpArrow">
+            <img src="https://imageog.flaticon.com/icons/png/512/20/20901.png?size=1200x630f&pad=10,10,10,10&ext=png&bg=FFFFFFFF" alt="up arrow">
         </div>
     </div>
 

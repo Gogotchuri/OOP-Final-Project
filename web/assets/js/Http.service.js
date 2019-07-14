@@ -71,4 +71,4 @@ class HTTP{
     }
 }
 
-const http = new HTTP("http://localhost:8080/OOP_Final_Project");
+const http = new HTTP("http://localhost:8080/OOP_Final_Project_war_exploded");

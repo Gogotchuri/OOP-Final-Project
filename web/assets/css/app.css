@@ -430,8 +430,7 @@ div.messages div.own-message .message-date{
     margin-inline: 40%;
 }
 
-.cycleContainer
-> div.cycles > div.dealUpArrow > img{
+.cycleContainer div.dealUpArrow > img{
     height: 30%;
     width: 30%;
     margin-inline: 90%;

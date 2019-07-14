@@ -72,7 +72,7 @@
 
 
     //functions
-    let getChatEndpointAddr = chatID => "ws://localhost:8080/OOP_Final_Project/user/chats/" + chatID + "/" + "<%=user.getUsername()%>";
+    let getChatEndpointAddr = chatID => "ws://localhost:8080/OOP_Final_Project_war_exploded/user/chats/" + chatID + "/" + "<%=user.getUsername()%>";
 
     let handleMessage = parsedMessage => {
         let messageClass = (parsedMessage.user_id == localUserId) ? "own-message" : "message";

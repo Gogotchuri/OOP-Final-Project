@@ -3,6 +3,7 @@ package controllers.user;
 import com.google.gson.Gson;
 import com.google.gson.JsonObject;
 import controllers.Controller;
+import managers.ChatManager;
 import models.Chat;
 import models.Cycle;
 import models.Message;
@@ -35,14 +36,7 @@ public class ChatsController extends Controller {
     }
 
     public void index() throws IOException, ServletException {
-//        List<Chat> chats = ChatManager.getUserChats(this.user.getUserID());
-        //TODO uncomment above line when we have data, this is just to test
-        List<Chat> chats = new ArrayList<>();
-        chats.add(new Chat(1, new Cycle(1)));
-        chats.add(new Chat(2, new Cycle(2)));
-        chats.add(new Chat(3, new Cycle(3)));
-        chats.add(new Chat(4, new Cycle(4)));
-        chats.add(new Chat(5, new Cycle(5)));
+        List<Chat> chats = ChatManager.getUserChats(this.user.getUserID());
         request.setAttribute("chats", chats);
         dispatchTo("/pages/user/chats.jsp");
     }
@@ -54,9 +48,7 @@ public class ChatsController extends Controller {
         Gson gson = new Gson();
         JsonObject resp = new JsonObject();
 
-        //TODO uncomment when data is present
-        //Chat chat = ChatManager.getChatByID(chat_ID);
-        Chat chat = new Chat(chat_ID, new Cycle(1));
+        Chat chat = ChatManager.getChatByID(chat_ID);
         if(chat == null || !chat.isParticipant(user.getUserID())){
             response.setStatus(404);
             resp.addProperty("error", "Chat with given id doesn't exist or doesn't belong to you!");
@@ -64,14 +56,11 @@ public class ChatsController extends Controller {
             pw.flush();
             return;
         }
-        //TODO uncomment when data is present
-        //List<Message> messages = chat.getMessages();
-        List<Message> messages = Arrays.asList(new Message(1,1,"message1, chat " + chat_ID), new Message(1,1,"message2, chat " + chat_ID));
+        List<Message> messages = chat.getMessages();
 
         resp.addProperty("messages", gson.toJson(messages));
         resp.addProperty("chat_id", chat_ID);
-        pw.print(resp.toString());
-        pw.flush();
+        sendJson(200, resp);
     }
 
 

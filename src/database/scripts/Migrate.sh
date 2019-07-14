@@ -30,7 +30,7 @@ if [[ ${1} == '-s' ]] || [[ ${2} == '-s' ]]
 then
     #seeding part
     echo "Starting to seed"
-    for filename in ${currDir}/../seeders/*/*.sql; do
+    for filename in ${currDir}/../seeders/seeders_*/*.sql; do
         echo "Seeding: ${filename}"
         mysql -u root --password=${password} ${dbName} < ${filename}
     done
