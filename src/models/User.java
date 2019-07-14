@@ -73,7 +73,7 @@ public class User {
 
 
     /**
-     * Constructor.
+     * Alternate Constructor.
      * @param username - User Name of User
      * @param password - Encrypted Password of User
      * @param firstName - First Name of User
@@ -200,17 +200,27 @@ public class User {
         this.email = email;
     }
 
+    /**
+     * @param firstName First name of a user
+     */
     public void setFirstName(String firstName) {
         this.firstName = firstName;
     }
 
+    /**
+     * @param lastName Last name of a user
+     */
     public void setLastName(String lastName) {
         this.lastName = lastName;
     }
 
+    /**
+     * @param phoneNumber Phone number of a user
+     */
     public void setPhoneNumber(String phoneNumber) {
         this.phoneNumber = phoneNumber;
     }
+
     /**
      * @param unprotected - Unprotected Password
      * @return Whether passed password equals of User's password
@@ -218,7 +228,6 @@ public class User {
     public boolean checkPassword(String unprotected) {
         return encryptPassword(unprotected).equals(password);
     }
-
 
     /**
      * Given a string password returns encrypted version
@@ -236,6 +245,10 @@ public class User {
         return hashed;
     }
 
+    /**
+     * @param hex byte representation of a string
+     * @return String version of passed hex
+     */
     private static String hexToString(byte[] hex) {
         StringBuilder sb = new StringBuilder();
         for (byte b : hex) {
@@ -245,7 +258,6 @@ public class User {
         }
         return sb.toString();
     }
-
 
     /**
      * @param other - other User

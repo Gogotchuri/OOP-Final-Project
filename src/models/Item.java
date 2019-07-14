@@ -155,11 +155,17 @@ public class Item implements Comparable<Item> {
     }
 
     @Override
+    /**
+     * Compares two items with names
+     */
     public int compareTo(Item o) {
         return name.compareTo(o.getName());
     }
 
     @Override
+    /**
+     * String representation of an item
+     */
     public String toString() {
         return name;
     }

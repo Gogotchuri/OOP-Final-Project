@@ -198,9 +198,9 @@ public class DealsManager {
             if (criteria == Criteria.USER_NAME) {
                 String userName = sc.getCriteriaValue(Criteria.USER_NAME);
                 queryBuilder.append(" AND u.user_name = \'").append(userName).append("\' \n");
-            } else if (criteria == Criteria.CATEGORY_NAME) {
-                String category = sc.getCriteriaValue(Criteria.CATEGORY_NAME);
-                queryBuilder.append(" AND ic.name = \'").append(category).append("\' \n");
+            } else if (criteria == Criteria.TITLE) {
+                String category = sc.getCriteriaValue(Criteria.TITLE);
+                queryBuilder.append(" AND d.title LIKE \'%").append(category).append("%\' \n"); // TODO
             }
         }
 

@@ -20,7 +20,7 @@ import static org.junit.Assert.*;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
-public class ChatManagerTest extends Tester { // TODO: Lasha
+public class ChatManagerTest extends Tester {
 
     private static User user1 = new User("one", "1", "o",
             "ne", "onemail", "111");
