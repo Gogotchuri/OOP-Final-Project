@@ -23,42 +23,11 @@
         <jsp:param name="title" value="Deal number ${id}"/>
     </jsp:include>
 
-    <style>
-        .wrapper{
-            display: grid;
-            grid-template-columns: 1fr 1fr 1fr;
-            grid-gap: 5px;
-        }
-
-        .wrapper > div{
-            height: 200%;
-        }
-
-        p.italic {
-            font-style: italic;
-            font-size: 14px;
-        }
-
-        .information-column{
-            padding: 5px;
-            color:lightslategray;
-            background-color:powderblue;
-        }
-
-        .deal-columns{
-            padding: 5px;
-            color:lightcyan;
-            background-color:#4a778a;
-        }
-
-    </style>
-
-
     <body>
     <%--Navbar--%>
     <jsp:include page="/pages/partials/navbar.jsp"/>
     <%--Page Content--%>
-    <div class="wrapper">
+    <div class="deal-wrapper">
 
         <%--<% HttpSession session = request.getSession();%>--%>
         <% User thisUser = (User)session.getAttribute("user");%>
@@ -77,7 +46,7 @@
             <% String dateCreated = new SimpleDateFormat("yyyy.MM.dd.HH.mm.ss").format(deal.getCreateDate());%>
             <% List<Cycle> cycles = CycleManager.getCyclesByDealID(deal.getDealID());%>
             <h3>Information</h3>
-                User: <%= user.getUsername()%> <br> <p class="italic"><%= userFullName %></p>
+                User: <%= user.getUsername()%> <br> <p class="side-text"><%= userFullName %></p>
                 Deal Created: <%= dateCreated%>
                 Deal Status: <%= deal.getStatus().getName() %>
                 Cycles:
@@ -87,7 +56,7 @@
                         <%-- <% String date = new SimpleDateFormat("yyyy.MM.dd.HH.mm.ss").format(c.get);%> date unda amas ciklis --%>
                         <% String statusName = c.getCycleStatus().getName();%>
                         <% String cycleInfo = "Cycle" + i;%>
-                        <li><%= cycleInfo%> <br> <p class="italic"><%= statusName %></></li>
+                        <li><%= cycleInfo%> <br> <p class="side-text"><%= statusName %></></li>
                         <%}%>
                     </ul>
          </div>
@@ -104,7 +73,7 @@
              <% String catInfo = type + "-" + brand + "-" + series;%>
                  <%-- <% String date = new SimpleDateFormat("yyyy.MM.dd.HH.mm.ss").format(i.getCreatedAt());%>
                  aitemis tarigia sawiro --%>
-                 <li><%= i.getName() %> <br> <%= catInfo%> <%-- <br> <p class="italic"><%= date%></p>> --%></li>
+                 <li><%= i.getName() %> <br> <%= catInfo%> <%-- <br> <p class="side-text"><%= date%></p>> --%></li>
                  <% } %>
              </ul>
          </div>
