@@ -278,8 +278,8 @@ public class DealsManager {
         try {
             PreparedStatement statement =
                 DAO.getPreparedStatement (
-                "INSERT INTO deals (user_id, status_id, title) " +
-                        "VALUES (?, ?, ?);",
+                "INSERT INTO deals (user_id, status_id, title, description) " +
+                        "VALUES (?, ?, ?, ?);",
                     Statement.RETURN_GENERATED_KEYS
                 );
 
@@ -287,6 +287,7 @@ public class DealsManager {
             //Freshly created deal should be ongoing
             statement.setInt(2, ProcessStatus.Status.WAITING.getId());
             statement.setString(3, ((deal.getTitle() == null) ? "" : deal.getTitle()));
+            statement.setString(4, (deal.getDescription() == null)? "" : deal.getDescription());
 
 
             if (statement.executeUpdate() == 0)
