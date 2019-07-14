@@ -17,7 +17,6 @@
 <%  Cycle cycle = (Cycle) request.getAttribute("cycle");
     List<Deal> deals = cycle.getDeals();
     String userDealsJson = (String)request.getAttribute("user_deal_ids_json");
-    Deal deal;
     String paramUser = RoutingConstants.PUBLIC_PROFILE;
     String paramDeal = RoutingConstants.SINGLE_DEAL;
 %>
@@ -32,12 +31,13 @@
     <div class="cycleContainer">
         <div class="cycles">
             <div class="button">
-                  <button id="accept-btn" type="submit" onclick="accept()">Accept cycle</button>
+                <button id="accept-btn" type="submit" onclick="accept()">Accept Cycle</button>
+                <button onclick="rejectCycle()">Reject Cycle</button>
             </div>
 
 
             <%for(int i = 0; i < deals.size(); i++){
-                deal = deals.get(i);
+                Deal deal = deals.get(i);
                 %>
                 <div class="deal">
                     <%  List<ItemImage> images = deal.getOwnedItems().get(0).getImages();
@@ -76,7 +76,7 @@
   <script src="${pageContext.request.contextPath}/assets/js/Http.service.js"></script>
   <script>
       const userDeals = JSON.parse('<%=userDealsJson%>');
-      const cycleId = 1;
+      const cycleId = "<%=cycle.getCycleID()%>";
       let notAccepted = true;
 
       function acceptCycle(deal_id){
@@ -94,6 +94,15 @@
           }).catch(reason => {
               console.error(reason);
           });
+      }
+
+      function rejectCycle(){
+          http.DELETE("<%=RoutingConstants.USER_SINGLE_CYCLE%>", {"cycle_id": cycleId })
+              .then(() => {
+                  window.alert("Cycle Deleted!");
+                  window.location.href = "${pageContext.request.contextPath}<%=RoutingConstants.USER_CYCLES%>";
+              })
+              .catch(reason => console.error(reason));
       }
 
       function accept(){

@@ -12,6 +12,8 @@ public class StatusManager {
     private static DatabaseAccessObject DAO = DatabaseAccessObject.getInstance();
 
     /**
+     * return status with given id
+     *
      * @param tableName - Name Of table
      * @param ID - ID of Some Object in DB
      * @return ProcessStatus of Object with given ID.

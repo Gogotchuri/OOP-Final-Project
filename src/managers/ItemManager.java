@@ -109,6 +109,7 @@ public class ItemManager {
 
 
     /**
+     * gets owner id of given item
      * @param itemID - ID of Deal in DB
      * @return Owner (User) of Item with ID = itemID.
      *         If such itemID does not exists in DB
@@ -131,6 +132,7 @@ public class ItemManager {
 
 
     /**
+     * gets category of given item
      * @param itemID - ID of Deal in DB
      * @return Category of Item with ID = itemID.
      *         If such itemID does not exists in DB
@@ -153,6 +155,7 @@ public class ItemManager {
 
 
     /**
+     *
      * @param itemID - ID of Deal in DB
      * @return Name of Item with ID = itemID.
      *         If such itemID does not exists in DB
@@ -223,7 +226,7 @@ public class ItemManager {
     }
 
     /**
-     *
+     * grab items according to given column with given value
      * @param table Name of table
      * @param column Name of column
      * @param value Passed value
@@ -250,7 +253,7 @@ public class ItemManager {
     }
 
     /**
-     *
+     * get all items of given user
      * @param userId Id of a user
      * @return List of the items of one user
      */
@@ -323,6 +326,7 @@ public class ItemManager {
         return true;
     }
     /**
+     * helper method
      * @param dealID
      * @param query
      * @return Item categories
@@ -346,6 +350,7 @@ public class ItemManager {
     }
 
     /**
+     * grabs wanted item categories with given deal id
      *
      * @param dealID Id of the deal
      * @return List of categories wanted in one deal

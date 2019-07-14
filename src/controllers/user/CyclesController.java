@@ -144,20 +144,22 @@ public class CyclesController extends Controller {
      */
     public void rejectCycle(int cycleID) throws IOException {
         if(!CycleManager.userParticipatesInCycle(user.getUserID(), cycleID)){
-            sendError(401, "Cycle doesn't belong to you! " +
+            sendApiError(401, "Cycle doesn't belong to you! " +
                     "(controllers.user.CyclesController:acceptCycle:126)");
             return;
         }
 
         if(!CycleManager.deleteCycle(cycleID)){
-            sendError(404, "Cycle couldn't be accepted " +
+            sendApiError(404, "Cycle couldn't be accepted " +
                     "(controllers.user.CyclesController:acceptCycle:132)");
             return;
         }
 
 
         //After successful acceptance redirect to all cycles page
-        redirectTo(RoutingConstants.USER_DEALS);
+        JsonObject jo = new JsonObject();
+        jo.addProperty("Message", "Cycle Delete!");
+        sendJson(201, jo);
     }
 
 }
