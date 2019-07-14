@@ -82,6 +82,7 @@ public class CategoryManager {
             }
         } catch (SQLException e) {
             e.printStackTrace();
+            return null;
         }
 
         List<ItemCategory> categories = new ArrayList<>();
