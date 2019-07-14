@@ -9,7 +9,7 @@
 <%@ page import="models.User" %>
 <%@ page import="servlets.RoutingConstants" %>
 <html>
-    <% User user = (User) session.getAttribute("user"); %>-
+    <% User user = (User) session.getAttribute("user"); %>
     <nav class="navbar navbar-expand-lg navbar-dark bg-primary">
         <a href="${pageContext.request.contextPath}/" class="navbar-brand">TODO</a>
         <button type="button" class="navbar-toggler" data-toggle="collapse" data-target="#navbarCollapse">
@@ -22,6 +22,7 @@
                 <a href="${pageContext.request.contextPath}<%= RoutingConstants.DEALS%>" class="nav-item nav-link">Deals</a>
                 <%if(user != null){%>
                     <a href="${pageContext.request.contextPath}<%= RoutingConstants.USER_DEAL_CREATE%>" class="nav-item nav-link">Create Deal</a>
+                    <a href="${pageContext.request.contextPath}<%= RoutingConstants.USER_CHATS%>" class="nav-item nav-link">Chats</a>
                     <a href="${pageContext.request.contextPath}<%= RoutingConstants.PUBLIC_PROFILE%>?id=<%=user.getUserID()%>" class="nav-item nav-link">Profile</a>
                     <a href="${pageContext.request.contextPath}<%= RoutingConstants.LOGOUT%>" class="nav-item nav-link">Logout</a>
                 <%}else{%>

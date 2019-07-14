@@ -5,7 +5,12 @@ import services.encoders.ItemCategoryJsonAdapter;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 
-//Class encapsulating a single category
+
+/**
+ * Class encapsulating a single category
+ * Containing serie, type and a brand
+ */
+
 @JsonAdapter(ItemCategoryJsonAdapter.class)
 public class ItemCategory implements Comparable<ItemCategory> {
 
@@ -59,8 +64,14 @@ public class ItemCategory implements Comparable<ItemCategory> {
         this(0, new ItemSeries(0, series), new ItemType(0, type), new ItemBrand(0, brand));
     }
 
+    /**
+     * @return ID of a category
+     */
     public int getId() { return id; }
 
+    /**
+     * @param id ID of a category
+     */
     public void setId(int id){
         this.id = id;
     }
@@ -86,6 +97,9 @@ public class ItemCategory implements Comparable<ItemCategory> {
     }
 
     @Override
+    /**
+     * Compares an itemCategory to another one by comparing serie, type and a brand, in that order
+     */
     public int compareTo(ItemCategory o) {
         int cur = getSeries().getName().compareTo(o.getSeries().getName());
         if(cur != 0) return cur;
@@ -95,11 +109,17 @@ public class ItemCategory implements Comparable<ItemCategory> {
     }
 
     @Override
+    /**
+     * String representation of a category
+     */
     public String toString() {
         return "Serie : " + series.toString() + ", Type : " + type.toString() + ", Brand : " + brand.toString() + "\n";
     }
 
     @Override
+    /**
+     * Equality of two itemCategories
+     */
     public boolean equals(Object o) {
         if(o == this) return true;
         if(!(o instanceof ItemCategory)) return false;

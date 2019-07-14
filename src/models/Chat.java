@@ -70,7 +70,7 @@ public class Chat implements Comparable<Chat> {
     }
 
     /**
-     * @param messages
+     * @param messages Vector of messages to set
      */
     public void setMessages(Vector<Message> messages){
         this.messages = messages;
@@ -91,7 +91,7 @@ public class Chat implements Comparable<Chat> {
     }
 
     /**
-     * @param date
+     * @param date last time this chat was updated
      */
     public void setUpdateDate(Date date){
         lastUpdateDate.setTime(date.getTime());
@@ -105,7 +105,7 @@ public class Chat implements Comparable<Chat> {
     }
 
     /**
-     * @param cycle
+     * @param cycle Passed cycle to set
      */
     public void setCycle(Cycle cycle){
         this.cycle = cycle;
