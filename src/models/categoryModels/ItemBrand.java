@@ -5,16 +5,25 @@ import services.encoders.ItemParameterJsonAdapter;
 import com.google.gson.annotations.JsonAdapter;
 import services.encoders.ItemParameterJsonAdapter;
 
-//Class representing a brand of a category
+/**
+ * Class encapsulating an item brand
+ */
 
 @JsonAdapter(ItemParameterJsonAdapter.class)
 public class ItemBrand extends ItemParameter implements Comparable <ItemBrand>{
 
-
+    /**
+     * @param id ID of brand
+     * @param name Name of brand
+     */
     public ItemBrand(int id, String name) {
         super(id, name);
     }
 
+    /**
+     * Alternate constructor
+     * @param name Name of brand
+     */
     public ItemBrand(String name) {
         super(name);
     }

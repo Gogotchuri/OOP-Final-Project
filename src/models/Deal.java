@@ -148,10 +148,16 @@ public class Deal {
         return ownedItemCategories;
     }
 
+    /**
+     * @return Description of a deal
+     */
     public String getDescription() {
         return description;
     }
 
+    /**
+     * @param description Description of a deal
+     */
     public void setDescription(String description) {
         this.description = description;
     }
