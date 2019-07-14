@@ -16,7 +16,8 @@
 
 <%  Cycle cycle = (Cycle) request.getAttribute("cycle");
     List<Deal> deals = cycle.getDeals();
-    Deal deal = null;
+    String userDealsJson = (String)request.getAttribute("user_deal_ids_json");
+    Deal deal;
     String paramUser = RoutingConstants.PUBLIC_PROFILE;
     String paramDeal = RoutingConstants.SINGLE_DEAL;
     String paramCycle = RoutingConstants.USER_SINGLE_CYCLE;
@@ -31,14 +32,8 @@
     <jsp:include page="/pages/partials/navbar.jsp"/>
     <div class="cycleContainer">
         <div class="cycles">
-
-                                        <%-- TODO: ACCEPT BUTTON --%>
             <div class="button">
-              <form action="${pageContext.request.contextPath}<%=paramCycle%>" method="PUT">
-                  <button type="submit">Accept cycle</button>
-                  <input name="cycle_id" type="hidden" value="<%=cycle.getCycleID()%>"/>
-                  <input name="deal_id" type="hidden" value="<%=cycle.getUserDeals(((User)session.getAttribute("user")).getUserID())%>"/>
-              </form> 
+                  <button id="accept-btn" type="submit" onclick="accept()">Accept cycle</button>
             </div>
 
 
@@ -79,4 +74,32 @@
 
     <jsp:include page="/pages/partials/footer.jsp"/>
   </body>
+  <script src="${pageContext.request.contextPath}/assets/js/Http.service.js"></script>
+  <script>
+      const userDeals = JSON.parse('<%=userDealsJson%>');
+      const cycleId = 1;
+      let notAccepted = true;
+
+      function acceptCycle(deal_id){
+          const bag = {};
+          bag.cycle_id = cycleId;
+          bag.deal_id = deal_id;
+          http.POST("<%=RoutingConstants.USER_SINGLE_CYCLE%>", bag)
+          .then(data => {
+            if(notAccepted) {
+                notAccepted = false;
+                window.alert(data.message);
+                document.getElementById("accept-btn").remove();
+            }
+
+          }).catch(reason => {
+              console.error(reason);
+          });
+      }
+
+      function accept(){
+        userDeals.forEach(id => acceptCycle(id));
+      }
+
+  </script>
 </html>

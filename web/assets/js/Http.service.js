@@ -62,7 +62,7 @@ class HTTP{
             }else{
                 resolve(data);
             }
-        })
+        });
     }
 
     static encodeForUrl(baggage) {

@@ -251,7 +251,8 @@ public class User {
      * @param other - other User
      * @return Whether two Users are equal or not
      */
-    @Override public boolean equals(Object other) {
+    @Override
+    public boolean equals(Object other) {
 
         if (this == other) return true;
         if (!(other instanceof User)) return false;

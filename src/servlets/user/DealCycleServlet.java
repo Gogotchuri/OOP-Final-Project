@@ -11,6 +11,7 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
+import java.io.PrintWriter;
 
 @WebServlet(urlPatterns = {RoutingConstants.USER_SINGLE_CYCLE})
 public class DealCycleServlet extends HttpServlet{
@@ -35,7 +36,7 @@ public class DealCycleServlet extends HttpServlet{
 		throws ServletException, IOException {
 		int cycle_id;
 		try {
-			cycle_id = Integer.parseInt(request.getParameter("cycleid"));
+			cycle_id = Integer.parseInt(request.getParameter("cycle_id"));
 		}
 		catch (NumberFormatException e) {
 			response.sendError(HttpServletResponse.SC_NOT_FOUND,
@@ -55,7 +56,7 @@ public class DealCycleServlet extends HttpServlet{
 	 dispatch to user.DealCycleServlet (GET) (cycle where action performed)
 	 */
 	@Override
-	protected void doPut(HttpServletRequest request,
+	protected void doPost(HttpServletRequest request,
 						 HttpServletResponse response)
 			throws ServletException, IOException {
 
@@ -64,8 +65,10 @@ public class DealCycleServlet extends HttpServlet{
 			cycle_id = Integer.parseInt(request.getParameter("cycle_id"));
 			deal_id = Integer.parseInt(request.getParameter("deal_id"));
 		} catch (NumberFormatException e) {
-			response.sendError(HttpServletResponse.SC_NOT_FOUND,
-					"This address should be called, with numeric parameter \"cycle_id\" and \"deal_id\"!");
+			PrintWriter pw = response.getWriter();
+			response.setStatus(404);
+			pw.print("{\"error\":\"This address should be called, with numeric parameter 'cycle_id' and 'deal_id'!\"}");
+			pw.flush();
 			return;
 		}
 

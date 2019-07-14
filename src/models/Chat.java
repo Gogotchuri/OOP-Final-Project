@@ -10,7 +10,7 @@ import java.util.*;
 /**
  * Class containing sequence of messages
  */
-public class Chat {
+public class Chat implements Comparable<Chat> {
 
     private int chatID;               // -1
     private Cycle cycle;              // null
@@ -156,6 +156,18 @@ public class Chat {
      * */
     public List<String> getParticipantNames(){
         return ChatManager.getChatUserNames(chatID);
-        //TODO test me
     }
+
+    /**
+     * @param chat - Passed Cycle
+     * @return Comparison of Cycles
+     */
+    @Override public int compareTo(Chat chat) {
+        if (chat.chatID > this.chatID)
+            return -1;
+        if (chat.chatID < this.chatID)
+            return 1;
+        return 0;
+    }
+
 }

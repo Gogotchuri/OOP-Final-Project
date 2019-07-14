@@ -15,9 +15,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.io.PrintWriter;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
+import java.util.*;
 
 public class ChatsController extends Controller {
     private User user;
@@ -37,12 +35,16 @@ public class ChatsController extends Controller {
 
     public void index() throws IOException, ServletException {
         List<Chat> chats = ChatManager.getUserChats(this.user.getUserID());
+        if (chats == null) chats = new ArrayList<>();
+        else {
+            Set<Chat> uniqueCycles = new TreeSet<>(chats);
+            chats = new ArrayList<>(uniqueCycles);
+        }
         request.setAttribute("chats", chats);
         dispatchTo("/pages/user/chats.jsp");
     }
 
     public void show(int chat_ID) throws IOException, ServletException {
-        PrintWriter pw = response.getWriter();
         response.setContentType("application/json");
         response.setCharacterEncoding("UTF-8");
         Gson gson = new Gson();
@@ -50,10 +52,7 @@ public class ChatsController extends Controller {
 
         Chat chat = ChatManager.getChatByID(chat_ID);
         if(chat == null || !chat.isParticipant(user.getUserID())){
-            response.setStatus(404);
-            resp.addProperty("error", "Chat with given id doesn't exist or doesn't belong to you!");
-            pw.print(resp.toString());
-            pw.flush();
+            sendApiError(404,"Chat with given id doesn't exist or doesn't belong to you!");
             return;
         }
         List<Message> messages = chat.getMessages();
@@ -62,47 +61,4 @@ public class ChatsController extends Controller {
         resp.addProperty("chat_id", chat_ID);
         sendJson(200, resp);
     }
-
-
-    //Not important for now, session controller handles message sending
-//    /**
-//     * Return api response, should be called through js as ajax
-//     * @param cycle_id
-//     * @throws IOException
-//     * @throws ServletException
-//     */
-//    public void sendMessage(int cycle_id) throws IOException{
-//        String body = request.getParameter("body");
-//        PrintWriter out = response.getWriter();
-//        response.setContentType("application/json");
-//        response.setCharacterEncoding("UTF-8");
-//
-//        if(body == null || body.isEmpty()){
-//            response.setStatus(422);
-//            out.print("Unprocessable entity! Should contain a body field!");
-//            out.flush();
-//            return;
-//        }
-//
-//        Chat chat = ChatManager.getChatByCycleID(cycle_id);
-//        if(chat == null){
-//            response.setStatus(404);
-//            out.print("No chat found with given cycle id!");
-//            out.flush();
-//            return;
-//        }
-//
-//        Message msg = new Message(chat.getChatID(), user.getUserID(), body);
-//
-//        if(!ChatManager.addMessageToDB(msg)) {
-//            response.setStatus(500);
-//            out.print("Internal Server Error! Message Could't be sent");
-//            out.flush();
-//            return;
-//        }
-//
-//        response.setStatus(201);
-//        out.print("Message sent Successfully");
-//        out.flush();
-//    }
 }
