@@ -12,6 +12,10 @@
         <jsp:param name="title" value="HOME"/>
     </jsp:include>
 
+    <head>
+        <style>.carousel-inner > .carousel-item > img { max-width:100%; height: auto; } </style>
+    </head>
+
 <body>
 
     <%--Navbar--%>
