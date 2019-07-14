@@ -466,3 +466,100 @@ div.messages div.own-message .message-date{
  }
 
 /*!!cycle.jsp column*/
+
+/*user-details.jsp*/
+
+.user-details-wrapper{
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    grid-gap: 10px;
+}
+
+.user-details-wrapper > div{
+    grid-gap: 10px;
+}
+
+.user-details-wrapper > div.details > .image-div > img {
+    max-width: 100px;
+    margin: 5px;
+}
+
+.user-details-wrapper > .deals-column > p.side-text {
+    font-style: italic;
+    font-size: 0.5em;
+}
+
+.user-details-wrapper > .details > .user-info{
+    padding: 5px;
+    color:lightslategray;
+    background-color: powderblue;
+}
+
+.user-details-wrapper > .details > .image-div{
+    min-height: 50%;
+}
+
+.user-details-wrapper> .deals-column{
+    padding: 5px;
+    color:lightcyan;
+    background-color:#4a778a;
+}
+
+.user-details-wrapper > label.completed{
+    color: lightgreen;
+    size: 5px;
+}
+
+.user-details-wrapper > label.ongoing{
+    color:rgb(228, 153, 153);
+    size: 5px;
+}
+
+/*end of user-details*/
+
+/*cycles.jsp*/
+
+.cycles-wrapper{
+    display: grid;
+    grid-template-rows: repeat(4, 1fr);
+    grid-gap: 5px;
+    padding: 10px;
+}
+
+.cycles-wrapper > .cycle-div{
+    color:lightcyan;
+    background-color:#4a778a;
+    padding: 10px;
+}
+
+/*end of cycles.jsp*/
+
+/*deal.jsp*/
+.deal-wrapper{
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr;
+    grid-gap: 5px;
+}
+
+.deal-wrapper > div{
+    height: 200%;
+}
+
+.deal-wrapper > .information-column > p.side-text {
+    font-style: italic;
+    font-size: 14px;
+}
+
+.deal-wrapper > .information-column{
+    padding: 5px;
+    color:lightslategray;
+    background-color:powderblue;
+}
+
+.deal-wrapper > .deal-columns{
+    padding: 5px;
+    color:lightcyan;
+    background-color:#4a778a;
+}
+
+/*end of deal.jsp*/

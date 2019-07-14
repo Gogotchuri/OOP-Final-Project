@@ -22,74 +22,12 @@
         <jsp:param name="title" value="Profile N ${id}"/>
     </jsp:include>
 
-    <style>
-        .wrapper{
-            display: grid;
-            grid-template-columns: 1fr 1fr;
-            grid-gap: 10px;
-        }
-
-        .wrapper > div{
-            grid-gap: 10px;
-        }
-
-        img {
-            max-width: 100px;
-            max-height: 100px;
-        }
-
-        p.side-text {
-            font-style: italic;
-            font-size: 0.5em;
-        }
-
-        .user-info{
-            padding: 5px;
-            color:lightslategray;
-            background-color: powderblue;
-        }
-
-        .image-div{
-            min-height: 50%;
-        }
-
-        .deals-column{
-            padding: 5px;
-            color:lightcyan;
-            background-color:#4a778a;
-        }
-
-        label.completed{
-            color: lightgreen;
-            size: 5px;
-        }
-
-        label.ongoing{
-            color:rgb(228, 153, 153);
-            size: 5px;
-        }
-
-        .button {
-            background-color: powderblue;
-            border: none;
-            color: lightslategray;
-            padding: 15px 32px;
-            text-align: center;
-            text-decoration: none;
-            display: inline-block;
-            font-size: 16px;
-            margin: 4px 2px;
-            cursor: pointer;
-        }
-
-
-    </style>
 <body>
     <%--Navbar--%>
     <jsp:include page="/pages/partials/navbar.jsp"/>
     <%--Page Content--%>
-    <div class="wrapper">
-        <div>
+    <div class="user-details-wrapper">
+        <div class="details">
             <% Image img = user.getProfilePicture(); %>
             <% String imgUrl = "";
             if(img == null){
