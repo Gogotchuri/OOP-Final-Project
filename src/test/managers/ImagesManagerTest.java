@@ -2,7 +2,6 @@
 package test.managers;
 
 import generalManagers.DeleteManager;
-import jdk.jfr.Category;
 import managers.CategoryManager;
 import managers.ImagesManager;
 import managers.ItemManager;

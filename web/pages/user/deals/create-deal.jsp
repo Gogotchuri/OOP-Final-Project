@@ -176,10 +176,6 @@
         http.POST("<%=RoutingConstants.USER_ITEM_CATEGORIES%>", cat)
             .then(data => {
                 let category = JSON.parse(data.category);
-                if(wantedIDs.includes(category.id)){
-                    window.alert("Category is already there!")
-                    return;
-                }
                 addWantedItem(category);
                 wantedIDs.push(category.id);
                 fetchCategories();
