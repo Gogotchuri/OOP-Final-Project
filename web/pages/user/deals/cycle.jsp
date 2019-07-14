@@ -20,7 +20,6 @@
     Deal deal;
     String paramUser = RoutingConstants.PUBLIC_PROFILE;
     String paramDeal = RoutingConstants.SINGLE_DEAL;
-    String paramCycle = RoutingConstants.USER_SINGLE_CYCLE;
 %>
 
 <html>
