@@ -26,22 +26,18 @@
                 <li data-target="#myCarousel" data-slide-to="0" class="active"></li>
                 <li data-target="#myCarousel" data-slide-to="1"></li>
                 <li data-target="#myCarousel" data-slide-to="2"></li>
-                <li data-target="#myCarousel" data-slide-to="3"></li>
             </ol>
 
             <div class="carousel-inner">
 
                 <div class="carousel-item active">
-                    <img src="${pageContext.request.contextPath}/images/a.jpg" alt="a">
+                    <img src="${pageContext.request.contextPath}/images/1.jpg" alt="Image can't be displayed">
                 </div>
                 <div class="carousel-item">
-                    <img src="${pageContext.request.contextPath}/images/b.jpg" alt="b">
+                    <img src="${pageContext.request.contextPath}/images/2.jpg" alt="Image can't be displayed">
                 </div>
                 <div class="carousel-item">
-                    <img src="${pageContext.request.contextPath}/images/c.jpg" alt="c">
-                </div>
-                <div class="carousel-item">
-                    <img src="${pageContext.request.contextPath}/images/d.jpg" alt="d">
+                    <img src="${pageContext.request.contextPath}/images/3.jpg" alt="Image can't be displayed">
                 </div>
 
             </div>
