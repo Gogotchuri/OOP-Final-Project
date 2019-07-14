@@ -74,13 +74,14 @@ public class Deal {
      * @param ownedItems - Owned Items of Deal
      * @param wantedCategories - Wanted Categories of Deal
      * @param title - title of the deal
+     * @param description - description of deal
      */
     public Deal(int ownerID,
                 List<Item> ownedItems,
                 List<ItemCategory> wantedCategories,
-                String title) {
+                String title, String description) {
         this(0, ownerID, ownedItems, wantedCategories, ProcessStatus.Status.WAITING, title,
-             null, new Timestamp(System.currentTimeMillis()));
+             description, new Timestamp(System.currentTimeMillis()));
     }
 
 
