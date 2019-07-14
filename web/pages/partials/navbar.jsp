@@ -29,8 +29,8 @@
                     <a href="${pageContext.request.contextPath}<%= RoutingConstants.REGISTER%>" class="nav-item nav-link">Register</a>
                 <%}%>
             </div>
-            <form class="form-inline ml-auto">
-                <input type="text" class="form-control" placeholder="Search">
+            <form action="${pageContext.request.contextPath}<%=RoutingConstants.DEALS%>" method="GET" class="form-inline ml-auto">
+                <input type="text" class="form-control" name="title" placeholder="Search">
                 <button type="submit" class="btn btn-outline-secondary">Search</button>
             </form>
         </div>

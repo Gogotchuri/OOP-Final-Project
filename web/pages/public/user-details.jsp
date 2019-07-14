@@ -87,8 +87,8 @@
                 } %>
             </ul>
                 <form method="GET" action="${pageContext.request.contextPath}<%=RoutingConstants.DEALS%>">
-                    <button type="submit">See all deals</button>
                     <input name="user_name" type="hidden" value="<%=user.getUsername()%>"/>
+                    <button type="submit">See all deals</button>
                 </form>
 
             <%if(user.getUserID() == thisId){ %>
