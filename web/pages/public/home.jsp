@@ -13,6 +13,7 @@
     </jsp:include>
 
 <body>
+
     <%--Navbar--%>
     <jsp:include page="/pages/partials/navbar.jsp"/>
     <%--Page Content--%>
@@ -31,16 +32,16 @@
             <div class="carousel-inner">
 
                 <div class="carousel-item active">
-                    <img src="../../images/a.jpg" alt="a">
+                    <img src="${pageContext.request.contextPath}/images/a.jpg" alt="a">
                 </div>
                 <div class="carousel-item">
-                    <img src="../../images/b.jpg" alt="b">
+                    <img src="${pageContext.request.contextPath}/images/b.jpg" alt="b">
                 </div>
                 <div class="carousel-item">
-                    <img src="../../images/c.jpg" alt="c">
+                    <img src="${pageContext.request.contextPath}/images/c.jpg" alt="c">
                 </div>
                 <div class="carousel-item">
-                    <img src="../../images/d.jpg" alt="d">
+                    <img src="${pageContext.request.contextPath}/images/d.jpg" alt="d">
                 </div>
 
             </div>
@@ -52,4 +53,7 @@
     <%--Footer--%>
     <jsp:include page="/pages/partials/footer.jsp"/>
 </body>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"></script>
 </html>

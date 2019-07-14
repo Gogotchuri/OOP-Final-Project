@@ -99,8 +99,8 @@ public class User {
             null,
             null,
             null,
-            null,
-            null
+            new Timestamp(System.currentTimeMillis()),
+                new Timestamp(System.currentTimeMillis())
         );
     }
 
