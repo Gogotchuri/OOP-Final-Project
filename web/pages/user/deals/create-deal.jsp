@@ -136,7 +136,9 @@
         console.log(deal);
         http.POST("<%=RoutingConstants.USER_DEALS%>", deal)
             .then(data => {
-                console.log(data);
+                console.log(JSON.parse(data.deal));
+                window.alert(data.message);
+                window.location.href = "${pageContext.request.contextPath}<%=RoutingConstants.USER_DEALS%>";
             })
             .catch(reason => {
                 console.error(reason);

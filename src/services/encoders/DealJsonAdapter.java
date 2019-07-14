@@ -13,17 +13,20 @@ public class DealJsonAdapter extends TypeAdapter<Deal> {
     public void write(JsonWriter jw, Deal deal) throws IOException {
         Gson gson = new Gson();
         jw.beginObject();
-        //TODO implement me
         jw.name("id");
-//        jw.value(deal.getDealID());
-//        jw.name(name);
-//        jw.value();
-//        jw.name();
-//        jw.value();
-//        jw.name();
-//        jw.value();
-//        jw.name();
-//        jw.value();
+        jw.value(deal.getDealID());
+        jw.name("name");
+        jw.value(deal.getTitle());
+        jw.name("description");
+        jw.value(deal.getDescription());
+        jw.name("author_id");
+        jw.value(deal.getOwnerID());
+        jw.name("date");
+        jw.value(deal.getCreateDate().toString());
+        jw.name("wanted-items");
+        jw.value(gson.toJson(deal.getWantedCategories()));
+        jw.name("owned-items");
+        jw.value(gson.toJson(deal.getOwnedItems()));
         jw.endObject();
     }
 

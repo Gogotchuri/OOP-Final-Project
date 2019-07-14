@@ -1,12 +1,15 @@
 
 package models;
 
+import com.google.gson.annotations.JsonAdapter;
 import models.categoryModels.ItemCategory;
+import services.encoders.DealJsonAdapter;
 
 import java.sql.Timestamp;
 import java.util.ArrayList;
 import java.util.List;
 
+@JsonAdapter(DealJsonAdapter.class)
 public class Deal {
 
     /* Comments means default values
@@ -77,7 +80,7 @@ public class Deal {
                 List<ItemCategory> wantedCategories,
                 String title) {
         this(0, ownerID, ownedItems, wantedCategories, ProcessStatus.Status.WAITING, title,
-             null, null);
+             null, new Timestamp(System.currentTimeMillis()));
     }
 
 
@@ -144,6 +147,13 @@ public class Deal {
         return ownedItemCategories;
     }
 
+    public String getDescription() {
+        return description;
+    }
+
+    public void setDescription(String description) {
+        this.description = description;
+    }
 
     /**
      * Sets Deal ID
