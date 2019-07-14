@@ -13,14 +13,14 @@ then
     echo "DROP DATABASE IF EXISTS ${dbName}; CREATE DATABASE ${dbName};" > dropAndCreate.sql
     #Execute cleaning sequence
     echo "Dropping database..."
-    mysql -u root --password=${password} < dropAndCreate.sql
+    sudo mysql -u root --password=${password} < dropAndCreate.sql
     #Clean drop and create script
     rm -f dropAndCreate.sql
 
     echo "Creating Database..."
     for filename in ${currDir}/../migrations/migration_*.sql; do
         echo "Executing migration: ${filename}"
-        mysql -u root --password=${password} ${dbName} < ${filename}
+        sudo mysql -u root --password=${password} ${dbName} < ${filename}
     done
     echo "Database structure created successfully!"
 fi
@@ -32,7 +32,7 @@ then
     echo "Starting to seed"
     for filename in ${currDir}/../seeders/seeders_*/*.sql; do
         echo "Seeding: ${filename}"
-        mysql -u root --password=${password} ${dbName} < ${filename}
+        sudo mysql -u root --password=${password} ${dbName} < ${filename}
     done
     echo "Seeding done!"
 
