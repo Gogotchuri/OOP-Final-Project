@@ -37,6 +37,7 @@
             <% int ownerId = deal.getOwnerID();%>
             <% User user = UserManager.getUserByID(ownerId);%>
             <% if(ownerId == thisId){ %>
+             <%-- TODO: doDelete HERE --%>
              <form method="POST" action="${pageContext.request.contextPath}<%=RoutingConstants.USER_DEAL_CONFIG%>">
                  <button type="submit">Delete deal</button>
              </form>

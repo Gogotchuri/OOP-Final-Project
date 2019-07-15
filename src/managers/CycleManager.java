@@ -224,7 +224,8 @@ public class CycleManager {
             synchronized (CycleManager.class) {
 
                 if (allAccepted(cycleID) &&
-                     StatusManager.getStatusIDByID("cycles", cycleID) == ProcessStatus.Status.WAITING)
+                     StatusManager.getStatusIDByID("cycles", cycleID)
+                      == ProcessStatus.Status.WAITING)
 
                     return updateCycleStatus(cycleID, ProcessStatus.Status.ONGOING.getId()) &&
                             ChatManager.addChatToDB(new Chat(new Cycle(cycleID)));

@@ -1,8 +1,9 @@
 <%--
   Created by IntelliJ IDEA.
-  User: gogotchuri
-  Date: 6/22/19
-  Time: 9:30 AM
+  User: giorgi
+  Date: 7/15/19
+  Time: 2:28 AM
+  To change this template use File | Settings | File Templates.
 --%>
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <html>
@@ -17,7 +18,7 @@
 <%--Page Content--%>
 <div>
     HERE goes content!
-    USER DEALS
+    USER DEAL
 </div>
 <%--Footer--%>
 <jsp:include page="/pages/partials/footer.jsp"/>

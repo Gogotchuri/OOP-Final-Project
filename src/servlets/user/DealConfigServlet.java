@@ -15,13 +15,23 @@ import java.io.IOException;
 @WebServlet(urlPatterns = {RoutingConstants.USER_DEAL_CONFIG})
 public class DealConfigServlet extends HttpServlet {
 
-	//Checking if user is authenticated before entering any method
-	@Override
-	protected void service(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-		if((new AuthenticatedUser(req,resp)).unauthenticated()) return;
-		super.service(req, resp);
-	}
 	/**
+	 * Checking if user is authenticated before entering any method.
+	 *
+	 * @param request - Request Object for getting user request
+	 * @param response - Response Object for sending back response
+	 * @throws ServletException - If some Servlet Exception happens
+	 * @throws IOException - If Some IOException happens
+	 */
+	@Override
+	protected void service(HttpServletRequest request, HttpServletResponse response)
+			throws ServletException, IOException {
+		if ((new AuthenticatedUser(request,response)).unauthenticated())
+			return;
+		super.service(request, response);
+	}
+
+	/*
      returned html main components:
      1) filled fields with information of deal, for updating.
      2) link to the user.DealConfigServlet (PUT) (submit deal changes button)
@@ -46,7 +56,7 @@ public class DealConfigServlet extends HttpServlet {
 	}
 */
 
-	/**
+	/*
 	 Checks whenever entered data satisfies deal editing rules.
 	 If satisfies, edits deal information.
 
@@ -75,13 +85,18 @@ public class DealConfigServlet extends HttpServlet {
 */
 
 	/**
-	 Deletes deal.
-
-	 returned html:
-	 if deleted successfully:
-	 	dispatch to front.Deals (GET) (only user deals)
-	 else:
-	 	dispatch to front.Deal (GET) (stays on deal statement)
+	 * Deletes deal.
+	 *
+	 * returned html:
+	 * if deleted successfully:
+	 * 	 dispatch to front.Deals (GET) (only user deals)
+	 * else:
+	 *	 dispatch to front.Deal (GET) (stays on deal statement)
+	 *
+	 * @param request - Request Object for getting user request
+	 * @param response - Response Object for sending back response
+	 * @throws ServletException - If some Servlet Exception happens
+	 * @throws IOException - If Some IOException happens
 	 */
 	@Override
 	protected void doDelete(HttpServletRequest request,

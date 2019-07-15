@@ -17,21 +17,23 @@ public class DealCyclesFinder extends Thread {
     private static final int CYCLE_MAX_LENGTH = 4;
 
     /**
-     Deal which should be checked
-     for new cycles.
+     * Deal which should be checked
+     * for new cycles.
      */
     private Deal deal;
 
+
     /**
-     Protects us from duplicating
-     cycles in Data Base.
+     * Protects us from duplicating
+     * cycles in Data Base.
      */
     private static Lock lock = new ReentrantLock();
 
+
     /**
-     Private helper structure
-     for linking deals
-     to save cycle property
+     * Private helper structure
+     * for linking deals
+     * to save cycle property
      */
     private static class LinkedDeal {
         Deal deal;
@@ -42,18 +44,21 @@ public class DealCyclesFinder extends Thread {
         }
     }
 
+
     /**
-     Main constructor,
-     for getting parameters,
-     before starting run() method.
+     * Main constructor,
+     * for getting parameters,
+     * before starting run() method.
+     * @param deal - Deal which's Cycles we are going to insert
      */
     public DealCyclesFinder(Deal deal) {
         this.deal = deal;
     }
 
+
     /**
-     Updates, creates new cycles
-     associated with passed deal.
+     * Updates, creates new cycles
+     * associated with passed deal.
      */
     @Override public void run() {
 
@@ -101,10 +106,12 @@ public class DealCyclesFinder extends Thread {
         }
     }
 
+
     /**
-     Returns true if and only if:
-     Passed deal != this.deal and
-     deal.wantedItemCategories == this.deal.ownedItemCategories
+     * @param deal - Deal Object
+     * @return true if and only if:
+     *         Passed deal != this.deal and
+     *         deal.wantedItemCategories == this.deal.ownedItemCategories
      */
     private boolean dealMakesCycle(Deal deal) {
 
@@ -121,8 +128,10 @@ public class DealCyclesFinder extends Thread {
         return CategoryManager.listsEqualsIgnoreOrder(l1, l2);
     }
 
+
     /**
-     Returns cycle made with this.deal
+     * @param linkedDeal - LinkedDeal Object
+     * @return Cycle made with this.deal
      */
     private Cycle getCycle(LinkedDeal linkedDeal) {
         List<Deal> cycleDeals = new ArrayList<>(CYCLE_MAX_LENGTH);
@@ -135,10 +144,13 @@ public class DealCyclesFinder extends Thread {
         return new Cycle(cycleDeals);
     }
 
+
     /**
-     Returns false iff:
-     Path from startLinkedDeal before null
-     does not contains equal Deal of passed 'dea;'
+     * @param startLinkedDeal - LinkedDeal Object
+     * @param deal - Deal Object
+     * @return false iff:
+     *         Path from startLinkedDeal before null
+     *         does not contains equal Deal of passed 'dea;'
      */
     private boolean pathContainsDeal(LinkedDeal startLinkedDeal, Deal deal) {
         while (startLinkedDeal != null) {
@@ -148,4 +160,5 @@ public class DealCyclesFinder extends Thread {
         }
         return false;
     }
+
 }
