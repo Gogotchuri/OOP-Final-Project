@@ -1,10 +1,11 @@
 package controllers.user;
 
+import com.google.gson.Gson;
+import com.google.gson.JsonObject;
 import controllers.Controller;
 import managers.UserManager;
 import models.User;
 import services.RequestValidator;
-import servlets.RoutingConstants;
 
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
@@ -34,7 +35,12 @@ public class UserController extends Controller {
         dispatchTo("/pages/user/edit-profile.jsp");
     }
 
+    /**
+     * Updates local user information
+     * returns response as a json object
+     */
     public void update() throws ServletException, IOException {
+        Gson gson = new Gson();
         //Validate and update
         Map<String, List<String>> rules = new HashMap<>();
         //Validation rules
@@ -43,12 +49,12 @@ public class UserController extends Controller {
         rules.put("phone_number", Arrays.asList("type:number", "min_len:9", "max_len:32"));
         RequestValidator validator = new RequestValidator(request, rules);
         if(validator.failed()){
-            request.setAttribute("errors", validator.getErrors());
-            editForm();
+            JsonObject jo = new JsonObject();
+            jo.addProperty("errors", gson.toJson(validator.getErrors()));
+            sendJson(422, jo);
             return;
         }
 
-        List<String> errors = new ArrayList<>();
         String newPassword = request.getParameter("password");
 
         if(newPassword != null && !newPassword.isEmpty())
@@ -57,12 +63,16 @@ public class UserController extends Controller {
         String newEmail = request.getParameter("email");
         if(newEmail != null && !newEmail.isEmpty() &&
                 !user.getEmail().equalsIgnoreCase(newEmail) && UserManager.getUserByEmail(newEmail) != null){
+            List<String> errors = new ArrayList<>();
             errors.add("Email is already taken");
-            request.setAttribute("errors", errors);
-            editForm();
+            JsonObject jo = new JsonObject();
+            jo.addProperty("errors", gson.toJson(errors));
+            sendJson(422, jo);
             return;
         }
-        user.setEmail(newEmail);
+
+        if(newEmail != null && !newEmail.isEmpty())
+            user.setEmail(newEmail);
 
         String firstName = request.getParameter("first_name");
         String lastName = request.getParameter("last_name");
@@ -77,12 +87,13 @@ public class UserController extends Controller {
 
 
         if(!UserManager.updateExistingUser(user)){
-            sendError(500, "Something went wrong during user update!");
+            sendApiError(500, "Something went wrong during user update!");
             return;
         }
-
-        redirectTo(RoutingConstants.PUBLIC_PROFILE + "?id=" + user.getUserID());
-
+        JsonObject jo = new JsonObject();
+        jo.addProperty("message", "User parameters updated");
+        jo.addProperty("user", gson.toJson(user));
+        sendJson(201, jo);
     }
 
 

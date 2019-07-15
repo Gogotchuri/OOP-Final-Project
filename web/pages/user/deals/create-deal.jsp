@@ -117,9 +117,27 @@
 <script src="${pageContext.request.contextPath}/assets/js/helpers.js"></script>
 <script src="${pageContext.request.contextPath}/assets/js/Http.service.js"></script>
 <script>
+    let base64_image = "";
     let wantedIDs = [];
     let ownedIDs = [];
     fetchCategories();
+
+    //Add listener to image change
+    document.getElementById("itemImage").addEventListener("change", getEncodedImage);
+
+    /**
+     * After user uploaded image, converts it into base64
+     * and stores it in the variable base64_image
+     * */
+    function getEncodedImage() {
+        //Check file present
+        if(!this.files || !this.files[0]) return;
+        console.log("bla");
+        let fileReader = new FileReader();
+        fileReader.onload = e => base64_image = e.target.result;
+        fileReader.readAsDataURL(this.files[0]);
+    }
+
 
     function saveDeal(){
         let deal = {};
@@ -290,30 +308,28 @@
         let descCol = row.insertCell(3);
         let actionCol = row.insertCell(4);
         idCol.innerHTML = item.id;
-        imageCol.innerHTML = '<img src="' +item.image_url + '" style="width:11vw;">';
+        imageCol.innerHTML = '<img src="${pageContext.request.contextPath}' +item.image_url + '" style="width:11vw;">';
         nameCol.innerHTML = item.name;
         descCol.innerHTML = item.description;
         actionCol.innerHTML = '<button style="color:red" onclick="deleteItem('+item.id+')">DELETE</button>';
     }
 
-    let addItem = () => {
+    addItem = async () => {
         let item = getItemData();
         if(item == null) return;
 
-        http.POST("<%=RoutingConstants.USER_ITEMS%>", item)
-            .then(data => {
-                console.log(data);
-                let item = JSON.parse(data.item);
-                displayItem(item);
-                ownedIDs.push(item.id);
-                fetchCategories();//Refresh categories
-            })
-            .catch(reason => {
-                if(reason.error != null)
-                    console.error(reason.error);
-                if(reason.errors != null)
-                    console.error(JSON.parse(reason.errors));
-            });
+        try{
+            let itemReq = await http.POST("<%=RoutingConstants.USER_ITEMS%>", item);
+            let itemObj = JSON.parse(itemReq.item);
+            let imageReq = await httpJsonEncoded.POST("<%=RoutingConstants.USER_ITEM_IMAGES%>?item_id="+itemObj.id, {"base64_image":base64_image});
+            itemObj.image_url = imageReq.image_url;
+            displayItem(itemObj);
+            ownedIDs.push(itemObj.id);
+            fetchCategories();//Refresh categories
+
+        }catch (reason) {
+            console.error(reason);
+        }
     }
 </script>
 </html>

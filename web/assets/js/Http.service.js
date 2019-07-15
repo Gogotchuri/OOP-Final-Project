@@ -5,8 +5,8 @@ class HTTP{
     constructor(base_url){
         this.base_url = base_url;
         this.headers = {
-            'Content-Type': 'application/x-www-form-urlencoded;charset=UTF-8',
-            'Accept' : "application/json"
+            'content-type': 'application/x-www-form-urlencoded;charset=UTF-8',
+            'accept' : "application/json"
         };
         this.options = {
             mode: "cors",
@@ -15,43 +15,46 @@ class HTTP{
     }
 
     setHeader(header, value){
-        this.headers[header] = value;
+        header = header.toLowerCase();
+        this.headers[header] = value.toLowerCase();
     }
 
     setOption(option, value){
         this.options[option] = value;
     }
 
+    /**
+     * Given a type, set content type for requests
+     * */
+    setContentType(type=null){
+        if(type == null) type = 'x-www-form-urlencoded;charset=UTF-8';
+        this.setHeader("content-type", "application/"+type);
+    }
+
     POST(uri, baggage = null){
         this.options["method"] ="POST";
-        if(baggage)
-            uri += HTTP.encodeForUrl(baggage);
-
-        return this.makeRequest(uri);
+        return this.makeRequest(uri, baggage);
     }
 
     GET(uri, baggage = null){
         this.options["method"] ="GET";
-        if(baggage)
-            uri += HTTP.encodeForUrl(baggage);
-        return this.makeRequest(uri);
+        return this.makeRequest(uri, baggage);
     }
 
     PUT(uri, baggage = null){
         this.options["method"] ="PUT";
-        if(baggage)
-            uri += HTTP.encodeForUrl(baggage);
-        return this.makeRequest(uri);
+        return this.makeRequest(uri, baggage);
     }
 
     DELETE(uri, baggage = null){
         this.options["method"] ="DELETE";
-        if(baggage)
-            uri += HTTP.encodeForUrl(baggage);
-        return this.makeRequest(uri);
+        return this.makeRequest(uri, baggage);
     }
 
-    async makeRequest(uri){
+    async makeRequest(uri, baggage){
+        if(baggage)
+            uri = this.setBaggage(uri, baggage);
+
         return new Promise(async (resolve, reject) => {
             let resp = await fetch(this.base_url + uri, this.options);
             let status = resp.status;
@@ -65,10 +68,21 @@ class HTTP{
         });
     }
 
+    setBaggage(uri, baggage){
+        if(this.headers['content-type'] === "application/json")
+            this.options["body"] = JSON.stringify(baggage);
+        else
+            uri += HTTP.encodeForUrl(baggage);
+        return uri;
+    }
+
     static encodeForUrl(baggage) {
         let urlEncoded = Object.keys(baggage).map(key => encodeURIComponent(key) + '=' + encodeURIComponent(baggage[key])).join("&");
         return "?" + urlEncoded;
     }
 }
 
-const http = new HTTP("http://localhost:8080/OOP_Final_Project_war_exploded");
+const http = new HTTP("http://localhost:8080/OOP_Final_Project");
+
+const httpJsonEncoded = new HTTP("http://localhost:8080/OOP_Final_Project");
+httpJsonEncoded.setContentType("json");

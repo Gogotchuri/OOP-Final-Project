@@ -9,6 +9,10 @@
 .idea/**/dictionaries
 .idea/**/shelf
 
+#Storage should't be uploaded
+web/storage/images/*.jpg
+./web/storage/images/*.png
+
 # Generated files
 .idea/**/contentModel.xml
 

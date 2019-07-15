@@ -1,11 +1,15 @@
 
 package models;
 
+import com.google.gson.annotations.JsonAdapter;
+import services.encoders.UserJsonAdapter;
+
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 import java.sql.Timestamp;
 import java.util.List;
 
+@JsonAdapter(UserJsonAdapter.class)
 public class User {
 
 
