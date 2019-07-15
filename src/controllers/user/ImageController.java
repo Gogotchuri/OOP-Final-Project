@@ -2,6 +2,7 @@ package controllers.user;
 
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
+import config.ConfigConstants;
 import controllers.Controller;
 import managers.ImagesManager;
 import managers.ItemManager;
@@ -20,9 +21,7 @@ import java.io.IOException;
 import java.sql.Timestamp;
 
 public class ImageController extends Controller {
-    //TODO might need to think of something else!
-    private static final String GLOBAL_PATH_TO_WEB = "/home/gogotchuri/Workspace/OOP/OOP-Final-Project/web";
-    private User user;
+   private User user;
     /**
      * Creates a controller, usually called from servlet, which is also
      * passed by parameter. servlet method passes taken request and response.
@@ -91,11 +90,10 @@ public class ImageController extends Controller {
         filename = User.encryptPassword(filename);
         result_path = "/storage/images/"+filename+".png";
 
-        //TODO should come up with something else
         String pathToOut = request.getServletContext().getRealPath("/");
         try{
             //storing on the real location
-            File output1 = new File(GLOBAL_PATH_TO_WEB+result_path);
+            File output1 = new File(ConfigConstants.GLOBAL_PATH_TO_STORAGE +result_path);
             ImageIO.write(image, "png", output1);
             //Saving in the current resource folder
             File output2 = new File(pathToOut+result_path);

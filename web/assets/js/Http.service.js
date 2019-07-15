@@ -82,7 +82,7 @@ class HTTP{
     }
 }
 
-const http = new HTTP("http://localhost:8080/OOP_Final_Project");
+const http = new HTTP(SERVER_ADDRESS);
 
-const httpJsonEncoded = new HTTP("http://localhost:8080/OOP_Final_Project");
+const httpJsonEncoded = new HTTP(SERVER_ADDRESS);
 httpJsonEncoded.setContentType("json");
