@@ -105,6 +105,7 @@
     };
 
 
+    //Callback to change chat
     let changeChat = (chat_id) => {
         if(chatSocket != null) chatSocket.close(); //Close connection to old chat
         chatSocket = new ChatSocket(getChatEndpointAddr(chat_id), handleRawMessage);

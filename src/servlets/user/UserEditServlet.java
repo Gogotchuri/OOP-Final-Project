@@ -65,7 +65,7 @@ public class UserEditServlet extends HttpServlet {
 	 * @throws IOException - If Some IOException happens
 	 */
 	@Override
-	protected void doPost(HttpServletRequest request,
+	protected void doPut(HttpServletRequest request,
 						   HttpServletResponse response)
 		throws ServletException, IOException {
 		(new UserController(request, response, this)).update();

@@ -41,5 +41,11 @@ public abstract class RoutingConstants {
 
     public static final String USER_ITEM_CATEGORIES = "/user/items/categories";
 
+    public static final String USER_ITEM_IMAGES = "/user/items/images";
+
+    public static final String USER_IMAGES = "/user/profile/images";
+
+
+
 
 }

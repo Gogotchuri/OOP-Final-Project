@@ -2,6 +2,8 @@ package managers;
 
 import java.util.List;
 
+//Came up with the idea little later in the project, other manager will be refactored
+//As singletons implementing Manager interface with reach model
 /**
  * Generic manager class, used for manipulating database
  * T optimally should be model, representing an entry in the database

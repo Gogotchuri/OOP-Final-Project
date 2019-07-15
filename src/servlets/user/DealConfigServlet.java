@@ -12,7 +12,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 
-@WebServlet(urlPatterns = {RoutingConstants.USER_DEAL_CONFIG})
+@WebServlet(urlPatterns={RoutingConstants.USER_DEAL_CONFIG})
 public class DealConfigServlet extends HttpServlet {
 
 	/**
@@ -26,9 +26,38 @@ public class DealConfigServlet extends HttpServlet {
 	@Override
 	protected void service(HttpServletRequest request, HttpServletResponse response)
 			throws ServletException, IOException {
-		if ((new AuthenticatedUser(request,response)).unauthenticated())
-			return;
+		if ((new AuthenticatedUser(request,response)).unauthenticated()) return;
 		super.service(request, response);
+	}
+
+	/**
+	 * Deletes deal.
+	 *
+	 * returned html:
+	 * if deleted successfully:
+	 * 	 dispatch to front.Deals (GET) (only user deals)
+	 * else:
+	 *	 dispatch to front.Deal (GET) (stays on deal statement)
+	 *
+	 * @param request - Request Object for getting user request (with parameter id)
+	 * @param response - Response Object for sending back response
+	 * @throws ServletException - If some Servlet Exception happens
+	 * @throws IOException - If Some IOException happens
+	 */
+	@Override
+	protected void doDelete(HttpServletRequest request,
+							HttpServletResponse response)
+			throws ServletException, IOException {
+
+		int id;
+		try { id = Integer.parseInt(request.getParameter("id")); }
+		catch (NumberFormatException e) {
+			response.setStatus(HttpServletResponse.SC_NOT_FOUND);
+			response.getWriter().print("This address should be called, with numeric parameter \"id\"!");
+			response.getWriter().flush();
+			return;
+		}
+		(new DealsController(request, response, this)).destroy(id);
 	}
 
 	/*
@@ -84,32 +113,5 @@ public class DealConfigServlet extends HttpServlet {
 	}
 */
 
-	/**
-	 * Deletes deal.
-	 *
-	 * returned html:
-	 * if deleted successfully:
-	 * 	 dispatch to front.Deals (GET) (only user deals)
-	 * else:
-	 *	 dispatch to front.Deal (GET) (stays on deal statement)
-	 *
-	 * @param request - Request Object for getting user request
-	 * @param response - Response Object for sending back response
-	 * @throws ServletException - If some Servlet Exception happens
-	 * @throws IOException - If Some IOException happens
-	 */
-	@Override
-	protected void doDelete(HttpServletRequest request,
-						  	 HttpServletResponse response)
-		throws ServletException, IOException {
 
-		int dealID;
-		try { dealID = Integer.parseInt(request.getParameter("id")); }
-		catch (NumberFormatException e) {
-			response.sendError(HttpServletResponse.SC_NOT_FOUND,
-					"This address should be called, with numeric parameter \"id\"!");
-			return;
-		}
-		(new DealsController(request, response, this)).destroy(dealID);
-	}
 }

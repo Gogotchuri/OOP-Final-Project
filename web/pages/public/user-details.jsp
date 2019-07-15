@@ -29,6 +29,7 @@
     <div class="user-details-wrapper">
         <div class="details">
             <% Image img = user.getProfilePicture(); %>
+<%--            TODO doesn't display image correctly--%>
             <% String imgUrl = "";
             if(img == null){
                 imgUrl = "https://zenbooks.ca/wp-content/uploads/2017/09/placeholder-female-square.png";

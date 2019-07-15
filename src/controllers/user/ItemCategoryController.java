@@ -114,21 +114,7 @@ public class ItemCategoryController extends Controller implements ApiResourceCon
     /**Removes wanted category from the item*/
     @Override
     public void destroy(int id) throws IOException {
-        int deal_id;
-        try{
-            deal_id = Integer.parseInt(request.getParameter("deal_id"));
-        }catch (NumberFormatException e){
-            sendApiError(404, "This path should be called with parameter 'deal_id'");
-            return;
-        }
-
-        if(!checkDealOwnership(deal_id)) return;
-
-        Deal deal = DealsManager.getDealByDealID(deal_id);
-        List<ItemCategory> wantedList = deal.getWantedCategories();
-        if(wantedList != null){
-            int bla = -69; //TODO if deal contains wanted item/category delete from it, need method in DealController
-        }
+        //NOT IMPLEMENTED YET
     }
 
     private boolean checkDealOwnership(int deal_id) throws IOException {

@@ -9,7 +9,7 @@ public class RequestValidator {
     //RULES!
     //Required rule when it's true, means: parameter must be included
     private static final String REQUIRED_REGEX = "required";
-    private static final String TYPE_REGEX = "type:(text|number|email|url|boolean|integer|double)";
+    private static final String TYPE_REGEX = "type:(text|number|email|url|boolean|integer|double|array)";
     //Number size if passed while not numeric, this is ignored!
     private static final String MAX_SIZE_REGEX = "max_num:-?[0-9]+";
     private static final String MIN_SIZE_REGEX = "min_num:-?[0-9]+";
@@ -29,7 +29,7 @@ public class RequestValidator {
     private static final String BOOLEAN_REGEX = "^(true|false)";
     private static final String INTEGER_REGEX = "-?[0-9]+";
     private static final String DOUBLE_REGEX = "-?[0-9]+.?[0-9]+";
-
+    private static final String ARRAY_REGEX = ".[.*?]";
     private  Map<String, List<String>> rules;
     private HttpServletRequest request;
 
@@ -173,7 +173,15 @@ public class RequestValidator {
             case "email":
                 checkEmail(key, param);
                 break;
+            case "array":
+                checkArray(key, param);
         }
+    }
+
+    private void checkArray(String key, String array) {
+        if(!array.matches(ARRAY_REGEX))
+            return; //TODO
+
     }
 
     /**

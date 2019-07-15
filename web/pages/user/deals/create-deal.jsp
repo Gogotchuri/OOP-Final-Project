@@ -4,7 +4,7 @@
   Date: 6/22/19
   Time: 9:36 AM
 --%>
-<%@ page contentType="text/html;charset=UTF-8" language="java" %>
+<%@ page contentType="text/html;charset=UTF-8" %>
 <html>
 <%--HEAD--%>
 <jsp:include page="/pages/partials/head.jsp">
@@ -117,15 +117,39 @@
 <script src="${pageContext.request.contextPath}/assets/js/helpers.js"></script>
 <script src="${pageContext.request.contextPath}/assets/js/Http.service.js"></script>
 <script>
+    let base64_image = "";
     let wantedIDs = [];
     let ownedIDs = [];
     fetchCategories();
 
+    //Add listener to image change
+    document.getElementById("itemImage").addEventListener("change", getEncodedImage);
+
+    /**
+     * After user uploaded image, converts it into base64
+     * and stores it in the variable base64_image
+     * */
+    function getEncodedImage() {
+        //Check file present
+        if(!this.files || !this.files[0]) return;
+        let fileReader = new FileReader();
+        fileReader.onload = e => base64_image = e.target.result;
+        fileReader.readAsDataURL(this.files[0]);
+    }
+
+
+    /**
+     * Gets and validates field information
+     * Then posts deal to the server
+     */
     function saveDeal(){
         let deal = {};
         deal["name"] = document.getElementById("name").value;
         deal["description"] = document.getElementById("description").value;
-        //TODO test for empty strings
+        if(deal["name"] === "" || deal["description"] === ""){
+            window.alert("Please fill name and description fields!");
+            return;
+        }
         deal["wanted_ids"] = JSON.stringify(wantedIDs);
         deal["owned_ids"] = JSON.stringify(ownedIDs);
         if(wantedIDs.length === 0 || ownedIDs.length === 0){
@@ -138,17 +162,26 @@
             .then(data => {
                 console.log(JSON.parse(data.deal));
                 window.alert(data.message);
-                window.location.href = "${pageContext.request.contextPath}<%=RoutingConstants.USER_DEALS%>";
+                window.location.href = "${pageContext.request.contextPath}<%=RoutingConstants.DEALS%>";
             })
             .catch(reason => {
                 console.error(reason);
             })
     }
+
+    /**
+     * Deletes category from frontend
+     * @param id category id to delete
+     * */
     function deleteCategory(id) {
         wantedIDs = wantedIDs.filter(e => e !== id);
         document.getElementById("wanted-item-"+id).remove();
     }
 
+    /**
+     * Given a item, displays it as a wanted item
+     * @param wanted item js object
+     * */
     function addWantedItem(wanted) {
         let itemsTable = document.getElementById("wanted-items");
         let row = itemsTable.insertRow();
@@ -163,9 +196,11 @@
         manufCol.innerHTML = JSON.parse(wanted.manufacturer).name;
         modelCol.innerHTML = JSON.parse(wanted.model).name;
         actionCol.innerHTML = '<button style="color:red" onclick="deleteCategory('+wanted.id+')">DELETE</button>';
-
     }
 
+    /**
+     * Validates field and then posts category to the server
+     * */
     function addCategory() {
         let cat = {};
         cat["type_name"] = document.getElementById("type").value;
@@ -183,15 +218,23 @@
             .catch(reason => {
                 console.error(reason);
             })
-
     }
 
+    /**
+     * Given a boolean to determine place of insertion and the model
+     * Adds model entries to model select
+     * @param inItems is in items or in categories
+     * @param models models to display
+     * */
     function displayModels(inItems, models) {
         let modelOptions = inItems ? document.getElementById("item-model") : document.getElementById("model");
         modelOptions.innerHTML = "";
         models.forEach(m => modelOptions.innerHTML += '<option value="'+m.name+'">'+m.name+'</option> \n');
     }
 
+    /**
+     * Updates models base on selected type and manufacturer
+     * */
     function updateModels(inItems=true){
         let typeName = "";
         let manufacturerName = "";
@@ -213,6 +256,9 @@
 
     }
 
+    /**
+     * Displays type options
+     * */
     function displayTypes(types) {
         let inItemLs = document.getElementById("item-type");
         let inCatLs = document.getElementById("type");
@@ -224,6 +270,9 @@
         });
     }
 
+    /**
+     * Displays manufacturer options
+     * */
     function displayManufacturers(manufacturers) {
         let inItemLs = document.getElementById("item-manufacturer");
         let inCatLs = document.getElementById("manufacturer");
@@ -236,6 +285,9 @@
     }
 
 
+    /**
+     * Getting types and manufacturers from the database
+     * */
     function fetchCategories(){
         http.GET("<%=RoutingConstants.ITEM_CATEGORIES%>")
             .then(data => {
@@ -254,7 +306,13 @@
             })
     }
 
+    /**
+     * Deletes item from the frontend
+     * */
     function deleteItem(id){
+        http.DELETE("<%=RoutingConstants.USER_SINGLE_ITEM%>?id="+id)
+            .then(data => console.log(data))
+            .catch(reason => console.error(reason));
         ownedIDs = ownedIDs.filter(e => e !== id);
         document.getElementById("deal-item-"+id).remove();
     }
@@ -290,30 +348,31 @@
         let descCol = row.insertCell(3);
         let actionCol = row.insertCell(4);
         idCol.innerHTML = item.id;
-        imageCol.innerHTML = '<img src="' +item.image_url + '" style="width:11vw;">';
+        imageCol.innerHTML = '<img src="${pageContext.request.contextPath}' +item.image_url + '" style="width:11vw;">';
         nameCol.innerHTML = item.name;
         descCol.innerHTML = item.description;
         actionCol.innerHTML = '<button style="color:red" onclick="deleteItem('+item.id+')">DELETE</button>';
     }
 
-    let addItem = () => {
+    addItem = async () => {
         let item = getItemData();
         if(item == null) return;
+        if(base64_image === ""){
+            window.alert("Please select an image first!");
+            return;
+        }
+        try{
+            let itemReq = await http.POST("<%=RoutingConstants.USER_ITEMS%>", item);
+            let itemObj = JSON.parse(itemReq.item);
+            let imageReq = await httpJsonEncoded.POST("<%=RoutingConstants.USER_ITEM_IMAGES%>?item_id="+itemObj.id, {"base64_image":base64_image});
+            itemObj.image_url = imageReq.image_url;
+            displayItem(itemObj);
+            ownedIDs.push(itemObj.id);
+            fetchCategories();//Refresh categories
 
-        http.POST("<%=RoutingConstants.USER_ITEMS%>", item)
-            .then(data => {
-                console.log(data);
-                let item = JSON.parse(data.item);
-                displayItem(item);
-                ownedIDs.push(item.id);
-                fetchCategories();//Refresh categories
-            })
-            .catch(reason => {
-                if(reason.error != null)
-                    console.error(reason.error);
-                if(reason.errors != null)
-                    console.error(JSON.parse(reason.errors));
-            });
+        }catch (reason) {
+            console.error(reason);
+        }
     }
 </script>
 </html>
