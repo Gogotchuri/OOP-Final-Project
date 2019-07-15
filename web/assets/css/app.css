@@ -22,7 +22,7 @@
     margin-top: 1.5em;
     grid-template-columns: repeat(4, 1fr);
     grid-auto-rows: auto;
-    grid-gap: 1em; 
+    grid-gap: 1em;
     margin-inline: 8%;
 }
 
@@ -53,7 +53,7 @@
 }
 
 .pagination > a {
-    color: #0a0023;
+    color: #5680E9;
     padding: 5px 10px;
     text-decoration: none !important;
     transition: background-color .4s;
@@ -62,13 +62,13 @@
 
 .pagination > a.selected {
     color: rgb(240, 219, 213);
-    background-color: rgb(74, 149, 189);
+    background-color: rgb(150, 187, 207);
     cursor: context-menu;
 }
 
 .pagination > a.unselectable {
     cursor: context-menu;
-    background: #838383;
+    background-color: rgb(150, 187, 207);
 }
 
 .pagination a:hover:not(.selected .unselectable) {
@@ -320,26 +320,26 @@ div.messages div.own-message .message-date{
     grid-template-rows: 1fr 1fr;
     height: 89vh;
     color: rgb(240, 219, 213);
-    background-color: rgb(103, 171, 207);
+    background-color: rgb(150, 187, 207);
 }
 
 .dealFormContainer div{
     color: rgb(240, 219, 213);
-    background-color: rgb(103, 171, 207);
+    background-color: rgb(150, 187, 207);
 }
 .dealFormContainer
 > div.dealFields{
     color: rgb(240, 219, 213);
-    background-color: rgb(103, 171, 207);
+    background-color: rgb(150, 187, 207);
 }
 
 .dealFormContainer
- > div.itemContainer {
+> div.itemContainer {
     border-bottom: 1px solid;
     display: grid;
     grid-template-columns: 1fr 1fr;
     color: rgb(240, 219, 213);
-    background-color: rgb(103, 171, 207);
+    background-color: rgb(150, 187, 207);
 }
 
 .dealFormContainer
@@ -355,14 +355,14 @@ div.messages div.own-message .message-date{
     display: grid;
     grid-template-columns: 1fr 1fr;
     color: rgb(240, 219, 213);
-    background-color: rgb(103, 171, 207);
+    background-color: rgb(150, 187, 207);
 }
 
 .dealFormContainer
 > div.itemContainer
 > div.dealItems table{
     color: rgb(240, 219, 213);
-    background-color: rgb(103, 171, 207);
+    background-color: rgb(150, 187, 207);
     height: 80%;
     width: 90%;
 }
@@ -372,7 +372,7 @@ div.messages div.own-message .message-date{
 > div.dealItems
 > div.tableWrapper{
     color: rgb(240, 219, 213);
-    background-color: rgb(103, 171, 207);
+    background-color: rgb(150, 187, 207);
     overflow-y: auto;
     height: 40vh;
 }
@@ -381,7 +381,7 @@ div.messages div.own-message .message-date{
 .dealFormContainer
 > div.lowerContainer {
     color: rgb(240, 219, 213);
-    background-color: rgb(103, 171, 207);
+    background-color: rgb(150, 187, 207);
     display: grid;
     grid-template-columns: 1fr 1fr 1fr;
 }
@@ -390,7 +390,7 @@ div.messages div.own-message .message-date{
 > div.lowerContainer
 > div.wantedCategories {
     color: rgb(240, 219, 213);
-    background-color: rgb(103, 171, 207);
+    background-color: rgb(150, 187, 207);
 }
 
 .dealFormContainer
@@ -400,7 +400,7 @@ div.messages div.own-message .message-date{
     border-top: 0;
     overflow-y: auto;
     color: rgb(240, 219, 213);
-    background-color: rgb(103, 171, 207);
+    background-color: rgb(150, 187, 207);
 }
 
 .dealFormContainer
@@ -432,7 +432,7 @@ div.messages div.own-message .message-date{
 > div.cycles > div.deal{
     display: grid;
     grid-template-columns: 1fr 1fr;
-    background: rgb(240, 219, 213);
+    background: rgba(232, 192, 189, 0.73);
     margin-inline: 10%;
     width: 80%;
     height: 40%;
@@ -471,14 +471,14 @@ div.messages div.own-message .message-date{
 }
 
 .cycleContainer
- > div.cycles > div.deal > div.info .link{
+> div.cycles > div.deal > div.info .link{
     margin: 0;
     border: 0;
     background: none;
     overflow: visible;
     color: #5680E9;
     cursor: pointer;
- }
+}
 
 /*!!cycle.jsp column*/
 
@@ -517,7 +517,7 @@ div.messages div.own-message .message-date{
 .user-details-wrapper> .deals-column{
     padding: 5px;
     color: rgb(123, 88, 199);
-    background-color: rgb(153, 242, 214);
+    background-color: #84CEEB;
 }
 
 
@@ -543,8 +543,8 @@ div.messages div.own-message .message-date{
 }
 
 .cycles-wrapper > .cycle-div{
-    color: rgb(240, 219, 213);
-    background-color: rgb(74, 149, 189);
+    color: rgb(123, 88, 199);
+    background-color: #84CEEB;
     padding: 10px;
 }
 
@@ -575,7 +575,7 @@ div.messages div.own-message .message-date{
 .deal-wrapper > .deal-columns{
     padding: 5px;
     color: rgb(123, 88, 199);
-    background-color: rgb(153, 242, 214);
+    background-color: #84CEEB;
 }
 
 /*end of deal.jsp*/
