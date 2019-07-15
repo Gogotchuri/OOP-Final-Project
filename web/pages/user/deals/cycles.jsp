@@ -46,9 +46,8 @@
                 <p>date_created</p>--%>
 
                 <form method="GET" action="${pageContext.request.contextPath}<%=param%>">
-                    <button type="submit">Go to cycle page</button>
                     <input name="cycle_id" type="hidden" value="<%=cycleID%>"/>
-                    <input name="deal_id" type="hidden" value="<%=cycleID%>"/>
+                    <button type="submit">Go to cycle page</button>
                 </form>
             </div>
         <%}%>

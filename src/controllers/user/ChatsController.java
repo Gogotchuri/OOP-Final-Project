@@ -59,6 +59,7 @@ public class ChatsController extends Controller {
 
         resp.addProperty("messages", gson.toJson(messages));
         resp.addProperty("chat_id", chat_ID);
+        resp.addProperty("cycle_id", chat.getCycle().getCycleID());
         sendJson(200, resp);
     }
 }

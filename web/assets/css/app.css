@@ -110,7 +110,7 @@
     margin-top: 1.5em;
     grid-template-columns: 1fr 2fr 1fr;
     grid-auto-rows: auto;
-    height: 88vh;
+    height: 50%;
 }
 
 .chats-container > div{

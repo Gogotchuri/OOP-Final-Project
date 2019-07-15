@@ -9,6 +9,7 @@
 <%@ page import="models.Chat" %>
 <%@ page import="models.User" %>
 <%@ page import="java.util.List" %>
+<%@ page import="servlets.RoutingConstants" %>
 <html>
 <%  User user = (User) session.getAttribute("user");
     List<Chat> chats = (List<Chat>) request.getAttribute("chats");
@@ -58,9 +59,7 @@
             <div class="col-header">
                 <h5>Parameters</h5>
             </div>
-            <div>
-
-            </div>
+            <div id="param-col"></div>
         </div>
     </div>
 </body>
@@ -110,8 +109,11 @@
         if(chatSocket != null) chatSocket.close(); //Close connection to old chat
         chatSocket = new ChatSocket(getChatEndpointAddr(chat_id), handleRawMessage);
         document.getElementById("message-send").style.display = ""; //Show input form when user asks for a chat
-        http.GET("/user/chats/show?id=" + chat_id)
+        http.GET("<%=RoutingConstants.USER_SINGLE_CHAT%>?id=" + chat_id)
             .then(data => {
+                let cycle_id = data.cycle_id;
+                document.getElementById("param-col").innerHTML =
+                    '<a href="${pageContext.request.contextPath}<%=RoutingConstants.USER_SINGLE_CYCLE%>?cycle_id='+cycle_id+'">Go to cycle page</a>\n'
                 let messages = JSON.parse(data.messages);
                 document.getElementById("messages").innerHTML = "";
                 messages.forEach(message => {

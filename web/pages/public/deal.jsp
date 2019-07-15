@@ -90,8 +90,6 @@
              </ul>
          </div>
     </div>
-        <%--Footer--%>
-    <jsp:include page="/pages/partials/footer.jsp"/>
 </body>
     <script src="${pageContext.request.contextPath}/assets/js/Http.service.js"></script>
 <script>

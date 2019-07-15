@@ -32,7 +32,7 @@
                          items.get(0).getImages().get(0) == null) { %>
                     <img class="card-img" src="${pageContext.request.contextPath}/images/4.png">
                 <% } else { %>
-                    <img class="card-img" src="<%=items.get(0).getImages().get(0).getUrl()%>">
+                    <img class="card-img" src="${pageContext.request.contextPath}<%=items.get(0).getImages().get(0).getUrl()%>">
                 <% } %>
                 <a class="card-title" href="${pageContext.request.contextPath}/deals/show?id=<%=deal.getDealID()%>"><%=deal.getTitle()%></a>
                 <p class="card-text"><%=deal.getDescription()%></p>
