@@ -1,6 +1,7 @@
 package managers;
 
 import database.DatabaseAccessObject;
+import generalManagers.DeleteManager;
 import models.Image;
 import models.ImageCategories;
 import models.ItemImage;
@@ -138,6 +139,14 @@ public class ImagesManager {
      */
     public static List<ItemImage> getItemImagesByItemID(int itemId) {
         return getItemImages(itemId, GET_ITEM_IMAGE_BY_ITEM_ID);
+    }
+
+    /**
+     * @param userID id of a user
+     * @return Whether deletion was successful
+     */
+    public static boolean deleteProfileImage(int userID) {
+        return DeleteManager.delete("profile_images", "user_id", userID);
     }
 
     /**
