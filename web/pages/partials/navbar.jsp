@@ -11,7 +11,7 @@
 <html>
     <% User user = (User) session.getAttribute("user"); %>
     <nav class="navbar navbar-expand-lg navbar-dark bg-primary">
-        <a href="${pageContext.request.contextPath}/" class="navbar-brand">TODO</a>
+        <a href="${pageContext.request.contextPath}/" class="navbar-brand">Barter</a>
         <button type="button" class="navbar-toggler" data-toggle="collapse" data-target="#navbarCollapse">
             <span class="navbar-toggler-icon"></span>
         </button>
