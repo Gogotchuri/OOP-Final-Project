@@ -20,7 +20,6 @@ public final class ChatEndpoint {
     private static final String SESSION_CONTROLLER_KEY = "ChatSessionController";
     @OnOpen
     public void onOpen(@PathParam("chat_id")final int chat_id, @PathParam("username") final String username,final Session session) throws Exception {
-        System.out.println("OPEN! for " + chat_id);
         User user = UserManager.getUserByUsername(username);
 
         if(user == null) throw new AuthenticationException("User authentication failed!");
@@ -39,7 +38,6 @@ public final class ChatEndpoint {
     @OnMessage
     public void onMessage(final String message, final Session session){
         User user = (User) session.getUserProperties().get(USER_KEY);
-        System.out.println("Message received: "+ message +"; From: " + user.getUsername());
         ChatSessionController csc = (ChatSessionController)session.getUserProperties().get(SESSION_CONTROLLER_KEY);
         try {
             csc.sendMessage(new Message(csc.getChat().getChatID(), user.getUserID(), message), session);
@@ -52,12 +50,10 @@ public final class ChatEndpoint {
     public void onClose(final Session session){
         ChatSessionController csc = (ChatSessionController)session.getUserProperties().get(SESSION_CONTROLLER_KEY);
         if(csc != null) csc.removeSession(session);
-        System.out.println("Session closed!");
     }
 
     @OnError
     public void onError(final Session session, final Throwable throwable){
-        System.out.println("IN ON ERROR!");
         try {
             session.close();
         } catch (IOException e) {

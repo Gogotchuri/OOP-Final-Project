@@ -31,6 +31,12 @@ public class Message {
         this.date = date;
     }
 
+    /**
+     * Alternate constructor
+     * @param chatID ID of a chad
+     * @param user_id ID of a user
+     * @param body Body of a message
+     */
     public Message(int chatID, int user_id, String body){
         this.messageID = -1;//Not really important
         this.chatID = chatID;
@@ -75,6 +81,9 @@ public class Message {
         return body;
     }
 
+    /**
+     * @return Id of a user
+     */
     public int getUserId() {
         return userId;
     }
@@ -110,6 +119,9 @@ public class Message {
         return messageID == ((Message) o).getMessageID();
     }
 
+    /**
+     * @return JsonObject of a message
+     */
     public JsonObject toJsonObject() {
         JsonObject jo = new JsonObject();
         jo.addProperty("userId", ""+this.userId);

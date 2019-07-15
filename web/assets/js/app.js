@@ -1,0 +1,1 @@
+const SERVER_ADDRESS = "http://localhost:8080/OOP_Final_Project_war_exploded";

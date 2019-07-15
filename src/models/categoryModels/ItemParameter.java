@@ -1,7 +1,10 @@
 package models.categoryModels;
 
-//Class representing all three child models of an item category
-public class ItemParameter{
+/**
+ * Parent class of itemSerie, itemType and itemBrand.
+ * Since all of those 3 classes share same signature and methods, they have a same parent class
+ */
+public class ItemParameter {
 
     private int id;
     private String name;

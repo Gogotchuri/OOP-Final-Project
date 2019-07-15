@@ -12,6 +12,8 @@ public class StatusManager {
     private static DatabaseAccessObject DAO = DatabaseAccessObject.getInstance();
 
     /**
+     * return status with given id
+     *
      * @param tableName - Name Of table
      * @param ID - ID of Some Object in DB
      * @return ProcessStatus of Object with given ID.
@@ -22,9 +24,9 @@ public class StatusManager {
         try {
             PreparedStatement statement =
                 DAO.getPreparedStatement (
-                        "SELECT status_id \n" +
-                               "  FROM " + tableName + '\n' +
-                               " WHERE id = " + ID + ";"
+                    "SELECT status_id \n" +
+                           "  FROM " + tableName + '\n' +
+                           " WHERE id = " + ID + ";"
                 );
             ResultSet resultSet = statement.executeQuery();
             if (resultSet.next())

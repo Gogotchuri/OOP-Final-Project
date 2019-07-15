@@ -31,10 +31,7 @@ public class UserController extends Controller {
     	User user = UserManager.getUserByID(userID);
 
     	if (user == null) {
-			/*
-			 User with passed id does not exists.
-			 Return error page.
-			 */
+			sendError(404, "User with given id doesn't exist!");
 			 return;
 		}
 

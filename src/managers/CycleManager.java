@@ -3,6 +3,8 @@ package managers;
 
 import database.DatabaseAccessObject;
 import generalManagers.DeleteManager;
+import generalManagers.UpdateForm;
+import generalManagers.UpdateManager;
 import models.Chat;
 import models.Cycle;
 import models.Deal;
@@ -39,6 +41,7 @@ public class CycleManager {
 
 
     /**
+     * get all cycles with this deal in it
      * @param dealID - ID of Cycle in DB
      * @return Fully Filled List of Cycle objects of Deal
      *         Which out site has offered to User
@@ -68,9 +71,9 @@ public class CycleManager {
 
 
     /**
-     Returns true iff:
-     Data Base contains such cycle
-     @param cycle - Cycle (at least) initialized with only Set of Deals
+     * Returns true iff:
+     * Data Base contains such cycle
+     * @param cycle - Cycle (at least) initialized with only Set of Deals
      */
     public static boolean containsDB(Cycle cycle) throws SQLException {
 
@@ -89,9 +92,9 @@ public class CycleManager {
         Iterator<Deal> i = cycle.getDealsIterator();
 
         /* As we know that, Cycle contains at least two Deal's */
-        queryBuilder.append("iod.deal_id = ").append(i.next().getDealID()).append(" ");
+        queryBuilder.append("ioc.deal_id = ").append(i.next().getDealID()).append(" ");
         while (i.hasNext())
-            queryBuilder.append("OR iod.deal_id = ").append(i.next().getDealID()).append(" ");
+            queryBuilder.append("OR ioc.deal_id = ").append(i.next().getDealID()).append(" ");
 
         queryBuilder.append('\n');
 
@@ -146,7 +149,8 @@ public class CycleManager {
                 Statement.RETURN_GENERATED_KEYS
             );
 
-        statement.setInt(1, ProcessStatus.Status.ONGOING.getId());
+        // Freshly created cycle should be waiting for acceptance
+        statement.setInt(1, ProcessStatus.Status.WAITING.getId());
 
         if (statement.executeUpdate() == 0)
             throw new SQLException("Creating Cycle failed, no rows affected.");
@@ -156,7 +160,7 @@ public class CycleManager {
             if (generatedKeys.next()) {
                 insertedCycle = new Cycle (
                         generatedKeys.getInt(1),
-                        ProcessStatus.Status.ONGOING,
+                        ProcessStatus.Status.WAITING,
                         cycle.getDeals()
                 );
                 cycle.setCycleID(insertedCycle.getCycleID());
@@ -169,6 +173,7 @@ public class CycleManager {
 
 
     /**
+     * inserts offered cycle in database
      * @param cycleDealID ID of Deal to add in offered_cycles
      * @param cycleID ID of a cycle, that deal belongs to
      */
@@ -180,7 +185,8 @@ public class CycleManager {
                 "INSERT INTO offered_cycles (status_id, deal_id, cycle_id) VALUES (?, ?, ?);"
             );
 
-        statement.setInt(1, ProcessStatus.Status.ONGOING.getId());
+
+        statement.setInt(1, ProcessStatus.Status.WAITING.getId());
         statement.setInt(2, cycleDealID);
         statement.setInt(3, cycleID);
 
@@ -189,13 +195,13 @@ public class CycleManager {
     }
 
 
-    /**
+    /*
      * Deletes offered Cycles associated with passed Cycle id.
      * @param cycleID - ID of Cycle in DB
-     */
+     *
     private static void deleteOfferedCycles(int cycleID){
         DeleteManager.delete("offered_cycles", "cycle_id", cycleID);
-    }
+    }*/
 
 
     /**
@@ -208,15 +214,22 @@ public class CycleManager {
             PreparedStatement statement =
                 DAO.getPreparedStatement (
                     "UPDATE offered_cycles \n" +
-                           "   SET status_id = " + ProcessStatus.Status.COMPLETED + " \n" +
+                           "   SET status_id = " + ProcessStatus.Status.COMPLETED.getId() + " \n" +
                            " WHERE cycle_id = " + cycleID + " \n" +
                            "   AND deal_id = " + dealID + ";"
             );
             if (statement.executeUpdate() == 0)
                 return false;
 
-            if (allAccepted(cycleID))
-                return ChatManager.addChatToDB(new Chat(new Cycle(cycleID)));
+            synchronized (CycleManager.class) {
+
+                if (allAccepted(cycleID) &&
+                     StatusManager.getStatusIDByID("cycles", cycleID)
+                      == ProcessStatus.Status.WAITING)
+
+                    return updateCycleStatus(cycleID, ProcessStatus.Status.ONGOING.getId()) &&
+                            ChatManager.addChatToDB(new Chat(new Cycle(cycleID)));
+            }
 
             return true;
         }
@@ -228,12 +241,38 @@ public class CycleManager {
 
 
     /**
-     * TODO
+     * Updates cycle's status in database
      * @param cycleID - ID of Cycle in DB
-     * @return Whether Cycle accepted or not
+     * @param statusID - ID of Status in DB
+     * @return true if successful
+     */
+    private static boolean updateCycleStatus(int cycleID, int statusID){
+        UpdateForm uf = new UpdateForm("cycles", cycleID);
+        uf.addUpdate("status_id", statusID);
+        return UpdateManager.update(uf);
+    }
+
+
+    /**
+     * chacks if all participants have accepted the cycle
+     * @param cycleID - ID of Cycle in DB
+     * @return Whether All of Users accepted Cycle or not
      */
     private static boolean allAccepted(int cycleID) {
-        return false;
+        try {
+            PreparedStatement statement =
+                DAO.getPreparedStatement (
+                    "SELECT 1 \n" +
+                           "  FROM offered_cycles \n" +
+                           " WHERE cycle_id = " + cycleID + " \n" +
+                           "   AND status_id = " + ProcessStatus.Status.WAITING.getId() + ";"
+                );
+            return !statement.executeQuery().next();
+        }
+        catch (SQLException e) {
+            e.printStackTrace();
+            return false;
+        }
     }
 
 
@@ -245,4 +284,94 @@ public class CycleManager {
         return DeleteManager.delete("cycles", "id", cycleID);
     }
 
+
+    /**
+     * checks if user participates in chat
+     * @param cycle_id given cycle
+     * @param user_id id of the user
+     * @return true if given user participates in given cycle
+     */
+    public static boolean userParticipatesInCycle(int user_id, int cycle_id){
+        String stmtString = "SELECT count(oc.id) as num_id \n" +
+                    "FROM offered_cycles oc \n" +
+                    "JOIN deals d \n" +
+                    "ON oc.deal_id = d.id \n" +
+                    "JOIN users u \n" +
+                    "ON u.id = d.user_id \n" +
+                    "WHERE u.id = " + user_id + " AND \n" +
+                    "oc.cycle_id = " + cycle_id +";";
+        try {
+            PreparedStatement statement =
+                    DAO.getPreparedStatement (stmtString);
+            ResultSet rs = statement.executeQuery();
+            rs.next();
+            return rs.getInt("num_id") > 0;
+
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+
+        return false;
+    }
+
+    /**
+     * Returns all cycles for the user with given id
+     * @param userID User id for whom to get cycles
+     * @return returns List of cycle if everything went well, if query crashed
+     *          prints stack trace and returns null
+     */
+    public static List<Cycle> getUserCycles(int userID) {
+        List<Cycle> cycles = new ArrayList<>();
+        try {
+            PreparedStatement statement =
+                    DAO.getPreparedStatement (
+                            "SELECT oc.cycle_id \n" +
+                                    "FROM offered_cycles oc \n" +
+                                    "JOIN deals d \n" +
+                                    "ON d.id = oc.deal_id \n" +
+                                    "WHERE d.user_id = " + userID + ";"
+                    );
+            ResultSet resultSet = statement.executeQuery();
+            while (resultSet.next())
+                cycles.add (
+                        getCycleByCycleID(resultSet.getInt("cycle_id"))
+                );
+        }
+        catch (SQLException e) {
+            e.printStackTrace();
+            return null;
+        }
+        return cycles;
+    }
+
+    /**
+     * Checks if there exists an offered cycle for
+     * cycle_id and user_id with ONGOING status
+     * @param cycle_id id of cycle
+     * @param user_id id of user
+     * @return true if there exists an offered cycle for
+     * cycle_id and user_id with ONGOING status
+     */
+    public static boolean isOfferedCycleAccepted(int cycle_id, int user_id){
+        try {
+            PreparedStatement statement =
+                    DatabaseAccessObject.getInstance().getPreparedStatement(
+                            "SELECT COUNT(oc.status_id) AS counter FROM offered_cycles oc \n" +
+                                    "JOIN deals d \n" +
+                                    "ON oc.deal_id = d.id \n" +
+                                    "WHERE d.user_id = ? \n" +
+                                    "AND oc.status_id = ? \n" +
+                                    "AND oc.cycle_id = ?;"
+                    );
+            statement.setInt(1, user_id);
+            statement.setInt(2, ProcessStatus.Status.COMPLETED.getId());
+            statement.setInt(3, cycle_id);
+            ResultSet resultSet = statement.executeQuery();
+            if(!resultSet.next()) return false;
+            return (resultSet.getInt(1) > 0);
+        } catch (SQLException e) {
+            e.printStackTrace();
+            return false;
+        }
+    }
 }

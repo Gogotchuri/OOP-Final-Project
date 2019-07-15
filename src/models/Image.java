@@ -6,6 +6,7 @@ import java.sql.Timestamp;
 /**
  * Class representing image
  * This is a default class, used for saving user profile images
+ * Parent class for itemImages
  */
 public class Image implements Comparable <Image> {
 
@@ -14,6 +15,12 @@ public class Image implements Comparable <Image> {
     private String url;
     private Timestamp createdAt;
 
+    /**
+     * @param id Id of an image
+     * @param userID Id of image's user
+     * @param url Url of an image
+     * @param createdAt Date when this image was created at
+     */
     public Image(int id, int userID, String url, Timestamp createdAt) {
         this.id = id;
         this.userID = userID;
@@ -21,6 +28,11 @@ public class Image implements Comparable <Image> {
         this.createdAt = createdAt;
     }
 
+    /**
+     * Alternate constructor
+     * @param userID Id of image's user
+     * @param url Url of an image
+     */
     public Image(int userID, String url) {
         this(0, userID, url, new Timestamp(System.currentTimeMillis()));
     }

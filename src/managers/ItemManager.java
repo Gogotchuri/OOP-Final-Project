@@ -2,14 +2,10 @@
 package managers;
 
 import database.DatabaseAccessObject;
-import models.Image;
+import generalManagers.DeleteManager;
 import models.Item;
 import models.ItemImage;
-import models.User;
-import models.categoryModels.ItemBrand;
 import models.categoryModels.ItemCategory;
-import models.categoryModels.ItemSerie;
-import models.categoryModels.ItemType;
 
 import java.sql.*;
 import java.util.ArrayList;
@@ -113,6 +109,7 @@ public class ItemManager {
 
 
     /**
+     * gets owner id of given item
      * @param itemID - ID of Deal in DB
      * @return Owner (User) of Item with ID = itemID.
      *         If such itemID does not exists in DB
@@ -135,6 +132,7 @@ public class ItemManager {
 
 
     /**
+     * gets category of given item
      * @param itemID - ID of Deal in DB
      * @return Category of Item with ID = itemID.
      *         If such itemID does not exists in DB
@@ -157,6 +155,7 @@ public class ItemManager {
 
 
     /**
+     *
      * @param itemID - ID of Deal in DB
      * @return Name of Item with ID = itemID.
      *         If such itemID does not exists in DB
@@ -197,6 +196,8 @@ public class ItemManager {
 
 
     /**
+     * Inserts item into database, if insertion fails print stack trace and returns false
+     * If insertion ends with a success sets item id to the given object and returns true;
      * @param item Item, which needs to added to database
      */
     public static boolean addItemToDB(Item item) {
@@ -225,7 +226,7 @@ public class ItemManager {
     }
 
     /**
-     *
+     * grab items according to given column with given value
      * @param table Name of table
      * @param column Name of column
      * @param value Passed value
@@ -252,22 +253,12 @@ public class ItemManager {
     }
 
     /**
-     *
+     * get all items of given user
      * @param userId Id of a user
      * @return List of the items of one user
      */
     public static List<Item> getUserItems(int userId) {
         return getItemsByColumn("items","user_id", userId + "");
-    }
-
-
-    /**
-     *
-     * @param dealId Id of the deal
-     * @return List of items
-     */
-    public static List<Item> getOwnedItems(int dealId) {
-        return getItemsByColumn("items", "owned_items.deal_id", dealId + "");
     }
 
     /**
@@ -335,6 +326,7 @@ public class ItemManager {
         return true;
     }
     /**
+     * helper method
      * @param dealID
      * @param query
      * @return Item categories
@@ -358,6 +350,7 @@ public class ItemManager {
     }
 
     /**
+     * grabs wanted item categories with given deal id
      *
      * @param dealID Id of the deal
      * @return List of categories wanted in one deal
@@ -366,5 +359,15 @@ public class ItemManager {
         String query = JOIN_CATEGORIES + " JOIN wanted_items w on s.id = w.item_category_id" +
                 " WHERE w.deal_id = ?;";
         return getItemCategories(dealID, query);
+    }
+
+
+    /**
+     *
+     * @param itemId Id of the item
+     * @return List of categories wanted in one deal
+     */
+    public static boolean deleteItemById(int itemId){
+        return DeleteManager.delete("items", "id", itemId);
     }
 }

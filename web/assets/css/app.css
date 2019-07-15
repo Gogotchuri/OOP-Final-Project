@@ -7,7 +7,7 @@
 
 .main-footer{
     text-align: right;
-    color: wheat;
+    color: rgb(240, 219, 213);
 }
 
 .main-footer > span{
@@ -22,12 +22,12 @@
     margin-top: 1.5em;
     grid-template-columns: repeat(4, 1fr);
     grid-auto-rows: auto;
-    grid-gap: 1em; 
+    grid-gap: 1em;
     margin-inline: 8%;
 }
 
 .deals > div{
-    background: #eee;
+    background: rgb(240, 219, 213);
     padding: 2px;
 }
 
@@ -53,7 +53,7 @@
 }
 
 .pagination > a {
-    color: #0a0023;
+    color: #5680E9;
     padding: 5px 10px;
     text-decoration: none !important;
     transition: background-color .4s;
@@ -61,18 +61,18 @@
 }
 
 .pagination > a.selected {
-    color: white;
-    background-color: cornflowerblue;
+    color: rgb(240, 219, 213);
+    background-color: rgb(150, 187, 207);
     cursor: context-menu;
 }
 
 .pagination > a.unselectable {
     cursor: context-menu;
-    background: #838383;
+    background-color: rgb(150, 187, 207);
 }
 
 .pagination a:hover:not(.selected .unselectable) {
-    background-color: #ddd;
+    background-color: rgb(240, 219, 213);
 }
 
 
@@ -110,7 +110,7 @@
     margin-top: 1.5em;
     grid-template-columns: 1fr 2fr 1fr;
     grid-auto-rows: auto;
-    height: 88vh;
+    height: 50%;
 }
 
 .chats-container > div{
@@ -151,7 +151,7 @@
     border: 1px solid;
     margin-left: 3px;
     cursor: pointer;
-    background-color: #eee;
+    background-color: rgb(240, 219, 213);
 }
 
 .chats-container > div.chats > div.chats-list
@@ -240,7 +240,7 @@ div.messages div.message > div.message-bubble{
     padding-left: 7px;
     height: 5em;
     position: relative;
-    background: aquamarine;
+    background: rgb(240, 219, 213);
     border-radius: .4em;
 }
 
@@ -251,7 +251,7 @@ div.messages div.message > div.message-bubble:after {
     left: 0;
     top: 20%;
     border: 12px solid transparent;
-    border-right-color: aquamarine;
+    border-right-color: rgb(240, 219, 213);
     border-left: 0;
     border-bottom: 0;
     margin-top: 0;
@@ -314,4 +314,269 @@ div.messages div.own-message .message-date{
 }
 /*!!Conversation column*/
 
+/*Deal Creation Page Style*/
+.dealFormContainer{
+    display: grid;
+    grid-template-rows: 1fr 1fr;
+    height: 89vh;
+    color: rgb(240, 219, 213);
+    background-color: rgb(150, 187, 207);
+}
+
+.dealFormContainer div{
+    margin: 10px;
+    color: rgb(240, 219, 213);
+    background-color: rgb(150, 187, 207);
+}
+.dealFormContainer
+> div.dealFields{
+    color: rgb(240, 219, 213);
+    background-color: rgb(150, 187, 207);
+}
+
+.dealFormContainer
+> div.itemContainer {
+    border-bottom: 1px solid;
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    color: rgb(240, 219, 213);
+    background-color: rgb(150, 187, 207);
+}
+
+.dealFormContainer
+> div.itemContainer
+> div.newItemContainer{
+    border-right: 1px solid;
+}
+
+.dealFormContainer
+> div.itemContainer
+> div.newItemContainer
+> div.newItem{
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    color: rgb(240, 219, 213);
+    background-color: rgb(150, 187, 207);
+}
+
+.dealFormContainer
+> div.itemContainer
+> div.dealItems table{
+    color: rgb(240, 219, 213);
+    background-color: rgb(150, 187, 207);
+    height: 80%;
+    width: 90%;
+}
+
+.dealFormContainer
+> div.itemContainer
+> div.dealItems
+> div.tableWrapper{
+    color: rgb(240, 219, 213);
+    background-color: rgb(150, 187, 207);
+    overflow-y: auto;
+    height: 40vh;
+}
+
+
+.dealFormContainer
+> div.lowerContainer {
+    color: rgb(240, 219, 213);
+    background-color: rgb(150, 187, 207);
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr;
+}
+
+.dealFormContainer
+> div.lowerContainer
+> div.wantedCategories {
+    color: rgb(240, 219, 213);
+    background-color: rgb(150, 187, 207);
+}
+
+.dealFormContainer
+> div.lowerContainer
+> div.categoryTableContainer {
+    border: 1px solid;
+    border-top: 0;
+    overflow-y: auto;
+    color: rgb(240, 219, 213);
+    background-color: rgb(150, 187, 207);
+}
+
+.dealFormContainer
+> div.lowerContainer
+> div.tableWrapper {
+    overflow-y: scroll;
+}
+
 /*!chats*/
+
+/*cycle.jsp column*/
+
+.cycleContainer{
+    display: grid;
+    grid-template-columns: 2fr 3fr 2fr;
+    grid-auto-rows: auto;
+    grid-template-rows: auto;
+
+}
+
+.cycleContainer
+>div.cycles{
+    grid-column-start: 2;
+    height: 90vh;
+    width: 50vw;
+}
+
+.cycleContainer
+> div.cycles > div.deal{
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    background: rgba(232, 192, 189, 0.73);
+    margin-inline: 10%;
+    width: 80%;
+    height: 40%;
+    border-radius: 10%;
+}
+
+.cycleContainer
+> div.cycles > div.dealArrow > img{
+    width: 20%;
+    margin-inline: 40%;
+}
+
+.cycleContainer div.dealUpArrow > img{
+    height: 30%;
+    width: 30%;
+    margin-inline: 90%;
+}
+
+.cycleContainer
+> div.cycles > div.button{
+    margin-inline: 40%;
+}
+
+.cycleContainer
+> div.cycles > div.deal > img {
+    float: right;
+    margin: 10px;
+    max-height: 90%;
+    max-width: 90%;
+    border-radius: 10%;
+}
+
+.cycleContainer
+> div.cycles > div.deal > div.info{
+    margin: 5%;
+}
+
+.cycleContainer
+> div.cycles > div.deal > div.info .link{
+    margin: 0;
+    border: 0;
+    background: none;
+    overflow: visible;
+    color: #5680E9;
+    cursor: pointer;
+}
+
+/*!!cycle.jsp column*/
+
+/*user-details.jsp*/
+
+.user-details-wrapper{
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    grid-gap: 10px;
+}
+
+.user-details-wrapper > div{
+    grid-gap: 10px;
+}
+
+.user-details-wrapper > div.details > .image-div > img {
+    max-width: 100px;
+    margin: 5px;
+}
+
+.user-details-wrapper > .deals-column > p.side-text {
+    font-style: italic;
+    font-size: 0.5em;
+}
+
+.user-details-wrapper > .details > .user-info{
+    padding: 5px;
+    color: rgb(240, 219, 213);
+    background-color: rgb(74, 149, 189);
+}
+
+.user-details-wrapper > .details > .image-div{
+    min-height: 50%;
+}
+
+.user-details-wrapper> .deals-column{
+    padding: 5px;
+    color: rgb(123, 88, 199);
+    background-color: #84CEEB;
+}
+
+
+.user-details-wrapper > label.completed{
+    color: lightgreen;
+    size: 5px;
+}
+
+.user-details-wrapper > label.ongoing{
+    color:rgb(228, 153, 153);
+    size: 5px;
+}
+
+/*end of user-details*/
+
+/*cycles.jsp*/
+
+.cycles-wrapper{
+    display: grid;
+    grid-template-rows: repeat(4, 1fr);
+    grid-gap: 5px;
+    padding: 10px;
+}
+
+.cycles-wrapper > .cycle-div{
+    color: rgb(123, 88, 199);
+    background-color: #84CEEB;
+    padding: 10px;
+}
+
+/*end of cycles.jsp*/
+
+/*deal.jsp*/
+.deal-wrapper{
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr;
+    grid-gap: 5px;
+}
+
+.deal-wrapper > div{
+    height: 200%;
+}
+
+.deal-wrapper > .information-column > p.side-text {
+    font-style: italic;
+    font-size: 14px;
+}
+
+.deal-wrapper > .information-column{
+    padding: 5px;
+    color: rgb(240, 219, 213);
+    background-color: rgb(74, 149, 189);
+}
+
+.deal-wrapper > .deal-columns{
+    padding: 5px;
+    color: rgb(123, 88, 199);
+    background-color: #84CEEB;
+}
+
+/*end of deal.jsp*/

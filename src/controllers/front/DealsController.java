@@ -87,10 +87,8 @@ public class DealsController extends Controller {
 		public enum Criteria {
 
 			/* Possible Criteria */
-			USER_NAME("user-name"),
-			CATEGORY_NAME("category-name"),
-			DEAL_CREATE_DATE("deal-create-date"),
-			DEAL_UPDATE_DATE("deal-update-date");
+			USER_NAME("user_name"),
+			TITLE("title");
 
 			private String criteriaName;
 

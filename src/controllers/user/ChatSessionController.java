@@ -1,7 +1,7 @@
 package controllers.user;
 
+import managers.ChatManager;
 import models.Chat;
-import models.Cycle;
 import models.Message;
 
 import javax.websocket.EncodeException;
@@ -20,10 +20,8 @@ public class ChatSessionController{
     private static final Map<Integer, ChatSessionController> chatSessionControllerMap = new ConcurrentHashMap<>();
 
     private ChatSessionController(int chat_id) throws Exception {
-        chat = new Chat(chat_id, new Cycle(1));
-        //TODO uncomment and check
-//        chat = ChatManager.getChatByID(chat_id);
-//        if(chat == null) throw new Exception("Chat not found!");
+        chat = ChatManager.getChatByID(chat_id);
+        if(chat == null) throw new Exception("Chat not found!");
     }
 
     /**
@@ -40,7 +38,6 @@ public class ChatSessionController{
                 csc = new ChatSessionController(chat_id);
                 chatSessionControllerMap.put(chat_id, csc);
             }
-            //TODO require use privileges on chat
             csc.addSession(session);
             return csc;
         }
@@ -52,9 +49,8 @@ public class ChatSessionController{
 
     public synchronized void sendMessage(Message msg, Session session) throws ServerException {
         chat.addMessage(msg);
-        //TODO check and uncomment
-//        if(!ChatManager.addMessageToDB(msg))
-//            throw new ServerException("Message couldn't be sent! (ChatSessionController:43)");
+        if(!ChatManager.addMessageToDB(msg))
+            throw new ServerException("Message couldn't be sent! (ChatSessionController:43)");
         for(Session ses : sessions){
             try {
                 ses.getBasicRemote().sendObject(msg);

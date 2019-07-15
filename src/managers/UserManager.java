@@ -13,7 +13,7 @@ import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.List;
 
-public class UserManager {
+public class UserManager{
 
 
     private static DatabaseAccessObject DAO = DatabaseAccessObject.getInstance();
@@ -38,6 +38,8 @@ public class UserManager {
 
 
     /**
+     * get owner of given deal
+     *
      * @param dealID - ID of Deal in DB
      * @return Owner (User) of Deal with ID = dealID
      *         If such dealID does not exists in DB
@@ -106,6 +108,8 @@ public class UserManager {
 
 
     /**
+     * parses user from given result set
+     *
      * @param resultSet - 'Row' of 'users' table
      * @return Fully Filled User
      * @throws SQLException - If some error happens while getting params from ResultSet
@@ -198,8 +202,8 @@ public class UserManager {
         uf.addUpdate("email", user.getEmail());
         uf.addUpdate("phone_number", user.getPhoneNumber());
         //Updating created_at isn't really necessary, but just in case
-        uf.addUpdate("created_at", user.getCreateDate());
-        uf.addUpdate("updated_at", user.getUpdateDate());
+        // uf.addUpdate("created_at", user.getCreateDate().toString());
+        uf.addUpdate("updated_at", user.getUpdateDate().toString());
         return UpdateManager.update(uf);
     }
 }

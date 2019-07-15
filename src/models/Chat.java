@@ -1,12 +1,16 @@
 package models;
 
+import managers.ChatManager;
+import managers.CycleManager;
+
+import java.sql.ResultSet;
 import java.sql.Timestamp;
 import java.util.*;
 
 /**
  * Class containing sequence of messages
  */
-public class Chat {
+public class Chat implements Comparable<Chat> {
 
     private int chatID;               // -1
     private Cycle cycle;              // null
@@ -66,7 +70,7 @@ public class Chat {
     }
 
     /**
-     * @param messages
+     * @param messages Vector of messages to set
      */
     public void setMessages(Vector<Message> messages){
         this.messages = messages;
@@ -87,7 +91,7 @@ public class Chat {
     }
 
     /**
-     * @param date
+     * @param date last time this chat was updated
      */
     public void setUpdateDate(Date date){
         lastUpdateDate.setTime(date.getTime());
@@ -101,7 +105,7 @@ public class Chat {
     }
 
     /**
-     * @param cycle
+     * @param cycle Passed cycle to set
      */
     public void setCycle(Cycle cycle){
         this.cycle = cycle;
@@ -137,23 +141,33 @@ public class Chat {
      * @return true if user can participate in chat
      */
     public boolean isParticipant(int user_id){
-       return true;
-       //TODO implement me
+        return CycleManager.userParticipatesInCycle(user_id, cycle.getCycleID());
     }
 
     /**
      * Returns list of users participating in this chat (cycle in general)
      * */
     public List<User> getParticipants(){
-        return null;
-        //TODO implement me
+        return ChatManager.getChatParticipants(chatID);
     }
 
     /**
      * Returns list of user names participating in this chat (cycle in general)
      * */
     public List<String> getParticipantNames(){
-        return Arrays.asList("ვასო", "ტასო", "ამირანი");
-        //TODO implement me
+        return ChatManager.getChatUserNames(chatID);
     }
+
+    /**
+     * @param chat - Passed Cycle
+     * @return Comparison of Cycles
+     */
+    @Override public int compareTo(Chat chat) {
+        if (chat.chatID > this.chatID)
+            return -1;
+        if (chat.chatID < this.chatID)
+            return 1;
+        return 0;
+    }
+
 }

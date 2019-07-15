@@ -44,4 +44,12 @@ public class DeleteManager {
         }
         return true;
     }
+
+    /**
+     * @param table Passed table
+     * @return Empties whole table and reseeds it too
+     */
+    public static boolean deleteAndReseed(String table) {
+        return delete(table,"1",1) && UpdateManager.reseedTable(table,1);
+    }
 }

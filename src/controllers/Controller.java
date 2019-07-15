@@ -1,5 +1,7 @@
 package controllers;
 
+import com.google.gson.JsonObject;
+
 import javax.servlet.ServletContext;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
@@ -7,6 +9,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 import java.io.IOException;
+import java.io.PrintWriter;
 
 /**
  * Base Controller class to be used as a base of every controller
@@ -66,4 +69,17 @@ public abstract class Controller {
         response.sendError(status_code, message);
     }
 
+    protected void sendApiError(int status_code, String error_msg) throws IOException
+    {
+        JsonObject jo = new JsonObject();
+        jo.addProperty("error", error_msg);
+        sendJson(status_code, jo);
+    }
+
+    protected void sendJson(int status_code, JsonObject jo) throws IOException {
+        PrintWriter pw = response.getWriter();
+        response.setStatus(status_code);
+        pw.print(jo.toString());
+        pw.flush();
+    }
 }

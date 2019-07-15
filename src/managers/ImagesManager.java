@@ -1,6 +1,7 @@
 package managers;
 
 import database.DatabaseAccessObject;
+import generalManagers.DeleteManager;
 import models.Image;
 import models.ImageCategories;
 import models.ItemImage;
@@ -123,6 +124,7 @@ public class ImagesManager {
     }
 
     /**
+     * returns all images of given user
      * @param userId Id of a user
      * @return All images of items that passed user owns
      */
@@ -131,6 +133,7 @@ public class ImagesManager {
     }
 
     /**
+     * returns all images of given items
      * @param itemId ID of an item
      * @return All images of a single item
      */
@@ -139,6 +142,16 @@ public class ImagesManager {
     }
 
     /**
+     * @param userID id of a user
+     * @return Whether deletion was successful
+     */
+    public static boolean deleteProfileImage(int userID) {
+        return DeleteManager.delete("profile_images", "user_id", userID);
+    }
+
+    /**
+     * executes given query and gets all images
+     * based oon item or user id
      * @param id Passed id, item or user id
      * @param query String query
      * @return Returns all images of a user or item
@@ -169,7 +182,7 @@ public class ImagesManager {
         return new Image(set.getBigDecimal("id").intValue(),
                 user_id,
                 set.getString("url"),
-                new Timestamp(set.getDate("created_at").getTime()));
+                new Timestamp(set.getTimestamp("created_at").getTime()));
     }
 
     /**
@@ -183,6 +196,6 @@ public class ImagesManager {
                 set.getInt("user_id"),
                 set.getInt("item_id"),
                 ImageCategories.getCategoryByID(set.getInt("image_category_id")),
-                new Timestamp(set.getDate("created_at").getTime()));
+                new Timestamp(set.getTimestamp("created_at").getTime()));
     }
 }

@@ -1,6 +1,7 @@
 package middlewares;
 
 import models.User;
+import servlets.RoutingConstants;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -18,7 +19,7 @@ public class AuthenticatedUser{
     public boolean check() throws IOException {
         User user = (User) request.getSession().getAttribute("user");
         if(user == null){
-            response.sendError(401, "User ins't authorized!");
+            response.sendRedirect(request.getContextPath()+ RoutingConstants.LOGIN);
             return false;
         }
         return true;

@@ -17,7 +17,7 @@
 <%--Page Content--%>
 <div>
     HERE goes content!
-    DEALS
+    USER DEALS
 </div>
 <%--Footer--%>
 <jsp:include page="/pages/partials/footer.jsp"/>

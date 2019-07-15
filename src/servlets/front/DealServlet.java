@@ -2,6 +2,8 @@
 package servlets.front;
 
 import controllers.front.DealsController;
+import servlets.RoutingConstants;
+
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
@@ -9,16 +11,21 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 
-@WebServlet(urlPatterns = {"/deals/show"})
+@WebServlet(urlPatterns = {RoutingConstants.SINGLE_DEAL})
 public class DealServlet extends HttpServlet {
 
     /**
-     returned html main components:
-     1) Information about some deal
-
-     If deal of this user:
-     2) link to the user.DealConfigServlet (GET) (deal configuration form)
-     3) link to the user.DealConfigServlet (DELETE) (deal delete button)
+     * returned html main components:
+     * 1) Information about some deal
+     *
+     * If deal of this user:
+     * 2) link to the user.DealConfigServlet (GET) (deal configuration form)
+     * 3) link to the user.DealConfigServlet (DELETE) (deal delete button)
+     *
+     * @param request - Request Object for getting user request
+     * @param response - Response Object for sending back response
+     * @throws ServletException - If some Servlet Exception happens
+     * @throws IOException - If Some IOException happens
      */
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
@@ -34,4 +41,5 @@ public class DealServlet extends HttpServlet {
 
         new DealsController(request, response, this).show(dealID);
     }
+
 }

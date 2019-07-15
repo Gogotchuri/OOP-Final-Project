@@ -1,11 +1,13 @@
 
 package models;
 
+import managers.DealsManager;
+
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 
-public class Cycle {
+public class Cycle implements Comparable<Cycle>{
 
     /* Comments means default values
      * if user does not initializes it. */
@@ -100,6 +102,15 @@ public class Cycle {
         deals.add(deal);
     }
 
+    /**
+     * find users deals
+     * @param userId ID of user, whose deals are looked for
+     * @return List<Deal> deals of given user in this cycle
+     */
+    public List<Deal> getUserDeals(int userId){
+        return DealsManager.getUsersDealsByCycleId(userId, cycleID);
+    }
+
 
     /**
      * !!! Cycle ID must be Initialized for correct comparing !!!
@@ -114,6 +125,18 @@ public class Cycle {
         Cycle otherCycle = (Cycle) other;
 
         return cycleID == otherCycle.cycleID;
+    }
+
+    /**
+     * @param cycle - Passed Cycle
+     * @return Comparison of Cycles
+     */
+    @Override public int compareTo(Cycle cycle) {
+        if (cycle.cycleID > this.cycleID)
+            return -1;
+        if (cycle.cycleID < this.cycleID)
+            return 1;
+        return 0;
     }
 
 }

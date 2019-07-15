@@ -12,14 +12,48 @@
         <jsp:param name="title" value="HOME"/>
     </jsp:include>
 
+    <head>
+        <style>.carousel-inner > .carousel-item > img { max-width:100%; height: auto; } </style>
+    </head>
+
 <body>
+
     <%--Navbar--%>
     <jsp:include page="/pages/partials/navbar.jsp"/>
     <%--Page Content--%>
-    <div>
-        HERE goes content!
+
+    <div class="slideshow">
+
+        <div id="myCarousel" class="carousel slide" data-ride="carousel">
+
+            <ol class="carousel-indicators">
+                <li data-target="#myCarousel" data-slide-to="0" class="active"></li>
+                <li data-target="#myCarousel" data-slide-to="1"></li>
+                <li data-target="#myCarousel" data-slide-to="2"></li>
+            </ol>
+
+            <div class="carousel-inner">
+
+                <div class="carousel-item active">
+                    <img src="${pageContext.request.contextPath}/images/1.jpg" alt="Image can't be displayed">
+                </div>
+                <div class="carousel-item">
+                    <img src="${pageContext.request.contextPath}/images/2.jpg" alt="Image can't be displayed">
+                </div>
+                <div class="carousel-item">
+                    <img src="${pageContext.request.contextPath}/images/3.jpg" alt="Image can't be displayed">
+                </div>
+
+            </div>
+
+        </div>
+
     </div>
+
     <%--Footer--%>
     <jsp:include page="/pages/partials/footer.jsp"/>
 </body>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"></script>
 </html>

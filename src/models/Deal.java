@@ -1,12 +1,15 @@
 
 package models;
 
+import com.google.gson.annotations.JsonAdapter;
 import models.categoryModels.ItemCategory;
+import services.encoders.DealJsonAdapter;
 
 import java.sql.Timestamp;
 import java.util.ArrayList;
 import java.util.List;
 
+@JsonAdapter(DealJsonAdapter.class)
 public class Deal {
 
     /* Comments means default values
@@ -15,6 +18,7 @@ public class Deal {
     private int dealID;                          // 0
     private int ownerID;                         // 0
     private String title;                        // null
+    private String description;                  // null
     private List<Item> ownedItems;               // null
     private List<ItemCategory> wantedCategories; // null
     private ProcessStatus.Status status;         // null
@@ -36,6 +40,7 @@ public class Deal {
                 List<ItemCategory> wantedCategories,
                 ProcessStatus.Status status,
                 String title,
+                String description,
                 Timestamp createDate)
     {
         this.dealID = dealID;
@@ -44,6 +49,7 @@ public class Deal {
         this.wantedCategories = wantedCategories;
         this.status = status;
         this.title = title;
+        this.description = description;
         this.createDate = createDate;
     }
 
@@ -55,15 +61,33 @@ public class Deal {
      * @param wantedCategories - Wanted Categories of Deal
      */
     public Deal(int ownerID,
-                 List<Item> ownedItems,
-                  List<ItemCategory> wantedCategories) {
-        this(0, ownerID, ownedItems, wantedCategories, null, "", null);
+                List<Item> ownedItems,
+                List<ItemCategory> wantedCategories) {
+        this(0, ownerID, ownedItems, wantedCategories, ProcessStatus.Status.ONGOING,
+             null, null, null);
+    }
+
+
+    /**
+     * Constructor.
+     * @param ownerID - User which has this Deal
+     * @param ownedItems - Owned Items of Deal
+     * @param wantedCategories - Wanted Categories of Deal
+     * @param title - title of the deal
+     * @param description - description of deal
+     */
+    public Deal(int ownerID,
+                List<Item> ownedItems,
+                List<ItemCategory> wantedCategories,
+                String title, String description) {
+        this(0, ownerID, ownedItems, wantedCategories, ProcessStatus.Status.ONGOING, title,
+             description, new Timestamp(System.currentTimeMillis()));
     }
 
 
     /**
      * @return ID of the Deal.
-     *         If returned -1 that means that
+     *         If returned 0 that means that
      *         Deal's ID is not initialized yet.
      */
     public int getDealID() { return dealID; }
@@ -124,6 +148,19 @@ public class Deal {
         return ownedItemCategories;
     }
 
+    /**
+     * @return Description of a deal
+     */
+    public String getDescription() {
+        return description;
+    }
+
+    /**
+     * @param description Description of a deal
+     */
+    public void setDescription(String description) {
+        this.description = description;
+    }
 
     /**
      * Sets Deal ID

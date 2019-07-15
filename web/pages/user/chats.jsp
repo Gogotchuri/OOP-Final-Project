@@ -9,6 +9,7 @@
 <%@ page import="models.Chat" %>
 <%@ page import="models.User" %>
 <%@ page import="java.util.List" %>
+<%@ page import="servlets.RoutingConstants" %>
 <html>
 <%  User user = (User) session.getAttribute("user");
     List<Chat> chats = (List<Chat>) request.getAttribute("chats");
@@ -58,23 +59,19 @@
             <div class="col-header">
                 <h5>Parameters</h5>
             </div>
-            <div>
-
-            </div>
+            <div id="param-col"></div>
         </div>
     </div>
 </body>
-    <script src="${pageContext.request.contextPath}/assets/js/helpers.js"></script>
+<script src="${pageContext.request.contextPath}/assets/js/helpers.js"></script>
+<script src="${pageContext.request.contextPath}/assets/js/Http.service.js"></script>
 <script>
-
-    //Variables
-    const http = new HTTP("http://localhost:8080/OOP_Final_Project");
     let chatSocket = null;
     const localUserId = "<%=user.getUserID()%>";
 
 
     //functions
-    let getChatEndpointAddr = chatID => "ws://localhost:8080/OOP_Final_Project/user/chats/" + chatID + "/" + "<%=user.getUsername()%>";
+    let getChatEndpointAddr = chatID => "ws://localhost:8080/OOP_Final_Project_war_exploded/user/chats/" + chatID + "/" + "<%=user.getUsername()%>";
 
     let handleMessage = parsedMessage => {
         let messageClass = (parsedMessage.user_id == localUserId) ? "own-message" : "message";
@@ -107,12 +104,16 @@
     };
 
 
+    //Callback to change chat
     let changeChat = (chat_id) => {
         if(chatSocket != null) chatSocket.close(); //Close connection to old chat
         chatSocket = new ChatSocket(getChatEndpointAddr(chat_id), handleRawMessage);
         document.getElementById("message-send").style.display = ""; //Show input form when user asks for a chat
-        http.GET("/user/chats/show?id=" + chat_id)
+        http.GET("<%=RoutingConstants.USER_SINGLE_CHAT%>?id=" + chat_id)
             .then(data => {
+                let cycle_id = data.cycle_id;
+                document.getElementById("param-col").innerHTML =
+                    '<a href="${pageContext.request.contextPath}<%=RoutingConstants.USER_SINGLE_CYCLE%>?cycle_id='+cycle_id+'">Go to cycle page</a>\n'
                 let messages = JSON.parse(data.messages);
                 document.getElementById("messages").innerHTML = "";
                 messages.forEach(message => {

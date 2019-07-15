@@ -2,10 +2,7 @@ package managers;
 
 import database.DatabaseAccessObject;
 import generalManagers.DeleteManager;
-import models.Chat;
-import models.Cycle;
-import models.Message;
-import models.ProcessStatus;
+import models.*;
 
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -20,7 +17,7 @@ public class ChatManager {
     private static final String GET_CHAT_BY_ID_QUERY = "SELECT * FROM chats WHERE id = ?;";
     private static final String GET_MESSAGES_QUERY = "SELECT * FROM messages WHERE chat_id = ?;";
     private static final String INSERT_MESSAGE_QUERY = "INSERT INTO messages (chat_id," +
-            " body, author_id, created_at) VALUES (?, ?, ?, ?);";
+            " author_id, body, created_at) VALUES (?, ?, ?, ?);";
     private static final String INSERT_CHAT_QUERY = "INSERT INTO chats (cycle_id) VALUES(?);";
     private static DatabaseAccessObject DBO = DatabaseAccessObject.getInstance();
 
@@ -34,8 +31,8 @@ public class ChatManager {
         try {
             PreparedStatement st = DBO.getPreparedStatement(INSERT_MESSAGE_QUERY, Statement.RETURN_GENERATED_KEYS);
             st.setInt(1, msg.getChatID());
-            st.setString(2, msg.getBody());
-            st.setInt(3, msg.getUserId());
+            st.setInt(2, msg.getUserId());
+            st.setString(3, msg.getBody());
             st.setTimestamp(4, msg.getDate());
             if (st.executeUpdate() == 0)
                 throw new SQLException("Creating message failed, no rows affected.");
@@ -128,7 +125,7 @@ public class ChatManager {
 
 
     /**
-     *
+     * gets chat of given cycle
      * @param cycleID id of the cycle, which the chat is related to
      * @return chat related to cycle with cycleID
      */
@@ -138,7 +135,7 @@ public class ChatManager {
             PreparedStatement st = DBO.getPreparedStatement(GET_CHAT_BY_CYCLE_QUERY);
             st.setInt(1, cycleID);
             ResultSet set = st.executeQuery();
-            set.next();
+            if(set.next())
             ch = new Chat(set.getBigDecimal("id").intValue(),
                     new Cycle(cycleID), set.getTimestamp("updated_at"), new Vector<>());
             getMessagesForChat(ch);
@@ -148,7 +145,11 @@ public class ChatManager {
         return ch;
     }
 
-    //TODO WARNING! not tested yet, please test
+    /**
+     * Finds user's active chats in database
+     * @param user_id
+     * @return list of chats
+     */
     public static List<Chat> getUserChats(int user_id){
         List<Chat> chats = new ArrayList<>();
         String query = "SELECT ch.id " +
@@ -159,7 +160,6 @@ public class ChatManager {
                 "WHERE cycles.status_id = " + ProcessStatus.Status.ONGOING.getId() +
                 " AND d.user_id = " + user_id +
                 " ORDER BY ch.updated_at";
-        //TODO is this right?? no idea
 
         try {
             PreparedStatement st = DBO.getPreparedStatement(query);
@@ -193,5 +193,51 @@ public class ChatManager {
             e.printStackTrace();
         }
         return ch;
+    }
+
+    /**
+     * gets all chat participants
+     * @param chat_id id of the chat
+     * @return List<User> users who participate in given chat
+     */
+    public static List<User> getChatParticipants(int chat_id){
+        List<User> result = new ArrayList<>();
+        List<String> userNames = getChatUserNames(chat_id);
+        for(String a : userNames){
+            result.add(UserManager.getUserByUsername(a));
+        }
+
+        return result;
+    }
+
+    /**
+     * gets usernames of participants with given chats
+     * @param chat_id id of the chat
+     * @return List<String> usernames of users who participate
+     * in given chat
+     */
+    public static List<String> getChatUserNames(int chat_id){
+        List<String> result = new ArrayList<>();
+
+        String statement = "SELECT u.user_name FROM chats ch \n" +
+                "JOIN cycles c ON ch.cycle_id = c.id \n" +
+                "JOIN offered_cycles oc ON c.id = oc.cycle_id \n" +
+                "JOIN deals d ON oc.deal_id = d.id \n" +
+                "JOIN users u ON d.user_id=u.id \n" +
+                "WHERE ch.id = " + chat_id +";";
+
+        try {
+            PreparedStatement st = DBO.getPreparedStatement(statement);
+            ResultSet set = st.executeQuery();
+
+            while(set.next()){
+                result.add(set.getString("user_name"));
+            }
+
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+
+        return result;
     }
 }

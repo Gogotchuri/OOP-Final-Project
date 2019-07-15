@@ -2,7 +2,7 @@
 package servlets.front;
 
 import controllers.front.UserController;
-
+import servlets.RoutingConstants;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
@@ -10,17 +10,22 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 
-@WebServlet(urlPatterns = {"/users/show"})
+@WebServlet(urlPatterns = {RoutingConstants.PUBLIC_PROFILE})
 public class UserServlet extends HttpServlet {
 
 	/**
-     returned html main components:
-     1) Some information about user
-     2) link to the front.DealsServlet (GET) (only this user deals)
-
-     If profile of this user:
-     3) link to the user.ChatsServlet (GET) (user's chats)
-     4) link to the user.UserConfigServlet (GET) (user configuration form)
+     * returned html main components:
+     * 1) Some information about user
+     * 2) link to the front.DealServlet (GET) (only this user deals)
+	 *
+     * If profile of this user:
+     * 3) link to the user.ChatsServlet (GET) (user's chats)
+     * 4) link to the user.UserEditServlet (GET) (user configuration form)
+	 *
+	 * @param request - Request Object for getting user request
+	 * @param response - Response Object for sending back response
+	 * @throws ServletException - If some Servlet Exception happens
+	 * @throws IOException - If Some IOException happens
 	 */
 	@Override
 	protected void doGet(HttpServletRequest request,
@@ -32,9 +37,10 @@ public class UserServlet extends HttpServlet {
         catch (NumberFormatException e) {
 			response.sendError(HttpServletResponse.SC_NOT_FOUND,
 					"This address should be called with parameter \"id\"!");
-             return;
+			return;
         }
 
 		new UserController(request, response, this).show(userID);
 	}
+
 }
