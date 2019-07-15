@@ -324,6 +324,7 @@ div.messages div.own-message .message-date{
 }
 
 .dealFormContainer div{
+    margin: 10px;
     color: rgb(240, 219, 213);
     background-color: rgb(150, 187, 207);
 }
