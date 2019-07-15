@@ -1,5 +1,6 @@
 <%@ page import="java.util.List" %>
-<%@ page import="models.Deal" %><%--
+<%@ page import="models.Deal" %>
+<%@ page import="models.Item" %><%--
   Created by IntelliJ IDEA.
   User: gogotchuri
   Date: 6/14/19
@@ -25,7 +26,14 @@
     <div class="deals">
         <%for(Deal deal: deals){%>
             <div class="card">
-                <img class="card-img" src="https://images.pexels.com/photos/414612/pexels-photo-414612.jpeg?auto=compress&cs=tinysrgb&dpr=1&w=500">
+                <% List<Item> items = deal.getOwnedItems();
+                   if (items == null || items.size() == 0 ||
+                        items.get(0).getImages() == null ||
+                         items.get(0).getImages().get(0) == null) { %>
+                    <img class="card-img" src="${pageContext.request.contextPath}/images/4.png">
+                <% } else { %>
+                    <img class="card-img" src="<%=items.get(0).getImages().get(0).getUrl()%>">
+                <% } %>
                 <a class="card-title" href="${pageContext.request.contextPath}/deals/show?id=<%=deal.getDealID()%>"><%=deal.getTitle()%></a>
                 <p class="card-text"><%=deal.getDescription()%></p>
             </div>

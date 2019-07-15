@@ -4,6 +4,7 @@ import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
 import config.ConfigConstants;
 import controllers.Controller;
+import generalManagers.DeleteManager;
 import managers.ImagesManager;
 import managers.ItemManager;
 import models.*;
@@ -40,7 +41,7 @@ public class ImageController extends Controller {
         JsonObject jo = new JsonObject();
         String url = storeItemLocally();
         Image img = new Image(user.getUserID(), url);
-        //TODO should delete old photo here
+        ImagesManager.deleteProfileImage(user.getUserID());
         if(!ImagesManager.addImage(img)){
             sendApiError(500,"Couldn't add image to database!");
             return;
