@@ -93,7 +93,7 @@ public class DealsController extends Controller implements ResourceController {
         Map<String, List<String>> rules = new HashMap<>();
         rules.put("name", Arrays.asList("required", "min_len:5", "max_len:35"));
         rules.put("description", Arrays.asList("required", "min_len:10", "max_len:250"));
-        rules.put("wanted_ids", Arrays.asList("required", "type:array")); //TODO need to add array type
+        rules.put("wanted_ids", Arrays.asList("required", "type:array"));
         rules.put("owned_ids", Arrays.asList("required", "type:array"));
         RequestValidator validator = new RequestValidator(request, rules);
 
@@ -179,12 +179,13 @@ public class DealsController extends Controller implements ResourceController {
     public void destroy(int id) throws IOException, ServletException {
         Deal deal = DealsManager.getDealByDealID(id);
         if(!checkOwnership(deal)) return;
-        if(DealsManager.deleteDeal(id)) {
-            index();
+        if(!DealsManager.deleteDeal(id)) {
+            sendApiError(500, "Internal ERROR! Something went wrong while trying to delete Deal through Deal Manager!");
             return;
         }
-        sendError(500,
-                "Internal ERROR! Something went wrong while trying to delete Deal through Deal Manager!");
+        JsonObject jo = new JsonObject();
+        jo.addProperty("message", "success");
+        sendJson(201, jo);
     }
 
     /**

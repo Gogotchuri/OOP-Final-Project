@@ -60,7 +60,6 @@
     function getEncodedImage() {
         //Check file present
         if(!this.files || !this.files[0]) return;
-        console.log("bla");
         let fileReader = new FileReader();
         fileReader.onload = e => base64_image = e.target.result;
         fileReader.readAsDataURL(this.files[0]);
@@ -76,6 +75,9 @@
         return user;
     }
 
+    /**
+     * Send new user parameters to the backend, show result
+     * */
     submitChanges = async () => {
         let errDiv = document.getElementById("errors");
         errDiv.innerHTML = ""; //Remove all prev. errors

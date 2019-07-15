@@ -41,8 +41,8 @@ public class ImageController extends Controller {
         JsonObject jo = new JsonObject();
         String url = storeItemLocally();
         Image img = new Image(user.getUserID(), url);
+        //TODO should delete old photo here
         if(!ImagesManager.addImage(img)){
-            //TODO find and fix image displaying error
             sendApiError(500,"Couldn't add image to database!");
             return;
         }
@@ -91,7 +91,7 @@ public class ImageController extends Controller {
         filename = User.encryptPassword(filename);
         result_path = "/storage/images/"+filename+".png";
 
-        //TODO should come up with smthg else
+        //TODO should come up with something else
         String pathToOut = request.getServletContext().getRealPath("/");
         try{
             //storing on the real location

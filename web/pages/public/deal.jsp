@@ -37,10 +37,7 @@
             <% int ownerId = deal.getOwnerID();%>
             <% User user = UserManager.getUserByID(ownerId);%>
             <% if(ownerId == thisId){ %>
-             <%-- TODO: doDelete HERE --%>
-             <form method="POST" action="${pageContext.request.contextPath}<%=RoutingConstants.USER_DEAL_CONFIG%>">
-                 <button type="submit">Delete deal</button>
-             </form>
+                <input type="button" value="Delete Deal" onclick="deleteDeal()">
             <%}%>
 
             <% String userFullName = " (" + user.getFirstName() + " " + user.getLastName() + ")";%>
@@ -93,10 +90,22 @@
              </ul>
          </div>
     </div>
-
-
-
         <%--Footer--%>
     <jsp:include page="/pages/partials/footer.jsp"/>
 </body>
+    <script src="${pageContext.request.contextPath}/assets/js/Http.service.js"></script>
+<script>
+    const dealID = "<%=deal.getDealID()%>";
+    const userID = "<%=user.getUserID()%>";
+    function deleteDeal(){
+        http.DELETE("<%=RoutingConstants.USER_DEAL_CONFIG%>?id="+dealID)
+            .then(() => {
+                window.location.href = "${pageContext.request.contextPath}<%=RoutingConstants.PUBLIC_PROFILE%>?id="+userID;
+            })
+            .catch(reason => {
+                window.alert("Couldn't delete deal...");
+                console.error(reason);
+            });
+    }
+</script>
 </html>

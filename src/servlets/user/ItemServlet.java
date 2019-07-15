@@ -42,18 +42,8 @@ public class ItemServlet extends HttpServlet {
     protected void doGet(HttpServletRequest request,
                           HttpServletResponse response)
         throws ServletException, IOException {
-        int id;
-        try {
-            id = Integer.parseInt(request.getParameter("id"));
-        } catch (NumberFormatException nfe) {
-            nfe.printStackTrace();
-            PrintWriter pw = response.getWriter();
-            response.setStatus(404);
-            // Send error to api
-            pw.print("{\"error\":\"This path should be called with parameter 'id'!\"}");
-            pw.flush();
-            return;
-        }
+        int id = getIntegerParameter("id", request, response);
+        if(id == -1) return;
         (new ItemController(request, response, this)).show(id);
     }
 
@@ -69,6 +59,36 @@ public class ItemServlet extends HttpServlet {
                            HttpServletResponse response)
         throws ServletException, IOException {
         doGet(request, response);
+    }
+
+    @Override
+    protected void doDelete(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+        int id = getIntegerParameter("id", req, resp);
+        if(id == -1) return;
+        (new ItemController(req, resp, this)).destroy(id);
+    }
+
+    /**
+     * @param name name of the parameter
+     * @param req {HttpServletResponse}
+     * @param res {HttpServletRequest}
+     * @return returns -1 if integer parameter isn't provided or less than 0. otherwise return param;
+     */
+    private int getIntegerParameter(String name, HttpServletRequest req, HttpServletResponse res) throws IOException {
+        int id;
+        try {
+            id = Integer.parseInt(req.getParameter(name));
+            if(id < 1) throw new NumberFormatException();
+        } catch (NumberFormatException nfe) {
+            nfe.printStackTrace();
+            PrintWriter pw = res.getWriter();
+            res.setStatus(404);
+            // Send error to api
+            pw.print("{\"error\":\"This path should be called with positive integer parameter '"+name+"'!\"}");
+            pw.flush();
+            return -1;
+        }
+        return id;
     }
 
 }
